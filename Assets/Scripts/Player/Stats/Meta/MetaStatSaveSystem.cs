@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace Player.Stats.Meta
@@ -31,6 +32,8 @@ namespace Player.Stats.Meta
             meta.LoadFromSerializableDict(wrapper.Data, registry);
         }
         
+        
+        [MenuItem("Meta/Clear Stats")]        
         public static void DeleteSaveFile()
         {
             string path = GetSavePath();

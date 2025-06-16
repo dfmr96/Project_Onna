@@ -34,12 +34,6 @@ namespace Player
         public PlayerStatContext StatContext => _statContext;
 
         private bool _isInitialized;
-
-        private void Start()
-        {
-            Debug.LogError("Actualización 8/Junio. Ahora Player Model requiere un PlayerModelBootstrapper en escena. " +
-                           "Asegúrate de que este prefab no se use directamente sin él.");
-        }
         
         public void InjectStatContext(PlayerStatContext context)
         {
@@ -74,7 +68,7 @@ namespace Player
             //{
             //    ApplyPassiveDrain();
             //}
-            ApplyPassiveDrain();
+            //ApplyPassiveDrain();
 
         }
 

@@ -25,7 +25,11 @@ namespace Player
         private Camera _mainCamera;
         
         private bool _isReady = false;
-        
+
+        public float Speed => _playerInputHandler.MovementInput.magnitude;
+
+        public Vector3 MouseWorldPos => _mouseWorldPos;
+
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerInitializedSignal>(OnPlayerInitialized);
@@ -52,9 +56,11 @@ namespace Player
         
             _mainCamera = Camera.main;
             _playerView = GetComponent<PlayerView>();
+            _playerView.SetPlayerController(this);
             _playerInput = GetComponent<PlayerInput>();
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _characterController = GetComponent<CharacterController>();
+            
         
             _playerInputHandler.FirePerformed += HandleFire;
         }
@@ -69,9 +75,7 @@ namespace Player
          
             _direction = _playerInputHandler.MovementInput;
             HandleAiming(_playerInputHandler.RawAimInput);
-        
             Move(_direction, _playerModel.Speed);
-            Rotate(_aimDirection);
         }
     
         private void HandleAiming(Vector2 rawInput)
@@ -87,7 +91,7 @@ namespace Player
 
                     var position = transform.position;
                     Vector3 flatPos = new Vector3(position.x, 0f, position.z);
-                    _aimDirection = (_mouseWorldPos - flatPos).normalized;
+                    _aimDirection = (MouseWorldPos - flatPos).normalized;
                 }
             }
             else if (_playerInput.currentControlScheme == "Gamepad")
@@ -120,7 +124,7 @@ namespace Player
 
         private void OnDrawGizmos()
         {
-            Gizmos.DrawSphere(_mouseWorldPos, 0.5f);
+            Gizmos.DrawSphere(MouseWorldPos, 0.5f);
         }
     }
 }
