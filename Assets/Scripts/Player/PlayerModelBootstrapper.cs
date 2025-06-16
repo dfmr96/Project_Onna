@@ -4,12 +4,14 @@ using Player.Stats;
 using Player.Stats.Meta;
 using Player.Stats.Runtime;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.SceneManagement;
 
 namespace Player
 {
     public class PlayerModelBootstrapper : MonoBehaviour
     {
+        public static PlayerModelBootstrapper Instance { get; private set; }
         [SerializeField] private GameMode currentMode;
 
         [Header("Stats Setup")]
@@ -26,6 +28,8 @@ namespace Player
 
         private void Awake()
         {
+            if (Instance != null && Instance != this) Destroy(gameObject);
+            Instance = this;
             DontDestroyOnLoad(gameObject);
             if (!ValidateDependencies()) return;
             

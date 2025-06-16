@@ -10,6 +10,7 @@ namespace ScriptableObjects
         public string description;
         public Sprite icon;
         public int cost;
+        
         public UpgradeEffect upgradeEffect;
     }
 }
