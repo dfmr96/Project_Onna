@@ -19,7 +19,10 @@ namespace Player
         
         private PlayerController _playerController;
         private PlayerInputHandler _playerInputHandler;
-        
+        private static readonly int MoveX = Animator.StringToHash("MoveX");
+        private static readonly int MoveY = Animator.StringToHash("MoveY");
+        private static readonly int Speed = Animator.StringToHash("Speed");
+
         private void RotateVisualTowards(Vector3 moveDir)
         {
             if (moveDir.sqrMagnitude < 0.01f) return;
@@ -47,11 +50,11 @@ namespace Player
 
         private void Update()
         {
-            animator.SetFloat("Speed", _playerController.Speed);
+            animator.SetFloat(Speed, _playerController.Speed);
             Vector3 moveDir = _playerInputHandler.MovementInput;
 
-            animator.SetFloat("MoveX", moveDir.x);
-            animator.SetFloat("MoveY", moveDir.z);
+            animator.SetFloat(MoveX, moveDir.x);
+            animator.SetFloat(MoveY, moveDir.z);
 
             RotateVisualTowards(moveDir);
             

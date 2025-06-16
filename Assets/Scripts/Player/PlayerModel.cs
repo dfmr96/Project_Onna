@@ -32,8 +32,6 @@ namespace Player
         public float CurrentHealth => _currentTime;
 
         public PlayerStatContext StatContext => _statContext;
-
-        private bool _isInitialized;
         
         public void InjectStatContext(PlayerStatContext context)
         {
@@ -41,7 +39,6 @@ namespace Player
             _currentTime = StatContext.Runtime?.CurrentEnergyTime ?? float.PositiveInfinity;
 
             EventBus.Publish(new PlayerInitializedSignal(this));
-            _isInitialized = true;
         }
         
         public void ForceReinitStats()
