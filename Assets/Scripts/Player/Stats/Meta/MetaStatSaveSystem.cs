@@ -33,7 +33,7 @@ namespace Player.Stats.Meta
         }
         
         
-        [MenuItem("Meta/Clear Stats")]        
+        //[MenuItem("Meta/Clear Stats")]        
         public static void DeleteSaveFile()
         {
             string path = GetSavePath();

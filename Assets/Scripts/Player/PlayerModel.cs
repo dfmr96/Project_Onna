@@ -60,11 +60,15 @@ namespace Player
         private void Update()
         {
             //if (!_isInitialized) return;
-            
-            //if (!devMode || GameModeSelector.SelectedMode != GameMode.Hub)
-            //{
-            //    ApplyPassiveDrain();
-            //}
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                devMode = !devMode;
+            }
+
+            if (!devMode && GameModeSelector.SelectedMode != GameMode.Hub)
+            {
+                ApplyPassiveDrain();
+            }
             //ApplyPassiveDrain();
 
         }
