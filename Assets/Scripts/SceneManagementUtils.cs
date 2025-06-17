@@ -36,6 +36,7 @@ public static class SceneManagementUtils
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            loadingScreen.GetComponent<LoadingScreen>().SetLevelName(scene.name);
             loadingScreen.GetComponent<Animator>().SetTrigger("FadeOut");
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
