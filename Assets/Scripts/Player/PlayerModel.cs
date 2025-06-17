@@ -22,7 +22,7 @@ namespace Player
         private PlayerStatContext _statContext;
 
         [Header("Floating Damage Text Effect")]
-        [SerializeField] private float heightTextSpawn = 2.5f;
+        [SerializeField] private float heightTextSpawn = 1.5f;
         [SerializeField] private GameObject floatingTextPrefab;
 
         public StatReferences StatRefs => statRefs;
