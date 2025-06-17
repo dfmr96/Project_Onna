@@ -1,4 +1,5 @@
-﻿using Mutations.Testing;
+﻿using System;
+using Mutations.Testing;
 using NaughtyAttributes;
 using Player;
 using UnityEngine;
@@ -20,6 +21,14 @@ namespace Mutations
             }
 
             RollAndDisplayMutations();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                RollAndDisplayMutations();
+            }
         }
 
         [Button("Roll Mutations and Show UI")]
