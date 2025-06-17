@@ -22,7 +22,7 @@ namespace Player
         private PlayerStatContext _statContext;
 
         [Header("Floating Damage Text Effect")]
-        [SerializeField] private Transform damageTextSpawnPoint;
+        [SerializeField] private float heightTextSpawn = 2.5f;
         [SerializeField] private GameObject floatingTextPrefab;
 
         public StatReferences StatRefs => statRefs;
@@ -79,13 +79,7 @@ namespace Player
         {
             ApplyDamage(timeTaken, true);
 
-            // Mostrar texto flotante
-            if (floatingTextPrefab != null)
-            {
-                Vector3 spawnPos = damageTextSpawnPoint != null ? damageTextSpawnPoint.position : transform.position + Vector3.up * 2f;
-                GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-                textObj.GetComponent<FloatingDamageText>().Initialize(timeTaken);
-            }
+       
         }
         
         public void ApplyDamage(float timeTaken, bool applyResistance)
@@ -101,6 +95,16 @@ namespace Player
                           $"🧪 Damage recibido: Base = {timeTaken}, " +
                           $"Resistance = {(resistance * 100f)}%, " +
                           $"Final = {effectiveDamage}");
+
+                // Mostrar texto flotante
+                if (floatingTextPrefab != null)
+                {
+                    Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
+                    GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
+                    textObj.GetComponent<FloatingDamageText>().Initialize(timeTaken);
+
+                  
+                }
             }
 
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));

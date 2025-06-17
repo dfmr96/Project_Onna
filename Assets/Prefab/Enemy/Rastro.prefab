@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.48, y: 1, z: -6.6865816}
-  m_LocalScale: {x: 0.3906, y: 0.3906, z: 0.3906}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c298c3e67246f5045be5ab04fc1b8642, type: 2}
+  - {fileID: 2100000, guid: 57ee2ab2349746f42bd741d97eccb00e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,8 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18fed119fc571b438ec03845e542623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatSpeed: 1.5
-  floatAmplitude: 0.5
+  minFloatSpeed: 0.2
+  maxFloatSpeed: 1
+  minFloatAmplitude: 0.2
+  maxFloatAmplitude: 1
   healingAmount: 10
   lifetime: 60
   attractionRadius: 3
