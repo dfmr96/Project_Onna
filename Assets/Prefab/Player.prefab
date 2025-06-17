@@ -64,37 +64,6 @@ Transform:
   - {fileID: 5078222509281479290}
   m_Father: {fileID: 516193456515153939}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &138078740219853281
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1776891058212488717}
-  m_Layer: 7
-  m_Name: DamageTextPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1776891058212488717
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 138078740219853281}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.409, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5232816373119301103}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &225835844613568438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,7 +1013,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6096603574120293089}
-  - {fileID: 1776891058212488717}
   - {fileID: 1592005984796363887}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1265,7 +1233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   devMode: 1
   statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
-  damageTextSpawnPoint: {fileID: 1776891058212488717}
+  heightTextSpawn: 1.5
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
 --- !u!114 &4339932572223991893
 MonoBehaviour:
