@@ -1650,8 +1650,8 @@ MonoBehaviour:
   doors:
   - {fileID: 1352749567}
   - {fileID: 1577047376}
-  orbSpawner: {fileID: 0}
-  projectileSpawner: {fileID: 0}
+  orbSpawner: {fileID: 1688213429}
+  projectileSpawner: {fileID: 718346850}
 --- !u!4 &135126093
 Transform:
   m_ObjectHideFlags: 0
@@ -10409,6 +10409,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fa8ef95f1b6b84479c990006e80298a, type: 3}
+--- !u!114 &718346850 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8746142756585533408, guid: 9fa8ef95f1b6b84479c990006e80298a, type: 3}
+  m_PrefabInstance: {fileID: 718346849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad9199148d484c46a0c5a771d856fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &759395478
 Mesh:
   m_ObjectHideFlags: 0
@@ -22618,6 +22629,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2da761e05a6a1ee45b7f0d13e7999d02, type: 3}
+--- !u!114 &1688213429 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2001152861161737939, guid: 2da761e05a6a1ee45b7f0d13e7999d02, type: 3}
+  m_PrefabInstance: {fileID: 1688213428}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a866b2fdac1d6604397e25c561413b84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1694451375
 PrefabInstance:
   m_ObjectHideFlags: 0
