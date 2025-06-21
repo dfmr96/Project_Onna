@@ -13,6 +13,7 @@ public class StoreHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI upgradeName;
     [SerializeField] private TextMeshProUGUI upgradeDescription;
     [SerializeField] private TextMeshProUGUI upgradeCost;
+    [SerializeField] private Button upgradeButton;
     [SerializeField] private List<GameObject> upgradeButtons;
     [SerializeField] private TextMeshProUGUI onnaFragments;
     private UpgradeData selectedData;
@@ -35,11 +36,12 @@ public class StoreHandler : MonoBehaviour
 
     public void OnUpgradeClicked(BuyUpgradeButton button)
     {
-        upgradeImage.sprite = button.Data.icon;
-        upgradeDescription.text = button.Data.description;
-        upgradeName.text = button.Data.name;
-        upgradeCost.text = button.Data.cost.ToString();
+        upgradeImage.sprite = button.Data.Icon;
+        upgradeDescription.text = button.Data.Description;
+        upgradeName.text = button.Data.UpgradeName;
+        upgradeCost.text = button.Data.Cost.ToString();
         selectedData = button.Data;
+        HandleBuyChance(button);
     }
 
     public void SetHubManager(HubManager hubManager) { hub = hubManager; }
@@ -49,7 +51,7 @@ public class StoreHandler : MonoBehaviour
         MetaStatSaveSystem.Save(playerModelBootstrapper.MetaStats, playerModelBootstrapper.Registry);
         hub.CloseStore();
     }
-    public void UpdateCurrencyStatus() { onnaFragments.text = "Onna Fragments: " + hub.PlayerWallet.Coins; }
+    public void UpdateCurrencyStatus() { onnaFragments.text = "Onna Fragments: " + hub.PlayerInventory.PlayerWallet.Coins; }
     public void CheckUpgradesAvailables()
     {
         UpdateCurrencyStatus();
@@ -58,23 +60,40 @@ public class StoreHandler : MonoBehaviour
             button.GetComponent<Button>().interactable = false;
             if (button.GetComponent<BuyUpgradeButton>().Data != null)
             {
-                if (hub.PlayerWallet.CheckCost(button.GetComponent<BuyUpgradeButton>().Data.cost))
-                    button.GetComponent<Button>().interactable = true;
+                button.GetComponent<Button>().interactable = true;
+                HandleBuyChance(button.GetComponent<BuyUpgradeButton>());
             }
         }
     }
+
+    private void HandleBuyChance(BuyUpgradeButton button)
+    {
+        
+        if (!hub.PlayerInventory.PlayerWallet.CheckCost(button.Data.Cost))
+        { 
+            upgradeButton.interactable = false;
+            upgradeCost.color = Color.gray;
+        }
+        else 
+        { 
+            upgradeButton.interactable = true;
+            upgradeCost.color = Color.white;
+        }
+    }
+
+
     public void TryBuyUpgrade()
     {
         if (selectedData != null)
         {
-            if (hub.PlayerWallet.TrySpend(selectedData.cost))
+            if (hub.PlayerInventory.PlayerWallet.TrySpend(selectedData.Cost))
             {
                 player = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
-                Debug.Log($"Compraste mejora: {selectedData.upgradeName}");
-                selectedData.upgradeEffect?.Apply(player.StatContext.Meta);
+                Debug.Log($"Compraste mejora: {selectedData.UpgradeName}");
+                selectedData.UpgradeEffect?.Apply(player.StatContext.Meta);
+                hub.PlayerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
                 hub.UpdateCoins();
                 CheckUpgradesAvailables();
-                // Do Something
             }
         }
     }

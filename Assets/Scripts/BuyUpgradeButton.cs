@@ -10,7 +10,7 @@ public class BuyUpgradeButton : MonoBehaviour
     public UpgradeData Data => data;
     private void Start() 
     {
-        if (data != null) img.sprite = data.icon;
+        if (data != null) img.sprite = data.Icon;
         else img.sprite = lockSprite;
     }
 }
