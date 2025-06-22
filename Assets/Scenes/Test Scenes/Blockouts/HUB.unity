@@ -12364,7 +12364,6 @@ GameObject:
   m_Component:
   - component: {fileID: 818595467}
   - component: {fileID: 818595468}
-  - component: {fileID: 818595469}
   m_Layer: 0
   m_Name: HUBBoostrapper
   m_TagString: Untagged
@@ -12401,21 +12400,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawner: {fileID: 1619722584}
   hubManager: {fileID: 871380410}
---- !u!114 &818595469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818595466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f460ac7a6b0c9543bc706a6f6724744, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerItemsHolder:
-    upgradesBuyed:
-      _serializedList: []
 --- !u!1001 &836481165
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13704,7 +13688,6 @@ MonoBehaviour:
   levelProgression: {fileID: 11400000, guid: 47f7c09258b695a4b8f6403fd5067858, type: 2}
   currencyText: {fileID: 1509962980}
   storePrefab: {fileID: 4035500945392137438, guid: 41ce3e3c15474954ab0a91ff46864baa, type: 3}
-  _playerInventory: {fileID: 818595469}
 --- !u!4 &871380411
 Transform:
   m_ObjectHideFlags: 0
