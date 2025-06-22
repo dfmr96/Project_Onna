@@ -1,9 +1,6 @@
 using AYellowpaper.SerializedCollections;
 using ScriptableObjects;
-using System;
 using UnityEngine;
-
-[Serializable]
 public class PlayerItemsHolder
 {
     [SerializeField] private SerializedDictionary<UpgradeData, int> upgradesBuyed = new SerializedDictionary<UpgradeData, int>();
@@ -13,10 +10,23 @@ public class PlayerItemsHolder
     {
         if (CheckUpgrades(data))
         {
-            Debug.Log($"{data.UpgradeName} mejorada 1 nivel");
-            // Do something
+            if (upgradesBuyed[data] < data.MaxLevel)
+            {
+                upgradesBuyed[data]++;
+                Debug.Log($"{data.UpgradeName} mejorada a nivel {upgradesBuyed[data]}");
+            }
+            else
+            {
+                Debug.LogWarning($"{data.UpgradeName} ya está en el nivel máximo.");
+            }
         }
         else upgradesBuyed.Add(data, 1);
+    }
+
+    public bool CanUpgrade(UpgradeData data)
+    {
+        if (!upgradesBuyed.ContainsKey(data)) return true;
+        return upgradesBuyed[data] < data.MaxLevel;
     }
 
     public bool CheckUpgrades(UpgradeData data) { return upgradesBuyed.ContainsKey(data); }
