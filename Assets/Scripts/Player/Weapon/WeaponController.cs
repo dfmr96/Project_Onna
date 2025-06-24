@@ -23,7 +23,7 @@ namespace Player.Weapon
         [SerializeField] private bool canFire = true;
 
         private Coroutine _coolingCooldownCoroutine;
-        private PlayerModel playerModel;
+        private PlayerModel _playerModel;
 
         public CooldownSettings Settings => cooldownSettings;
 
@@ -39,14 +39,14 @@ namespace Player.Weapon
         
         private void OnPlayerReady(PlayerInitializedSignal signal)
         {
-            playerModel = signal.Model;
+            _playerModel = signal.Model;
 
-            var stats = playerModel.StatContext.Source;
-            var refs = playerModel.StatRefs;
+            var stats = _playerModel.StatContext.Source;
+            var refs = _playerModel.StatRefs;
             Settings.Init(stats, refs);
             bulletSetting.Init(stats, refs);
-
-            currentAmmo = ammoSettings.maxAmmo;
+            ammoSettings.Init(stats, refs);
+            currentAmmo = (int)ammoSettings.MaxAmmo;
         }
 
         public void Attack()
@@ -55,7 +55,7 @@ namespace Player.Weapon
 
             FireBullet();
             currentAmmo--;
-            OnShoot?.Invoke(currentAmmo, ammoSettings.maxAmmo);
+            OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
 
             if (currentAmmo <= 0)
             {
@@ -71,8 +71,7 @@ namespace Player.Weapon
         private void FireBullet()
         {
             var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
-            bullet.SetSpeed(bulletSetting.BulletSpeed);
-            bullet.SetMaxDistance(bulletSetting.AttackRange);
+            bullet.Setup(bulletSetting.BulletSpeed,bulletSetting.AttackRange, bulletSetting.Damage);
         }
 
         private void StartCoolingCooldown()
@@ -109,16 +108,16 @@ namespace Player.Weapon
         {
             canFire = false;
             yield return new WaitForSeconds(Settings.OverheatCooldown);
-            currentAmmo = ammoSettings.maxAmmo;
+            currentAmmo = (int)ammoSettings.MaxAmmo;
             canFire = true;
         }
 
         private IEnumerator CoolingCooldown()
         {
             yield return new WaitForSeconds(Settings.CoolingCooldown);
-            currentAmmo = ammoSettings.maxAmmo;
+            currentAmmo = (int)ammoSettings.MaxAmmo;
             _coolingCooldownCoroutine = null;
-            OnShoot?.Invoke(currentAmmo, ammoSettings.maxAmmo);
+            OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
         }
     }
 }

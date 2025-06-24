@@ -8,8 +8,6 @@ public class HubBootstrapper : MonoBehaviour
 {
     [SerializeField] private PlayerSpawner spawner;
     [SerializeField] private HubManager hubManager;
-    
-    private PlayerWallet _playerWallet;
 
     private void Awake()
     {
