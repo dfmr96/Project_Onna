@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] float bulletSpeed;
-    private float maxDistance;
-    [SerializeField] private float damage;
+    private float _bulletSpeed;
+    private float _damage;
+    private float _maxDistance;
 
     private void Start()
     {
-        float destroyTime = maxDistance / bulletSpeed;
+        float destroyTime = _maxDistance / _bulletSpeed;
         Destroy(gameObject, destroyTime);
     }
 
@@ -20,24 +20,21 @@ public class Bullet : MonoBehaviour
 
     private void Move()
     {
-        transform.Translate(Vector3.forward * (bulletSpeed * Time.deltaTime));
+        transform.Translate(Vector3.forward * (_bulletSpeed * Time.deltaTime));
     }
 
-    public void SetSpeed(float speed)
+    public void Setup(float speed, float distance, float damage)
     {
-        bulletSpeed = speed;
-    }
-
-    public void SetMaxDistance(float distance)
-    {
-        maxDistance = distance;
+        _bulletSpeed = speed;
+        _maxDistance = distance;
+        this._damage = damage;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<IDamageable>(out var damageable))
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(_damage);
             Debug.Log("Enemy damaged");
             Destroy(gameObject);
         }

@@ -9,7 +9,6 @@ namespace Player.Weapon
     {
         [SerializeField] private Bullet bulletPrefab;
         [SerializeField] private Transform bulletSpawnPoint;
-        private float _bulletSpeed = 20f;
 
         private IStatSource _stats;
         private StatReferences _statReferences;
@@ -23,11 +22,11 @@ namespace Player.Weapon
         public float AttackRange => _stats.Get(_statReferences.attackRange);
         public float Damage => _stats.Get(_statReferences.damage);
 
+        public float BulletSpeed => _stats.Get(_statReferences.bulletSpeed);
         public Bullet BulletPrefab => bulletPrefab;
 
         public Transform BulletSpawnPoint => bulletSpawnPoint;
 
-        public float BulletSpeed => _bulletSpeed;
     }
 
     [System.Serializable]
@@ -49,6 +48,14 @@ namespace Player.Weapon
     [System.Serializable]
     public class AmmoSettings
     {
-        public int maxAmmo = 12;
+        private IStatSource _stats;
+        private StatReferences _statReferences;
+        public void Init(IStatSource stats, StatReferences statReferences)
+        {
+            _statReferences = statReferences;
+            _stats = stats;
+        }
+        
+        public float MaxAmmo => _stats.Get(_statReferences.maxAmmo); 
     }
 }

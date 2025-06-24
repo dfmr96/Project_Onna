@@ -46,6 +46,7 @@ public class StoreHandler : MonoBehaviour
 
     public void OnUpgradeClicked(BuyUpgradeButton button)
     {
+        if (button.Data == null) return;
         upgradeImage.sprite = button.Data.Icon;
         upgradeDescription.text = button.Data.Description;
         upgradeName.text = button.Data.UpgradeName;
