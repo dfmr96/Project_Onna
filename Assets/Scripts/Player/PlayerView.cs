@@ -16,6 +16,7 @@ namespace Player
         [Header("Params")]
         [SerializeField] private float torsoRotationSpeed = 10f;
         [SerializeField] private float rotationSpeed = 10f;
+        [SerializeField] private float minAimDistance = 2f;
         
         private PlayerController _playerController;
         private PlayerInputHandler _playerInputHandler;
@@ -66,11 +67,22 @@ namespace Player
         {
             if (aimTarget == null || torsoTransform == null) return;
 
+            // Mantener la altura del torso
             worldPos.y = torsoTransform.position.y;
-            aimTarget.position = worldPos;
 
             Vector3 direction = worldPos - torsoTransform.position;
             direction.y = 0f;
+
+            float sqrDist = direction.sqrMagnitude;
+
+            // Si está demasiado cerca, reubicarlo a una distancia mínima
+            if (sqrDist < minAimDistance * minAimDistance)
+            {
+                direction = direction.normalized * minAimDistance;
+                worldPos = torsoTransform.position + direction;
+            }
+
+            aimTarget.position = worldPos;
 
             if (direction.sqrMagnitude > 0.01f)
             {
@@ -81,12 +93,25 @@ namespace Player
 
         public void UpdateWeaponAim(Vector3 targetPos)
         {
-            if (weaponInstance == null) return;
+            if (weaponInstance == null || torsoTransform == null) return;
 
-            Vector3 lookAt = targetPos;
-            lookAt.y = weaponInstance.transform.position.y;
+            Vector3 origin = torsoTransform.position; // usar el torso como centro
+            Vector3 dir = targetPos - origin;
+            dir.y = 0f;
 
-            weaponInstance.transform.LookAt(lookAt);
+            float sqrDist = dir.sqrMagnitude;
+
+            // Si está muy cerca, reubicar
+            if (sqrDist < minAimDistance * minAimDistance)
+            {
+                dir = dir.normalized * minAimDistance;
+                targetPos = origin + dir;
+            }
+
+            // Mantener la altura del arma
+            targetPos.y = weaponInstance.transform.position.y;
+
+            weaponInstance.transform.LookAt(targetPos);
         }
         
         public void SetPlayerController(PlayerController controller)
@@ -96,6 +121,13 @@ namespace Player
         
         private void OnDrawGizmos()
         {
+            
+            if (torsoTransform != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(torsoTransform.position, minAimDistance);
+            }
+
             if (visualRoot != null)
             {
                 Gizmos.color = Color.green;

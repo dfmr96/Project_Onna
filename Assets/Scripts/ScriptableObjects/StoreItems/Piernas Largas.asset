@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
-  m_Name: Player4
+  m_Name: Piernas Largas
   m_EditorClassIdentifier: 
-  upgradeName: player4
-  description: playerDescription4
-  icon: {fileID: 21300000, guid: 176d2bd122021d14689d4056faed7700, type: 3}
-  cost: 7
+  upgradeName: Piernas Largas
+  description: +0.5 de velocidad de movimiento. (Max +4 de velocidad de movimiento)
+  icon: {fileID: -1471847155, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
+  cost: 10
+  maxLevel: 4
+  upgradeEffect: {fileID: 11400000, guid: dc7c50f8cc5c46f478df8a4e4a4d7234, type: 2}
