@@ -1465,6 +1465,63 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &497195773
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0001001358
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
+      propertyPath: m_Name
+      value: OnnaMonarch5 (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 328f9ca24a18bdd4db53f7faa699ae42, type: 3}
 --- !u!43 &582452200
 Mesh:
   m_ObjectHideFlags: 0
@@ -2755,6 +2812,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ed99d6b90924ecfbf1e77ed4ab7ab48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aimTarget: {fileID: 0}
+  torsoTransform: {fileID: 0}
+  weaponSocket: {fileID: 0}
+  weaponInstance: {fileID: 0}
+  animator: {fileID: 0}
+  visualRoot: {fileID: 0}
+  torsoRotationSpeed: 10
+  rotationSpeed: 10
 --- !u!1 &991128269
 GameObject:
   m_ObjectHideFlags: 0
@@ -7073,3 +7138,4 @@ SceneRoots:
   - {fileID: 1479850395}
   - {fileID: 2087838609}
   - {fileID: 595132598}
+  - {fileID: 497195773}
