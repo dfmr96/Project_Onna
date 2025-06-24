@@ -13,6 +13,8 @@ namespace Player.Stats
 
         [Header("Combat Stats")]
         public StatDefinition damage;
+        public StatDefinition bulletSpeed;
+        public StatDefinition maxAmmo;
         public StatDefinition attackRange;
         public StatDefinition fireRate;
         public StatDefinition criticalChance;
@@ -53,6 +55,8 @@ namespace Player.Stats
             TryAssign(ref dashDistance, "DashDistance", registry);
             TryAssign(ref dashCooldown, "DashCooldown", registry);
             TryAssign(ref coolingCooldown, "CoolingCooldown", registry);
+            TryAssign(ref bulletSpeed, "BulletSpeed", registry);
+            TryAssign(ref maxAmmo, "MaxAmmo", registry);
 
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssets();

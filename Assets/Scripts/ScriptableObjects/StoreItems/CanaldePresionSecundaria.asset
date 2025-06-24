@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
-  m_Name: Player2
+  m_Name: CanaldePresionSecundaria
   m_EditorClassIdentifier: 
-  upgradeName: player2
-  description: playerDescription2
-  icon: {fileID: -1471847155, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
+  upgradeName: "Canal de Presi\xF3n Secundaria"
+  description: "Aumenta capacidad m\xE1xima de disparos a 14 antes de sobrecalentamiento"
+  icon: {fileID: -649927673, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   cost: 5
-  upgradeEffect: {fileID: 0}
+  maxLevel: 4
+  upgradeEffect: {fileID: 11400000, guid: 405133f309113ea47ad69404e5faeea9, type: 2}

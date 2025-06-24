@@ -1,4 +1,4 @@
-using System.IO;
+using System;
 using UnityEngine;
 
 public class PlayerWallet
@@ -13,7 +13,7 @@ public class PlayerWallet
     {
         Coins += amount;
         SaveCoins();
-        Debug.Log($"Se sumaron {amount} monedas. Total: {Coins}");
+        Debug.LogWarning($"Se sumaron {amount} monedas. Total: {Coins}");
     }
 
     public bool CheckCost(int ammount)

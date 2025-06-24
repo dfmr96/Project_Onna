@@ -37,6 +37,7 @@ namespace Player.Stats
             DrawStat("Damage", statRefs.damage);
             DrawStat("Overheat Cooldown", statRefs.overheatCooldown);
             DrawStat("Attack Range", statRefs.attackRange);
+            DrawStat("Max Ammo", statRefs.maxAmmo);
 
             GUILayout.EndArea();
         }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
+  m_Name: Longevidad Terrenal
+  m_EditorClassIdentifier: 
+  upgradeName: 'Longevidad Terrenal  '
+  description: "+1% de Tiempo Vital M\xE1ximo (Max +6% de Tiempo Vital).  "
+  icon: {fileID: -2037384063, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
+  cost: 25
+  maxLevel: 4
+  upgradeEffect: {fileID: 11400000, guid: d1946fef716e418408dc0142533634ac, type: 2}

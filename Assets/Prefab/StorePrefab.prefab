@@ -146,9 +146,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b494e5ffd29af3c45b5bf0fb1a9a47f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 58377ab50471974459a41c1e22b449d0, type: 2}
+  data: {fileID: 11400000, guid: 1e50043834c19044cab178e96309224c, type: 2}
   img: {fileID: 1195999432107226926}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &220937813715027389
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,6 +303,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 7842079782137068285}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &285595124390452018
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,6 +532,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 8572049593338948465}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &355207494773231555
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,8 +686,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1316,6 +1331,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 5902206909549373446}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &1725697544238706772
 GameObject:
   m_ObjectHideFlags: 0
@@ -1465,6 +1485,11 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: a48367eac8c6d384caea778e981a32db, type: 2}
   img: {fileID: 240456853568462127}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &1985514565716597357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1839,6 +1864,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 3132305648558339591}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &3152196116406454283
 GameObject:
   m_ObjectHideFlags: 0
@@ -2515,6 +2545,7 @@ MonoBehaviour:
   upgradeName: {fileID: 8039589440265053877}
   upgradeDescription: {fileID: 3025359557037419281}
   upgradeCost: {fileID: 7288625454716417634}
+  upgradeButton: {fileID: 1970880863103576881}
   upgradeButtons:
   - {fileID: 220508972055186111}
   - {fileID: 1725697544238706772}
@@ -2532,6 +2563,13 @@ MonoBehaviour:
   - {fileID: 220937813715027389}
   - {fileID: 327820416781375193}
   onnaFragments: {fileID: 3321045086749033995}
+  detailBackgroundImage: {fileID: 8886837083660472561}
+  levelBackgrounds:
+  - {fileID: -526056402, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: -106515213, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: -961650428, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: -2004911960, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 751122953, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &4075003271297682202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2681,6 +2719,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 6788819887458551927}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &4458776849776341696
 GameObject:
   m_ObjectHideFlags: 0
@@ -2977,9 +3020,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b494e5ffd29af3c45b5bf0fb1a9a47f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: 1fe5c15f0e3c12c43944401292baa794, type: 2}
   img: {fileID: 7837705956083883895}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &4969169359320548142
 GameObject:
   m_ObjectHideFlags: 0
@@ -3126,9 +3174,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b494e5ffd29af3c45b5bf0fb1a9a47f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: a48367eac8c6d384caea778e981a32db, type: 2}
   img: {fileID: 5406516497549101998}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &5224613871015868657
 GameObject:
   m_ObjectHideFlags: 0
@@ -3350,9 +3403,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b494e5ffd29af3c45b5bf0fb1a9a47f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: 138fd5feee399c246a615f58b8e3f7d4, type: 2}
   img: {fileID: 2862552925097643401}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &5344701529217291107
 GameObject:
   m_ObjectHideFlags: 0
@@ -4146,9 +4204,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b494e5ffd29af3c45b5bf0fb1a9a47f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: 58377ab50471974459a41c1e22b449d0, type: 2}
   img: {fileID: 2021684868919095506}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &6161300969765593972
 GameObject:
   m_ObjectHideFlags: 0
@@ -4298,6 +4361,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 8252812039292827549}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &6384073983192579331
 GameObject:
   m_ObjectHideFlags: 0
@@ -4599,6 +4667,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 9031041432830890203}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &6952850823725615081
 GameObject:
   m_ObjectHideFlags: 0
@@ -4748,6 +4821,11 @@ MonoBehaviour:
   data: {fileID: 0}
   img: {fileID: 5115340094504779065}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &7023180977816653416
 GameObject:
   m_ObjectHideFlags: 0
@@ -5120,9 +5198,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b494e5ffd29af3c45b5bf0fb1a9a47f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 138fd5feee399c246a615f58b8e3f7d4, type: 2}
+  data: {fileID: 11400000, guid: c32f5559abb0f0844904a84fa3f3c904, type: 2}
   img: {fileID: 7707995644180888611}
   lockSprite: {fileID: 795138389, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  levelBackgrounds:
+  - {fileID: -710805354, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 706280747, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1841488300, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
+  - {fileID: 1646873169, guid: 2ada49fd5d58375448626af0554dc735, type: 3}
 --- !u!1 &9128184622398619670
 GameObject:
   m_ObjectHideFlags: 0
