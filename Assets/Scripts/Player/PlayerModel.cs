@@ -30,6 +30,8 @@ namespace Player
         private float DrainRate => StatContext.Source.Get(statRefs.passiveDrainRate);
         public float MaxHealth => StatContext.Source.Get(statRefs.maxVitalTime);
         public float CurrentHealth => _currentTime;
+        public float DashCooldown => StatContext.Source.Get(statRefs.dashCooldown);
+        public float DashDistance => StatContext.Source.Get(statRefs.dashDistance);
 
         public PlayerStatContext StatContext => _statContext;
         

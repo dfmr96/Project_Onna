@@ -14,6 +14,13 @@ namespace Player
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private LayerMask groundLayer;
 
+        [Header("Variables del Dash")]
+        private bool _isDashing = false;
+        private float _dashEndTime = 0f;
+        private float _lastDashTime = -Mathf.Infinity;
+        private Vector3 _dashDirection;
+        private const float DashDurationSeconds = 0.2f;
+
         private CharacterController _characterController;
         private Vector3 _aimDirection = Vector3.forward;
         private PlayerInputHandler _playerInputHandler;
@@ -59,6 +66,7 @@ namespace Player
             _playerView.SetPlayerController(this);
             _playerInput = GetComponent<PlayerInput>();
             _playerInputHandler = GetComponent<PlayerInputHandler>();
+            _playerInputHandler.DashPerformed += HandleDash;
             _characterController = GetComponent<CharacterController>();
             
         
@@ -72,12 +80,26 @@ namespace Player
                 Debug.Log("🕒 PlayerController: esperando inicialización...");
                 return;
             }
-         
+
             _direction = _playerInputHandler.MovementInput;
             HandleAiming(_playerInputHandler.RawAimInput);
+
+            if (_isDashing)
+            {
+                if (Time.time > _dashEndTime)
+                {
+                    _isDashing = false;
+                }
+                else
+                {
+                    Move(_dashDirection, _playerModel.DashDistance);
+                    return;
+                }
+            }
+
             Move(_direction, _playerModel.Speed);
         }
-    
+
         private void HandleAiming(Vector2 rawInput)
         {
             if (_playerInput.currentControlScheme == "Keyboard&Mouse")
@@ -120,6 +142,16 @@ namespace Player
         private void HandleFire()
         {
             weaponController.Attack();
+        }
+
+        private void HandleDash()
+        {
+            if (Time.time < _lastDashTime + _playerModel.DashCooldown || _direction == Vector3.zero) return;
+
+            _isDashing = true;
+            _dashEndTime = Time.time + DashDurationSeconds;
+            _dashDirection = _direction.normalized;
+            _lastDashTime = Time.time;
         }
 
         private void OnDrawGizmos()
