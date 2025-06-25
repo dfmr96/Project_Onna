@@ -11,6 +11,7 @@ namespace Player
         public Vector2 RawAimInput { get; private set; }
 
         public event Action FirePerformed;
+        public event Action DashPerformed;
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -28,6 +29,14 @@ namespace Player
             if (context.performed)
             {
                 FirePerformed?.Invoke();
+            }
+        }
+
+        public void OnDash(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                DashPerformed?.Invoke();
             }
         }
     }
