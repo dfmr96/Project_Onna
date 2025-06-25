@@ -15,8 +15,6 @@ namespace Player
         [SerializeField] private LayerMask groundLayer;
 
         [Header("Variables del Dash")]
-        [SerializeField] private float dashSpeed = 10f;
-        [SerializeField] private float dashCooldown = 1f;
         private bool _isDashing = false;
         private float _dashEndTime = 0f;
         private float _lastDashTime = -Mathf.Infinity;
@@ -94,7 +92,7 @@ namespace Player
                 }
                 else
                 {
-                    Move(_dashDirection, dashSpeed);
+                    Move(_dashDirection, _playerModel.DashDistance);
                     return;
                 }
             }
@@ -148,7 +146,7 @@ namespace Player
 
         private void HandleDash()
         {
-            if (Time.time < _lastDashTime + dashCooldown || _direction == Vector3.zero) return;
+            if (Time.time < _lastDashTime + _playerModel.DashCooldown || _direction == Vector3.zero) return;
 
             _isDashing = true;
             _dashEndTime = Time.time + DashDurationSeconds;
