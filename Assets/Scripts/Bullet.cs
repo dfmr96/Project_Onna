@@ -13,15 +13,9 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, destroyTime);
     }
 
-    private void Update()
-    {
-        Move();
-    }
+    private void Update() { Move(); }
 
-    private void Move()
-    {
-        transform.Translate(Vector3.forward * (_bulletSpeed * Time.deltaTime));
-    }
+    private void Move() { transform.Translate(Vector3.forward * (_bulletSpeed * Time.deltaTime)); }
 
     public void Setup(float speed, float distance, float damage)
     {
@@ -33,11 +27,8 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<IDamageable>(out var damageable))
-        {
             damageable.TakeDamage(_damage);
-            Debug.Log("Enemy damaged");
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 
 }
