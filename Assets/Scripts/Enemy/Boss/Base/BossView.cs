@@ -11,7 +11,7 @@ public class BossView : MonoBehaviour
     private BossModel _bossModel;
     private ProjectileSpawner projectileSpawner;
 
-    private float _distanceToCountExit = 3f;
+    //private float _distanceToCountExit = 3f;
 
 
     private void Awake()

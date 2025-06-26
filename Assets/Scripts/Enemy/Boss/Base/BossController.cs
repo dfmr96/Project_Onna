@@ -11,14 +11,15 @@ public class BossController : MonoBehaviour
     private BossModel model;
     private BossView view;
     private Rigidbody rb;
-
     private NavMeshAgent _navMeshAgent;
 
 
-
+    [Header("Pillars Stats")]
     [SerializeField] private List<Pillar> pillars;
-    [SerializeField] private GameObject shield;   
+    [SerializeField] private GameObject shield;
     [SerializeField] private float shieldEffectDuration = 1f;
+    [SerializeField] private float timeToReactivatePillars = 5f;
+
 
     private int pillarsDestroyed = 0;
     private bool shieldActive = true;
@@ -80,74 +81,71 @@ public class BossController : MonoBehaviour
     #endregion
 
 
-    //#region Behaviours
-    ////Behaviour
+    #region Behaviours
+    //Behaviour
     //[Header("FSM-Behaviour ScriptableObjects")]
     //[SerializeField] private EnemyIdleSOBase EnemyIdleSOBase;
     //[SerializeField] private EnemyAttackSOBase EnemyAttackSOBase;
-    //[SerializeField] private EnemyChaseSOBase EnemyChaseSOBase;
+
+
     //[SerializeField] private EnemyDeadSOBase EnemyDeadSOBase;
-    //[SerializeField] private EnemyPatrolSOBase EnemyPatrolSOBase;
-    //[SerializeField] private EnemyStunnedSOBase EnemyStunnedSOBase;
-    //[SerializeField] private EnemyEscapeSOBase EnemyEscapeSOBase;
-    //[SerializeField] private EnemyHurtSOBase EnemyHurtSOBase;
-    //[SerializeField] private EnemyDefendSOBase EnemyDefendSOBase;
 
 
 
 
-    //public EnemyIdleSOBase EnemyIdleBaseInstance { get; set; }
-    //public EnemyAttackSOBase EnemyAttackBaseInstance { get; set; }
-    //public EnemyChaseSOBase EnemyChaseBaseInstance { get; set; }
-    //public EnemyDeadSOBase EnemyDeadBaseInstance { get; set; }
-    //public EnemyPatrolSOBase EnemyPatrolBaseInstance { get; set; }
-    //public EnemyStunnedSOBase EnemyStunnedBaseInstance { get; set; }
-    //public EnemyEscapeSOBase EnemyEscapeBaseInstance { get; set; }
-    //public EnemyHurtSOBase EnemyHurtBaseInstance { get; set; }
-    //public EnemyDefendSOBase EnemyDefendBaseInstance { get; set; }
+    public EnemyIdleSOBase EnemyIdleBaseInstance { get; set; }
+    public EnemyAttackSOBase EnemyAttackBaseInstance { get; set; }
+
+    public EnemyChaseSOBase EnemyChaseBaseInstance { get; set; }
+    public EnemyDeadSOBase EnemyDeadBaseInstance { get; set; }
+    public EnemyPatrolSOBase EnemyPatrolBaseInstance { get; set; }
+    public EnemyStunnedSOBase EnemyStunnedBaseInstance { get; set; }
+    public EnemyEscapeSOBase EnemyEscapeBaseInstance { get; set; }
+    public EnemyHurtSOBase EnemyHurtBaseInstance { get; set; }
+    public EnemyDefendSOBase EnemyDefendBaseInstance { get; set; }
 
 
 
 
-    //#endregion
+    #endregion
 
-    //    void Awake()
-    //    {
-    //        //Behaviour
-    //        EnemyIdleBaseInstance = Instantiate(EnemyIdleSOBase);
-    //        EnemyAttackBaseInstance = Instantiate(EnemyAttackSOBase);
-    //        EnemyChaseBaseInstance = Instantiate(EnemyChaseSOBase);
-    //        EnemyDeadBaseInstance = Instantiate(EnemyDeadSOBase);
-    //        EnemyPatrolBaseInstance = Instantiate(EnemyPatrolSOBase);
-    //        EnemyStunnedBaseInstance = Instantiate(EnemyStunnedSOBase);
-    //        EnemyEscapeBaseInstance = Instantiate(EnemyEscapeSOBase);
-    //        EnemyHurtBaseInstance = Instantiate(EnemyHurtSOBase);
-    //        EnemyDefendBaseInstance = Instantiate(EnemyDefendSOBase);
+    void Awake()
+    {
+        //Behaviour
+        //EnemyIdleBaseInstance = Instantiate(EnemyIdleSOBase);
+        //EnemyAttackBaseInstance = Instantiate(EnemyAttackSOBase);
+        //EnemyChaseBaseInstance = Instantiate(EnemyChaseSOBase);
+        //EnemyDeadBaseInstance = Instantiate(EnemyDeadSOBase);
+        //EnemyPatrolBaseInstance = Instantiate(EnemyPatrolSOBase);
+        //EnemyStunnedBaseInstance = Instantiate(EnemyStunnedSOBase);
+        //EnemyEscapeBaseInstance = Instantiate(EnemyEscapeSOBase);
+        //EnemyHurtBaseInstance = Instantiate(EnemyHurtSOBase);
+        //EnemyDefendBaseInstance = Instantiate(EnemyDefendSOBase);
 
 
 
 
 
-    //        model = GetComponent<EnemyModel>();
-    //        view = GetComponent<EnemyView>();
-    //        rb = GetComponent<Rigidbody>();
+        model = GetComponent<BossModel>();
+        view = GetComponent<BossView>();
+        rb = GetComponent<Rigidbody>();
 
-    //        fsm = new EnemyStateMachine();
+        fsm = new EnemyStateMachine();
 
-    //        PatrolState = new EnemyPatrolState(this, fsm);
-    //        ChaseState = new EnemyChaseState(this, fsm);
-    //        AttackState = new EnemyAttackState(this, fsm);
-    //        SearchState = new EnemySearchState(this, fsm);
-    //        StunnedState = new EnemyStunnedState(this, fsm);
-    //        IdleState = new EnemyIdleState(this, fsm);
-    //        DeadState = new EnemyDeadState(this, fsm);
-    //        EscapeState = new EnemyEscapeState(this, fsm);
-    //        HurtState = new EnemyHurtState(this, fsm);
-    //        DefendState = new EnemyDefendState(this, fsm);
+        //PatrolState = new EnemyPatrolState(this, fsm);
+        //ChaseState = new EnemyChaseState(this, fsm);
+        //AttackState = new EnemyAttackState(this, fsm);
+        //SearchState = new EnemySearchState(this, fsm);
+        //StunnedState = new EnemyStunnedState(this, fsm);
+        //IdleState = new EnemyIdleState(this, fsm);
+        //DeadState = new EnemyDeadState(this, fsm);
+        //EscapeState = new EnemyEscapeState(this, fsm);
+        //HurtState = new EnemyHurtState(this, fsm);
+        //DefendState = new EnemyDefendState(this, fsm);
 
 
 
-    //    }
+    }
 
     //    public Rigidbody Rb => rb;
 
@@ -314,8 +312,12 @@ public class BossController : MonoBehaviour
         ActivateShield();
     }
 
+
+
     private void HandlePillarDestroyed(Pillar pillar)
     {
+
+
         pillarsDestroyed++;
 
         if (pillarsDestroyed >= pillars.Count)
@@ -334,8 +336,8 @@ public class BossController : MonoBehaviour
         shield.SetActive(false);
         shieldActive = false;
 
-        // Aquí podrías empezar un timer o esperar un evento para revivir los pilares
-        yield return new WaitForSeconds(5f); // Por ejemplo, espera 10s
+        //tiempo para revivir los pilares
+        yield return new WaitForSeconds(timeToReactivatePillars); 
         ReactivatePillars();
         TriggerShieldEffect();
         ActivateShield();
@@ -355,9 +357,9 @@ public class BossController : MonoBehaviour
 
         float duration = shieldEffectDuration;
         float elapsed = 0f;
-        float blinkSpeed = 10f; // cuántos parpadeos por segundo
-        Color baseColor = Color.white; // Color del escudo
-        float emissionStrength = 2f;  // Intensidad del brillo
+        float blinkSpeed = 10f; //cuantos parpadeos por segundo
+        Color baseColor = Color.white; //Color del escudo
+        float emissionStrength = 2f;  //Intensidad del brillo
 
         while (elapsed < duration)
         {
@@ -385,7 +387,7 @@ public class BossController : MonoBehaviour
     {
         foreach (var pillar in pillars)
         {
-            pillar.ResetPillar(); // Restaura salud y estado visual
+            pillar.ResetPillar(); //Restaura salud y estado visual
         }
 
         pillarsDestroyed = 0;
