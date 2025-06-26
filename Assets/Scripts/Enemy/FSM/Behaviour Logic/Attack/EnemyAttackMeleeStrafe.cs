@@ -179,7 +179,7 @@ public class EnemyAttackMeleeStrafe : EnemyAttackSOBase
         _enemyView.Animator.applyRootMotion = false;
     }
 
-    public override void Initialize(GameObject gameObject, EnemyController enemy)
+    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

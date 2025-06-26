@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyDeadSOBase : ScriptableObject
 {
-    protected EnemyController enemy;
+    protected IEnemyBaseController enemy;
     protected Transform transform;
     protected GameObject gameObject;
     protected EnemyView _enemyView;
@@ -16,21 +16,21 @@ public class EnemyDeadSOBase : ScriptableObject
 
     private NavMeshAgent _navMeshAgent;
 
-    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
+    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         this.gameObject = gameObject;
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
+        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
     }
 
     public virtual void DoEnterLogic()
     {
-        _enemyView = enemy.GetComponent<EnemyView>();
-        _collider = enemy.GetComponent<CapsuleCollider>();
+        _enemyView = gameObject.GetComponent<EnemyView>();
+        _collider = gameObject.GetComponent<CapsuleCollider>();
 
         _navMeshAgent.speed = 0;
         _navMeshAgent.isStopped = true;

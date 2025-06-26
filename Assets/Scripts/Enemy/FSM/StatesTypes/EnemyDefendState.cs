@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDefendState : EnemyState
+public class EnemyDefendState : EnemyState<BaseEnemyController>
 {
-    public EnemyDefendState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
+    private EnemyDefendSOBase defendBehavior;
+
+    public EnemyDefendState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm, EnemyDefendSOBase defendBehavior) : base(enemy, fsm)
     {
+        this.defendBehavior = defendBehavior;
 
     }
 
@@ -13,7 +16,7 @@ public class EnemyDefendState : EnemyState
     {
         base.EnterState();
 
-        enemy.EnemyDefendBaseInstance.DoEnterLogic();
+        defendBehavior.DoEnterLogic();
 
     }
 
@@ -23,7 +26,7 @@ public class EnemyDefendState : EnemyState
     {
         base.ExitState();
 
-        enemy.EnemyDefendBaseInstance.DoExitLogic();
+        defendBehavior.DoExitLogic();
 
     }
 
@@ -31,7 +34,7 @@ public class EnemyDefendState : EnemyState
     {
         base.FrameUpdate();
 
-        enemy.EnemyDefendBaseInstance.DoFrameUpdateLogic();
+        defendBehavior.DoFrameUpdateLogic();
 
 
     }
