@@ -141,6 +141,8 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         SetShield(isShieldActive);
 
         InitializeState();
+
+
     }
 
     void Update()
@@ -174,11 +176,11 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
     public float GetDamage() => model.statsSO.AttackDamage;
 
-    public void DoAttack(IDamageable target)
-    {
-        target.TakeDamage(GetDamage());
-        Debug.Log("Daño hecho por el estado Melee");
-    }
+    //public void DoAttack(IDamageable target)
+    //{
+    //    target.TakeDamage(GetDamage());
+    //    Debug.Log("Daño hecho por el estado Melee");
+    //}
 
     private void HandleHealthChanged(float currentHealth) => view.PlayDamageAnimation();
 
@@ -201,15 +203,15 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
     public override EnemyAttackSOBase CurrentAttackSO => currentAttackSO;
 
 
-    void OnGUI()
-    {
-        if (fsm?.CurrentState != null)
-        {
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 16;
-            style.normal.textColor = Color.white;
+    //void OnGUI()
+    //{
+    //    if (fsm?.CurrentState != null)
+    //    {
+    //        GUIStyle style = new GUIStyle();
+    //        style.fontSize = 16;
+    //        style.normal.textColor = Color.white;
 
-            GUI.Label(new Rect(10, 200, 400, 30), $"Estado FSM: {fsm.CurrentState.GetType().Name}", style);
-        }
-    }
+    //        GUI.Label(new Rect(10, 200, 400, 30), $"Estado FSM: {fsm.CurrentState.GetType().Name}", style);
+    //    }
+    //}
 }

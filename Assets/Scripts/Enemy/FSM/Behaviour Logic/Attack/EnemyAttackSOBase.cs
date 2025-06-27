@@ -9,6 +9,8 @@ public class EnemyAttackSOBase : ScriptableObject
     protected IEnemyBaseController enemy;
     protected EnemyModel _enemyModel;
     protected EnemyView _enemyView;
+    protected BossModel _bossModel;
+    protected BossView _bossView;
     protected Transform transform;
     protected GameObject gameObject;
 
@@ -68,6 +70,8 @@ public class EnemyAttackSOBase : ScriptableObject
 
         _enemyModel = gameObject.GetComponent<EnemyModel>();
         _enemyView = gameObject.GetComponent<EnemyView>();
+        _bossModel = gameObject.GetComponent<BossModel>();
+        _bossView = gameObject.GetComponent<BossView>();
 
         initialSpeed = _navMeshAgent.speed;
         _navMeshAgent.speed = 0;

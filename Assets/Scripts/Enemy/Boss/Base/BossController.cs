@@ -2,59 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Player;
 
-//public class BossController : MonoBehaviour, ITriggerCheck
-public class BossController : MonoBehaviour
 
+public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseController
 {
+    #region Fields and Components
 
     private BossModel model;
     private BossView view;
     private Rigidbody rb;
     private NavMeshAgent _navMeshAgent;
 
-    [System.Serializable]
-    public class AttackPhase
-    {
-        [Range(0f, 1f)]
-        public float healthThreshold;
-        public EnemyAttackSOBase attackSO;
-    }
 
-    [SerializeField]
-    public List<AttackPhase> attackPhases;
-    public EnemyAttackSOBase currentAttackSO;
+    public Rigidbody Rb => rb;
 
-    [Header("Pillars Stats")]
+    public Transform firePoint;
+    public GameObject aggroChecksObject;
+
+    private bool isShieldActive;
+    private int pillarsDestroyed = 0;
+    private bool shieldActive = true;
+
     [SerializeField] private List<Pillar> pillars;
     [SerializeField] private GameObject shield;
     [SerializeField] private float shieldEffectDuration = 1f;
     [SerializeField] private float timeToReactivatePillars = 5f;
+    [SerializeField] private float pushDistance = 5f;
+    private Collider shieldCollider;
 
 
-    private int pillarsDestroyed = 0;
-    private bool shieldActive = true;
+    #endregion
 
-
-    public Transform firePoint;
-    public GameObject shieldObject;
-    private bool isShieldActive;
-    public GameObject aggroChecksObject;
-
-
-    public bool isAggroed { get; set; }
-    public bool isWhitinCombatRadius { get; set; }
-
-    #region State Machine Variables
+    #region State Machine and FSM
 
     public EnemyStateMachine<BaseEnemyController> fsm { get; set; }
-    public EnemyPatrolState PatrolState { get; set; }
+
     public EnemyIdleState IdleState { get; set; }
     public EnemyDeadState DeadState { get; set; }
+    public EnemyAttackState AttackState { get; set; }
 
-
-
-
+    [SerializeField] private EnemyAttackSOBase currentAttackSO;
+    public override EnemyAttackSOBase CurrentAttackSO => currentAttackSO;
 
     public enum InitialState
     {
@@ -65,35 +54,55 @@ public class BossController : MonoBehaviour
 
     public InitialState initialState = InitialState.Idle;
 
-
     #endregion
 
+    #region ScriptableObjects & Behaviors
 
-    #region Behaviours
-    //Behaviour
+    [System.Serializable]
+    public class AttackPhase
+    {
+        [Range(0f, 1f)]
+        public float healthThreshold;
+        public EnemyAttackSOBase attackSO;
+    }
+
+    [SerializeField] public List<AttackPhase> attackPhases;
+
     [Header("FSM-Behaviour ScriptableObjects")]
     [SerializeField] private EnemyIdleSOBase EnemyIdleSOBase;
     [SerializeField] private EnemyDeadSOBase EnemyDeadSOBase;
 
-
-
-
-    public EnemyIdleSOBase EnemyIdleBaseInstance { get; set; }
-    public EnemyDeadSOBase EnemyDeadBaseInstance { get; set; }
+    public EnemyIdleSOBase EnemyIdleBaseInstance { get; private set; }
+    public EnemyDeadSOBase EnemyDeadBaseInstance { get; private set; }
 
     private List<EnemyAttackSOBase> attackPhaseInstances = new();
 
+    #endregion
 
+    #region IEnemyBaseController Interface Stubs
 
+    public bool isAggroed { get; set; }
+    public bool isWhitinCombatRadius { get; set; }
+
+    public EnemyChaseState ChaseState => throw new System.NotImplementedException();
+    public EnemyPatrolState PatrolState => throw new System.NotImplementedException();
+    public EnemySearchState SearchState => throw new System.NotImplementedException();
+    public EnemyStunnedState StunnedState => throw new System.NotImplementedException();
+    public EnemyEscapeState EscapeState => throw new System.NotImplementedException();
+    public EnemyHurtState HurtState => throw new System.NotImplementedException();
+    public EnemyDefendState DefendState => throw new System.NotImplementedException();
+
+    public override float MaxHealth => throw new System.NotImplementedException();
+    public override float CurrentHealth => throw new System.NotImplementedException();
 
     #endregion
 
-    void Awake()
+    #region Unity Methods
+
+    private void Awake()
     {
-        //Behaviour
         EnemyIdleBaseInstance = Instantiate(EnemyIdleSOBase);
         EnemyDeadBaseInstance = Instantiate(EnemyDeadSOBase);
-
 
         foreach (var phase in attackPhases)
         {
@@ -107,109 +116,93 @@ public class BossController : MonoBehaviour
 
         fsm = new EnemyStateMachine<BaseEnemyController>();
 
+        IdleState = new EnemyIdleState(this, fsm, EnemyIdleBaseInstance);
+        DeadState = new EnemyDeadState(this, fsm, EnemyDeadBaseInstance);
 
-        //IdleState = new EnemyIdleState(this, fsm, EnemyIdleSOBase);
-        //DeadState = new EnemyDeadState(this, fsm, EnemyDeadSOBase);
-       
+        currentAttackSO = attackPhaseInstances[0];
+        AttackState = new EnemyAttackState(this, fsm);
 
-
-
+        shieldCollider = shield.GetComponent<Collider>();
     }
-
-    public Rigidbody Rb => rb;
 
     private void Start()
     {
         foreach (var pillar in pillars)
-        {
             pillar.OnPillarDestroyed += HandlePillarDestroyed;
-        }
 
         ActivatePillars();
         ActivateShield();
 
-        for (int i = 0; i < attackPhaseInstances.Count; i++)
-        {
-            //attackPhaseInstances[i].Initialize(gameObject, this);
-        }
+        foreach (var atk in attackPhaseInstances)
+            atk.Initialize(gameObject, this);
 
-        // Seleccioná el primero por defecto
         currentAttackSO = attackPhaseInstances[0];
 
-        //Behaviour
-        //EnemyIdleBaseInstance.Initialize(gameObject, this);
-        //EnemyDeadBaseInstance.Initialize(gameObject, this);
-    
-
-
-
+        EnemyIdleBaseInstance.Initialize(gameObject, this);
+        EnemyDeadBaseInstance.Initialize(gameObject, this);
 
         InitializeState();
 
-
-
         _navMeshAgent = GetComponent<NavMeshAgent>();
-
 
         model.OnHealthChanged += HandleHealthChanged;
         model.OnDeath += HandleDeath;
 
         isShieldActive = model.statsSO.isShieldActive;
-        SetShield(isShieldActive);
+
+
     }
 
     private void Update()
     {
-        //fsm.CurrentEnemyState.FrameUpdate();
-
-        //Debug.Log(fsm.CurrentEnemyState);
-
-        //Animacion de Movimiento
+        fsm.CurrentState?.FrameUpdate();
         view.PlayMovingAnimation(_navMeshAgent.speed);
+        Debug.Log(fsm.CurrentState);
     }
+
+    #endregion
+
+    #region FSM Logic
 
     private void InitializeState()
     {
         switch (initialState)
         {
-        
             case InitialState.Idle:
                 fsm.Initialize(IdleState);
                 break;
             case InitialState.Dead:
                 fsm.Initialize(DeadState);
                 break;
-           
-
-
         }
     }
 
-    //Realiza el ataque desde el eventtrigger de la animacion
-    public void ExecuteAttack(IDamageable target)
+    #endregion
+
+    #region Attack Logic
+
+    public override void ExecuteAttack(IDamageable target)
     {
-
         target.TakeDamage(model.statsSO.AttackDamage);
-
-
     }
 
     public float GetDamage()
     {
         return model.statsSO.AttackDamage;
     }
-    public void DoAttack(IDamageable target)
-    {
-        target.TakeDamage(GetDamage());
-        Debug.Log("Daño hecho por el estado Melee");
-    }
+
+    //public void DoAttack(IDamageable target)
+    //{
+    //    target.TakeDamage(GetDamage());
+    //    Debug.Log("Daño hecho por el estado Melee");
+    //}
+
+    #endregion
+
+    #region Health / Damage / Death Handling
 
     private void HandleHealthChanged(float currentHealth)
     {
-        //float healthPercentage = currentHealth / model.statsSO.MaxHealth;
-
-        //Cuando lo hieren pasa a Hurt
-        //fsm.ChangeState(HurtState);
         float healthPercent = currentHealth / model.MaxHealth;
 
         for (int i = 0; i < attackPhases.Count; i++)
@@ -229,18 +222,13 @@ public class BossController : MonoBehaviour
         fsm.ChangeState(DeadState);
     }
 
+    #endregion
+
+    #region Aggro / Combat Control
+
     public void SetAggroChecksEnabled(bool enabled)
     {
-        if (enabled)
-        {
-
-            aggroChecksObject.SetActive(true);
-        }
-        else
-        {
-            aggroChecksObject.SetActive(false);
-
-        }
+        aggroChecksObject.SetActive(enabled);
     }
 
     public void SetAggroStatus(bool IsAggroed)
@@ -253,34 +241,22 @@ public class BossController : MonoBehaviour
         isWhitinCombatRadius = IsWhitinCombatRadius;
     }
 
-    public void SetShield(bool isGod)
-    {
-        isShieldActive = isGod;
-
-        if (isGod)
-        {
-            shieldObject.SetActive(true);
-        }
-        else
-        {
-            shieldObject.SetActive(false);
-        }
-    }
-
     public bool GetShield()
     {
         return isShieldActive;
     }
 
+    public void SetShield(bool isOn)
+    {
+        throw new System.NotImplementedException();
+    }
 
+    #endregion
 
-
-
+    #region Pillar / Shield Logic
 
     private void HandlePillarDestroyed(Pillar pillar)
     {
-
-
         pillarsDestroyed++;
 
         if (pillarsDestroyed >= pillars.Count)
@@ -291,16 +267,13 @@ public class BossController : MonoBehaviour
 
     private IEnumerator DeactivateShieldRoutine()
     {
-        // Efecto de shader o feedback visual
         TriggerShieldEffect();
-
         yield return new WaitForSeconds(shieldEffectDuration);
 
         shield.SetActive(false);
         shieldActive = false;
 
-        //tiempo para revivir los pilares
-        yield return new WaitForSeconds(timeToReactivatePillars); 
+        yield return new WaitForSeconds(timeToReactivatePillars);
         ReactivatePillars();
         TriggerShieldEffect();
         ActivateShield();
@@ -320,9 +293,9 @@ public class BossController : MonoBehaviour
 
         float duration = shieldEffectDuration;
         float elapsed = 0f;
-        float blinkSpeed = 10f; //cuantos parpadeos por segundo
-        Color baseColor = Color.white; //Color del escudo
-        float emissionStrength = 2f;  //Intensidad del brillo
+        float blinkSpeed = 10f;
+        Color baseColor = Color.white;
+        float emissionStrength = 2f;
 
         while (elapsed < duration)
         {
@@ -335,22 +308,47 @@ public class BossController : MonoBehaviour
             yield return null;
         }
 
-        // Reset después del efecto
-        mat.SetColor("_EmissionColor", baseColor * 0f); // apagar
+        mat.SetColor("_EmissionColor", baseColor * 0f);
     }
-
 
     private void ActivateShield()
     {
         shield.SetActive(true);
         shieldActive = true;
+
+        Transform playerTransform = PlayerHelper.GetPlayer().transform;
+        Rigidbody playerRb = playerTransform.GetComponent<Rigidbody>();
+        SphereCollider shieldCollider = shield.GetComponent<SphereCollider>();
+
+        if (playerTransform == null || shieldCollider == null)
+            return;
+
+        //Convertir centro local del SphereCollider a mundo
+        Vector3 shieldCenter = shield.transform.TransformPoint(shieldCollider.center);
+        float shieldRadius = shieldCollider.radius * shield.transform.lossyScale.x; 
+
+        Vector3 toPlayer = playerTransform.position - shieldCenter;
+        float distance = toPlayer.magnitude;
+
+        if (distance < shieldRadius)
+        {
+            Vector3 pushDirection = toPlayer.normalized;
+            float pushDistance = shieldRadius - distance + 1f; 
+
+            Vector3 newPosition = playerTransform.position + pushDirection * pushDistance;
+
+            if (playerRb != null)
+                playerRb.MovePosition(newPosition);
+            else
+                playerTransform.position = newPosition;
+        }
     }
 
     private void ActivatePillars()
     {
         foreach (var pillar in pillars)
         {
-            pillar.ResetPillar(); //Restaura salud y estado visual
+            pillar.ResetPillar();
         }
 
         pillarsDestroyed = 0;
@@ -361,7 +359,5 @@ public class BossController : MonoBehaviour
         ActivatePillars();
     }
 
-
-
-
+    #endregion
 }
