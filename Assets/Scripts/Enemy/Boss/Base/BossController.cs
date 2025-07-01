@@ -75,7 +75,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     public EnemyIdleSOBase EnemyIdleBaseInstance { get; private set; }
     public EnemyDeadSOBase EnemyDeadBaseInstance { get; private set; }
 
-    private List<EnemyAttackSOBase> attackPhaseInstances = new();
+    //private List<EnemyAttackSOBase> attackPhaseInstances = new();
 
     #endregion
 
@@ -104,11 +104,11 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         EnemyIdleBaseInstance = Instantiate(EnemyIdleSOBase);
         EnemyDeadBaseInstance = Instantiate(EnemyDeadSOBase);
 
-        foreach (var phase in attackPhases)
-        {
-            var instance = Instantiate(phase.attackSO);
-            attackPhaseInstances.Add(instance);
-        }
+        //foreach (var phase in attackPhases)
+        //{
+        //    //var instance = Instantiate(phase.attackSO);
+        //    attackPhaseInstances.Add(instance);
+        //}
 
         model = GetComponent<BossModel>();
         view = GetComponent<BossView>();
@@ -119,7 +119,9 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         IdleState = new EnemyIdleState(this, fsm, EnemyIdleBaseInstance);
         DeadState = new EnemyDeadState(this, fsm, EnemyDeadBaseInstance);
 
-        currentAttackSO = attackPhaseInstances[0];
+        currentAttackSO = attackPhases[0].attackSO;
+
+        //bug
         AttackState = new EnemyAttackState(this, fsm);
 
         shieldCollider = shield.GetComponent<Collider>();
@@ -133,10 +135,10 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         ActivatePillars();
         ActivateShield();
 
-        foreach (var atk in attackPhaseInstances)
-            atk.Initialize(gameObject, this);
+        foreach (var atk in attackPhases)
+            atk.attackSO.Initialize(gameObject, this);
 
-        currentAttackSO = attackPhaseInstances[0];
+        currentAttackSO = attackPhases[0].attackSO;
 
         EnemyIdleBaseInstance.Initialize(gameObject, this);
         EnemyDeadBaseInstance.Initialize(gameObject, this);
@@ -209,7 +211,9 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         {
             if (healthPercent <= attackPhases[i].healthThreshold)
             {
-                currentAttackSO = attackPhaseInstances[i];
+                Debug.Log("Fase: " + attackPhases[i] + i);
+
+                currentAttackSO = attackPhases[i].attackSO;
                 break;
             }
         }

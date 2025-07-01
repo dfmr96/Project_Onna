@@ -25,6 +25,7 @@ public class MonarchAttackProjectiles : EnemyAttackSOBase
         _timer = 0f;
         _hasAttackedOnce = false;
 
+        Debug.Log("Inicio Fase de Ataque");
        
         _navMeshAgent.stoppingDistance = 0f;
         _navMeshAgent.updateRotation = true;

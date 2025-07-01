@@ -22,7 +22,7 @@ public class Pillar : MonoBehaviour, IDamageable
 
 
     private OrbSpawner orbSpawner;
-    private BossModel _bossModel;
+    [SerializeField] private BossModel _bossModel;
 
 
  
@@ -32,7 +32,7 @@ public class Pillar : MonoBehaviour, IDamageable
        
 
         orbSpawner = GameManager.Instance.orbSpawner;
-        _bossModel = GetComponentInParent<BossModel>();
+        //_bossModel = GetComponentInParent<BossModel>();
 
         MaxHealth = _bossModel.statsSO.PillarMaxHealth;
         CurrentHealth = MaxHealth;
