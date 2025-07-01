@@ -14,6 +14,7 @@ public class EnemyAttackSOBase : ScriptableObject
     protected Transform transform;
     protected GameObject gameObject;
 
+
     protected Transform playerTransform;
 
     protected NavMeshAgent _navMeshAgent;
@@ -52,7 +53,12 @@ public class EnemyAttackSOBase : ScriptableObject
         playerTransform = PlayerHelper.GetPlayer().transform;
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
+        _enemyView = gameObject.GetComponent<EnemyView>();
+        _bossModel = gameObject.GetComponent<BossModel>();
+        _bossView = gameObject.GetComponent<BossView>();
 
+        Debug.Log("Cambio de ataque");
     }
 
     public virtual void DoEnterLogic()

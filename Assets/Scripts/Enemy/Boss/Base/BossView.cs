@@ -17,15 +17,17 @@ public class BossView : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
     }
     public Animator Animator => animator;
 
     private void Start()
     {
         _playerTransform = PlayerHelper.GetPlayer().transform;
-        projectileSpawner = GameManager.Instance.projectileSpawner;
         _bossController = GetComponent<BossController>();
         _bossModel = GetComponent<BossModel>();
+        projectileSpawner = GameManager.Instance.projectileSpawner;
+
 
     }
 
