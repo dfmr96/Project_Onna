@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyStunnedSOBase : ScriptableObject
 {
-    protected EnemyController enemy;
+    protected IEnemyBaseController enemy;
     protected Transform transform;
     protected GameObject gameObject;
 
@@ -15,20 +15,20 @@ public class EnemyStunnedSOBase : ScriptableObject
 
     private NavMeshAgent _navMeshAgent;
 
-    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
+    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         this.gameObject = gameObject;
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
+        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
     }
 
     public virtual void DoEnterLogic()
     {
-        _enemyView = enemy.GetComponent<EnemyView>();
+        _enemyView = gameObject.GetComponent<EnemyView>();
 
     }
     public virtual void DoExitLogic() { ResetValues(); }

@@ -89,6 +89,7 @@ public class EnemyAttackRanged : EnemyAttackSOBase
             {
                 TryStrafe(directionToPlayer);
             }
+          
             return;
         }
 
@@ -109,13 +110,12 @@ public class EnemyAttackRanged : EnemyAttackSOBase
             _timer = 0f;
         }
 
-        
     }
 
 
 
 
-    public override void Initialize(GameObject gameObject, EnemyController enemy)
+    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
     }
@@ -134,6 +134,16 @@ public class EnemyAttackRanged : EnemyAttackSOBase
     private void ShootProjectile()
     {
          _enemyView.PlayAttackAnimation(true);
+
+        //ROTAR hacia el jugador
+        Vector3 direction = (playerTransform.position - transform.position).normalized;
+        direction.y = 0f; //para no inclinar hacia arriba/abajo si el jugador esta a otra altura
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f); //o un valor menor para suavizar
+        }
     }
 
 

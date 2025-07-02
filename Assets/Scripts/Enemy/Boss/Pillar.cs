@@ -17,10 +17,12 @@ public class Pillar : MonoBehaviour, IDamageable
     [SerializeField] private GameObject floatingTextPrefab;
     [SerializeField] private float heightTextSpawn = 2f;
     [SerializeField] private ParticleSystem particleExplosion;
+    private ParticleSystem explosionInstance;
+
 
 
     private OrbSpawner orbSpawner;
-    private BossModel _bossModel;
+    [SerializeField] private BossModel _bossModel;
 
 
  
@@ -30,10 +32,17 @@ public class Pillar : MonoBehaviour, IDamageable
        
 
         orbSpawner = GameManager.Instance.orbSpawner;
-        _bossModel = GetComponentInParent<BossModel>();
+        //_bossModel = GetComponentInParent<BossModel>();
 
         MaxHealth = _bossModel.statsSO.PillarMaxHealth;
         CurrentHealth = MaxHealth;
+
+        //Instanciar una vez la explosion y detenerla
+        if (particleExplosion != null)
+        {
+            explosionInstance = Instantiate(particleExplosion, transform.position, Quaternion.identity);
+            explosionInstance.Stop();
+        }
 
         ResetPillar();
 
@@ -41,9 +50,13 @@ public class Pillar : MonoBehaviour, IDamageable
 
     void SpawnParticle(Vector3 pos)
     {
-        ParticleSystem inst = Instantiate(particleExplosion, pos, Quaternion.identity);
-        inst.Play();
+        if (explosionInstance != null)
+        {
+            explosionInstance.transform.position = pos;
+            explosionInstance.Play();
+        }
     }
+
     public void TakeDamage(float damageAmount)
     {
         if (isDestroyed) return;
