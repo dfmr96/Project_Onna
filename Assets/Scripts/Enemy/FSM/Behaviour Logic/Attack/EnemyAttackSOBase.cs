@@ -13,6 +13,7 @@ public class EnemyAttackSOBase : ScriptableObject
     protected BossView _bossView;
     protected Transform transform;
     protected GameObject gameObject;
+    protected ProjectileSpawner _projectileSpawner;
 
 
     protected Transform playerTransform;
@@ -57,6 +58,7 @@ public class EnemyAttackSOBase : ScriptableObject
         _enemyView = gameObject.GetComponent<EnemyView>();
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
+        _projectileSpawner = GameManager.Instance.projectileSpawner;
 
         Debug.Log("Cambio de ataque");
     }

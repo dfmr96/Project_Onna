@@ -97,5 +97,7 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
     {
         base.DoExitLogic();
         _laser.StopLaser();
+        _firing = false;
+        _elapsedTime = 0f;
     }
 }

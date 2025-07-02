@@ -17,13 +17,23 @@ public class LaserDamage : MonoBehaviour
     private Transform playerTransform;
     private IDamageable playerDamageable;
 
-    private void Start()
+    [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
+    private ParticleSystem impactParticlesInstance;
+
+       
+private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
         playerDamageable = playerTransform.GetComponent<IDamageable>();
+
+        if (impactEffectParticlesPrefab != null)
+        {
+            impactParticlesInstance = Instantiate(impactEffectParticlesPrefab);
+            impactParticlesInstance.Stop();
+        }
     }
 
     private void Update()
@@ -43,6 +53,19 @@ public class LaserDamage : MonoBehaviour
 
         lineRenderer.SetPosition(0, laserOrigin.position);
         lineRenderer.SetPosition(1, endPos);
+
+        //particulas al final del rayo
+        if (impactParticlesInstance != null)
+        {
+            impactParticlesInstance.transform.position = endPos;
+
+            Vector3 toLaserOrigin = (laserOrigin.position - endPos).normalized;
+            if (toLaserOrigin != Vector3.zero)
+                impactParticlesInstance.transform.rotation = Quaternion.LookRotation(toLaserOrigin);
+
+            if (!impactParticlesInstance.isPlaying)
+                impactParticlesInstance.Play();
+        }
     }
 
     public void StartLaser()
@@ -52,7 +75,15 @@ public class LaserDamage : MonoBehaviour
 
         if (damageCoroutine == null)
             damageCoroutine = StartCoroutine(DamageRoutine());
+
+        if (impactParticlesInstance != null && !impactParticlesInstance.isPlaying)
+        {
+            impactParticlesInstance.Play();
+
+        }
     }
+
+
 
     public void StopLaser()
     {
@@ -63,6 +94,11 @@ public class LaserDamage : MonoBehaviour
         {
             StopCoroutine(damageCoroutine);
             damageCoroutine = null;
+        }
+
+        if (impactEffectParticlesPrefab != null)
+        {
+            impactParticlesInstance.Stop();
         }
     }
 

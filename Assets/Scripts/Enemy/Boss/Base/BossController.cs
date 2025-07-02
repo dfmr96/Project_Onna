@@ -75,7 +75,6 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     public EnemyIdleSOBase EnemyIdleBaseInstance { get; private set; }
     public EnemyDeadSOBase EnemyDeadBaseInstance { get; private set; }
 
-    //private List<EnemyAttackSOBase> attackPhaseInstances = new();
 
     #endregion
 
@@ -104,12 +103,6 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         EnemyIdleBaseInstance = Instantiate(EnemyIdleSOBase);
         EnemyDeadBaseInstance = Instantiate(EnemyDeadSOBase);
 
-        //foreach (var phase in attackPhases)
-        //{
-        //    //var instance = Instantiate(phase.attackSO);
-        //    attackPhaseInstances.Add(instance);
-        //}
-
         model = GetComponent<BossModel>();
         view = GetComponent<BossView>();
         rb = GetComponent<Rigidbody>();
@@ -121,7 +114,6 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
         currentAttackSO = attackPhases[0].attackSO;
 
-        //bug
         AttackState = new EnemyAttackState(this, fsm);
 
         shieldCollider = shield.GetComponent<Collider>();
@@ -206,14 +198,18 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private void HandleHealthChanged(float currentHealth)
     {
         float healthPercent = currentHealth / model.MaxHealth;
-
-        for (int i = 0; i < attackPhases.Count; i++)
+        Debug.Log("Vida: " + healthPercent);
+        for (int i = attackPhases.Count - 1; i >= 0; i--)
         {
             if (healthPercent <= attackPhases[i].healthThreshold)
             {
-                Debug.Log("Fase: " + attackPhases[i] + i);
-
-                currentAttackSO = attackPhases[i].attackSO;
+                if (attackPhases[i].attackSO != currentAttackSO)
+                {
+                    Debug.Log("Entró en fase: " + i);
+                    currentAttackSO?.DoExitLogic();
+                    currentAttackSO = attackPhases[i].attackSO;
+                    //currentAttackSO?.DoEnterLogic(); // activar el nuevo ataque
+                }
                 break;
             }
         }
