@@ -8,8 +8,10 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
     [SerializeField] private float laserDuration = 5f;
     [SerializeField] private float laserCooldown = 2f;
 
-    [SerializeField] private float rotationSmoothness = 2f;       // Qué tan lento gira hacia el jugador
-    [SerializeField] private float trackingDelay = 0.5f;          // Tiempo entre actualizaciones de la posición del jugador
+    [SerializeField] private float rotationSmoothness = 2f;       
+    [SerializeField] private float trackingDelay = 0.5f;        
+    [SerializeField] private float messageDuration = 4f;
+    [SerializeField] List<string> bossMessage;
 
     private LaserDamage _laser;
     private float _elapsedTime;
@@ -22,6 +24,9 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
     {
         base.DoEnterLogic();
 
+        int randomIndex = Random.Range(0, bossMessage.Count);
+        _bossModel.PrintMessage(bossMessage[randomIndex], messageDuration);
+
         isLookingPlayer = false;
         _laser = _bossModel.GetComponentInChildren<LaserDamage>(true);
         _laser.StartLaser();
@@ -32,7 +37,6 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
 
         _navMeshAgent.isStopped = true;
 
-        // Tomar la posición inicial del jugador
         Vector3 toPlayer = playerTransform.position - transform.position;
         toPlayer.y = 0f;
 
@@ -48,7 +52,7 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
 
         if (_firing)
         {
-            // Actualizar la posición objetivo cada cierto tiempo (delay simulado)
+            //Actualizar la posición objetivo cada cierto tiempo (delay simulado)
             if (_trackingTimer >= trackingDelay)
             {
                 _delayedTargetPosition = playerTransform.position;
@@ -88,7 +92,7 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
                     transform.rotation = lookRotation;
                 }
 
-                DoEnterLogic(); // Reinicia el ataque láser
+                DoEnterLogic(); 
             }
         }
     }

@@ -198,17 +198,15 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private void HandleHealthChanged(float currentHealth)
     {
         float healthPercent = currentHealth / model.MaxHealth;
-        Debug.Log("Vida: " + healthPercent);
         for (int i = attackPhases.Count - 1; i >= 0; i--)
         {
             if (healthPercent <= attackPhases[i].healthThreshold)
             {
                 if (attackPhases[i].attackSO != currentAttackSO)
                 {
-                    Debug.Log("Entró en fase: " + i);
                     currentAttackSO?.DoExitLogic();
                     currentAttackSO = attackPhases[i].attackSO;
-                    //currentAttackSO?.DoEnterLogic(); // activar el nuevo ataque
+                    currentAttackSO?.DoEnterLogic(); 
                 }
                 break;
             }

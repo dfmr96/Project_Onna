@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using System.Collections;
-using UnityEngine;
-
 [CreateAssetMenu(fileName = "Attack-CombinedBurstAndLaser", menuName = "Enemy Logic/Boss Attack Logic/Combined Burst and Laser")]
 public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
 {
-    [SerializeField] private int minBurstShots = 4;
-    [SerializeField] private int maxBurstShots = 6;
+    [SerializeField] private int burstDuration = 1;
     [SerializeField] private float timeBetweenBursts = 3f;
     [SerializeField] private float laserDuration = 4f;
     [SerializeField] private float laserCooldownAfter = 2f;
+    [SerializeField] private float messageDuration = 4f;
+    [SerializeField] List<string> bossMessage;
+  
 
     private enum AttackPhase { Burst, WaitAfterBurst, Laser, WaitAfterLaser }
     private AttackPhase currentPhase;
@@ -27,6 +26,9 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
     {
         base.DoEnterLogic();
 
+        int randomIndex = Random.Range(0, bossMessage.Count);
+        _bossModel.PrintMessage(bossMessage[randomIndex], messageDuration);
+
         _navMeshAgent.isStopped = true;
         _navMeshAgent.updateRotation = true;
         _navMeshAgent.stoppingDistance = 0f;
@@ -34,14 +36,14 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
         _burstShooter = _bossModel.GetComponentInChildren<ProjectileBurstShooter>();
         _laser = _bossModel.GetComponentInChildren<LaserDamage>(true);
 
-        // Comenzar con ráfaga
+        shotsRemainingInBurst = burstDuration;
+        //Comenzar rafaga
         StartBurst();
     }
 
     private void StartBurst()
     {
         currentPhase = AttackPhase.Burst;
-        shotsRemainingInBurst = Random.Range(minBurstShots, maxBurstShots + 1);
         timer = 0f;
         _laser?.StopLaser();
         _burstShooter?.StartBurstLoop();
@@ -77,20 +79,12 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
         switch (currentPhase)
         {
             case AttackPhase.Burst:
-                // Aquí puedes controlar que la ráfaga dispare un tiro a la vez
-                // y se reduzca shotsRemainingInBurst, por ejemplo
-                // Asumo que ProjectileBurstShooter maneja eso solo
                 if (shotsRemainingInBurst <= 0)
                 {
                     StartWaitAfterBurst();
+                    shotsRemainingInBurst = burstDuration;
                 }
-                else
-                {
-                    // Aquí podrías detectar cuando se dispara un tiro para decrementar
-                    // Pero si el _burstShooter controla su lógica internamente,
-                    // podrías hacer algo como:
-                    // shotsRemainingInBurst = 0; // forzar terminar tras un loop
-                }
+              
                 break;
 
             case AttackPhase.WaitAfterBurst:
@@ -107,7 +101,6 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
                 }
                 else
                 {
-                    // Actualizar rotación hacia jugador con delay o suavizado si quieres
                     UpdateLaserRotation();
                 }
                 break;
@@ -120,12 +113,10 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
                 break;
         }
 
-        // Si quieres controlar shotsRemainingInBurst basado en el shooter, aquí podrías:
         if (currentPhase == AttackPhase.Burst && _burstShooter != null)
         {
-            // Ejemplo: si el shooter tiene evento o variable pública que indica tiros restantes
-            // Aquí solo decrementa manualmente para simular
-            if (timer >= 1f) // ejemplo para simular disparos cada 1s
+            //Simular disparos
+            if (timer >= 1f) 
             {
                 shotsRemainingInBurst--;
                 timer = 0f;

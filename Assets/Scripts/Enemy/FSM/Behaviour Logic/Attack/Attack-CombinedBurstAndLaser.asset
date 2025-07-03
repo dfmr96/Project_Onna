@@ -20,8 +20,14 @@ MonoBehaviour:
   _targetColor: {r: 1, g: 0, b: 0, a: 1}
   isLookingPlayer: 1
   rotationSpeed: 5
-  minBurstShots: 4
-  maxBurstShots: 6
+  burstDuration: 1
   timeBetweenBursts: 3
   laserDuration: 4
   laserCooldownAfter: 2
+  messageDuration: 4
+  bossMessage:
+  - You forced my hand, mortal. Face my full might!
+  - Now, chaos and light shall strike together!
+  - No escape... my arsenal unleashed!
+  - Witness the glory of total annihilation!
+  - I wield the cosmos itself against you!

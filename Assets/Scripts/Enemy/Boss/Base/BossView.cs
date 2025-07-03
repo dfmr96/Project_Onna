@@ -14,6 +14,7 @@ public class BossView : MonoBehaviour
     //private float _distanceToCountExit = 3f;
 
 
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
