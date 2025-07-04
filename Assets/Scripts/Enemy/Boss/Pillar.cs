@@ -5,30 +5,63 @@ using System;
 
 public class Pillar : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float maxHealth = 100f;
-    private float currentHealth;
-
+ 
     public event Action<Pillar> OnPillarDestroyed;
 
-    public float MaxHealth => maxHealth;
-    public float CurrentHealth => currentHealth;
+    public float MaxHealth { get; private set; }
+    public float CurrentHealth { get; private set; }
 
     private bool isDestroyed = false;
 
     [Header("Floating Damage Text Effect")]
     [SerializeField] private GameObject floatingTextPrefab;
     [SerializeField] private float heightTextSpawn = 2f;
+    [SerializeField] private ParticleSystem particleExplosion;
+    private ParticleSystem explosionInstance;
 
-    private void Awake()
+
+
+    private OrbSpawner orbSpawner;
+    [SerializeField] private BossModel _bossModel;
+
+
+ 
+
+    private void Start()
     {
+       
+
+        orbSpawner = GameManager.Instance.orbSpawner;
+        //_bossModel = GetComponentInParent<BossModel>();
+
+        MaxHealth = _bossModel.statsSO.PillarMaxHealth;
+        CurrentHealth = MaxHealth;
+
+        //Instanciar una vez la explosion y detenerla
+        if (particleExplosion != null)
+        {
+            explosionInstance = Instantiate(particleExplosion, transform.position, Quaternion.identity);
+            explosionInstance.Stop();
+        }
+
         ResetPillar();
+
+    }
+
+    void SpawnParticle(Vector3 pos)
+    {
+        if (explosionInstance != null)
+        {
+            explosionInstance.transform.position = pos;
+            explosionInstance.Play();
+        }
     }
 
     public void TakeDamage(float damageAmount)
     {
         if (isDestroyed) return;
 
-        currentHealth -= damageAmount;
+        CurrentHealth -= damageAmount;
 
         // Mostrar texto flotante
         if (floatingTextPrefab != null)
@@ -38,7 +71,7 @@ public class Pillar : MonoBehaviour, IDamageable
             textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
         }
 
-        if (currentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
             Die();
         }
@@ -51,14 +84,25 @@ public class Pillar : MonoBehaviour, IDamageable
         isDestroyed = true;
 
         //Efecto de destruccion
+        SpawnParticle(transform.position);
+
         gameObject.SetActive(false); 
 
         OnPillarDestroyed?.Invoke(this);
+
+        if (_bossModel.statsSO.PillarRastroOrbOnDeath && orbSpawner != null)
+        {
+            for (int i = 0; i < _bossModel.statsSO.pillarNumberOfOrbsOnDeath; i++)
+            {
+                orbSpawner.SpawnHealingOrb(transform.position, transform.forward);
+            }
+        }
     }
 
+   
     public void ResetPillar()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = MaxHealth;
         isDestroyed = false;
         gameObject.SetActive(true);
     }

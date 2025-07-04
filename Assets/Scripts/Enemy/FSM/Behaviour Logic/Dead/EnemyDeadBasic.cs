@@ -13,7 +13,7 @@ public class EnemyDeadBasic : EnemyDeadSOBase
     {
         base.DoEnterLogic();
 
-        _enemyView.PlayDeathAnimation();
+        //_enemyView.PlayDeathAnimation();
         _timer = 0f;
     }
 
@@ -35,7 +35,7 @@ public class EnemyDeadBasic : EnemyDeadSOBase
         }
     }
 
-    public override void Initialize(GameObject gameObject, EnemyController enemy)
+    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

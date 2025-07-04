@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f28dc6eb0af9b75449f4cc8ed32cb514, type: 3}
+  m_Name: EnemyBossMonarchStats
+  m_EditorClassIdentifier: 
+  MaxHealth: 100
+  isShieldActive: 0
+  AttackDamage: 0
+  AttackRange: 100
+  combatAngle: 360
+  obstacleCombatLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  detectionRange: 20
+  visionAngle: 360
+  obstacleDetectionLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  ShootForce: 15
+  PillarMaxHealth: 20
+  pillarRadiusSpawnOrb: 1.5
+  PillarRastroOrbOnHit: 1
+  pillarNumberOfOrbsOnHit: 1
+  PillarRastroOrbOnDeath: 1
+  pillarNumberOfOrbsOnDeath: 4
+  radiusSpawnOrb: 1.5
+  RastroOrbOnHit: 1
+  numberOfOrbsOnHit: 1
+  RastroOrbOnDeath: 1
+  numberOfOrbsOnDeath: 2
+  CoinsToDrop: 1

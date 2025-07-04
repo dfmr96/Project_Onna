@@ -25,11 +25,11 @@ public class BossModel : MonoBehaviour, IDamageable
     [SerializeField] private GameObject floatingTextPrefab;
     [SerializeField] private float heightTextSpawn = 2f;
 
-    [Header("Health bar")]
-    [SerializeField] private GameObject healthBarPrefab;
-    [SerializeField] private float heightBarSpawn = 2.5f;
-    private Transform healthBar;
-    private Transform healthFill;
+    //[Header("Health bar")]
+    //[SerializeField] private GameObject healthBarPrefab;
+    //[SerializeField] private float heightBarSpawn = 2.5f;
+    //private Transform healthBar;
+    //private Transform healthFill;
 
     private void Start()
     {
@@ -40,16 +40,25 @@ public class BossModel : MonoBehaviour, IDamageable
         enemy = GetComponent<BossController>();
         orbSpawner = GameManager.Instance.orbSpawner;
 
-        //Instanciar la barra de vida
-        if (healthBarPrefab != null)
-        {
-            GameObject barInstance = Instantiate(healthBarPrefab, transform);
-            barInstance.transform.localPosition = new Vector3(0, heightBarSpawn, 0);
-            healthBar = barInstance.transform;
-            healthFill = healthBar.Find("Fill");
-        }
+        ////Instanciar la barra de vida
+        //if (healthBarPrefab != null)
+        //{
+        //    GameObject barInstance = Instantiate(healthBarPrefab, transform);
+        //    barInstance.transform.localPosition = new Vector3(0, heightBarSpawn, 0);
+        //    healthBar = barInstance.transform;
+        //    healthFill = healthBar.Find("Fill");
+        //}
     }
 
+    public void PrintMessage(String text, float lifeTime)
+    {
+        if (floatingTextPrefab != null)
+        {
+            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
+            GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
+            textObj.GetComponent<FloatingDamageText>().Initialize(text, lifeTime);
+        }
+    }
     public void TakeDamage(float damageAmount)
     {
         //if (enemy.GetShield()) return;
@@ -67,7 +76,7 @@ public class BossModel : MonoBehaviour, IDamageable
         OnHealthChanged?.Invoke(CurrentHealth);
         //view.PlayDamageAnimation();
 
-        UpdateHealthBar();
+        //UpdateHealthBar();
 
         // Mostrar texto flotante
         if (floatingTextPrefab != null)
@@ -90,10 +99,10 @@ public class BossModel : MonoBehaviour, IDamageable
             }
         }
 
-        if (healthBar != null)
-        {
-            Destroy(healthBar.gameObject);
-        }
+        //if (healthBar != null)
+        //{
+        //    Destroy(healthBar.gameObject);
+        //}
 
 
         if (RunData.CurrentCurrency != null)
@@ -104,16 +113,16 @@ public class BossModel : MonoBehaviour, IDamageable
         OnDeath?.Invoke(this);
     }
 
-    private void UpdateHealthBar()
-    {
-        if (healthFill == null) return;
+    //private void UpdateHealthBar()
+    //{
+    //    if (healthFill == null) return;
 
-        float normalizedHealth = Mathf.Clamp01(CurrentHealth / MaxHealth);
-        healthFill.localScale = new Vector3(normalizedHealth, 1f, 1f);
+    //    float normalizedHealth = Mathf.Clamp01(CurrentHealth / MaxHealth);
+    //    healthFill.localScale = new Vector3(normalizedHealth, 1f, 1f);
 
-        // Mover la barra hacia la izquierda para que "se vacíe" desde ahí
-        healthFill.localPosition = new Vector3((normalizedHealth - 1f) / 2f, 0f, 0f);
-    }
+    //    // Mover la barra hacia la izquierda para que "se vacíe" desde ahí
+    //    healthFill.localPosition = new Vector3((normalizedHealth - 1f) / 2f, 0f, 0f);
+    //}
 
 }
 

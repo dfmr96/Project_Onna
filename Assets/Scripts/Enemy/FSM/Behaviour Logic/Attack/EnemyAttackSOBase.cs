@@ -6,11 +6,15 @@ using UnityEngine.AI;
 
 public class EnemyAttackSOBase : ScriptableObject
 {
-    protected EnemyController enemy;
+    protected IEnemyBaseController enemy;
     protected EnemyModel _enemyModel;
     protected EnemyView _enemyView;
+    protected BossModel _bossModel;
+    protected BossView _bossView;
     protected Transform transform;
     protected GameObject gameObject;
+    protected ProjectileSpawner _projectileSpawner;
+
 
     protected Transform playerTransform;
 
@@ -41,16 +45,22 @@ public class EnemyAttackSOBase : ScriptableObject
     protected float _colorTransitionDuration;
     protected enum ColorPhase { None, ToRed, ToOriginal }
     protected ColorPhase _colorPhase = ColorPhase.None;
-    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
+    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         this.gameObject = gameObject;
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
+        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
+        _enemyView = gameObject.GetComponent<EnemyView>();
+        _bossModel = gameObject.GetComponent<BossModel>();
+        _bossView = gameObject.GetComponent<BossView>();
+        _projectileSpawner = GameManager.Instance.projectileSpawner;
 
+        Debug.Log("Cambio de ataque");
     }
 
     public virtual void DoEnterLogic()
@@ -66,8 +76,10 @@ public class EnemyAttackSOBase : ScriptableObject
 
         }
 
-        _enemyModel = enemy.GetComponent<EnemyModel>();
-        _enemyView = enemy.GetComponent<EnemyView>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
+        _enemyView = gameObject.GetComponent<EnemyView>();
+        _bossModel = gameObject.GetComponent<BossModel>();
+        _bossView = gameObject.GetComponent<BossView>();
 
         initialSpeed = _navMeshAgent.speed;
         _navMeshAgent.speed = 0;
@@ -75,7 +87,7 @@ public class EnemyAttackSOBase : ScriptableObject
 
         //InitialAttackDelay Visual
         _colorTransitionDuration = _initialAttackDelay;
-        _material = enemy.GetComponentInChildren<Renderer>().material;
+        _material = gameObject.GetComponentInChildren<Renderer>().material;
         _originalColor = _material.color;
     }
     public virtual void DoExitLogic() { ResetValues(); }

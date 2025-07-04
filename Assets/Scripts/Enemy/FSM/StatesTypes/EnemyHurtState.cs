@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHurtState : EnemyState
+public class EnemyHurtState : EnemyState<BaseEnemyController>
 {
-    public EnemyHurtState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
-    {
+    private EnemyHurtSOBase hurtBehavior;
 
+    public EnemyHurtState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm, EnemyHurtSOBase hurtBehavior) : base(enemy, fsm)
+    {
+        this.hurtBehavior = hurtBehavior;
     }
 
     public override void EnterState()
     {
         base.EnterState();
 
-        enemy.EnemyHurtBaseInstance.DoEnterLogic();
+        hurtBehavior.DoEnterLogic();
 
     }
 
@@ -23,7 +25,7 @@ public class EnemyHurtState : EnemyState
     {
         base.ExitState();
 
-        enemy.EnemyHurtBaseInstance.DoExitLogic();
+        hurtBehavior.DoExitLogic();
 
     }
 
@@ -31,7 +33,7 @@ public class EnemyHurtState : EnemyState
     {
         base.FrameUpdate();
 
-        enemy.EnemyHurtBaseInstance.DoFrameUpdateLogic();
+        hurtBehavior.DoFrameUpdateLogic();
 
 
     }

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: EnemyMeleeStats
   m_EditorClassIdentifier: 
   MaxHealth: 100
+  isShieldActive: 0
   AttackDamage: 5
   AttackRange: 1.8
-  combatAngle: 30
+  combatAngle: 30.27
   obstacleCombatLayers:
     serializedVersion: 2
     m_Bits: 384
@@ -28,6 +29,9 @@ MonoBehaviour:
   moveSpeed: 6
   rotationSpeed: 400
   RandomMovementRange: 30
+  radiusSpawnOrb: 1.5
   RastroOrbOnHit: 1
+  numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
+  numberOfOrbsOnDeath: 2
   CoinsToDrop: 1

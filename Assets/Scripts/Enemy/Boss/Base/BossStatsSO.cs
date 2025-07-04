@@ -24,12 +24,23 @@ public class BossStatsSO : ScriptableObject
     [Header("Ranged Combat")]
     public float ShootForce = 15f;
 
-    [Header("Movement")]
-    public float moveSpeed = 6f;
-    public float rotationSpeed = 400f;
-    public float RandomMovementRange = 30f;
+    //[Header("Movement")]
+    //public float moveSpeed = 6f;
+    //public float rotationSpeed = 400f;
+    //public float RandomMovementRange = 30f;
 
-    [Header("Rastro Orb")]
+    [Header("Pillar Stats")]
+    public float PillarMaxHealth = 100f;
+
+
+    [Header("Pillar Rastro Orb")]
+    public float pillarRadiusSpawnOrb = 1.5f;
+    public bool PillarRastroOrbOnHit = true;
+    public int pillarNumberOfOrbsOnHit = 1;
+    public bool PillarRastroOrbOnDeath = true;
+    public int pillarNumberOfOrbsOnDeath = 2;
+
+    [Header("Boss Rastro Orb")]
     public float radiusSpawnOrb = 1.5f;
     public bool RastroOrbOnHit = true;
     public int numberOfOrbsOnHit = 1;
