@@ -1,21 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using Player;
-using UnityEditor.Experimental.GraphView;
 
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance;
 
     [Header("UI")]
-    public GameObject dialoguePanel;
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI dialogueText;
-    public Button[] optionButtons;
-
+    [SerializeField] private GameObject dialoguePrefab;
+    private GameObject dialogueInstance;
     private DialogueNode currentNode;
 
     private void Awake()
@@ -32,59 +26,26 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(NPCData npcData)
     {
-        BindActions(npcData.startingDialogue);
-        ShowNode(npcData.startingDialogue);
-        nameText.text = npcData.npcName;
+        if (dialogueInstance == null) dialogueInstance = Instantiate(dialoguePrefab);
+
+        dialogueInstance.gameObject.SetActive(true);
+        dialogueInstance.GetComponent<DialogueUI>().SetName(npcData.NpcName);
+        dialogueInstance.GetComponent<DialogueUI>().SetImage(npcData.NpcImage);
+        dialogueInstance.GetComponent<DialogueUI>().BindActions(npcData.StartingDialogue);
+        ShowNode(npcData.StartingDialogue);
+
         PlayerHelper.DisableInput();
-    }
-
-    void BindActions(DialogueNode node)
-    {
-        foreach (var option in node.options)
-        {
-            option.onSelectedAction = null;
-
-            switch (option.actionId)
-            {
-                case DialogueActionId.OpenStore:
-                    option.onSelectedAction = () =>
-                    {
-                        HubManager hub = HubManager.Instance;
-                        if (hub != null) hub.OpenStore();
-                    };
-                    break;
-
-                case DialogueActionId.None:
-                default:
-                    break;
-            }
-        }
     }
 
     void ShowNode(DialogueNode node)
     {
         currentNode = node;
-        dialoguePanel.SetActive(true);
-        dialogueText.text = node.dialogueText;
-
-        for (int i = 0; i < optionButtons.Length; i++)
-        {
-            if (i < node.options.Length)
-            {
-                optionButtons[i].gameObject.SetActive(true);
-                int index = i;
-                optionButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = node.options[i].optionText;
-                optionButtons[i].onClick.RemoveAllListeners();
-                optionButtons[i].onClick.AddListener(() => OnOptionSelected(index));
-            }
-            else optionButtons[i].gameObject.SetActive(false);
-        }
+        dialogueInstance.GetComponent<DialogueUI>().DisplayNode(node, OnOptionSelected);
     }
 
     void OnOptionSelected(int index)
     {
-        var selectedOption = currentNode.options[index];
-
+        var selectedOption = currentNode.Options[index];
         selectedOption.onSelectedAction?.Invoke();
 
         if (selectedOption.endsDialogue)
@@ -95,7 +56,7 @@ public class DialogueManager : MonoBehaviour
 
         if (selectedOption.nextNode != null)
         {
-            BindActions(selectedOption.nextNode);
+            dialogueInstance.GetComponent<DialogueUI>().BindActions(selectedOption.nextNode);
             ShowNode(selectedOption.nextNode);
         }
         else EndDialogue();
@@ -103,7 +64,7 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
-        dialoguePanel.SetActive(false);
+        dialogueInstance.gameObject.SetActive(false);
         currentNode = null;
         PlayerHelper.EnableInput();
     }

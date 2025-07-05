@@ -4,7 +4,9 @@ using UnityEngine;
 public class DialogueNode : ScriptableObject
 {
     [TextArea]
-    public string dialogueText;
+    [SerializeField] private string dialogueText;
+    [SerializeField] private DialogueOption[] options;
 
-    public DialogueOption[] options;
+    public string DialogueText => dialogueText;
+    public DialogueOption[] Options => options;
 }
