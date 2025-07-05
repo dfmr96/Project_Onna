@@ -11,7 +11,9 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
     [SerializeField] private float laserCooldownAfter = 2f;
     [SerializeField] private float messageDuration = 4f;
     [SerializeField] List<string> bossMessage;
-  
+    [SerializeField] private float rotationMultiply = 15f;
+    [SerializeField] private float rotationSmoothness = 5f;
+
 
     private enum AttackPhase { Burst, WaitAfterBurst, Laser, WaitAfterLaser }
     private AttackPhase currentPhase;
@@ -29,9 +31,9 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
         int randomIndex = Random.Range(0, bossMessage.Count);
         _bossModel.PrintMessage(bossMessage[randomIndex], messageDuration);
 
-        _navMeshAgent.isStopped = true;
+        //_navMeshAgent.isStopped = true;
         _navMeshAgent.updateRotation = true;
-        _navMeshAgent.stoppingDistance = 0f;
+        //_navMeshAgent.stoppingDistance = 0f;
 
         _burstShooter = _bossModel.GetComponentInChildren<ProjectileBurstShooter>();
         _laser = _bossModel.GetComponentInChildren<LaserDamage>(true);
@@ -133,9 +135,11 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
 
         if (dir != Vector3.zero)
         {
-            float rotationSmoothness = 2f;
+            _bossView.PlayProjectilesAttackAnimation();
+
             Quaternion targetRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSmoothness * Time.deltaTime);
+            float rotationSpeed = rotationSmoothness * rotationMultiply;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
     }
 

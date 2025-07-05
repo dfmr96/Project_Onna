@@ -8,16 +8,22 @@ public class MonarchAttackProjectiles : EnemyAttackSOBase
     private ProjectileBurstShooter _burstShooter;
     [SerializeField] private float messageDuration = 4f;
     [SerializeField] List<string> bossMessage;
+    private bool doOnce = true;
 
 
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
 
-        int randomIndex = Random.Range(0, bossMessage.Count);
-        _bossModel.PrintMessage(bossMessage[randomIndex], messageDuration);
+        if(doOnce)
+        {
+            int randomIndex = Random.Range(0, bossMessage.Count);
+            _bossModel.PrintMessage(bossMessage[randomIndex], messageDuration);
+            doOnce = false;
+        }
+      
 
-        _navMeshAgent.stoppingDistance = 0f;
+        //_navMeshAgent.stoppingDistance = 0f;
         _navMeshAgent.updateRotation = true;
 
         _burstShooter = _bossModel.GetComponentInChildren<ProjectileBurstShooter>();

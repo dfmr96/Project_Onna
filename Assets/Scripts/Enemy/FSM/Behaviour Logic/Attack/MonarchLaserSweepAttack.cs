@@ -8,7 +8,8 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
     [SerializeField] private float laserDuration = 5f;
     [SerializeField] private float laserCooldown = 2f;
 
-    [SerializeField] private float rotationSmoothness = 2f;       
+    [SerializeField] private float rotationSmoothness = 2f;
+    [SerializeField] private float rotationMultiply = 20f;
     [SerializeField] private float trackingDelay = 0.5f;        
     [SerializeField] private float messageDuration = 4f;
     [SerializeField] List<string> bossMessage;
@@ -35,7 +36,7 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
         _firing = true;
         _trackingTimer = 0f;
 
-        _navMeshAgent.isStopped = true;
+        //_navMeshAgent.isStopped = true;
 
         Vector3 toPlayer = playerTransform.position - transform.position;
         toPlayer.y = 0f;
@@ -65,8 +66,10 @@ public class MonarchLaserSweepAttack : EnemyAttackSOBase
 
             if (dir != Vector3.zero)
             {
+                _bossView.PlayProjectilesAttackAnimation();
                 Quaternion targetRot = Quaternion.LookRotation(dir);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSmoothness * Time.deltaTime);
+                float rotationSpeed = rotationSmoothness * rotationMultiply; 
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
             }
 
             // Fin del disparo

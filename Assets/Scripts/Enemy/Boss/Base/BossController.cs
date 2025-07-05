@@ -25,6 +25,11 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private bool shieldActive = true;
 
     [SerializeField] private List<Pillar> pillars;
+    [SerializeField] private List<Transform> pillarSpawnPoints;
+    [SerializeField] private List<Transform> bossSpawnPoints;
+    [SerializeField] private Transform bossTransform;
+    private int bossRespawnIndex = 0;
+
     [SerializeField] private GameObject shield;
     [SerializeField] private float shieldEffectDuration = 1f;
     [SerializeField] private float timeToReactivatePillars = 5f;
@@ -144,7 +149,6 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
         isShieldActive = model.statsSO.isShieldActive;
 
-
     }
 
     private void Update()
@@ -206,7 +210,9 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
                 {
                     currentAttackSO?.DoExitLogic();
                     currentAttackSO = attackPhases[i].attackSO;
-                    currentAttackSO?.DoEnterLogic(); 
+                    currentAttackSO?.DoEnterLogic();
+
+                    ReactivateShieldRoutine();
                 }
                 break;
             }
@@ -271,7 +277,11 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         shield.SetActive(false);
         shieldActive = false;
 
-        yield return new WaitForSeconds(timeToReactivatePillars);
+    }
+
+    private void ReactivateShieldRoutine()
+    {
+        BossRespawn();
         ReactivatePillars();
         TriggerShieldEffect();
         ActivateShield();
@@ -342,11 +352,44 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         }
     }
 
+    private void BossRespawn()
+    {
+        if (bossSpawnPoints.Count == 0) return;
+
+        if (bossRespawnIndex >= bossSpawnPoints.Count)
+        {
+            bossRespawnIndex = 0;
+        }
+
+        
+            _navMeshAgent.enabled = false;
+
+        bossTransform.position = bossSpawnPoints[bossRespawnIndex].position;
+        bossTransform.rotation = bossSpawnPoints[bossRespawnIndex].rotation;
+
+      
+            _navMeshAgent.enabled = true;
+
+        bossRespawnIndex++;
+
+    }
+
     private void ActivatePillars()
     {
+        //copia temporal de las posiciones disponibles
+        List<Transform> availablePositions = new List<Transform>(pillarSpawnPoints);
+
         foreach (var pillar in pillars)
         {
-            pillar.ResetPillar();
+            //pos aleatoria
+            int randomIndex = Random.Range(0, availablePositions.Count);
+            Transform selectedPosition = availablePositions[randomIndex];
+
+            //colocamos el pilar en esa pos
+            pillar.ResetPillar(selectedPosition);
+
+            //eliminamos esa pos de las disponibles
+            availablePositions.RemoveAt(randomIndex);
         }
 
         pillarsDestroyed = 0;

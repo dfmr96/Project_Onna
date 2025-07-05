@@ -7,9 +7,10 @@ using UnityEngine;
 public class EnemyDeadBoss : EnemyDeadSOBase
 {
     private float _timer;
-    private float animationTime = 4f;
+    [SerializeField] private float animationTime = 11f;
     [SerializeField] private string bossMessage= "You... have only delayed the inevitable...";
-    [SerializeField] private float messageDuration=3.5f;
+    [SerializeField] private float messageDuration=8f;
+    [SerializeField] private GameObject particleExplosion;
 
     public override void DoEnterLogic()
     {
@@ -23,6 +24,8 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     public override void DoExitLogic()
     {
         base.DoExitLogic();
+
+      
     }
 
     public override void DoFrameUpdateLogic()
@@ -30,6 +33,19 @@ public class EnemyDeadBoss : EnemyDeadSOBase
         base.DoFrameUpdateLogic();
 
         _timer += Time.deltaTime;
+
+        if (_timer > 9.5f)
+        {
+            if (particleExplosion != null)
+            {
+                float midHeight = _collider != null ? _collider.height : 1f;
+                Vector3 spawnPos = transform.position + Vector3.up * midHeight;
+                GameObject particles = Instantiate(particleExplosion, spawnPos, Quaternion.identity);
+
+                //GameObject particles = Instantiate(particleExplosion, transform.position, Quaternion.identity);
+                Destroy(particles, 1.5f);
+            }
+        }
 
         if (_timer > animationTime)
         {
