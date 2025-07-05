@@ -14,18 +14,21 @@ public class BossView : MonoBehaviour
     //private float _distanceToCountExit = 3f;
 
 
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
     }
     public Animator Animator => animator;
 
     private void Start()
     {
         _playerTransform = PlayerHelper.GetPlayer().transform;
-        projectileSpawner = GameManager.Instance.projectileSpawner;
         _bossController = GetComponent<BossController>();
         _bossModel = GetComponent<BossModel>();
+        projectileSpawner = GameManager.Instance.projectileSpawner;
+
 
     }
 
@@ -47,21 +50,85 @@ public class BossView : MonoBehaviour
     //    }
     //}
 
-    //public void AnimationShootProjectileFunc()
-    //{
-    //    if (projectileSpawner == null) return;
+    private Coroutine _shootCoroutine;
 
-    //    Transform firePoint = _bossController.firePoint;
+    [SerializeField] private int burstCount = 3;           // Cantidad de disparos por ráfaga
+    [SerializeField] private float burstInterval = 0.2f;   // Tiempo entre disparos
+    //[SerializeField] private float spreadAngle = 5f;
+    [SerializeField] private int pelletsPerShot = 5;          // cuántos proyectiles por escopetazo
+    [SerializeField] private float spreadAngle = 15f;         // dispersión en grados
 
-    //    Vector3 targetPos = _playerTransform.position;
-    //    targetPos.y = firePoint.position.y; 
+    public void AnimationShootProjectileFunc()
+    {
+        //Debug.Log("Entro animacion");
+        //if (projectileSpawner == null) return;
 
-    //    Vector3 dir = (targetPos - firePoint.position).normalized;
 
-    //    projectileSpawner.SpawnProjectile(firePoint.position, dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.AttackDamage);
-        
+        //Transform firePoint = _bossController.firePoint;
 
-    //}
+        //Vector3 targetPos = _playerTransform.position;
+        //targetPos.y = firePoint.position.y;
+
+        //Vector3 dir = (targetPos - firePoint.position).normalized;
+
+        //projectileSpawner.SpawnProjectile(firePoint.position, dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.AttackDamage);
+
+        if (_shootCoroutine != null)
+            StopCoroutine(_shootCoroutine);
+
+        _shootCoroutine = StartCoroutine(ShootBurstCoroutine());
+    
+
+    }
+    private IEnumerator ShootBurstCoroutine()
+    {
+        for (int i = 0; i < burstCount; i++)
+        {
+            ShootShotgunProjectile();
+            yield return new WaitForSeconds(burstInterval);
+        }
+    }
+
+    private void ShootSingleProjectile()
+    {
+        if (projectileSpawner == null || _playerTransform == null) return;
+
+        Transform firePoint = _bossController.firePoint;
+
+        Vector3 targetPos = _playerTransform.position;
+        targetPos.y = firePoint.position.y;
+
+        //Vector3 dir = (targetPos - firePoint.position).normalized;
+
+        Vector3 dir = (targetPos - firePoint.position).normalized;
+        dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
+
+        projectileSpawner.SpawnProjectile(firePoint.position, dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.AttackDamage);
+    }
+
+    private void ShootShotgunProjectile()
+    {
+        if (projectileSpawner == null || _playerTransform == null) return;
+
+        Transform firePoint = _bossController.firePoint;
+        Vector3 targetPos = _playerTransform.position;
+        targetPos.y = firePoint.position.y;
+
+        Vector3 baseDir = (targetPos - firePoint.position).normalized;
+
+        for (int i = 0; i < pelletsPerShot; i++)
+        {
+            float angle = Random.Range(-spreadAngle, spreadAngle);
+            Vector3 spreadDir = Quaternion.Euler(0, angle, 0) * baseDir;
+
+            projectileSpawner.SpawnProjectile(
+                firePoint.position,
+                spreadDir,
+                _bossModel.statsSO.ShootForce,
+                _bossModel.statsSO.AttackDamage
+            );
+        }
+    }
 
 
 
@@ -69,6 +136,11 @@ public class BossView : MonoBehaviour
     public void PlayAttackAnimation(bool isAttacking)
     {
         animator.SetBool("IsAttacking", isAttacking);
+    }
+
+    public void PlayProjectilesAttackAnimation()
+    {
+        animator.SetTrigger("IsProjectilesAttacking");
     }
 
     public void PlayStrafeAnimation()
@@ -83,7 +155,7 @@ public class BossView : MonoBehaviour
 
     public void PlayIdleAnimation()
     {
-        //animator.SetTrigger("Idle");
+        animator.SetTrigger("Idle");
     }
 
     public void PlayMovingAnimation(float moveSpeed)

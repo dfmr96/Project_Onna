@@ -28,28 +28,33 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
     {
         base.DoFrameUpdateLogic();
 
-        timer += Time.deltaTime;
+        //timer += Time.deltaTime;
 
-        if (timer > duration)
+        //if (timer > duration)
+        //{
+        //    float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        //    if (distanceToPlayer > model.statsSO.AttackRange)
+        //    {
+        //        enemy.fsm.ChangeState(enemy.ChaseState);
+
+        //    }
+        //    else
+        //    {
+        //        enemy.fsm.ChangeState(enemy.AttackState);
+
+        //    }
+
+        //}
+
+        if (enemy.isWhitinCombatRadius)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-            if (distanceToPlayer > model.statsSO.AttackRange)
-            {
-                enemy.fsm.ChangeState(enemy.ChaseState);
-
-            }
-            else
-            {
-                enemy.fsm.ChangeState(enemy.AttackState);
-
-            }
-
+            enemy.fsm.ChangeState(enemy.AttackState);
         }
 
     }
 
-    public override void Initialize(GameObject gameObject, EnemyController enemy)
+    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

@@ -12,7 +12,7 @@ public class EnemyDefendTank : EnemyDefendSOBase
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
-        enemyModel = enemy.GetComponent<EnemyModel>();
+        enemyModel = gameObject.GetComponent<EnemyModel>();
 
         //enemyModel.SetShield(true);
         defendDuration = Random.Range(minDefendTime, maxDefendTime);
@@ -39,7 +39,7 @@ public class EnemyDefendTank : EnemyDefendSOBase
         }
     }
 
-    public override void Initialize(GameObject gameObject, EnemyController enemy)
+    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

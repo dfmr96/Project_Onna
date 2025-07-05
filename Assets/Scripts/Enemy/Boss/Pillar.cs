@@ -2,10 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static UnityEditor.PlayerSettings;
 
 public class Pillar : MonoBehaviour, IDamageable
 {
- 
+
+    [Header("Movement")]
+    [SerializeField] private float riseHeight = 2f;
+    [SerializeField] private float targetHeight = 1.5f;
+    [SerializeField] private float riseSpeed = 2f;
+    [SerializeField] private float shakeIntensity = 0.1f;
+    private Vector3 initialPosition;
+    private Vector3 targetPosition;
+
     public event Action<Pillar> OnPillarDestroyed;
 
     public float MaxHealth { get; private set; }
@@ -18,9 +27,13 @@ public class Pillar : MonoBehaviour, IDamageable
     [SerializeField] private float heightTextSpawn = 2f;
     [SerializeField] private ParticleSystem particleExplosion;
 
+    private ParticleSystem explosionInstance;
+
+
+
 
     private OrbSpawner orbSpawner;
-    private BossModel _bossModel;
+    [SerializeField] private BossModel _bossModel;
 
 
  
@@ -30,20 +43,32 @@ public class Pillar : MonoBehaviour, IDamageable
        
 
         orbSpawner = GameManager.Instance.orbSpawner;
-        _bossModel = GetComponentInParent<BossModel>();
+        //_bossModel = GetComponentInParent<BossModel>();
 
         MaxHealth = _bossModel.statsSO.PillarMaxHealth;
         CurrentHealth = MaxHealth;
 
-        ResetPillar();
+        //Instanciar una vez la explosion y detenerla
+        if (particleExplosion != null)
+        {
+            explosionInstance = Instantiate(particleExplosion, transform.position, Quaternion.identity);
+            explosionInstance.Stop();
+        }
+ 
+
+        CurrentHealth = MaxHealth;
+        isDestroyed = false;
+        gameObject.SetActive(true);
+
+        targetPosition = transform.position;
 
     }
 
     void SpawnParticle(Vector3 pos)
     {
-        ParticleSystem inst = Instantiate(particleExplosion, pos, Quaternion.identity);
-        inst.Play();
+      
     }
+
     public void TakeDamage(float damageAmount)
     {
         if (isDestroyed) return;
@@ -87,11 +112,52 @@ public class Pillar : MonoBehaviour, IDamageable
     }
 
    
-    public void ResetPillar()
+    public void ResetPillar(Transform targetTransform)
     {
         CurrentHealth = MaxHealth;
         isDestroyed = false;
         gameObject.SetActive(true);
+
+        //pos inicial hundida
+        //targetPosition = targetTransform.position;
+        targetPosition = new Vector3(targetTransform.position.x, targetHeight, targetTransform.position.z);
+
+        initialPosition = targetPosition - Vector3.up * riseHeight;
+        transform.position = initialPosition;
+
+
+     
+
+        //empezamos a subir
+        StartCoroutine(RiseUpCoroutine());
+    }
+
+    private IEnumerator RiseUpCoroutine()
+    {
+        float elapsed = 0f;
+        float duration = riseHeight / riseSpeed;
+
+
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            // Movimiento de subida
+            Vector3 basePos = Vector3.Lerp(initialPosition, targetPosition, t);
+
+            // Agrego temblor aleatorio en X y Z (opcional: podés hacerlo solo en X o solo en Y si querés)
+            float shakeX = UnityEngine.Random.Range(-shakeIntensity, shakeIntensity);
+            float shakeZ = UnityEngine.Random.Range(-shakeIntensity, shakeIntensity);
+            Vector3 shakeOffset = new Vector3(shakeX, 0, shakeZ);
+
+            transform.position = basePos + shakeOffset;
+
+            yield return null;
+        }
+
+        transform.position = targetPosition;
     }
 }
 

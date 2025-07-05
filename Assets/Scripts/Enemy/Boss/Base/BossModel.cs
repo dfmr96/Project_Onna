@@ -50,6 +50,15 @@ public class BossModel : MonoBehaviour, IDamageable
         //}
     }
 
+    public void PrintMessage(String text, float lifeTime)
+    {
+        if (floatingTextPrefab != null)
+        {
+            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
+            GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
+            textObj.GetComponent<FloatingDamageText>().Initialize(text, lifeTime);
+        }
+    }
     public void TakeDamage(float damageAmount)
     {
         //if (enemy.GetShield()) return;

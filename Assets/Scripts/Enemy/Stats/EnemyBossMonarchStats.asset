@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   isShieldActive: 0
-  AttackDamage: 20
-  AttackRange: 10
-  combatAngle: 30
+  AttackDamage: 0
+  AttackRange: 100
+  combatAngle: 360
   obstacleCombatLayers:
     serializedVersion: 2
-    m_Bits: 0
-  detectionRange: 10
-  visionAngle: 45
+    m_Bits: 256
+  detectionRange: 20
+  visionAngle: 360
   obstacleDetectionLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   ShootForce: 15
-  PillarMaxHealth: 10
+  PillarMaxHealth: 20
   pillarRadiusSpawnOrb: 1.5
   PillarRastroOrbOnHit: 1
   pillarNumberOfOrbsOnHit: 1

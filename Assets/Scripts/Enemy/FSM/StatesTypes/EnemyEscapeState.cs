@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyEscapeState : EnemyState
+public class EnemyEscapeState : EnemyState<BaseEnemyController>
 {
 
 
+    private EnemyEscapeSOBase escapeBehavior;
 
 
 
-    public EnemyEscapeState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
+    public EnemyEscapeState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm, EnemyEscapeSOBase escapeBehavior) : base(enemy, fsm)
     {
-
+        this.escapeBehavior = escapeBehavior;
 
     }
 
     public override void EnterState()
     {
         base.EnterState();
-        enemy.EnemyEscapeBaseInstance.DoEnterLogic();
+        escapeBehavior.DoEnterLogic();
 
 
     }
@@ -27,7 +28,7 @@ public class EnemyEscapeState : EnemyState
     public override void ExitState()
     {
         base.ExitState();
-        enemy.EnemyEscapeBaseInstance.DoExitLogic();
+        escapeBehavior.DoExitLogic();
 
 
 
@@ -36,7 +37,7 @@ public class EnemyEscapeState : EnemyState
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-        enemy.EnemyEscapeBaseInstance.DoFrameUpdateLogic();
+        escapeBehavior.DoFrameUpdateLogic();
 
 
 

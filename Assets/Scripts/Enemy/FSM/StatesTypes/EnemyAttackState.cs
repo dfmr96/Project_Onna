@@ -6,38 +6,34 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-
-public class EnemyAttackState : EnemyState
+public class EnemyAttackState : EnemyState<BaseEnemyController>
 {
-
-    public EnemyAttackState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
+    public EnemyAttackState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm) : base(enemy, fsm)
     {
-
     }
 
     public override void EnterState()
     {
         base.EnterState();
-
-        enemy.EnemyAttackBaseInstance.DoEnterLogic();
-
+        // Delegamos la lógica al ScriptableObject actual según la fase
+        enemy.CurrentAttackSO?.DoEnterLogic();
     }
 
     public override void ExitState()
     {
         base.ExitState();
-        enemy.EnemyAttackBaseInstance.DoExitLogic();
-
+        enemy.CurrentAttackSO?.DoExitLogic();
     }
 
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-        enemy.EnemyAttackBaseInstance.DoFrameUpdateLogic();
-
+        enemy.CurrentAttackSO?.DoFrameUpdateLogic();
     }
-
-
-
-
 }
+
+
+
+
+
+
