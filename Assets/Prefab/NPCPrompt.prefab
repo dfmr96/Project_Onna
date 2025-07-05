@@ -932,6 +932,7 @@ GameObject:
   - component: {fileID: 6275672134696621794}
   - component: {fileID: 2987210129302061371}
   - component: {fileID: 5248413343625255966}
+  - component: {fileID: 7686880507413826667}
   m_Layer: 5
   m_Name: NPCPrompt
   m_TagString: Untagged
@@ -1022,6 +1023,26 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7686880507413826667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4678365346501918123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c93190ff52d333499b0aa5d9b6c44b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: {fileID: 1555099809292799574}
+  dialogueText: {fileID: 8079626868217564276}
+  npcImage: {fileID: 2577595328819771033}
+  optionButtons:
+  - {fileID: 3816942297945667681}
+  - {fileID: 5493181097713917049}
+  - {fileID: 6081014132391033635}
+  - {fileID: 7855252747868593253}
 --- !u!1 &5174156772529440252
 GameObject:
   m_ObjectHideFlags: 0
