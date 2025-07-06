@@ -7,6 +7,10 @@ public class EnemyAttackCharge : EnemyAttackSOBase
 
     [SerializeField] private float chargeSpeed = 10f;
     [SerializeField] private float chargeDuration = 1f;
+    [SerializeField] private float meleeRange = 2f;
+    [SerializeField] private float postChargeDelay = 0.5f;
+    private float postChargeTimer;
+    private bool isPostCharging;
 
     private bool isCharging = false;
     private float chargeTimer = 0f;
@@ -42,34 +46,67 @@ public class EnemyAttackCharge : EnemyAttackSOBase
 
         _timer += Time.deltaTime;
 
-        if (!_hasAttackedOnce && !isCharging && _timer >= _initialAttackDelay)
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (isPostCharging)
         {
-            StartCharge();
+            postChargeTimer += Time.deltaTime;
+            if (postChargeTimer >= postChargeDelay)
+            {
+                isPostCharging = false;
+                enemy.SetShield(true);
+                _timer = 0f;
+
+            }
+            return;
+        }
+
+        //Si se aleja del rango de ataque cambiar a busqueda
+        if (distanceToPlayer > _distanceToCountExit)
+        {
+            EndAttackAnimations();
+            enemy.fsm.ChangeState(enemy.ChaseState);
             return;
         }
 
         if (isCharging)
         {
             chargeTimer += Time.deltaTime;
-
-            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-
             _navMeshAgent.Move(chargeDirection * chargeSpeed * Time.deltaTime);
-
-            //if (chargeTimer >= chargeDuration)
-            //{
-            //    EndCharge(); 
-            //}
 
             if (distanceToPlayer < 1 || chargeTimer >= chargeDuration)
             {
                 EndCharge();
             }
+            return;
         }
 
+        //Si ya ataco una vez, espera el tiempo entre ataques
+        if (_hasAttackedOnce)
+        {
+            if (_timer >= _timeBetweenAttacks)
+            {
+                _hasAttackedOnce = false;
+                _timer = 0f;
+            }
+            return;
+        }
 
+        //Si no ataco todavia y cumplio el delay inicial
+        if (_timer >= _initialAttackDelay)
+        {
+            if (distanceToPlayer <= meleeRange)
+            {
+                StartMeleeAttack();
+            }
+            else 
+            {
+                StartCharge();
+            }
+        }
     }
+
+
 
 
     public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
@@ -96,18 +133,32 @@ public class EnemyAttackCharge : EnemyAttackSOBase
     }
 
 
-   
+    private void EndAttackAnimations()
+    {
+        _enemyView.PlayAttackAnimation(false);
+        _enemyView.PlayMeleeAttackAnimation(false);
+    }
 
+    private void StartMeleeAttack()
+    {
+        isCharging = false;
+        _enemyView.PlayAttackAnimation(false);
 
+        _enemyView.PlayMeleeAttackAnimation(true);
+        _hasAttackedOnce = true;
+        _timer = 0f;
+    }
     private void StartCharge()
     {
         if (playerTransform == null) return;
 
         isLookingPlayer = false;
 
+        _enemyView.PlayMeleeAttackAnimation(false);
+
         _enemyView.PlayAttackAnimation(true);
 
-        //enemy.SetShield(false);
+        enemy.SetShield(false);
 
         _navMeshAgent.isStopped = false;
         _navMeshAgent.ResetPath();
@@ -130,8 +181,8 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         enemy.SetShield(false);
         isLookingPlayer = true;
 
-
-        enemy.fsm.ChangeState(enemy.IdleState);
+        isPostCharging = true;
+        postChargeTimer = 0f;
     }
 
 

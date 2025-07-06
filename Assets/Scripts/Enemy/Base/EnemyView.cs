@@ -91,6 +91,11 @@ public class EnemyView : MonoBehaviour
         animator.SetBool("IsAttacking", isAttacking);
     }
 
+    public void PlayMeleeAttackAnimation(bool isAttacking)
+    {
+        animator.SetBool("IsMeleeAttacking", isAttacking);
+    }
+
     public void PlayStrafeAnimation()
     {
         animator.SetTrigger("IsStrafing");
