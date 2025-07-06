@@ -1,4 +1,5 @@
 using Player;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,10 @@ public class EnemyView : MonoBehaviour
     private Material material;
     private Color originalColor;
 
+    public event Action OnAttackStarted;
+    public event Action OnAttackImpact;
+
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -37,9 +42,16 @@ public class EnemyView : MonoBehaviour
         originalColor = material.GetColor("_Color");
     }
 
+
+    public void AnimationAttackStarted()
+    {
+        OnAttackStarted?.Invoke();
+    }
+
     //ActionEvent de Ataque
     public void AnimationAttackFunc()
     {
+        OnAttackImpact?.Invoke();
 
         if (_playerTransform != null)
         {
