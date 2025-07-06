@@ -165,7 +165,7 @@ public class EnemyAttackMeleeStrafe : EnemyAttackSOBase
         {
             _enemyView.Animator.applyRootMotion = true;
             _enemyView.PlayAttackAnimation(true);
-            TriggerAttackColorEffect();
+            //TriggerAttackColorEffect();
         }
     }
 
