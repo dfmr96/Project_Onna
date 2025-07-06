@@ -15,9 +15,10 @@ public class EnemyAttackSOBase : ScriptableObject
     protected GameObject gameObject;
     protected ProjectileSpawner _projectileSpawner;
 
+    protected Renderer _enemyRenderer;
+    protected Color _originalColor;
 
     protected Transform playerTransform;
-
     protected NavMeshAgent _navMeshAgent;
     protected float initialSpeed;
 
@@ -27,11 +28,8 @@ public class EnemyAttackSOBase : ScriptableObject
     [SerializeField] protected bool isMovingSpeedChangesOnAttack;
     [SerializeField] protected float _timeBetweenAttacks = 1.5f;
     [SerializeField] protected float _initialAttackDelay = 0.3f;
-    [SerializeField] protected Color _targetColor = Color.red;
     [SerializeField] protected bool isLookingPlayer = true;
     [SerializeField] protected float rotationSpeed = 5f;
-
-
 
     protected float distanceToPlayer;
     protected float _timer;
@@ -39,7 +37,6 @@ public class EnemyAttackSOBase : ScriptableObject
 
     //InitialAttackDelay Visual
     protected Material _material;
-    protected Color _originalColor;
 
     protected float _colorChangeTimer = 0f;
     protected float _colorTransitionDuration;
@@ -59,6 +56,9 @@ public class EnemyAttackSOBase : ScriptableObject
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
         _projectileSpawner = GameManager.Instance.projectileSpawner;
+
+        _enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
+        _originalColor = _enemyRenderer.material.color;
 
         Debug.Log("Cambio de ataque");
     }
@@ -117,7 +117,7 @@ public class EnemyAttackSOBase : ScriptableObject
 
         }
 
-        ColorChanger();
+        //ColorChanger();
 
         _timer += Time.deltaTime;
 
@@ -147,39 +147,5 @@ public class EnemyAttackSOBase : ScriptableObject
 
     }
 
-    private void ColorChanger()
-    {
-        if (_colorPhase != ColorPhase.None)
-        {
-            _colorChangeTimer += Time.deltaTime;
-            float t = Mathf.Clamp01(_colorChangeTimer / _colorTransitionDuration);
-
-            if (_colorPhase == ColorPhase.ToRed)
-            {
-                _material.color = Color.Lerp(_originalColor, _targetColor, t);
-
-                if (t >= 1f)
-                {
-                    //Vuelve al color original
-                    _colorChangeTimer = 0f;
-                    _colorPhase = ColorPhase.ToOriginal;
-                }
-            }
-            else if (_colorPhase == ColorPhase.ToOriginal)
-            {
-                _material.color = Color.Lerp(_targetColor, _originalColor, t);
-
-                if (t >= 1f)
-                {   //Efecto terminado
-                    _colorPhase = ColorPhase.None;
-                }
-            }
-        }
-    }
-
-    protected void TriggerAttackColorEffect()
-    {
-        _colorChangeTimer = 0f;
-        _colorPhase = ColorPhase.ToRed;
-    }
+   
 }
