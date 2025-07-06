@@ -8,7 +8,8 @@ namespace Player.Weapon
 {
     public class WeaponController : MonoBehaviour
     {
-        public static Action<int, int> OnShoot;
+        public static event Action<int, int> OnShoot;
+        public static event Action<float, float> OnCooling;
 
         [BoxGroup("Bullet")] 
         [SerializeField] private BulletSettings bulletSetting;
@@ -49,6 +50,11 @@ namespace Player.Weapon
 
         private void Start()
         {
+            InitializeVisuals();
+        }
+
+        private void InitializeVisuals()
+        {
             lineRenderer = GetComponentInChildren<LineRenderer>(true);
             laserLength = bulletSetting.AttackRange;
             lineRenderer.enabled = true;
@@ -68,10 +74,8 @@ namespace Player.Weapon
                 muzzleFlashInstance.transform.SetParent(null);
                 muzzleFlashInstance.Stop();
             }
-
         }
 
-        
         private void Update()
         {
             LaserEffect();
@@ -125,22 +129,30 @@ namespace Player.Weapon
         {
             if (_coolingCooldownCoroutine == null)
             {
-                _coolingCooldownCoroutine = StartCoroutine(CoolingCooldown());
+                Debug.Log("Cooling cooldown Called");
             }
+            else
+            {
+                StopCoroutine(_coolingCooldownCoroutine);
+                Debug.Log("Cooling cooldown restarted");
+            }
+            _coolingCooldownCoroutine = StartCoroutine(CoolingCooldown());
         }
 
-        private void ResetCoolingCooldown()
+        private void StopCoolingCooldown()
         {
             if (_coolingCooldownCoroutine != null)
             {
                 StopCoroutine(_coolingCooldownCoroutine);
+                
+                Debug.Log("Cooling cooldown stopped");
                 _coolingCooldownCoroutine = null;
             }
         }
 
         private void StartOverheatCooldown()
         {
-            ResetCoolingCooldown();
+            StopCoolingCooldown();
             StartCoroutine(OverheatCooldown());
         }
 
@@ -149,22 +161,35 @@ namespace Player.Weapon
             canFire = false;
             yield return new WaitForSeconds(Settings.FireRate);
             canFire = true;
-
         }
 
         private IEnumerator OverheatCooldown()
         {
+            Debug.Log("Overheat cooldown Called");
+            OnCooling?.Invoke(Settings.CoolingCooldown, Settings.CoolingCooldown);
+            Debug.Log("OnCooling event called");
             canFire = false;
             yield return new WaitForSeconds(Settings.OverheatCooldown);
             currentAmmo = (int)ammoSettings.MaxAmmo;
+            
+            OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
             canFire = true;
+            Debug.Log("Overheat cooldown Finished");
         }
 
         private IEnumerator CoolingCooldown()
         {
-            yield return new WaitForSeconds(Settings.CoolingCooldown);
+            float coolingTimer = 0f;
+            
+            while (coolingTimer < Settings.CoolingCooldown)
+            {
+                coolingTimer += Time.deltaTime;
+                OnCooling?.Invoke(coolingTimer, Settings.CoolingCooldown);
+                yield return null;
+            }
             currentAmmo = (int)ammoSettings.MaxAmmo;
             _coolingCooldownCoroutine = null;
+            Debug.Log("Cooling cooldown finished");
             OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
         }
 
