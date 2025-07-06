@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Player
@@ -24,18 +25,14 @@ namespace Player
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int Speed = Animator.StringToHash("Speed");
 
-        private void RotateVisualTowards(Vector3 moveDir)
-        {
-            if (moveDir.sqrMagnitude < 0.01f) return;
+        //Efecto Visual de Dano
+        private Color flashColor = Color.white;
+        private float flashDuration = 0.1f;
+        private Renderer[] renderers;
+        private Color[][] originalColors;
+        private readonly string[] colorPropertyNames = { "_BaseColor", "_Color", "_MainColor" };
 
-            moveDir.y = 0;
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            visualRoot.rotation = Quaternion.Slerp(
-                visualRoot.rotation,
-                targetRotation,
-                Time.deltaTime * rotationSpeed
-            );
-        }
+
 
         private void Awake()
         {
@@ -47,6 +44,28 @@ namespace Player
             }
 
             _playerInputHandler = GetComponent<PlayerInputHandler>();
+
+        }
+
+        private void Start()
+        {
+            renderers = GetComponentsInChildren<Renderer>();
+            originalColors = new Color[renderers.Length][];
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                var mats = renderers[i].materials;
+                originalColors[i] = new Color[mats.Length];
+
+                for (int j = 0; j < mats.Length; j++)
+                {
+                    var mat = mats[j];
+                    string property = GetColorProperty(mat);
+
+                    if (!string.IsNullOrEmpty(property))
+                        originalColors[i][j] = mat.GetColor(property);
+                }
+            }
         }
 
         private void Update()
@@ -61,6 +80,19 @@ namespace Player
             
             UpdateAimTarget(_playerController.MouseWorldPos);     
             UpdateWeaponAim(_playerController.MouseWorldPos);   
+        }
+
+        private void RotateVisualTowards(Vector3 moveDir)
+        {
+            if (moveDir.sqrMagnitude < 0.01f) return;
+
+            moveDir.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            visualRoot.rotation = Quaternion.Slerp(
+                visualRoot.rotation,
+                targetRotation,
+                Time.deltaTime * rotationSpeed
+            );
         }
 
         public void UpdateAimTarget(Vector3 worldPos)
@@ -118,7 +150,55 @@ namespace Player
         {
             _playerController = controller;
         }
-        
+
+        public void PlayDamageEffect()
+        {
+            StartCoroutine(FlashCoroutine());
+
+        }
+
+        private IEnumerator FlashCoroutine()
+        {
+            // Cambia el color
+            foreach (var renderer in renderers)
+            {
+                foreach (var mat in renderer.materials)
+                {
+                    string property = GetColorProperty(mat);
+
+                    if (!string.IsNullOrEmpty(property))
+                        mat.SetColor(property, flashColor);
+                }
+            }
+
+            yield return new WaitForSeconds(flashDuration);
+
+            // Restaura colores
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                var mats = renderers[i].materials;
+
+                for (int j = 0; j < mats.Length; j++)
+                {
+                    var mat = mats[j];
+                    string property = GetColorProperty(mat);
+
+                    if (!string.IsNullOrEmpty(property))
+                        mat.SetColor(property, originalColors[i][j]);
+                }
+            }
+        }
+
+        private string GetColorProperty(Material mat)
+        {
+            foreach (var prop in colorPropertyNames)
+            {
+                if (mat.HasProperty(prop))
+                    return prop;
+            }
+            return null;
+        }
+
         private void OnDrawGizmos()
         {
             

@@ -13,6 +13,11 @@ public class EnemyView : MonoBehaviour
 
     private float _distanceToCountExit = 3f;
 
+    private Renderer targetRenderer; 
+    private Color flashColor = Color.white;
+    private float flashDuration = 0.1f;
+    private Material material;
+    private Color originalColor;
 
     private void Awake()
     {
@@ -26,7 +31,10 @@ public class EnemyView : MonoBehaviour
         projectileSpawner = GameManager.Instance.projectileSpawner;
         _enemyController = GetComponent<EnemyController>();
         _enemyModel = GetComponent<EnemyModel>();
+        targetRenderer = GetComponentInChildren<Renderer>();
 
+        material = targetRenderer.material;
+        originalColor = material.GetColor("_Color");
     }
 
     //ActionEvent de Ataque
@@ -114,6 +122,21 @@ public class EnemyView : MonoBehaviour
     public void UpdateHealthBar(float healthPercentage)
     {
         //health bar logic
+    }
+
+    public void PlayDamageEffect()
+    {
+        StartCoroutine(FlashCoroutine());
+
+    }
+
+    private IEnumerator FlashCoroutine()
+    {
+        material.SetColor("_Color", flashColor);
+
+        yield return new WaitForSeconds(flashDuration);
+
+        material.SetColor("_Color", originalColor);
     }
 }
 

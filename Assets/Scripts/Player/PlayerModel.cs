@@ -34,7 +34,15 @@ namespace Player
         public float DashDistance => StatContext.Source.Get(statRefs.dashDistance);
 
         public PlayerStatContext StatContext => _statContext;
-        
+
+        private PlayerView _playerView;
+
+        private void Start()
+        {
+            _playerView = GetComponent<PlayerView>();
+
+        }
+
         public void InjectStatContext(PlayerStatContext context)
         {
             _statContext = context;
@@ -85,7 +93,7 @@ namespace Player
         {
             ApplyDamage(timeTaken, true);
 
-       
+            _playerView.PlayDamageEffect();
         }
         
         public void ApplyDamage(float timeTaken, bool applyResistance)
