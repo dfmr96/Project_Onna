@@ -12,6 +12,7 @@ namespace Player
 
         public event Action FirePerformed;
         public event Action DashPerformed;
+        public event Action InteractionPerformed;
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -29,6 +30,14 @@ namespace Player
             if (context.performed)
             {
                 FirePerformed?.Invoke();
+            }
+        }
+
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                InteractionPerformed?.Invoke();
             }
         }
 

@@ -14,7 +14,7 @@ namespace Player
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private LayerMask groundLayer;
 
-        [Header("Variables del Dash")]
+        [Header("Dash")]
         private bool _isDashing = false;
         private float _dashEndTime = 0f;
         private float _lastDashTime = -Mathf.Infinity;
@@ -30,7 +30,9 @@ namespace Player
         private PlayerView _playerView;
         private Vector3 _mouseWorldPos;
         private Camera _mainCamera;
-        
+        private IInteractable currentInteractable;
+        private bool canInteract = true;
+
         private bool _isReady = false;
 
         public float Speed => _playerInputHandler.MovementInput.magnitude;
@@ -68,8 +70,8 @@ namespace Player
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _playerInputHandler.DashPerformed += HandleDash;
             _characterController = GetComponent<CharacterController>();
-            
-        
+
+            _playerInputHandler.InteractionPerformed += HandleInteraction;
             _playerInputHandler.FirePerformed += HandleFire;
         }
 
@@ -143,6 +145,26 @@ namespace Player
         {
             weaponController.Attack();
         }
+
+        private void HandleInteraction()
+        {
+            Collider[] hits = Physics.OverlapSphere(transform.position, 3f);
+
+            IInteractable closestInteractable = null;
+
+            foreach (var hit in hits)
+            {
+                IInteractable interactable = hit.GetComponent<IInteractable>();
+                if (interactable != null && canInteract)
+                {
+                    interactable.Interact();
+                    canInteract = false;
+                }
+            }
+            currentInteractable = closestInteractable;
+        }
+
+        public void ToggleInteraction(bool value) { canInteract = value; }
 
         private void HandleDash()
         {
