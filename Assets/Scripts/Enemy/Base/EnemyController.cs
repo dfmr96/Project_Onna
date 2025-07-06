@@ -147,9 +147,10 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
     void Update()
     {
-        //fsm.CurrentEnemyState?.FrameUpdate();
         view.PlayMovingAnimation(_navMeshAgent.speed);
         fsm.CurrentState?.FrameUpdate();
+
+        Debug.Log("ESTADO: " + fsm.CurrentState);
 
     }
 
