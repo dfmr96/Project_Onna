@@ -62,15 +62,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Interaction"",
-                    ""type"": ""Button"",
-                    ""id"": ""0e4611df-c29a-4503-aa9a-b54815d032c4"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -258,17 +249,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""88279252-5238-4b6f-a2d2-1286986aa62a"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -860,7 +840,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
-        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -944,7 +923,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Dash;
-    private readonly InputAction m_Player_Interaction;
     public struct PlayerActions
     {
         private @Player_Input m_Wrapper;
@@ -953,7 +931,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
-        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -975,9 +952,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
-            @Interaction.started += instance.OnInteraction;
-            @Interaction.performed += instance.OnInteraction;
-            @Interaction.canceled += instance.OnInteraction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -994,9 +968,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
-            @Interaction.started -= instance.OnInteraction;
-            @Interaction.performed -= instance.OnInteraction;
-            @Interaction.canceled -= instance.OnInteraction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1183,7 +1154,6 @@ public partial class @Player_Input: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
-        void OnInteraction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
