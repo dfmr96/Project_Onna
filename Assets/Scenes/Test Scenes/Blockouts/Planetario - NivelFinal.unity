@@ -16157,7 +16157,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
   timeCircle: {fileID: 1744955339}
-  timeWeaponCooldown: {fileID: 1882168514}
+  weaponOverheat: {fileID: 0}
+  weaponCooling: {fileID: 0}
 --- !u!4 &1971396493
 Transform:
   m_ObjectHideFlags: 0
@@ -17693,8 +17694,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c60056b50a2c714a983ed11695dd20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riseHeight: 2
+  targetHeight: 1.5
+  riseSpeed: 2
+  shakeIntensity: 0.1
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
   heightTextSpawn: 2
+  particleExplosion: {fileID: 0}
+  _bossModel: {fileID: 0}
 --- !u!1 &1002706632714058002
 GameObject:
   m_ObjectHideFlags: 0
@@ -17862,8 +17869,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c60056b50a2c714a983ed11695dd20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riseHeight: 2
+  targetHeight: 1.5
+  riseSpeed: 2
+  shakeIntensity: 0.1
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
   heightTextSpawn: 2
+  particleExplosion: {fileID: 0}
+  _bossModel: {fileID: 0}
 --- !u!1 &1203236664573475234
 GameObject:
   m_ObjectHideFlags: 0
@@ -21926,6 +21939,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27344c2d6689d6c4bbc24abee4cafe90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  burstCount: 3
+  burstInterval: 0.2
+  pelletsPerShot: 5
+  spreadAngle: 15
 --- !u!4 &4812250155166654492
 Transform:
   m_ObjectHideFlags: 0
@@ -22103,8 +22120,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c60056b50a2c714a983ed11695dd20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riseHeight: 2
+  targetHeight: 1.5
+  riseSpeed: 2
+  shakeIntensity: 0.1
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
   heightTextSpawn: 2
+  particleExplosion: {fileID: 0}
+  _bossModel: {fileID: 0}
 --- !u!4 &5164755107462196063
 Transform:
   m_ObjectHideFlags: 0
@@ -24890,8 +24913,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c60056b50a2c714a983ed11695dd20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riseHeight: 2
+  targetHeight: 1.5
+  riseSpeed: 2
+  shakeIntensity: 0.1
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
   heightTextSpawn: 2
+  particleExplosion: {fileID: 0}
+  _bossModel: {fileID: 0}
 --- !u!4 &8436217235274255426
 Transform:
   m_ObjectHideFlags: 0
@@ -25498,15 +25527,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9431ad46c58cf340a87228353138b71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firePoint: {fileID: 0}
+  aggroChecksObject: {fileID: 0}
   pillars:
   - {fileID: 8256951977921521034}
   - {fileID: 946029821949301086}
   - {fileID: 5156534580896136260}
   - {fileID: 1190721678045162945}
+  pillarSpawnPoints: []
+  bossSpawnPoints: []
+  bossTransform: {fileID: 0}
   shield: {fileID: 3942273321410267140}
   shieldEffectDuration: 0.5
   timeToReactivatePillars: 5
+  pushDistance: 5
+  currentAttackSO: {fileID: 0}
   initialState: 4
+  attackPhases: []
+  EnemyIdleSOBase: {fileID: 0}
+  EnemyDeadSOBase: {fileID: 0}
 --- !u!1 &8972448721277959752
 GameObject:
   m_ObjectHideFlags: 0
@@ -25577,7 +25616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9053437158025476691
 Transform:
   m_ObjectHideFlags: 0

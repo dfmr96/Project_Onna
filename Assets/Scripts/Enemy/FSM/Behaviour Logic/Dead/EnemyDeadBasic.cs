@@ -13,7 +13,7 @@ public class EnemyDeadBasic : EnemyDeadSOBase
     {
         base.DoEnterLogic();
 
-        //_enemyView.PlayDeathAnimation();
+        _enemyView.PlayDeathAnimation();
         _timer = 0f;
     }
 
