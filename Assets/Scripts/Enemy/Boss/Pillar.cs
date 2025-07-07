@@ -66,7 +66,12 @@ public class Pillar : MonoBehaviour, IDamageable
 
     void SpawnParticle(Vector3 pos)
     {
-      
+
+        if (explosionInstance != null)
+        {
+            explosionInstance.transform.position = pos;
+            explosionInstance.Play();
+        }
     }
 
     public void TakeDamage(float damageAmount)
