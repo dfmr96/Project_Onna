@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [CreateAssetMenu(fileName = "Dead-Dead Boss", menuName = "Enemy Logic/Dead Logic/Dead Boss")]
 
@@ -11,6 +13,7 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     [SerializeField] private string bossMessage= "You... have only delayed the inevitable...";
     [SerializeField] private float messageDuration=8f;
     [SerializeField] private GameObject particleExplosion;
+
 
     public override void DoEnterLogic()
     {
@@ -25,7 +28,8 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     {
         base.DoExitLogic();
 
-      
+        SceneManager.LoadScene("HUB");
+
     }
 
     public override void DoFrameUpdateLogic()

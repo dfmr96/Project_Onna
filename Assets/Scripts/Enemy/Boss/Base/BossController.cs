@@ -39,6 +39,9 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private Collider shieldCollider;
 
 
+    [SerializeField] private BossUIController bossUIController;
+
+
     #endregion
 
     #region State Machine and FSM
@@ -151,6 +154,28 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
         isShieldActive = model.statsSO.isShieldActive;
 
+
+        //UI
+        model.OnHealthChanged += currentHealth =>
+        {
+            bossUIController.UpdateBossHealth(currentHealth, model.MaxHealth);
+        };
+
+        for (int i = 0; i < pillars.Count; i++)
+        {
+            int index = i; // Captura la variable correctamente en el closure
+            pillars[index].OnPillarHealthChanged += (current, max) =>
+            {
+                bossUIController.UpdatePillarHealth(index, current, max);
+            };
+        }
+
+        // Inicializar los valores actuales
+        bossUIController.UpdateBossHealth(model.CurrentHealth, model.MaxHealth);
+        for (int i = 0; i < pillars.Count; i++)
+        {
+            bossUIController.UpdatePillarHealth(i, pillars[i].CurrentHealth, pillars[i].MaxHealth);
+        }
     }
 
     private void Update()
