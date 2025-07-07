@@ -143,5 +143,23 @@ namespace Player
         }
 
         public void Die() => OnPlayerDie?.Invoke();
+        
+        [Button("Debug OnPlayerDie subscribers")]
+        private void DebugOnPlayerDieSubscribers()
+        {
+            if (OnPlayerDie == null)
+            {
+                Debug.Log("🛑 OnPlayerDie no tiene suscriptores.");
+                return;
+            }
+
+            var invocationList = OnPlayerDie.GetInvocationList();
+            Debug.Log($"📋 OnPlayerDie tiene {invocationList.Length} suscriptores:");
+            foreach (var d in invocationList)
+            {
+                Debug.Log($"➡️ {d.Method.DeclaringType}.{d.Method.Name} (target: {d.Target})");
+            }
+        }
+
     }
 }

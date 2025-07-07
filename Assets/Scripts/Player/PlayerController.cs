@@ -53,7 +53,7 @@ namespace Player
         {
             if (signal.Model != GetComponent<PlayerModel>()) return;
 
-            Debug.Log("🎯 PlayerController: recibida señal PlayerInitializedSignal");
+//            Debug.Log("🎯 PlayerController: recibida señal PlayerInitializedSignal");
 
             _playerModel = signal.Model;
             _isReady = true;
