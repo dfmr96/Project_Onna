@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     private void DefeatGame()
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
+        GameModeSelector.SelectedMode = GameMode.Hub;
         SceneManagementUtils.LoadSceneByName("HUB");
     }
     private void OpenDoorDebug() 
