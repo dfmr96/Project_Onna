@@ -62,7 +62,7 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
     public override void ResetValues()
     {
         base.ResetValues();
-        _navMeshAgent.isStopped = false;
+        //_navMeshAgent.isStopped = false;
 
     }
 
