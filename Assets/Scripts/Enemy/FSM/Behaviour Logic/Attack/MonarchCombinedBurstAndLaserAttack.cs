@@ -5,14 +5,20 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Attack-CombinedBurstAndLaser", menuName = "Enemy Logic/Boss Attack Logic/Combined Burst and Laser")]
 public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
 {
+    [Header("Burst Config")]
     [SerializeField] private int burstDuration = 1;
     [SerializeField] private float timeBetweenBursts = 3f;
+
+    [Header("Laser Config")]
     [SerializeField] private float laserDuration = 4f;
     [SerializeField] private float laserCooldownAfter = 2f;
-    [SerializeField] private float messageDuration = 4f;
-    [SerializeField] List<string> bossMessage;
     [SerializeField] private float rotationMultiply = 15f;
     [SerializeField] private float rotationSmoothness = 5f;
+
+    [Header("Boss Messages")]
+    [SerializeField] private float messageDuration = 4f;
+    [SerializeField] List<string> bossMessage;
+
 
 
     private enum AttackPhase { Burst, WaitAfterBurst, Laser, WaitAfterLaser }
@@ -62,7 +68,7 @@ public class MonarchCombinedBurstAndLaserAttack : EnemyAttackSOBase
     {
         currentPhase = AttackPhase.Laser;
         timer = 0f;
-        _laser?.StartLaser();
+        _laser.StartLaser();
     }
 
     private void StartWaitAfterLaser()

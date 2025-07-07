@@ -5,9 +5,9 @@ using Player;
 
 public class LaserDamage : MonoBehaviour
 {
-    [SerializeField] private float damagePerSecond = 10f;
-    [SerializeField] private float tickRate = 0.2f;
-    [SerializeField] private float laserLength = 20f;
+    private float damagePerSecond = 10f;
+    private float tickRate = 0.2f;
+    private float laserLength = 20f;
 
     private bool isActive = false;
     private Coroutine damageCoroutine;
@@ -20,11 +20,14 @@ public class LaserDamage : MonoBehaviour
     [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
     private ParticleSystem impactParticlesInstance;
 
-       
-private void Start()
+    private BossModel _bossModel;
+
+
+    private void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
+        _bossModel = GetComponentInParent<BossModel>();
 
         playerTransform = PlayerHelper.GetPlayer().transform;
         playerDamageable = playerTransform.GetComponent<IDamageable>();
@@ -34,6 +37,13 @@ private void Start()
             impactParticlesInstance = Instantiate(impactEffectParticlesPrefab);
             impactParticlesInstance.Stop();
         }
+
+        //inicializo
+        damagePerSecond = _bossModel.statsSO.LaserDamagePerSecond;
+        laserLength = _bossModel.statsSO.LaserLenght;
+        tickRate = _bossModel.statsSO.LaserTickRate;
+
+
     }
 
     private void Update()
@@ -72,6 +82,7 @@ private void Start()
     {
         isActive = true;
         lineRenderer.enabled = true;
+
 
         if (damageCoroutine == null)
             damageCoroutine = StartCoroutine(DamageRoutine());
@@ -113,7 +124,11 @@ private void Start()
             {
                 if (hit.transform == playerTransform)
                 {
-                    playerDamageable?.TakeDamage(damagePerSecond * tickRate);
+                    float damage = damagePerSecond * tickRate;
+                    Debug.Log("Applying damage: " + damage);
+                    playerDamageable?.TakeDamage(damage);
+
+                    //playerDamageable?.TakeDamage(damagePerSecond * tickRate);
                 }
             }
 

@@ -103,7 +103,7 @@ public class BossView : MonoBehaviour
         Vector3 dir = (targetPos - firePoint.position).normalized;
         dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
 
-        projectileSpawner.SpawnProjectile(firePoint.position, dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.AttackDamage);
+        projectileSpawner.SpawnProjectile(firePoint.position, dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.ProjectileDamage);
     }
 
     private void ShootShotgunProjectile()
@@ -125,7 +125,7 @@ public class BossView : MonoBehaviour
                 firePoint.position,
                 spreadDir,
                 _bossModel.statsSO.ShootForce,
-                _bossModel.statsSO.AttackDamage
+                _bossModel.statsSO.ProjectileDamage
             );
         }
     }
