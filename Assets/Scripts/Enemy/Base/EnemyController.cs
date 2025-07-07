@@ -12,6 +12,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
     private NavMeshAgent _navMeshAgent;
 
     public Transform firePoint;
+
     public GameObject shieldObject;
     public GameObject aggroChecksObject;
 
