@@ -69,6 +69,13 @@ namespace Player.Stats
                 GUI.color = Color.black;
                 string healthText = $"{player.CurrentHealth:0}/{player.MaxHealth:0}";
                 GUI.Label(healthBarRect, $"❤️ {healthText}");
+                
+                // Texto debajo de la barra de vida indicando el estado de Passive Drain
+                GUI.color = player.DevMode ? Color.yellow : Color.green;
+                string passiveDrainStatus = player.DevMode ? "⚠️ Passive Drain DESACTIVADO (DevMode)" : "✅ Passive Drain ACTIVO";
+                Rect passiveDrainRect = new Rect(healthBarRect.x, healthBarRect.y + healthBarRect.height + 5, 300, 25);
+                GUI.Label(passiveDrainRect, passiveDrainStatus);
+
             }
         }
 

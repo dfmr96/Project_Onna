@@ -35,6 +35,8 @@ namespace Player
 
         public PlayerStatContext StatContext => _statContext;
 
+        public bool DevMode => devMode;
+
         private PlayerView _playerView;
 
         private void Start()
@@ -72,10 +74,10 @@ namespace Player
             //if (!_isInitialized) return;
             if (Input.GetKeyDown(KeyCode.F2))
             {
-                devMode = !devMode;
+                devMode = !DevMode;
             }
 
-            if (!devMode && GameModeSelector.SelectedMode != GameMode.Hub)
+            if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub)
             {
                 ApplyPassiveDrain();
             }
