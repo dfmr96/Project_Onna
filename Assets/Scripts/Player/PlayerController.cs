@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
         private const float AimRaycastMaxDistance = 100f;
@@ -21,7 +21,8 @@ namespace Player
         private Vector3 _dashDirection;
         private const float DashDurationSeconds = 0.2f;
 
-        private CharacterController _characterController;
+        private Rigidbody _rb;
+        
         private Vector3 _aimDirection = Vector3.forward;
         private PlayerInputHandler _playerInputHandler;
         private Vector3 _direction = Vector3.zero;
@@ -53,7 +54,7 @@ namespace Player
         {
             if (signal.Model != GetComponent<PlayerModel>()) return;
 
-            Debug.Log("🎯 PlayerController: recibida señal PlayerInitializedSignal");
+//            Debug.Log("🎯 PlayerController: recibida señal PlayerInitializedSignal");
 
             _playerModel = signal.Model;
             _isReady = true;
@@ -69,7 +70,7 @@ namespace Player
             _playerInput = GetComponent<PlayerInput>();
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _playerInputHandler.DashPerformed += HandleDash;
-            _characterController = GetComponent<CharacterController>();
+            _rb = GetComponent<Rigidbody>();
 
             _playerInputHandler.InteractionPerformed += HandleInteraction;
             _playerInputHandler.FirePerformed += HandleFire;
@@ -85,7 +86,12 @@ namespace Player
 
             _direction = _playerInputHandler.MovementInput;
             HandleAiming(_playerInputHandler.RawAimInput);
+        }
 
+        private void FixedUpdate()
+        {
+            _rb.velocity = Vector3.zero;
+            
             if (_isDashing)
             {
                 if (Time.time > _dashEndTime)
@@ -98,7 +104,6 @@ namespace Player
                     return;
                 }
             }
-
             Move(_direction, _playerModel.Speed);
         }
 
@@ -129,7 +134,8 @@ namespace Player
         {
             if (direction.sqrMagnitude > 0.01f)
             {
-                _characterController.Move(direction * (speed * Time.deltaTime));
+                Vector3 targetPosition = _rb.position + direction.normalized * (speed * Time.fixedDeltaTime);
+                _rb.MovePosition(targetPosition);
             }
         }
 

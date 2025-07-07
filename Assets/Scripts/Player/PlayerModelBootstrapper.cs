@@ -4,7 +4,6 @@ using Player.Stats;
 using Player.Stats.Meta;
 using Player.Stats.Runtime;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.SceneManagement;
 
 namespace Player
@@ -34,28 +33,20 @@ namespace Player
             if (!ValidateDependencies()) return;
             
             MetaStatSaveSystem.Load(metaStats, registry);
-            SceneManager.sceneLoaded += OnSceneLoaded;
             
             EventBus.Publish(new PlayerModelBootstrapperSignal(this));
         }
 
         private void OnEnable()
         {
-            Debug.Log("🛰 Bootstrapper suscribiéndose al PlayerSpawnedSignal");
+            //Debug.Log("🛰 Bootstrapper suscribiéndose al PlayerSpawnedSignal");
             EventBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
         }
         
         private void OnDisable()
         {
             EventBus.Unsubscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
-            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mod)
-        {
-            Debug.Log($"🌍 Bootstrapper: Escena cargada: {scene.name}, Modo actual: {currentMode}");
-        }
-        
         private bool ValidateDependencies()
         {
             bool isValid = true;
@@ -77,7 +68,7 @@ namespace Player
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)
         {
-            Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
+            //Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
             var playerGO = signal.PlayerGO;
             var playerModel = playerGO.GetComponent<PlayerModel>();
             if (playerModel == null)
@@ -109,24 +100,14 @@ namespace Player
                     return;
             }
 
-            Debug.Log("✅ StatContext inyectado correctamente en PlayerModel.");
+            //Debug.Log("✅ StatContext inyectado correctamente en PlayerModel.");
             playerModel.InjectStatContext(_statContext);
 
         }
     }
+
+
     
-        
-    public static class GameModeSelector
-    {
-        public static GameMode SelectedMode = GameMode.Hub;
-    }
-
-
-    public enum GameMode
-    {
-        Hub,
-        Run
-    }
     
     
 }
