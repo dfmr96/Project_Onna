@@ -4,11 +4,11 @@ using Player;
 
 public class ProjectileBurstShooter : MonoBehaviour
 {
-    [SerializeField] private int minProjectilesPerBurst = 3;
-    [SerializeField] private int maxProjectilesPerBurst = 5;
-    [SerializeField] private float delayBetweenShots = 0.2f;
-    [SerializeField] private float delayBetweenBursts = 2f;
-    [SerializeField] private float spreadAngle = 15f;
+    private int minProjectilesPerBurst;
+    private int maxProjectilesPerBurst;
+    private float delayBetweenShots;
+    private float delayBetweenBursts;
+    private float spreadAngle;
 
     private ProjectileSpawner _spawner;
     private BossModel _bossModel;
@@ -25,10 +25,19 @@ public class ProjectileBurstShooter : MonoBehaviour
         _bossController = GetComponentInParent<BossController>();
         _bossView = GetComponentInParent<BossView>();
         _playerTransform = PlayerHelper.GetPlayer().transform;
+
+        minProjectilesPerBurst = _bossModel.statsSO.minProjectilesPerBurst;
+        maxProjectilesPerBurst = _bossModel.statsSO.maxProjectilesPerBurst;
+        delayBetweenShots = _bossModel.statsSO.delayBetweenShots;
+        delayBetweenBursts = _bossModel.statsSO.delayBetweenBursts;
+        spreadAngle = _bossModel.statsSO.spreadAngle;
     }
 
     public void StartBurstLoop()
     {
+
+     
+
         if (_loopCoroutine == null)
             _loopCoroutine = StartCoroutine(BurstLoop());
     }
@@ -72,7 +81,7 @@ public class ProjectileBurstShooter : MonoBehaviour
             _bossController.firePoint.position,
             dir,
             _bossModel.statsSO.ShootForce,
-            _bossModel.statsSO.AttackDamage
+            _bossModel.statsSO.ProjectileDamage
         );
 
         _bossView?.PlayProjectilesAttackAnimation();

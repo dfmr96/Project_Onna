@@ -181,12 +181,12 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
     public override void ExecuteAttack(IDamageable target)
     {
-        target.TakeDamage(model.statsSO.AttackDamage);
+        target.TakeDamage(model.statsSO.ProjectileDamage);
     }
 
     public float GetDamage()
     {
-        return model.statsSO.AttackDamage;
+        return model.statsSO.ProjectileDamage;
     }
 
     //public void DoAttack(IDamageable target)
