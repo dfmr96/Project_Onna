@@ -19,7 +19,7 @@ namespace Player
         private float _dashEndTime = 0f;
         private float _lastDashTime = -Mathf.Infinity;
         private Vector3 _dashDirection;
-        private const float DashDurationSeconds = 0.2f;
+        private const float DashDurationSeconds = 0.12f;
 
         private CharacterController _characterController;
         private Vector3 _aimDirection = Vector3.forward;
