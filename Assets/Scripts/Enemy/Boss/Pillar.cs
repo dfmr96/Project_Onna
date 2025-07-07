@@ -36,7 +36,9 @@ public class Pillar : MonoBehaviour, IDamageable
     [SerializeField] private BossModel _bossModel;
 
 
- 
+
+    //UI
+    public event Action<float, float> OnPillarHealthChanged;
 
     private void Start()
     {
@@ -88,6 +90,9 @@ public class Pillar : MonoBehaviour, IDamageable
             textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
         }
 
+        //UI
+        OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+
         if (CurrentHealth <= 0)
         {
             Die();
@@ -124,14 +129,13 @@ public class Pillar : MonoBehaviour, IDamageable
         gameObject.SetActive(true);
 
         //pos inicial hundida
-        //targetPosition = targetTransform.position;
         targetPosition = new Vector3(targetTransform.position.x, targetHeight, targetTransform.position.z);
 
         initialPosition = targetPosition - Vector3.up * riseHeight;
         transform.position = initialPosition;
 
-
-     
+        //UI
+        OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
 
         //empezamos a subir
         StartCoroutine(RiseUpCoroutine());
