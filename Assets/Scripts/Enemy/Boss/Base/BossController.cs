@@ -28,6 +28,8 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     [SerializeField] private List<Transform> pillarSpawnPoints;
     [SerializeField] private List<Transform> bossSpawnPoints;
     [SerializeField] private Transform bossTransform;
+    [SerializeField] private GameObject torretPrefab;
+    [SerializeField] private List<Transform> torretSpawnPoints;
     private int bossRespawnIndex = 0;
 
     [SerializeField] private GameObject shield;
@@ -282,6 +284,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private void ReactivateShieldRoutine()
     {
         BossRespawn();
+        TorretsRespawn();
         ReactivatePillars();
         TriggerShieldEffect();
         ActivateShield();
@@ -371,6 +374,26 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
             _navMeshAgent.enabled = true;
 
         bossRespawnIndex++;
+
+    }
+
+    private void TorretsRespawn()
+    {
+        List<Transform> availablePositions = new List<Transform>(torretSpawnPoints);
+
+        int torretCount = 2; 
+        for (int i = 0; i < torretCount; i++)
+        {
+            if (availablePositions.Count == 0)
+                break; 
+
+            int randomIndex = Random.Range(0, availablePositions.Count);
+            Transform selectedPosition = availablePositions[randomIndex];
+
+            Instantiate(torretPrefab, selectedPosition.position, selectedPosition.rotation);
+
+            availablePositions.RemoveAt(randomIndex);
+        }
 
     }
 
