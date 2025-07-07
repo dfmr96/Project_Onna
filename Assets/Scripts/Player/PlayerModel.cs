@@ -79,8 +79,6 @@ namespace Player
             {
                 ApplyPassiveDrain();
             }
-            //ApplyPassiveDrain();
-
         }
 
         private void ApplyPassiveDrain()
