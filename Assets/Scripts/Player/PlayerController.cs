@@ -90,6 +90,8 @@ namespace Player
 
         private void FixedUpdate()
         {
+            _rb.velocity = Vector3.zero;
+            
             if (_isDashing)
             {
                 if (Time.time > _dashEndTime)
