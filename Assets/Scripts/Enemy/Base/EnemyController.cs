@@ -1,29 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour, ITriggerCheck
+public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseController
 {
-
     private EnemyModel model;
     private EnemyView view;
     private Rigidbody rb;
+    public Rigidbody Rb => rb;
 
     private NavMeshAgent _navMeshAgent;
 
     public Transform firePoint;
+
     public GameObject shieldObject;
-    private bool isShieldActive;
     public GameObject aggroChecksObject;
 
+    private bool isShieldActive;
 
     public bool isAggroed { get; set; }
     public bool isWhitinCombatRadius { get; set; }
 
-    #region State Machine Variables
+    public EnemyStateMachine<BaseEnemyController> fsm { get; private set; }
 
-    public EnemyStateMachine fsm { get; set; }
+    // Estados de la FSM
     public EnemyPatrolState PatrolState { get; set; }
     public EnemyChaseState ChaseState { get; set; }
     public EnemyAttackState AttackState { get; set; }
@@ -35,33 +35,27 @@ public class EnemyController : MonoBehaviour, ITriggerCheck
     public EnemyHurtState HurtState { get; set; }
     public EnemyDefendState DefendState { get; set; }
 
-
-
-
     public enum InitialState
     {
-        Patrol,
-        Chase,
-        Attack,
-        Search,
-        Idle,
-        Stunned,
-        Dead,
-        Escape,
-        Defend
+        Patrol, Chase, Attack, Search, Idle, Stunned, Dead, Escape, Defend
     }
 
     public InitialState initialState = InitialState.Patrol;
 
+    [System.Serializable]
+    public class AttackPhase
+    {
+        [Range(0f, 1f)]
+        public float healthThreshold;
+        public EnemyAttackSOBase attackSO;
+    }
 
-    #endregion
+    [SerializeField] public List<AttackPhase> attackPhases;
+    public EnemyAttackSOBase currentAttackSO { get; private set; }
 
-
-    #region Behaviours
-    //Behaviour
+    // ScriptableObject behaviors
     [Header("FSM-Behaviour ScriptableObjects")]
     [SerializeField] private EnemyIdleSOBase EnemyIdleSOBase;
-    [SerializeField] private EnemyAttackSOBase EnemyAttackSOBase;
     [SerializeField] private EnemyChaseSOBase EnemyChaseSOBase;
     [SerializeField] private EnemyDeadSOBase EnemyDeadSOBase;
     [SerializeField] private EnemyPatrolSOBase EnemyPatrolSOBase;
@@ -69,30 +63,25 @@ public class EnemyController : MonoBehaviour, ITriggerCheck
     [SerializeField] private EnemyEscapeSOBase EnemyEscapeSOBase;
     [SerializeField] private EnemyHurtSOBase EnemyHurtSOBase;
     [SerializeField] private EnemyDefendSOBase EnemyDefendSOBase;
+    [SerializeField] private EnemySearchSOBase EnemySearchSOBase;
 
+    // Instancias
+    public EnemyIdleSOBase EnemyIdleBaseInstance { get; private set; }
+    public EnemySearchSOBase EnemySearchBaseInstance { get; private set; }
+    public EnemyChaseSOBase EnemyChaseBaseInstance { get; private set; }
+    public EnemyDeadSOBase EnemyDeadBaseInstance { get; private set; }
+    public EnemyPatrolSOBase EnemyPatrolBaseInstance { get; private set; }
+    public EnemyStunnedSOBase EnemyStunnedBaseInstance { get; private set; }
+    public EnemyEscapeSOBase EnemyEscapeBaseInstance { get; private set; }
+    public EnemyHurtSOBase EnemyHurtBaseInstance { get; private set; }
+    public EnemyDefendSOBase EnemyDefendBaseInstance { get; private set; }
 
-
-
-    public EnemyIdleSOBase EnemyIdleBaseInstance { get; set; }
-    public EnemyAttackSOBase EnemyAttackBaseInstance { get; set; }
-    public EnemyChaseSOBase EnemyChaseBaseInstance { get; set; }
-    public EnemyDeadSOBase EnemyDeadBaseInstance { get; set; }
-    public EnemyPatrolSOBase EnemyPatrolBaseInstance { get; set; }
-    public EnemyStunnedSOBase EnemyStunnedBaseInstance { get; set; }
-    public EnemyEscapeSOBase EnemyEscapeBaseInstance { get; set; }
-    public EnemyHurtSOBase EnemyHurtBaseInstance { get; set; }
-    public EnemyDefendSOBase EnemyDefendBaseInstance { get; set; }
-
-
-
-
-    #endregion
+    private List<EnemyAttackSOBase> attackPhaseInstances = new();
 
     void Awake()
     {
-        //Behaviour
+        // Instanciar behaviors
         EnemyIdleBaseInstance = Instantiate(EnemyIdleSOBase);
-        EnemyAttackBaseInstance = Instantiate(EnemyAttackSOBase);
         EnemyChaseBaseInstance = Instantiate(EnemyChaseSOBase);
         EnemyDeadBaseInstance = Instantiate(EnemyDeadSOBase);
         EnemyPatrolBaseInstance = Instantiate(EnemyPatrolSOBase);
@@ -100,41 +89,43 @@ public class EnemyController : MonoBehaviour, ITriggerCheck
         EnemyEscapeBaseInstance = Instantiate(EnemyEscapeSOBase);
         EnemyHurtBaseInstance = Instantiate(EnemyHurtSOBase);
         EnemyDefendBaseInstance = Instantiate(EnemyDefendSOBase);
+        EnemySearchBaseInstance = Instantiate(EnemySearchSOBase);
 
-
-
-
+        foreach (var phase in attackPhases)
+        {
+            var instance = Instantiate(phase.attackSO);
+            attackPhaseInstances.Add(instance);
+        }
 
         model = GetComponent<EnemyModel>();
         view = GetComponent<EnemyView>();
         rb = GetComponent<Rigidbody>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
 
-        fsm = new EnemyStateMachine();
+        fsm = new EnemyStateMachine<BaseEnemyController>();
 
-        PatrolState = new EnemyPatrolState(this, fsm);
-        ChaseState = new EnemyChaseState(this, fsm);
+        // Inicialización de estados
+        PatrolState = new EnemyPatrolState(this, fsm, EnemyPatrolBaseInstance);
+        ChaseState = new EnemyChaseState(this, fsm, EnemyChaseBaseInstance);
+        IdleState = new EnemyIdleState(this, fsm, EnemyIdleBaseInstance);
+        DeadState = new EnemyDeadState(this, fsm, EnemyDeadBaseInstance);
+        SearchState = new EnemySearchState(this, fsm, EnemySearchBaseInstance);
+        StunnedState = new EnemyStunnedState(this, fsm, EnemyStunnedBaseInstance);
+        EscapeState = new EnemyEscapeState(this, fsm, EnemyEscapeBaseInstance);
+        HurtState = new EnemyHurtState(this, fsm, EnemyHurtBaseInstance);
+        DefendState = new EnemyDefendState(this, fsm, EnemyDefendBaseInstance);
+
+        // El AttackState se construye con el currentAttackSO dinámico
+        currentAttackSO = attackPhaseInstances[0];
         AttackState = new EnemyAttackState(this, fsm);
-        SearchState = new EnemySearchState(this, fsm);
-        StunnedState = new EnemyStunnedState(this, fsm);
-        IdleState = new EnemyIdleState(this, fsm);
-        DeadState = new EnemyDeadState(this, fsm);
-        EscapeState = new EnemyEscapeState(this, fsm);
-        HurtState = new EnemyHurtState(this, fsm);
-        DefendState = new EnemyDefendState(this, fsm);
-
-
-
     }
 
-    public Rigidbody Rb => rb;
-
-    private void Start()
+    void Start()
     {
-      
+        foreach (var atk in attackPhaseInstances)
+            atk.Initialize(gameObject, this);
 
-        //Behaviour
         EnemyIdleBaseInstance.Initialize(gameObject, this);
-        EnemyAttackBaseInstance.Initialize(gameObject, this);
         EnemyChaseBaseInstance.Initialize(gameObject, this);
         EnemyDeadBaseInstance.Initialize(gameObject, this);
         EnemyPatrolBaseInstance.Initialize(gameObject, this);
@@ -142,140 +133,87 @@ public class EnemyController : MonoBehaviour, ITriggerCheck
         EnemyEscapeBaseInstance.Initialize(gameObject, this);
         EnemyHurtBaseInstance.Initialize(gameObject, this);
         EnemyDefendBaseInstance.Initialize(gameObject, this);
-
-
-
-
-        InitializeState();
-
-
-
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-
+        EnemySearchBaseInstance.Initialize(gameObject, this);
 
         model.OnHealthChanged += HandleHealthChanged;
         model.OnDeath += HandleDeath;
 
         isShieldActive = model.statsSO.isShieldActive;
         SetShield(isShieldActive);
+
+        InitializeState();
+
+
     }
 
-    private void Update()
+    void Update()
     {
-        fsm.CurrentEnemyState.FrameUpdate();
-
-        Debug.Log(fsm.CurrentEnemyState);
-
-        //Animacion de Movimiento
         view.PlayMovingAnimation(_navMeshAgent.speed);
+        fsm.CurrentState?.FrameUpdate();
+
+        Debug.Log("ESTADO: " + fsm.CurrentState);
+
     }
 
     private void InitializeState()
     {
         switch (initialState)
         {
-            case InitialState.Patrol:
-                fsm.Initialize(PatrolState);
-                break;
-            case InitialState.Chase:
-                fsm.Initialize(ChaseState);
-                break;
-            case InitialState.Attack:
-                fsm.Initialize(AttackState);
-                break;
-            case InitialState.Search:
-                fsm.Initialize(SearchState);
-                break;
-            case InitialState.Idle:
-                fsm.Initialize(IdleState);
-                break;
-            case InitialState.Stunned:
-                fsm.Initialize(StunnedState);
-                break;
-            case InitialState.Dead:
-                fsm.Initialize(DeadState);
-                break;
-            case InitialState.Escape:
-                fsm.Initialize(EscapeState);
-                break;
-
-
+            case InitialState.Patrol: fsm.Initialize(PatrolState); break;
+            case InitialState.Chase: fsm.Initialize(ChaseState); break;
+            case InitialState.Attack: fsm.Initialize(AttackState); break;
+            case InitialState.Search: fsm.Initialize(SearchState); break;
+            case InitialState.Idle: fsm.Initialize(IdleState); break;
+            case InitialState.Stunned: fsm.Initialize(StunnedState); break;
+            case InitialState.Dead: fsm.Initialize(DeadState); break;
+            case InitialState.Escape: fsm.Initialize(EscapeState); break;
+            case InitialState.Defend: fsm.Initialize(DefendState); break;
         }
     }
 
-    //Realiza el ataque desde el eventtrigger de la animacion
-    public void ExecuteAttack(IDamageable target)
+    public override void ExecuteAttack(IDamageable target)
     {
-     
         target.TakeDamage(model.statsSO.AttackDamage);
-
-
     }
 
-    public float GetDamage()
+    public float GetDamage() => model.statsSO.AttackDamage;
+
+    //public void DoAttack(IDamageable target)
+    //{
+    //    target.TakeDamage(GetDamage());
+    //    Debug.Log("Daño hecho por el estado Melee");
+    //}
+
+    private void HandleHealthChanged(float currentHealth) => view.HandleDamage();
+
+    private void HandleDeath(EnemyModel enemy) => fsm.ChangeState(DeadState);
+
+    public void SetAggroChecksEnabled(bool enabled) => aggroChecksObject.SetActive(enabled);
+    public void SetAggroStatus(bool value) => isAggroed = value;
+    public void SetCombatRadiusBool(bool value) => isWhitinCombatRadius = value;
+
+    public void SetShield(bool isOn)
     {
-        return model.statsSO.AttackDamage;
-    }
-    public void DoAttack(IDamageable target)
-    {
-        target.TakeDamage(GetDamage());
-        Debug.Log("Daño hecho por el estado Melee");
+        isShieldActive = isOn;
+        shieldObject.SetActive(isOn);
     }
 
-    private void HandleHealthChanged(float currentHealth)
-    {
-        //float healthPercentage = currentHealth / model.statsSO.MaxHealth;
+    public bool GetShield() => isShieldActive;
 
-        //Cuando lo hieren pasa a Hurt
-        //fsm.ChangeState(HurtState);
-        view.PlayDamageAnimation();
-    }
+    public override float MaxHealth => model.statsSO.MaxHealth;
+    public override float CurrentHealth => model.CurrentHealth;
+    public override EnemyAttackSOBase CurrentAttackSO => currentAttackSO;
 
-    private void HandleDeath(EnemyModel enemy)
-    {
-        fsm.ChangeState(DeadState);
-    }
-    
-    public void SetAggroChecksEnabled(bool enabled)
-    {
-        if (enabled) {
 
-            aggroChecksObject.SetActive(true);
-        }
-        else
-        {
-            aggroChecksObject.SetActive(false);
+    //void OnGUI()
+    //{
+    //    if (fsm?.CurrentState != null)
+    //    {
+    //        GUIStyle style = new GUIStyle();
+    //        style.fontSize = 16;
+    //        style.normal.textColor = Color.white;
 
-        }
-    }
-
-    public void SetAggroStatus(bool IsAggroed)
-    {
-        isAggroed = IsAggroed;
-    }
-
-    public void SetCombatRadiusBool(bool IsWhitinCombatRadius)
-    {
-        isWhitinCombatRadius = IsWhitinCombatRadius;
-    }
-
-    public void SetShield(bool isGod)
-    {
-        isShieldActive = isGod;
-
-        if (isGod)
-        {
-            shieldObject.SetActive(true);
-        }
-        else
-        {
-            shieldObject.SetActive(false);
-        }
-    }
-
-    public bool GetShield()
-    {
-        return isShieldActive;
-    }
-
+    //        GUI.Label(new Rect(10, 200, 400, 30), $"Estado FSM: {fsm.CurrentState.GetType().Name}", style);
+    //    }
+    //}
 }

@@ -3170,8 +3170,10 @@ MonoBehaviour:
   shieldObject: {fileID: 28391037131662461}
   aggroChecksObject: {fileID: 4153413387264883387}
   initialState: 0
+  attackPhases:
+  - healthThreshold: 0
+    attackSO: {fileID: 11400000, guid: a75b4e11a32232a4e82b78e0cb0cc09a, type: 2}
   EnemyIdleSOBase: {fileID: 11400000, guid: c4a8a2f2ad6efca48b5170c6ad0499f8, type: 2}
-  EnemyAttackSOBase: {fileID: 11400000, guid: a75b4e11a32232a4e82b78e0cb0cc09a, type: 2}
   EnemyChaseSOBase: {fileID: 11400000, guid: efb6beaf3be9d854f84cc61466bc8fbc, type: 2}
   EnemyDeadSOBase: {fileID: 11400000, guid: ee85fcac1a8666d489a2d70f1d6395e2, type: 2}
   EnemyPatrolSOBase: {fileID: 11400000, guid: d7a19362356848140914a410a04746a6, type: 2}
@@ -3179,6 +3181,7 @@ MonoBehaviour:
   EnemyEscapeSOBase: {fileID: 11400000, guid: 9b57c33a83dacca4881a7c8a079b9128, type: 2}
   EnemyHurtSOBase: {fileID: 11400000, guid: cc3e30759b988b3419289f6f13305ff3, type: 2}
   EnemyDefendSOBase: {fileID: 11400000, guid: 2cbdebe29aa18464992e60d1773cdf21, type: 2}
+  EnemySearchSOBase: {fileID: 11400000, guid: bb21c07f89f7e7d419ca5740b9777f7e, type: 2}
 --- !u!114 &2718148224763795913
 MonoBehaviour:
   m_ObjectHideFlags: 0

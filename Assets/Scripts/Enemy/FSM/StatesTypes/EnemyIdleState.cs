@@ -3,31 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyIdleState : EnemyState
+public class EnemyIdleState : EnemyState<BaseEnemyController>
 {
 
-    public EnemyIdleState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
-    {
+    private EnemyIdleSOBase idleBehavior;
 
+    public EnemyIdleState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm, EnemyIdleSOBase idleBehavior) : base(enemy, fsm)
+    {
+        this.idleBehavior = idleBehavior;
     }
 
     public override void EnterState()
     {
         base.EnterState();
-        enemy.EnemyIdleBaseInstance.DoEnterLogic();
+        idleBehavior.DoEnterLogic();
     }
 
     public override void ExitState()
     {
         base.ExitState();
-        enemy.EnemyIdleBaseInstance.DoExitLogic();
+        idleBehavior.DoExitLogic();
 
     }
 
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-        enemy.EnemyIdleBaseInstance.DoFrameUpdateLogic();
+        idleBehavior.DoFrameUpdateLogic();
 
 
 

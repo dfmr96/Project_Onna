@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aa1fcfa55cb4f5783e1b2a0b48b294e, type: 3}
+  m_Name: UpgradeDB
+  m_EditorClassIdentifier: 
+  allUpgrades:
+  - {fileID: 11400000, guid: 60a1388f114167f41963412a582d5453, type: 2}
+  - {fileID: 11400000, guid: 58377ab50471974459a41c1e22b449d0, type: 2}
+  - {fileID: 11400000, guid: 138fd5feee399c246a615f58b8e3f7d4, type: 2}
+  - {fileID: 11400000, guid: faefc8276ef21814dabd43ec952048f4, type: 2}
+  - {fileID: 11400000, guid: 95e131ba38d246349a25fc832cbd5058, type: 2}
+  - {fileID: 11400000, guid: a28f03ca6c30c1447b3c70c19c35bf41, type: 2}
+  - {fileID: 11400000, guid: 1e50043834c19044cab178e96309224c, type: 2}
+  - {fileID: 11400000, guid: a48367eac8c6d384caea778e981a32db, type: 2}
+  - {fileID: 11400000, guid: aea14fbf44537c8429441673f6d3d570, type: 2}
+  - {fileID: 11400000, guid: c32f5559abb0f0844904a84fa3f3c904, type: 2}
+  - {fileID: 11400000, guid: 513bde620cdac124bb6192ebf13796ff, type: 2}
+  - {fileID: 11400000, guid: ad606e661880b0443814df5c4fe18a33, type: 2}
+  - {fileID: 11400000, guid: 1fe5c15f0e3c12c43944401292baa794, type: 2}
+  - {fileID: 11400000, guid: 62527750c73e8194b9e6d2d4c50136a4, type: 2}
+  - {fileID: 11400000, guid: 4e1a79e45c13f2b49b01305759870694, type: 2}
+  lookup:
+    _serializedList:
+    - Key: CanaldePresionSecundaria
+      Value: {fileID: 11400000, guid: 60a1388f114167f41963412a582d5453, type: 2}
+    - Key: MaxVitalTimeStoreData
+      Value: {fileID: 11400000, guid: 58377ab50471974459a41c1e22b449d0, type: 2}
+    - Key: MovementSpeedStoreData
+      Value: {fileID: 11400000, guid: 138fd5feee399c246a615f58b8e3f7d4, type: 2}
+    - Key: Overheat
+      Value: {fileID: 11400000, guid: faefc8276ef21814dabd43ec952048f4, type: 2}
+    - Key: Weapon3
+      Value: {fileID: 11400000, guid: 95e131ba38d246349a25fc832cbd5058, type: 2}
+    - Key: Weapon4
+      Value: {fileID: 11400000, guid: a28f03ca6c30c1447b3c70c19c35bf41, type: 2}
+    - Key: SU_01_Longevidad
+      Value: {fileID: 11400000, guid: 1e50043834c19044cab178e96309224c, type: 2}
+    - Key: SU_02_PiernasLargas
+      Value: {fileID: 11400000, guid: a48367eac8c6d384caea778e981a32db, type: 2}
+    - Key: SU_03_EvoOrbes
+      Value: {fileID: 11400000, guid: aea14fbf44537c8429441673f6d3d570, type: 2}
+    - Key: SU_04_Entrenamiento
+      Value: {fileID: 11400000, guid: c32f5559abb0f0844904a84fa3f3c904, type: 2}
+    - Key: SU_05_PiesVeloces
+      Value: {fileID: 11400000, guid: 513bde620cdac124bb6192ebf13796ff, type: 2}
+    - Key: SU_06_SaltoAgil
+      Value: {fileID: 11400000, guid: ad606e661880b0443814df5c4fe18a33, type: 2}
+    - Key: SU_07_Enfriamiento
+      Value: {fileID: 11400000, guid: 1fe5c15f0e3c12c43944401292baa794, type: 2}
+    - Key: SU_08_Telescopio
+      Value: {fileID: 11400000, guid: 62527750c73e8194b9e6d2d4c50136a4, type: 2}
+    - Key: SU_09_Blindaje
+      Value: {fileID: 11400000, guid: 4e1a79e45c13f2b49b01305759870694, type: 2}

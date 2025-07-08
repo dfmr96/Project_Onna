@@ -9,6 +9,8 @@ namespace Mutations
         [field:SerializeField] [TextArea]  private string description;
         [field:SerializeField] private OrganType organ;
         [field:SerializeField] private Sprite icon;
+        [field:SerializeField] private ValueMode valueMode = ValueMode.None;
+        [field:SerializeField] private float upgradeBonus;
         [field:SerializeField] private UpgradeEffect upgradeEffect;
         public string MutationName
         {
@@ -31,5 +33,9 @@ namespace Mutations
         public Sprite Icon => icon;
 
         public UpgradeEffect UpgradeEffect => upgradeEffect;
+
+        public float UpgradeBonus => upgradeBonus;
+
+        public ValueMode Mode => valueMode;
     }
 }

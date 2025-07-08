@@ -165,7 +165,7 @@ public class EnemyAttackMeleeStrafe : EnemyAttackSOBase
         {
             _enemyView.Animator.applyRootMotion = true;
             _enemyView.PlayAttackAnimation(true);
-            TriggerAttackColorEffect();
+            //TriggerAttackColorEffect();
         }
     }
 
@@ -179,7 +179,7 @@ public class EnemyAttackMeleeStrafe : EnemyAttackSOBase
         _enemyView.Animator.applyRootMotion = false;
     }
 
-    public override void Initialize(GameObject gameObject, EnemyController enemy)
+    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

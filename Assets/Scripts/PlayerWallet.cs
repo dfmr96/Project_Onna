@@ -1,33 +1,24 @@
 using System;
 using UnityEngine;
-
+[System.Serializable]
 public class PlayerWallet
 {
-    public int Coins { private set; get; }
-    public PlayerWallet() { LoadCoins(); }
+    [SerializeField] private int coins;
+    public int Coins => coins;
 
-    private void LoadCoins() { Coins = SaveSystem.LoadData().totalCoins; }
-    private void SaveCoins() { SaveSystem.SaveCoins(Coins); }
-
-    public void AddCoins(int amount)
-    {
-        Coins += amount;
-        SaveCoins();
-        Debug.LogWarning($"Se sumaron {amount} monedas. Total: {Coins}");
-    }
+    public void AddCoins(int amount) { coins += amount; }
 
     public bool CheckCost(int ammount)
     {
         if (Coins >= ammount) return true;
-        else return false;
+        return false;
     }
 
     public bool TrySpend(int amount)
     {
         if (Coins >= amount)
         {
-            Coins -= amount;
-            SaveCoins();
+            coins -= amount;
             return true;
         }
         return false;

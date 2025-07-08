@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
+  m_Name: Engineer Dialogue Node
+  m_EditorClassIdentifier: 
+  dialogueText: "Hey! Just in time. I just finished tuning up a few things... Interested
+    in checking out what I\u2019ve got? Some of it\u2019s useful, some of it I barely
+    understand... but it works."
+  options:
+  - optionText: "Sure, show me what you\u2019ve got."
+    nextNode: {fileID: 0}
+    endsDialogue: 1
+    actionId: 1
+  - optionText: No thanks, just looking around.
+    nextNode: {fileID: 0}
+    endsDialogue: 1
+    actionId: 0

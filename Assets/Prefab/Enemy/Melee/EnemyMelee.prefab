@@ -1382,6 +1382,7 @@ GameObject:
   - component: {fileID: 579964553208854834}
   - component: {fileID: 3059458471508149341}
   - component: {fileID: 5494369513606284842}
+  - component: {fileID: 872886560669737373}
   m_Layer: 7
   m_Name: EnemyMelee
   m_TagString: Enemy
@@ -1516,8 +1517,10 @@ MonoBehaviour:
   shieldObject: {fileID: 5590283411822690491}
   aggroChecksObject: {fileID: 3922803291852483100}
   initialState: 0
+  attackPhases:
+  - healthThreshold: 0
+    attackSO: {fileID: 11400000, guid: dcde0ee0a61b0c244a1bf7b0a556bbfb, type: 2}
   EnemyIdleSOBase: {fileID: 11400000, guid: c4a8a2f2ad6efca48b5170c6ad0499f8, type: 2}
-  EnemyAttackSOBase: {fileID: 11400000, guid: dcde0ee0a61b0c244a1bf7b0a556bbfb, type: 2}
   EnemyChaseSOBase: {fileID: 11400000, guid: 29dbc36fa4b3a8642ad32021e48b7b77, type: 2}
   EnemyDeadSOBase: {fileID: 11400000, guid: ee85fcac1a8666d489a2d70f1d6395e2, type: 2}
   EnemyPatrolSOBase: {fileID: 11400000, guid: d7a19362356848140914a410a04746a6, type: 2}
@@ -1525,6 +1528,7 @@ MonoBehaviour:
   EnemyEscapeSOBase: {fileID: 11400000, guid: 9b57c33a83dacca4881a7c8a079b9128, type: 2}
   EnemyHurtSOBase: {fileID: 11400000, guid: cc3e30759b988b3419289f6f13305ff3, type: 2}
   EnemyDefendSOBase: {fileID: 11400000, guid: 2cbdebe29aa18464992e60d1773cdf21, type: 2}
+  EnemySearchSOBase: {fileID: 11400000, guid: bb21c07f89f7e7d419ca5740b9777f7e, type: 2}
 --- !u!114 &3059458471508149341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1554,6 +1558,108 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15090d3ae99f0744785b069fb322afa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firePoint2: {fileID: 3041068540020085891}
+  turretHead: {fileID: 3041068540020085891}
+  deathParticlesPrefab: {fileID: 4000606309234296067, guid: f84f5269c2501854292626425fb30685, type: 3}
+  spawnParticlesPrefab: {fileID: 5169803093150543574, guid: fa65185353a88a842b840df16733e05b, type: 3}
+  shootAudioClip: {fileID: 0}
+  damagedAudioClip: {fileID: 8300000, guid: 5432abd34717bbe4b8083fecca85ebda, type: 3}
+--- !u!82 &872886560669737373
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5215764810527803941}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 20
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5485727888402235831
 GameObject:
   m_ObjectHideFlags: 0
@@ -1959,7 +2065,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: ebeeaf51a4f945d488dcee1e0dd62b6d, type: 3}
+  - {fileID: 2100000, guid: 6b9fc1241a472cf409e6508851c739e6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

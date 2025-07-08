@@ -25,7 +25,7 @@ public class EnemyIdleStillChase : EnemyIdleSOBase
         }
     }
 
-    public override void Initialize(GameObject gameObject, EnemyController enemy)
+    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

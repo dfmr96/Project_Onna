@@ -7,9 +7,21 @@ public class BossStatsSO : ScriptableObject
     public float MaxHealth = 100f;
     public bool isShieldActive = false;
 
+    [Header("Combat Projectiles")]
+    public float ProjectileDamage = 5f;
+    public float ShootForce = 15f;
+    public int minProjectilesPerBurst = 3;
+    public int maxProjectilesPerBurst = 5;
+    public float delayBetweenShots = 0.2f;
+    public float delayBetweenBursts = 2f;
+    public float spreadAngle = 15f;
 
-    [Header("Combat")]
-    public float AttackDamage = 20f;
+    [Header("Combat Laser")]
+    public float LaserDamagePerSecond = 25f;
+    public float LaserTickRate = 0.2f;
+    public float LaserLenght = 20f;
+
+    [Header("Attack Range Vision")]
     public float AttackRange = 10f;
 
     [Header("Vision Combat Stats")]
@@ -21,15 +33,18 @@ public class BossStatsSO : ScriptableObject
     public float visionAngle = 45f;
     public LayerMask obstacleDetectionLayers;
 
-    [Header("Ranged Combat")]
-    public float ShootForce = 15f;
+    [Header("Pillar Stats")]
+    public float PillarMaxHealth = 100f;
 
-    [Header("Movement")]
-    public float moveSpeed = 6f;
-    public float rotationSpeed = 400f;
-    public float RandomMovementRange = 30f;
 
-    [Header("Rastro Orb")]
+    [Header("Pillar Rastro Orb")]
+    public float pillarRadiusSpawnOrb = 1.5f;
+    public bool PillarRastroOrbOnHit = true;
+    public int pillarNumberOfOrbsOnHit = 1;
+    public bool PillarRastroOrbOnDeath = true;
+    public int pillarNumberOfOrbsOnDeath = 2;
+
+    [Header("Boss Rastro Orb")]
     public float radiusSpawnOrb = 1.5f;
     public bool RastroOrbOnHit = true;
     public int numberOfOrbsOnHit = 1;

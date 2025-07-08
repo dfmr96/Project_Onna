@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class EnemyIdleSOBase : ScriptableObject
 {
 
-    protected EnemyController enemy;
+    protected IEnemyBaseController enemy;
     protected EnemyModel model;
     protected Transform transform;
     protected GameObject gameObject;
@@ -17,14 +17,14 @@ public class EnemyIdleSOBase : ScriptableObject
     protected NavMeshAgent _navMeshAgent;
     protected float initialSpeed;
 
-    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
+    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         this.gameObject = gameObject;   
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
+        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
 
     }
@@ -34,7 +34,7 @@ public class EnemyIdleSOBase : ScriptableObject
         initialSpeed = _navMeshAgent.speed;
         _navMeshAgent.speed = 0;
         _navMeshAgent.isStopped = true;
-        model = enemy.GetComponent<EnemyModel>();
+        model = gameObject.GetComponent<EnemyModel>();
 
     }
     public virtual void DoExitLogic() { ResetValues(); }

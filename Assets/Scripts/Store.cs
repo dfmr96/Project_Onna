@@ -1,11 +1,13 @@
 using UnityEngine;
 
-public class Store : MonoBehaviour
+public class Store : InteractableBase
 {
     [SerializeField] private HubManager hub;
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == 6)
-            hub.OpenStore();
+    [SerializeField] private NPCData data;
+
+    public override void Interact() 
+    { 
+        base.Interact();
+        DialogueManager.Instance.StartDialogue(data);
     }
 }
