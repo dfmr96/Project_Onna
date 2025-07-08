@@ -66,8 +66,15 @@ namespace Player
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)
         {
-            //Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
+            if (signal.PlayerGO == null)
+            {
+                Debug.LogWarning("⚠️ PlayerSpawnedSignal recibido con GameObject nulo.");
+                return;
+            }
+            
+            Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
             var playerGO = signal.PlayerGO;
+            Debug.Log($"📦 Recibido PlayerSpawnedSignal. GO = {playerGO?.name}");
             var playerModel = playerGO.GetComponent<PlayerModel>();
             if (playerModel == null)
             {

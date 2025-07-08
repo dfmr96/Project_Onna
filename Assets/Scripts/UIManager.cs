@@ -26,6 +26,13 @@ public class UIManager : MonoBehaviour
         PlayerModel.OnUpdateTime += UpdateTimeUI; 
         WeaponController.OnShoot += UpdateWeaponCooldown;
         WeaponController.OnCooling += UpdateCoolingCooldown;
+
+        var player = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
+        if (player != null)
+        {
+            float initialPercent = player.CurrentHealth / player.MaxHealth;
+            UpdateTimeUI(initialPercent);
+        }
     }
 
     private void OnDisable()
@@ -48,6 +55,7 @@ public class UIManager : MonoBehaviour
     private void UpdateTimeUI(float timePercent) 
     {
         timeCircle.fillAmount = timePercent;
+        Debug.Log(timePercent);
     }
 
     private void UpdateWeaponCooldown(int actualAmmo, int totalAmmo)
