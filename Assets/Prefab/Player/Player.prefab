@@ -2355,12 +2355,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 6924677166269443374}
     m_Modifications:
     - target: {fileID: 464436045622186159, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 464436045622186159, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 464436045622186159, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 464436045622186159, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 464436045622186159, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.64
       objectReference: {fileID: 0}
     - target: {fileID: 464436045622186159, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2394,6 +2406,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 464436045622186159, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3081362037621676516, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
       propertyPath: m_Name
       value: Dash
@@ -2401,6 +2417,10 @@ PrefabInstance:
     - target: {fileID: 4850777541897618062, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850777541897618062, guid: 9e87d521299bb114cb15b4d5c3385989, type: 3}
+      propertyPath: simulationSpeed
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
