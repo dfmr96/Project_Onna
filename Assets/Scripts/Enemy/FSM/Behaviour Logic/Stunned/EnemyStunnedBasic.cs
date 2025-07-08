@@ -24,7 +24,6 @@ using UnityEngine;
 
             _timer = 0f;
             _enemyModel.OnDeath -= HandleDeathState;
-            _enemyView.PlayMovingAnimation(_enemyModel.statsSO.moveSpeed);
 
     }
 
@@ -37,7 +36,7 @@ using UnityEngine;
 
         if (_timer >= _timeStun)
         {
-                    _enemyView.PlayMovingAnimation(_enemyModel.statsSO.moveSpeed);
+                    //_enemyView.PlayMovingAnimation(_enemyModel.statsSO.moveSpeed);
                     enemy.fsm.ChangeState(enemy.ChaseState);
 
             }
@@ -57,7 +56,7 @@ using UnityEngine;
         private void HandleDeathState(EnemyModel enemy_)
         {
             DoExitLogic();
-            _enemyView.PlayDeathAnimation();
+            //_enemyView.PlayDeathAnimation();
         }
 }
 
