@@ -184,7 +184,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
     //    Debug.Log("Daño hecho por el estado Melee");
     //}
 
-    private void HandleHealthChanged(float currentHealth) => view.PlayDamageAnimation();
+    private void HandleHealthChanged(float currentHealth) => view.HandleDamage();
 
     private void HandleDeath(EnemyModel enemy) => fsm.ChangeState(DeadState);
 

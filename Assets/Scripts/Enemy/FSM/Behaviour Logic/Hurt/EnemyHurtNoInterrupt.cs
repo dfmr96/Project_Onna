@@ -13,7 +13,7 @@ using UnityEngine.AI;
         {
             base.DoEnterLogic();
 
-        _enemyView.PlayDamageAnimation();
+        _enemyView.HandleDamage();
 
         }
 

@@ -76,6 +76,8 @@ MonoBehaviour:
   heightTextSpawn: 6
   particleExplosion: {fileID: 4000606309234296067, guid: f84f5269c2501854292626425fb30685, type: 3}
   _bossModel: {fileID: 0}
+  spawnClip: {fileID: 8300000, guid: 911018c4d2f3a8445813e0f205469b6f, type: 3}
+  destroyClip: {fileID: 8300000, guid: faa5cabfabfb2984191ea333c634a4ae, type: 3}
 --- !u!82 &-8280054764607263706
 AudioSource:
   m_ObjectHideFlags: 0
@@ -86,7 +88,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 911018c4d2f3a8445813e0f205469b6f, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 0.6

@@ -41,6 +41,7 @@ public class EnemyView : MonoBehaviour
     private AudioSource audioSource;
 
     [SerializeField] private AudioClip shootAudioClip;
+    [SerializeField] private AudioClip damagedAudioClip;
 
 
 
@@ -245,12 +246,16 @@ public class EnemyView : MonoBehaviour
         animator.SetTrigger("IsStunned");
     }
 
-
-
-    public void PlayDamageAnimation()
+    public void HandleDamage()
     {
         animator.SetTrigger("IsDamaged");
+        audioSource.PlayOneShot(damagedAudioClip);
     }
+
+    //public void PlayDamageAnimation()
+    //{
+    //    animator.SetTrigger("IsDamaged");
+    //}
 
     public void PlayDeathAnimation()
     {

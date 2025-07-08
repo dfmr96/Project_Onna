@@ -30,10 +30,12 @@ public class Pillar : MonoBehaviour, IDamageable
     private ParticleSystem explosionInstance;
     private AudioSource audioSource;
 
-
-
     private OrbSpawner orbSpawner;
     [SerializeField] private BossModel _bossModel;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip spawnClip;
+    [SerializeField] private AudioClip destroyClip;
 
 
 
@@ -95,6 +97,7 @@ public class Pillar : MonoBehaviour, IDamageable
         if (CurrentHealth <= 0)
         {
             Die();
+            audioSource?.PlayOneShot(destroyClip);
         }
     }
 
@@ -137,7 +140,7 @@ public class Pillar : MonoBehaviour, IDamageable
         OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
 
         //Sonido
-        audioSource.Play();
+        audioSource?.PlayOneShot(spawnClip);
 
         //empezamos a subir
         StartCoroutine(RiseUpCoroutine());

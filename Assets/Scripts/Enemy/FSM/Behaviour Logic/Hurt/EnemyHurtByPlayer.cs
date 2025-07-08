@@ -17,7 +17,7 @@ using UnityEngine.AI;
         _navMeshAgent.ResetPath();
         _navMeshAgent.velocity = Vector3.zero;
 
-        _enemyView.PlayDamageAnimation();
+        _enemyView.HandleDamage();
 
         }
 
