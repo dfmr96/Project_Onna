@@ -151,7 +151,7 @@ public class StoreHandler : MonoBehaviour
     {
         int cost = data.GetCost(level);
         upgradeCost.text = cost != -1 ? cost.ToString() : "MAX";
-        upgradeImage.sprite = data.Icon;
+        upgradeImage.sprite = data.IconOnSelected;
         upgradeDescription.text = data.Description;
         upgradeName.text = data.UpgradeName;
     }

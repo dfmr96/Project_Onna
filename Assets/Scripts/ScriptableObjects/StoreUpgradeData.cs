@@ -11,6 +11,7 @@ namespace ScriptableObjects
         [SerializeField] private string upgradeName;
         [SerializeField] private string description;
         [SerializeField] private Sprite icon;
+        [SerializeField] private Sprite iconOnSelected;
         [SerializeField] private ValueMode valueMode = ValueMode.None;
         [SerializeField] private List<UpgradeLevelData> _levels;
         [SerializeField] private UpgradeEffect upgradeEffect;
@@ -22,6 +23,8 @@ namespace ScriptableObjects
         public UpgradeEffect UpgradeEffect => upgradeEffect;
 
         public ValueMode Mode => valueMode;
+
+        public Sprite IconOnSelected => iconOnSelected;
 
         private UpgradeLevelData GetLevelData(int level)
         {
