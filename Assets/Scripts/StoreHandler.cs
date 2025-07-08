@@ -59,7 +59,7 @@ public class StoreHandler : MonoBehaviour
 
         UpdateUpgradeDetail(button.Data, currentLevel);
         HandleBuyChance(button);
-        AudioManager.Instance?.PlayOneShot(buttonClickClip);
+        AudioManager.Instance?.PlaySFX(buttonClickClip);
     }
 
     public void SetHubManager(HubManager hubManager) { hub = hubManager;}
@@ -123,7 +123,7 @@ public class StoreHandler : MonoBehaviour
         selectedData.UpgradeEffect?.Apply(player.StatContext.Meta, selectedData.GetValue(currentLevel), selectedData.Mode);
         playerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
         hub.UpdateCoins();
-        AudioManager.Instance?.PlayOneShot(upgradeClip);
+        AudioManager.Instance?.PlaySFX(upgradeClip);
         CheckAvailableUpgrades();
         HandleBuyChance(selectedButton);
     }
