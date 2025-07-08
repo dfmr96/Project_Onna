@@ -6,13 +6,13 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerItemsHolder
 {
-    [SerializeField] private SerializedDictionary<UpgradeData, int> upgradesBoughtDictionary = new SerializedDictionary<UpgradeData, int>();
-    
     // Esta lista se serializa como JSON. El diccionario no.
     [SerializeField] private List<UpgradeSaveData> _upgradesBoughtList = new List<UpgradeSaveData>();
-    public SerializedDictionary<UpgradeData, int> UpgradesBoughtDictionary => upgradesBoughtDictionary;
+    
+    private SerializedDictionary<StoreUpgradeData, int> upgradesBoughtDictionary = new SerializedDictionary<StoreUpgradeData, int>();
+    public SerializedDictionary<StoreUpgradeData, int> UpgradesBoughtDictionary => upgradesBoughtDictionary;
 
-    public void AddUpgrade(UpgradeData data)
+    public void AddUpgrade(StoreUpgradeData data)
     {
         if (CheckUpgrades(data))
         {
@@ -26,18 +26,27 @@ public class PlayerItemsHolder
                 Debug.LogWarning($"{data.UpgradeName} ya est� en el nivel m�ximo.");
             }
         }
-        else upgradesBoughtDictionary.Add(data, 1);
+        else
+        {
+            upgradesBoughtDictionary.Add(data, 1);
+            Debug.Log($"{data.UpgradeName} mejorada a nivel {upgradesBoughtDictionary[data]}");
+        }
     }
 
-    public bool CanUpgrade(UpgradeData data)
+    public bool CanUpgrade(StoreUpgradeData data)
     {
         if (!upgradesBoughtDictionary.ContainsKey(data)) return true;
         return upgradesBoughtDictionary[data] < data.MaxLevel;
     }
 
-    public bool CheckUpgrades(UpgradeData data)
+    public bool CheckUpgrades(StoreUpgradeData data)
     {
         return upgradesBoughtDictionary.ContainsKey(data);
+    }
+    
+    public void ClearUpgrades()
+    {
+        UpgradesBoughtDictionary.Clear();
     }
     
     /// <summary>
