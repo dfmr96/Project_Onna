@@ -68,6 +68,7 @@ public class BossModel : MonoBehaviour, IDamageable
         }
 
         CurrentHealth -= damageAmount;
+
         OnHealthChanged?.Invoke(CurrentHealth);
         //view.PlayDamageAnimation();
 
