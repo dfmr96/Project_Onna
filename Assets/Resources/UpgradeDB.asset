@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aa1fcfa55cb4f5783e1b2a0b48b294e, type: 3}
+  m_Name: UpgradeDB
+  m_EditorClassIdentifier: 
+  allUpgrades:
+  - {fileID: 11400000, guid: 60a1388f114167f41963412a582d5453, type: 2}
+  - {fileID: 11400000, guid: 1fe5c15f0e3c12c43944401292baa794, type: 2}
+  - {fileID: 11400000, guid: c32f5559abb0f0844904a84fa3f3c904, type: 2}
+  - {fileID: 11400000, guid: 1e50043834c19044cab178e96309224c, type: 2}
+  - {fileID: 11400000, guid: 58377ab50471974459a41c1e22b449d0, type: 2}
+  - {fileID: 11400000, guid: 138fd5feee399c246a615f58b8e3f7d4, type: 2}
+  - {fileID: 11400000, guid: faefc8276ef21814dabd43ec952048f4, type: 2}
+  - {fileID: 11400000, guid: a48367eac8c6d384caea778e981a32db, type: 2}
+  - {fileID: 11400000, guid: 95e131ba38d246349a25fc832cbd5058, type: 2}
+  - {fileID: 11400000, guid: a28f03ca6c30c1447b3c70c19c35bf41, type: 2}
+  lookup:
+    _serializedList:
+    - Key: CanaldePresionSecundaria
+      Value: {fileID: 11400000, guid: 60a1388f114167f41963412a582d5453, type: 2}
+    - Key: CoolingSystemStoreData
+      Value: {fileID: 11400000, guid: 1fe5c15f0e3c12c43944401292baa794, type: 2}
+    - Key: Entrenamiento Militar
+      Value: {fileID: 11400000, guid: c32f5559abb0f0844904a84fa3f3c904, type: 2}
+    - Key: Longevidad Terrenal
+      Value: {fileID: 11400000, guid: 1e50043834c19044cab178e96309224c, type: 2}
+    - Key: MaxVitalTimeStoreData
+      Value: {fileID: 11400000, guid: 58377ab50471974459a41c1e22b449d0, type: 2}
+    - Key: MovementSpeedStoreData
+      Value: {fileID: 11400000, guid: 138fd5feee399c246a615f58b8e3f7d4, type: 2}
+    - Key: Overheat
+      Value: {fileID: 11400000, guid: faefc8276ef21814dabd43ec952048f4, type: 2}
+    - Key: Piernas Largas
+      Value: {fileID: 11400000, guid: a48367eac8c6d384caea778e981a32db, type: 2}
+    - Key: Weapon3
+      Value: {fileID: 11400000, guid: 95e131ba38d246349a25fc832cbd5058, type: 2}
+    - Key: Weapon4
+      Value: {fileID: 11400000, guid: a28f03ca6c30c1447b3c70c19c35bf41, type: 2}
