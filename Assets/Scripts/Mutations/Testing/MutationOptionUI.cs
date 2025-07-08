@@ -45,7 +45,7 @@ namespace Mutations.Testing
                 return;
             }
 
-            mutation.UpgradeEffect.Apply(playerStats);
+            //mutation.UpgradeEffect.Apply(playerStats); TODO: Uncomment when UpgradeEffect is implemented
             Debug.Log($"✅ Mutación aplicada: {mutation.MutationName}");
 
             OnClose?.Invoke();

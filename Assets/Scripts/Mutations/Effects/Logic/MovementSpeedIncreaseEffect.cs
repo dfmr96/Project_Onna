@@ -9,22 +9,24 @@ namespace Mutations
     [CreateAssetMenu(menuName = "Mutations/Effects/Oxigeno ONNA")]
     public class MovementSpeedIncreaseEffect : UpgradeEffect
     {
-        [SerializeField] private float increasePercent = 0.05f;
-
-        public override void Apply(IStatTarget player)
+        public override void Apply(IStatTarget player, float value, ValueMode mode)
         {
-            player.AddPercentBonus(statRefs.movementSpeed, increasePercent);
+            switch (mode)
+            {
+                case ValueMode.Flat:
+                    player.AddFlatBonus(statRefs.movementSpeed, value);
+                    break;
+                case ValueMode.Percent:
+                    player.AddPercentBonus(statRefs.movementSpeed, value);
+                    break;
+                case ValueMode.Multiplier:
+                    player.AddMultiplierBonus(statRefs.movementSpeed, value);
+                    break;
+                case ValueMode.None:
+                default:
+                    Debug.LogWarning($"[UpgradeEffect] ValueMode is None or unrecognized.");
+                    break;
+            }
         }
-#if UNITY_EDITOR    
-        [Button("🔬 Test Effect")]
-        private void TestEffect()
-        {
-            var testStats = new RuntimeStats(testBaseStats, testMetaStats, statRefs);
-            float before = testStats.Get(statRefs.movementSpeed);
-            Apply(testStats);
-            float after = testStats.Get(statRefs.movementSpeed);
-            Debug.Log($"🧪 MovementSpeedIncrease aplicado:\nAntes: {before:F2}\nDespués: {after:F2}");
-        }
-#endif
     }
 }

@@ -66,8 +66,6 @@ public class StoreHandler : MonoBehaviour
 
     public void CloseStore()
     {
-        MetaStatSaveSystem.Save(playerModelBootstrapper.MetaStats, playerModelBootstrapper.Registry);
-        
         playerInventory.PlayerItemsHolder.PrepareForSave();
         SaveSystem.SaveInventory(playerInventory);
         
@@ -122,7 +120,7 @@ public class StoreHandler : MonoBehaviour
         if (!playerInventory.PlayerWallet.TrySpend(cost)) return;
 
         player = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
-        selectedData.UpgradeEffect?.Apply(player.StatContext.Meta);
+        selectedData.UpgradeEffect?.Apply(player.StatContext.Meta, selectedData.GetValue(currentLevel), selectedData.Mode);
         playerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
         hub.UpdateCoins();
         AudioManager.Instance?.PlayOneShot(upgradeClip);
@@ -187,7 +185,13 @@ public class StoreHandler : MonoBehaviour
             playerInventory.PlayerItemsHolder.ClearUpgrades();
             playerInventory.PlayerItemsHolder.PrepareForSave(); 
             SaveSystem.SaveInventory(playerInventory);
+
             playerInventory = SaveSystem.LoadInventory();
+            playerInventory.PlayerItemsHolder.RestoreFromSave();
+
+            player.StatContext.Meta.Clear(); 
+            playerInventory.PlayerItemsHolder.ApplyAllUpgradesTo(player.StatContext.Meta); 
+
             Debug.Log("Mejoras borradas del inventario y guardadas.");
             CheckAvailableUpgrades();
         }

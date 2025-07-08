@@ -38,7 +38,7 @@ namespace Mutations.Testing
         
         public void ResetMetaStats()
         {
-            MetaStatSaveSystem.DeleteSaveFile();
+            //MetaStatSaveSystem.DeleteSaveFile(); TODO Ojo
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }

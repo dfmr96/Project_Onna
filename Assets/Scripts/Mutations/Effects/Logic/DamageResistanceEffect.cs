@@ -9,23 +9,24 @@ namespace Mutations
     [CreateAssetMenu(menuName = "Mutations/Effects/Blindaje Oseo")]
     public class DamageResistanceEffect : UpgradeEffect
     {
-        [SerializeField] private float resistanceBonus;
-
-        public override void Apply(IStatTarget  player)
+        public override void Apply(IStatTarget player, float value, ValueMode mode)
         {
-            float bonus = resistanceBonus / 100f;
-            player.AddFlatBonus(statRefs.damageResistance, bonus);
+            switch (mode)
+            {
+                case ValueMode.Flat:
+                    player.AddFlatBonus(statRefs.damageResistance, value);
+                    break;
+                case ValueMode.Percent:
+                    player.AddPercentBonus(statRefs.damageResistance, value);
+                    break;
+                case ValueMode.Multiplier:
+                    player.AddMultiplierBonus(statRefs.damageResistance, value);
+                    break;
+                case ValueMode.None:
+                default:
+                    Debug.LogWarning($"[UpgradeEffect] ValueMode is None or unrecognized.");
+                    break;
+            }
         }
-#if UNITY_EDITOR    
-        [Button("🔬 Test Effect")]
-        private void TestEffect()
-        {
-            var testStats = new RuntimeStats(testBaseStats, testMetaStats, statRefs);
-            float before = testStats.Get(statRefs.damageResistance);
-            Apply(testStats);
-            float after = testStats.Get(statRefs.damageResistance);
-            Debug.Log($"🧪 DamageResistance aplicado:\nAntes: {before:F2}\nDespués: {after:F2}");
-        }
-#endif
     }
 }

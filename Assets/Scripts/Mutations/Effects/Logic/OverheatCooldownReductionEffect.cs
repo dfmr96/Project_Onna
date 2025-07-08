@@ -9,32 +9,25 @@ namespace Mutations
     [CreateAssetMenu(menuName = "Mutations/Effects/Tactica de Guerra")]
     public class OverheatCooldownReductionEffect : UpgradeEffect
     {
-        [SerializeField] private float reduction = 0.1f;
-
-        public override void Apply(IStatTarget player)
+        public override void Apply(IStatTarget player, float value, ValueMode mode)
         {
-            float reductionFactor = 1f - (reduction / 100f);
-            player.AddMultiplierBonus(statRefs.overheatCooldown, reductionFactor);
-        }
-        
-#if UNITY_EDITOR
-        [Button("🔬 Test Effect")]
-        private void TestEffect()
-        {
-            if (statRefs == null || statRefs.overheatCooldown == null || testBaseStats == null)
+            switch (mode)
             {
-                Debug.LogWarning("⚠️ Faltan testBaseStats o referencias para testear.");
-                return;
+                case ValueMode.Flat:
+                    player.AddFlatBonus(statRefs.overheatCooldown, value);
+                    break;
+                case ValueMode.Percent:
+                    player.AddPercentBonus(statRefs.overheatCooldown, value);
+                    break;
+                case ValueMode.Multiplier:
+                    float reductionFactor = 1f - (value / 100f);
+                    player.AddMultiplierBonus(statRefs.overheatCooldown, reductionFactor);
+                    break;
+                case ValueMode.None:
+                default:
+                    Debug.LogWarning($"[UpgradeEffect] ValueMode is None or unrecognized.");
+                    break;
             }
-
-            var testStats = new RuntimeStats(testBaseStats, testMetaStats, statRefs);
-            float before = testStats.Get(statRefs.overheatCooldown);
-
-            Apply(testStats);
-
-            float after = testStats.Get(statRefs.overheatCooldown);
-            Debug.Log($"🧪 {name}: OverheatCooldown\nAntes: {before:F2} → Después: {after:F2}");
         }
-#endif
     }
 }

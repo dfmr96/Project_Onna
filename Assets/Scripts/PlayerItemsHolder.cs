@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using Mutations;
+using Player.Stats.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -92,6 +94,30 @@ public class PlayerItemsHolder
                 Debug.LogWarning($"Upgrade '{saved.upgradeId}' no encontrado en UpgradeDatabase.");
             }
         }
+    }
+    
+    public void ApplyAllUpgradesTo(IStatTarget target)
+    {
+        foreach (var kvp in upgradesBoughtDictionary)
+        {
+            var upgradeData = kvp.Key;
+            int level = kvp.Value;
+            //var upgradeStats = upgradeData.UpgradeEffect.name;
+            float value = upgradeData.GetValue(level - 1); // niveles empiezan en 1
+            ValueMode mode = upgradeData.Mode;
+
+            if (upgradeData.UpgradeEffect != null)
+            {
+                upgradeData.UpgradeEffect.Apply(target, value, mode);
+
+                Debug.Log($"📦 Aplicando upgrade: <b>{upgradeData.UpgradeName}</b> | Nivel: {level} | Valor: {value} | Modo: {mode}");
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ UpgradeEffect es null para {upgradeData.name}");
+            }
+        }
+        Debug.Log($"✅ Aplicadas {upgradesBoughtDictionary.Count} mejoras al MetaStatBlock.");
     }
 }
 

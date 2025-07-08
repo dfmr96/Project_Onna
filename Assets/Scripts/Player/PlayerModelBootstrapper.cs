@@ -32,8 +32,6 @@ namespace Player
             DontDestroyOnLoad(gameObject);
             if (!ValidateDependencies()) return;
             
-            MetaStatSaveSystem.Load(metaStats, registry);
-            
             EventBus.Publish(new PlayerModelBootstrapperSignal(this));
         }
 
@@ -79,7 +77,6 @@ namespace Player
             
             var inventory = SaveSystem.LoadInventory();
             inventory.PlayerItemsHolder.RestoreFromSave();
-
             playerModel.InjectInventory(inventory);
 
             _statContext = new PlayerStatContext();
@@ -95,8 +92,10 @@ namespace Player
 
                 case GameMode.Hub:
                     var reader = new MetaStatReader(baseStats, metaStats);
-                    _statContext.SetupForHub(reader, metaStats);
                     metaStats.InjectBaseSource(reader);
+                    metaStats.Clear();
+                    inventory.PlayerItemsHolder.ApplyAllUpgradesTo(metaStats);
+                    _statContext.SetupForHub(reader, metaStats);
                     Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando MetaStats en PlayerModel.");
                     break;
 

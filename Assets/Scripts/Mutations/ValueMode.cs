@@ -4,6 +4,7 @@
     {
         Percent,
         Flat,
+        Multiplier,
         None
     }
 }

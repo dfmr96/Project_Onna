@@ -9,28 +9,24 @@ namespace Mutations.Effects.Logic
     [CreateAssetMenu(menuName = "Mutations/Effects/Mirada del Umbral")]
     public class AttackRangeIncreaseEffect : UpgradeEffect
     {
-        [SerializeField] private float increasePercent;
-        
-
-        public override void Apply(IStatTarget player)
+        public override void Apply(IStatTarget player, float value, ValueMode mode)
         {
-            player.AddPercentBonus(statRefs.attackRange, increasePercent);
+            switch (mode)
+            {
+                case ValueMode.Flat:
+                    player.AddFlatBonus(statRefs.attackRange, value);
+                    break;
+                case ValueMode.Percent:
+                    player.AddPercentBonus(statRefs.attackRange, value);
+                    break;
+                case ValueMode.Multiplier:
+                    player.AddMultiplierBonus(statRefs.attackRange, value);
+                    break;
+                case ValueMode.None:
+                default:
+                    Debug.LogWarning($"[UpgradeEffect] ValueMode is None or unrecognized.");
+                    break;
+            }
         }
-        
-#if UNITY_EDITOR
-        [Button("🔬 Test Effect (Editor)")]
-        private void TestEffect()
-        {
-            var stats = new RuntimeStats(testBaseStats, testMetaStats, statRefs);
-
-            float before = stats.Get(statRefs.attackRange);
-
-            Apply(stats);
-
-            float after = stats.Get(statRefs.attackRange);
-
-            Debug.Log($"🧪 Stat '{statRefs.attackRange.name}' aplicado:\nAntes: {before:F2}\nDespués: {after:F2}");
-        }
-#endif
     }
 }

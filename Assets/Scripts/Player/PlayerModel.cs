@@ -38,7 +38,7 @@ namespace Player
         private PlayerView _playerView;
         private bool passiveDrainEnabled = true;
         
-        private PlayerInventory _playerInventory;
+        [SerializeField] PlayerInventory _playerInventory;
         public PlayerInventory Inventory => _playerInventory;
 
         private void Start()
