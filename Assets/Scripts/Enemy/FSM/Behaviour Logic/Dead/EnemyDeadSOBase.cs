@@ -38,7 +38,7 @@ public class EnemyDeadSOBase : ScriptableObject
         _bossView = gameObject.GetComponent<BossView>();
 
         _navMeshAgent.speed = 0;
-        _navMeshAgent.isStopped = true;
+        //_navMeshAgent.isStopped = true;
         _collider.enabled = false;
 
     }

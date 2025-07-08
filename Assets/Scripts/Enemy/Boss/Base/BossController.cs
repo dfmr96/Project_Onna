@@ -22,7 +22,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
     private bool isShieldActive;
     private int pillarsDestroyed = 0;
-    private bool shieldActive = true;
+    //private bool shieldActive = true;
 
     [SerializeField] private List<Pillar> pillars;
     [SerializeField] private List<Transform> pillarSpawnPoints;
@@ -34,8 +34,8 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
     [SerializeField] private GameObject shield;
     [SerializeField] private float shieldEffectDuration = 1f;
-    [SerializeField] private float timeToReactivatePillars = 5f;
-    [SerializeField] private float pushDistance = 5f;
+    //[SerializeField] private float timeToReactivatePillars = 5f;
+    //[SerializeField] private float pushDistance = 5f;
     private Collider shieldCollider;
 
 
@@ -308,7 +308,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         yield return new WaitForSeconds(shieldEffectDuration);
 
         shield.SetActive(false);
-        shieldActive = false;
+        //shieldActive = false;
 
     }
 
@@ -356,7 +356,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private void ActivateShield()
     {
         shield.SetActive(true);
-        shieldActive = true;
+        //shieldActive = true;
 
         Transform playerTransform = PlayerHelper.GetPlayer().transform;
         Rigidbody playerRb = playerTransform.GetComponent<Rigidbody>();

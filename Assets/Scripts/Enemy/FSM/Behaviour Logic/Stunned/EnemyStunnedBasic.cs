@@ -10,33 +10,37 @@ using UnityEngine;
 
 
     public override void DoEnterLogic()
-        {
+    {
             base.DoEnterLogic();
 
             _enemyView.PlayStunnedAnimation();
 
-        }
+            _enemyModel.OnDeath += HandleDeathState;
+    }
 
         public override void DoExitLogic()
         {
             base.DoExitLogic();
 
             _timer = 0f;
-            enemy.fsm.ChangeStateDirect(enemy.SearchState);
+            _enemyModel.OnDeath -= HandleDeathState;
+            _enemyView.PlayMovingAnimation(_enemyModel.statsSO.moveSpeed);
+
     }
 
-        public override void DoFrameUpdateLogic()
+    public override void DoFrameUpdateLogic()
         {
             base.DoFrameUpdateLogic();
 
              _timer += Time.deltaTime;
 
-            if (_timer >= _timeStun)
-                {
 
+        if (_timer >= _timeStun)
+        {
+                    _enemyView.PlayMovingAnimation(_enemyModel.statsSO.moveSpeed);
                     enemy.fsm.ChangeState(enemy.ChaseState);
 
-                 }
+            }
     }
 
         public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
@@ -48,5 +52,12 @@ using UnityEngine;
         {
             base.ResetValues();
         }
- }
+
+
+        private void HandleDeathState(EnemyModel enemy_)
+        {
+            DoExitLogic();
+            _enemyView.PlayDeathAnimation();
+        }
+}
 
