@@ -12,7 +12,12 @@ public class HubManager : MonoBehaviour
     [SerializeField] private GameObject storePrefab;
     private GameObject storeInstance;
     private PlayerInventory _playerInventory;
-    public PlayerInventory PlayerInventory => _playerInventory;
+    public PlayerInventory PlayerInventory
+    {
+        get => _playerInventory;
+        set => _playerInventory = value;
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -23,7 +28,8 @@ public class HubManager : MonoBehaviour
     {
         levelProgression.ResetProgress();
         _playerInventory = new PlayerInventory();
-
+        _playerInventory = SaveSystem.LoadInventory();
+        _playerInventory.PlayerItemsHolder.RestoreFromSave();
         // Si venimos de una run con monedas las sumamos
         if (RunData.CurrentCurrency != null)
         {

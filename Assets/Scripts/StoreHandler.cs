@@ -33,6 +33,8 @@ public class StoreHandler : MonoBehaviour
     private IEnumerator DelayedCheck()
     {
         yield return null;
+        SaveSystem.DebugInventoryJson();
+        hub.PlayerInventory = SaveSystem.LoadInventory();
         CheckUpgradesAvailables();
     }
 
@@ -64,6 +66,10 @@ public class StoreHandler : MonoBehaviour
     public void CloseStore()
     {
         MetaStatSaveSystem.Save(playerModelBootstrapper.MetaStats, playerModelBootstrapper.Registry);
+        
+        hub.PlayerInventory.PlayerItemsHolder.PrepareForSave();
+        SaveSystem.SaveInventory(HubManager.Instance.PlayerInventory);
+        
         hub.CloseStore();
     }
     public void UpdateCurrencyStatus() { onnaFragments.text = "Onna Fragments: " + hub.PlayerInventory.PlayerWallet.Coins; }
@@ -80,7 +86,7 @@ public class StoreHandler : MonoBehaviour
             button.GetComponent<Button>().interactable = data != null;
 
             int currentLevel = 0;
-            hub.PlayerInventory.PlayerItemsHolder.UpgradesBuyed.TryGetValue(data, out currentLevel);
+            hub.PlayerInventory.PlayerItemsHolder.UpgradesBoughtDictionary.TryGetValue(data, out currentLevel);
 
             button.GetComponent<BuyUpgradeButton>().UpdateVisuals(currentLevel);
         }
@@ -89,7 +95,7 @@ public class StoreHandler : MonoBehaviour
     private void HandleBuyChance(BuyUpgradeButton button)
     {
         int currentLevel = 0;
-        hub.PlayerInventory.PlayerItemsHolder.UpgradesBuyed.TryGetValue(button.Data, out currentLevel);
+        hub.PlayerInventory.PlayerItemsHolder.UpgradesBoughtDictionary.TryGetValue(button.Data, out currentLevel);
 
         int index = Mathf.Clamp(currentLevel, 0, levelBackgrounds.Count - 1);
         detailBackgroundImage.sprite = levelBackgrounds[index];
@@ -115,6 +121,25 @@ public class StoreHandler : MonoBehaviour
         CheckUpgradesAvailables();
         HandleBuyChance(selectedButton);
     }
+
+    private void GetModelBoostrapper(PlayerModelBootstrapperSignal signal)
+    {
+        playerModelBootstrapper = signal.Bootstrapper;
+    }
     
-    private void GetModelBoostrapper(PlayerModelBootstrapperSignal signal) { playerModelBootstrapper = signal.Bootstrapper; }
+    private void OnGUI()
+    {
+
+        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
+        buttonStyle.fontSize = 18;
+
+        if (GUI.Button(new Rect(20, 20, 160, 40), "Add 100 Coins", buttonStyle))
+        {
+            PlayerInventory inventory = hub.PlayerInventory;
+            inventory.PlayerWallet.AddCoins(100);
+
+            Debug.Log("Added 100 coins!");
+            UpdateCurrencyStatus();
+        }
+    }
 }
