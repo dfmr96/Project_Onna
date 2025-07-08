@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 5145006322461039333}
   - component: {fileID: 8972301543615369811}
   - component: {fileID: 480185732868386467}
+  - component: {fileID: 605305537691644728}
   m_Layer: 5
   m_Name: MutationContainer
   m_TagString: Untagged
@@ -207,6 +208,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &605305537691644728
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121568470424771816}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &897403291325144491
 PrefabInstance:
   m_ObjectHideFlags: 0

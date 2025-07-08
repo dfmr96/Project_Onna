@@ -55,5 +55,10 @@ namespace Mutations.Testing
         {
             OnClose = callback;
         }
+        
+        public void SetInteractable(bool value)
+        {
+            selectButton.interactable = value;
+        }
     }
 }
