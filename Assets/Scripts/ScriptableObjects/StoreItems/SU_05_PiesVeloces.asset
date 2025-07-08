@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
+  m_Name: SU_05_PiesVeloces
+  m_EditorClassIdentifier: 
+  upgradeName: Pies Veloces
+  description: +3% de velocidad de movimiento. (Max 15% de Velocidad de Movimiento)
+  icon: {fileID: 1443567942, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
+  iconOnSelected: {fileID: -181064604, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
+  valueMode: 0
+  _levels:
+  - value: 3
+    cost: 40
+  - value: 6
+    cost: 80
+  - value: 9
+    cost: 120
+  - value: 12
+    cost: 180
+  upgradeEffect: {fileID: 11400000, guid: 842c44155cdd3ce4abefac604dfe56d4, type: 2}

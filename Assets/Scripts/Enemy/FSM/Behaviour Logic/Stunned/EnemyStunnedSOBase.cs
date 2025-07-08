@@ -6,29 +6,31 @@ using UnityEngine.AI;
 
 public class EnemyStunnedSOBase : ScriptableObject
 {
-    protected EnemyController enemy;
+    protected IEnemyBaseController enemy;
     protected Transform transform;
     protected GameObject gameObject;
 
     protected Transform playerTransform;
     protected EnemyView _enemyView;
+    protected EnemyModel _enemyModel;
 
     private NavMeshAgent _navMeshAgent;
 
-    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
+    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         this.gameObject = gameObject;
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
+        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
     }
 
     public virtual void DoEnterLogic()
     {
-        _enemyView = enemy.GetComponent<EnemyView>();
+        _enemyView = gameObject.GetComponent<EnemyView>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();    
 
     }
     public virtual void DoExitLogic() { ResetValues(); }

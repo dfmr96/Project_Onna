@@ -4,7 +4,6 @@ using Player.Stats;
 using Player.Stats.Meta;
 using Player.Stats.Runtime;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.SceneManagement;
 
 namespace Player
@@ -33,29 +32,19 @@ namespace Player
             DontDestroyOnLoad(gameObject);
             if (!ValidateDependencies()) return;
             
-            MetaStatSaveSystem.Load(metaStats, registry);
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            
             EventBus.Publish(new PlayerModelBootstrapperSignal(this));
         }
 
         private void OnEnable()
         {
-            Debug.Log("🛰 Bootstrapper suscribiéndose al PlayerSpawnedSignal");
+            //Debug.Log("🛰 Bootstrapper suscribiéndose al PlayerSpawnedSignal");
             EventBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
         }
         
         private void OnDisable()
         {
             EventBus.Unsubscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
-            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mod)
-        {
-            Debug.Log($"🌍 Bootstrapper: Escena cargada: {scene.name}, Modo actual: {currentMode}");
-        }
-        
         private bool ValidateDependencies()
         {
             bool isValid = true;
@@ -77,14 +66,25 @@ namespace Player
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)
         {
+            if (signal.PlayerGO == null)
+            {
+                Debug.LogWarning("⚠️ PlayerSpawnedSignal recibido con GameObject nulo.");
+                return;
+            }
+            
             Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
             var playerGO = signal.PlayerGO;
+            Debug.Log($"📦 Recibido PlayerSpawnedSignal. GO = {playerGO?.name}");
             var playerModel = playerGO.GetComponent<PlayerModel>();
             if (playerModel == null)
             {
                 Debug.LogError("❌ PlayerModel no encontrado en el jugador instanciado.");
                 return;
             }
+            
+            var inventory = SaveSystem.LoadInventory();
+            inventory.PlayerItemsHolder.RestoreFromSave();
+            playerModel.InjectInventory(inventory);
 
             _statContext = new PlayerStatContext();
 
@@ -99,8 +99,10 @@ namespace Player
 
                 case GameMode.Hub:
                     var reader = new MetaStatReader(baseStats, metaStats);
-                    _statContext.SetupForHub(reader, metaStats);
                     metaStats.InjectBaseSource(reader);
+                    metaStats.Clear();
+                    inventory.PlayerItemsHolder.ApplyAllUpgradesTo(metaStats);
+                    _statContext.SetupForHub(reader, metaStats);
                     Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando MetaStats en PlayerModel.");
                     break;
 
@@ -109,24 +111,14 @@ namespace Player
                     return;
             }
 
-            Debug.Log("✅ StatContext inyectado correctamente en PlayerModel.");
+            //Debug.Log("✅ StatContext inyectado correctamente en PlayerModel.");
             playerModel.InjectStatContext(_statContext);
 
         }
     }
+
+
     
-        
-    public static class GameModeSelector
-    {
-        public static GameMode SelectedMode = GameMode.Hub;
-    }
-
-
-    public enum GameMode
-    {
-        Hub,
-        Run
-    }
     
     
 }

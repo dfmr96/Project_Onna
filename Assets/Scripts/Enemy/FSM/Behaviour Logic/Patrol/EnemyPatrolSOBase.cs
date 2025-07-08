@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyPatrolSOBase : ScriptableObject
 {
-    protected EnemyController enemy;
+    protected IEnemyBaseController enemy;
     protected Transform transform;
     protected GameObject gameObject;
 
@@ -17,20 +17,20 @@ public class EnemyPatrolSOBase : ScriptableObject
     protected Vector3 _targetPos;
     protected EnemyModel _enemyModel;
 
-    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
+    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         this.gameObject = gameObject;
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
+        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
     }
 
     public virtual void DoEnterLogic()
     {
-        _enemyModel = enemy.GetComponent<EnemyModel>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
         _navMeshAgent.isStopped = false;
 
     }

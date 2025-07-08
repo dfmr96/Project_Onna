@@ -13,7 +13,7 @@ using UnityEngine.AI;
         {
             base.DoEnterLogic();
 
-        _enemyView.PlayDamageAnimation();
+        _enemyView.HandleDamage();
 
         }
 
@@ -38,7 +38,7 @@ using UnityEngine.AI;
             }
     }
 
-        public override void Initialize(GameObject gameObject, EnemyController enemy)
+        public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
         {
             base.Initialize(gameObject, enemy);
         }

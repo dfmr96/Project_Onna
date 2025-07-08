@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
         private const float AimRaycastMaxDistance = 100f;
@@ -14,7 +14,23 @@ namespace Player
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private LayerMask groundLayer;
 
-        private CharacterController _characterController;
+       
+
+        [Header("Dash")]
+        private bool _isDashing = false;
+        private float _dashEndTime = 0f;
+        private float _lastDashTime = -Mathf.Infinity;
+        private Vector3 _dashDirection;
+        private const float DashDurationSeconds = 0.025f;
+        private float _dashSpeed;
+        [SerializeField] private ParticleSystem particleDash;
+
+        [Header("PAUSE GAME")]
+        [SerializeField] private GameObject pausePanelPrefab;
+        private GameObject pausePanelInstance;
+
+        private Rigidbody _rb;
+        
         private Vector3 _aimDirection = Vector3.forward;
         private PlayerInputHandler _playerInputHandler;
         private Vector3 _direction = Vector3.zero;
@@ -23,7 +39,9 @@ namespace Player
         private PlayerView _playerView;
         private Vector3 _mouseWorldPos;
         private Camera _mainCamera;
-        
+        private IInteractable currentInteractable;
+        private bool canInteract = true;
+
         private bool _isReady = false;
 
         public float Speed => _playerInputHandler.MovementInput.magnitude;
@@ -44,7 +62,7 @@ namespace Player
         {
             if (signal.Model != GetComponent<PlayerModel>()) return;
 
-            Debug.Log("🎯 PlayerController: recibida señal PlayerInitializedSignal");
+//            Debug.Log("🎯 PlayerController: recibida señal PlayerInitializedSignal");
 
             _playerModel = signal.Model;
             _isReady = true;
@@ -59,10 +77,20 @@ namespace Player
             _playerView.SetPlayerController(this);
             _playerInput = GetComponent<PlayerInput>();
             _playerInputHandler = GetComponent<PlayerInputHandler>();
-            _characterController = GetComponent<CharacterController>();
-            
-        
+            _playerInputHandler.DashPerformed += HandleDash;
+            _playerInputHandler.OnPauseGame += PauseGame;
+            _rb = GetComponent<Rigidbody>();
+
+            _playerInputHandler.InteractionPerformed += HandleInteraction;
             _playerInputHandler.FirePerformed += HandleFire;
+        }
+
+        private void Start()
+        {
+            if (particleDash != null)
+            {
+                particleDash.Stop();
+            }
         }
 
         void Update()
@@ -72,12 +100,44 @@ namespace Player
                 Debug.Log("🕒 PlayerController: esperando inicialización...");
                 return;
             }
-         
+
             _direction = _playerInputHandler.MovementInput;
             HandleAiming(_playerInputHandler.RawAimInput);
+        }
+
+        private void FixedUpdate()
+        {
+            _rb.velocity = Vector3.zero;
+            
+            if (_isDashing)
+            {
+
+                if (Time.time > _dashEndTime)
+                {
+                    _isDashing = false;
+                }
+                else
+                {
+                    particleDash.Play();
+                    Move(_dashDirection, _dashSpeed);
+                    return;
+                }
+            }
+            else
+            {
+                particleDash.Stop();
+            }
+
             Move(_direction, _playerModel.Speed);
         }
-    
+
+        //TO DO 
+        //SACAR ESTO DE ACA X DIOS
+        private void PauseGame()
+        {
+            pausePanelInstance = Instantiate(pausePanelPrefab);
+        }
+
         private void HandleAiming(Vector2 rawInput)
         {
             if (_playerInput.currentControlScheme == "Keyboard&Mouse")
@@ -103,11 +163,30 @@ namespace Player
 
         private void Move(Vector3 direction, float speed)
         {
-            if (direction.sqrMagnitude > 0.01f)
+            if (direction.sqrMagnitude <= 0.01f) return;
+
+            Vector3 moveDir = direction.normalized;
+            float moveDistance = speed * Time.fixedDeltaTime;
+            Vector3 moveVector = moveDir * moveDistance;
+
+            if (_rb.SweepTest(moveDir, out RaycastHit hit, moveDistance) && !hit.collider.isTrigger)
             {
-                _characterController.Move(direction * (speed * Time.deltaTime));
+                float adjustedDistance = Mathf.Max(hit.distance - 0.05f, 0f);
+                Vector3 adjustedMove = moveDir * adjustedDistance;
+                _rb.MovePosition(_rb.position + adjustedMove);
             }
+            else _rb.MovePosition(_rb.position + moveVector);
         }
+
+        // Old move method
+        //private void Move(Vector3 direction, float speed)
+        //{
+        //    if (direction.sqrMagnitude > 0.01f)
+        //    {
+        //        Vector3 targetPosition = _rb.position + direction.normalized * (speed * Time.fixedDeltaTime);
+        //        _rb.MovePosition(targetPosition);
+        //    }
+        //}
 
         private void Rotate(Vector3 aimDirection)
         {
@@ -120,6 +199,38 @@ namespace Player
         private void HandleFire()
         {
             weaponController.Attack();
+        }
+
+        private void HandleInteraction()
+        {
+            Collider[] hits = Physics.OverlapSphere(transform.position, 3f);
+
+            IInteractable closestInteractable = null;
+
+            foreach (var hit in hits)
+            {
+                IInteractable interactable = hit.GetComponent<IInteractable>();
+                if (interactable != null && canInteract)
+                {
+                    interactable.Interact();
+                    canInteract = false;
+                }
+            }
+            currentInteractable = closestInteractable;
+        }
+
+        public void ToggleInteraction(bool value) { canInteract = value; }
+
+        private void HandleDash()
+        {
+            if (Time.time < _lastDashTime + _playerModel.DashCooldown || _direction == Vector3.zero) return;
+
+            _isDashing = true;
+            _dashEndTime = Time.time + DashDurationSeconds;
+            _dashDirection = _direction.normalized;
+            _lastDashTime = Time.time;
+
+            _dashSpeed = _playerModel.DashDistance / DashDurationSeconds;
         }
 
         private void OnDrawGizmos()

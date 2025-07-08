@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class BuyUpgradeButton : MonoBehaviour
 {
-    [SerializeField] private UpgradeData data;
+    [SerializeField] private StoreUpgradeData data;
     [SerializeField] private Image img;
     [SerializeField] private Sprite lockSprite;
     private Image backgroundImage;
     [SerializeField] private List<Sprite> levelBackgrounds;
-    public UpgradeData Data => data;
+    public StoreUpgradeData Data => data;
     private void Start() 
     {
         if (data != null) img.sprite = data.Icon;
@@ -20,13 +20,13 @@ public class BuyUpgradeButton : MonoBehaviour
 
     public void UpdateVisuals(int currentLevel)
     {
-        if (data == null || currentLevel <= 0) return;
+        if (data == null) return;
 
         if (backgroundImage == null) return;
 
         if (levelBackgrounds == null || levelBackgrounds.Count == 0) return;
 
-        int index = Mathf.Clamp(currentLevel - 1, 0, levelBackgrounds.Count - 1);
+        int index = Mathf.Clamp(currentLevel, 0, levelBackgrounds.Count - 1);
         backgroundImage.sprite = levelBackgrounds[index];
     }
 }

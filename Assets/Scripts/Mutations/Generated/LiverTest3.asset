@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: LiverTest3
   m_EditorClassIdentifier: 
   mutationName: LiverMutation3
-  description: This is a mutation test description
+  description: "Mutaci\xF3n de prueba aumenta vida en 50"
   organ: 5
-  icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  effect: {fileID: 0}
+  icon: {fileID: -1862539893, guid: 0438e44b17312f746aa2fcb42dab02be, type: 3}
+  valueMode: 1
+  upgradeBonus: 50
+  upgradeEffect: {fileID: 11400000, guid: 49e12df55cb77804399e88c28347017c, type: 2}

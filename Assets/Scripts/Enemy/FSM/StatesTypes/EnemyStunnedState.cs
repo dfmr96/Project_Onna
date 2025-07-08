@@ -4,42 +4,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyStunnedState : EnemyState
+public class EnemyStunnedState : EnemyState<BaseEnemyController>
 {
+    private EnemyStunnedSOBase stunnedBehavior;
 
-
-
-    public EnemyStunnedState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
+    public EnemyStunnedState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm, EnemyStunnedSOBase stunnedBehavior) : base(enemy, fsm)
     {
-
+        this.stunnedBehavior = stunnedBehavior;
     }
 
     public override void EnterState()
     {
         base.EnterState();
-
-        enemy.EnemyStunnedBaseInstance.DoEnterLogic();
-
+        stunnedBehavior.DoEnterLogic();
     }
-
-
 
     public override void ExitState()
     {
         base.ExitState();
-
-        enemy.EnemyStunnedBaseInstance.DoExitLogic();
-
+        stunnedBehavior.DoExitLogic();
     }
 
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-
-        enemy.EnemyStunnedBaseInstance.DoFrameUpdateLogic();
-
-
+        stunnedBehavior.DoFrameUpdateLogic();
     }
-
-
 }

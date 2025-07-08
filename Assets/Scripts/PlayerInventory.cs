@@ -1,12 +1,18 @@
+
+using System;
+using UnityEngine;
+
+[Serializable]
 public class PlayerInventory
 {
-    private PlayerWallet playerWallet;
-    private PlayerItemsHolder playerItemsHolder;
+    [SerializeField] private PlayerWallet playerWallet;
+    [SerializeField] private PlayerItemsHolder playerItemsHolder;
     public PlayerWallet PlayerWallet => playerWallet;
     public PlayerItemsHolder PlayerItemsHolder => playerItemsHolder;
 
     public PlayerInventory() { Init(); }
-    public void Init()
+
+    private void Init()
     {
         playerWallet = new PlayerWallet();
         playerItemsHolder = new PlayerItemsHolder();
