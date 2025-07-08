@@ -21,6 +21,7 @@ public class LaserDamage : MonoBehaviour
     private ParticleSystem impactParticlesInstance;
 
     private BossModel _bossModel;
+    private BossView _bossView;
 
 
     private void Start()
@@ -28,6 +29,7 @@ public class LaserDamage : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
         _bossModel = GetComponentInParent<BossModel>();
+        _bossView = GetComponentInParent<BossView>();
 
         playerTransform = PlayerHelper.GetPlayer().transform;
         playerDamageable = playerTransform.GetComponent<IDamageable>();
@@ -90,8 +92,8 @@ public class LaserDamage : MonoBehaviour
         if (impactParticlesInstance != null && !impactParticlesInstance.isPlaying)
         {
             impactParticlesInstance.Play();
-
         }
+        _bossView.StartLaserShoot();
     }
 
 
@@ -111,6 +113,7 @@ public class LaserDamage : MonoBehaviour
         {
             impactParticlesInstance.Stop();
         }
+        _bossView.StopLaserShoot();
     }
 
     private IEnumerator DamageRoutine()

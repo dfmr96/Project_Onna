@@ -1,6 +1,5 @@
 using Player;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BossView : MonoBehaviour
@@ -10,6 +9,11 @@ public class BossView : MonoBehaviour
     private BossController _bossController;
     private BossModel _bossModel;
     private ProjectileSpawner projectileSpawner;
+    private AudioSource audioSource;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip laserShootAudioClip;
+    [SerializeField] private AudioClip shootAudioClip;
 
     //private float _distanceToCountExit = 3f;
 
@@ -28,7 +32,7 @@ public class BossView : MonoBehaviour
         _bossController = GetComponent<BossController>();
         _bossModel = GetComponent<BossModel>();
         projectileSpawner = GameManager.Instance.projectileSpawner;
-
+        audioSource = GetComponent<AudioSource>();
 
     }
 
@@ -168,6 +172,21 @@ public class BossView : MonoBehaviour
         animator.SetTrigger("IsStunned");
     }
 
+    public void StartLaserShoot() 
+    {
+        audioSource.clip = laserShootAudioClip;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    public void StopLaserShoot()
+    {
+        audioSource.clip = null;
+        audioSource.loop = false;
+        audioSource.Stop();
+    }
+
+    public void ShootShotgun() { audioSource.PlayOneShot(shootAudioClip); }
 
 
     public void PlayDamageAnimation()

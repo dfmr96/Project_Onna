@@ -93,11 +93,11 @@ public class Pillar : MonoBehaviour, IDamageable
 
         //UI
         OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+        audioSource?.PlayOneShot(destroyClip);
 
         if (CurrentHealth <= 0)
         {
             Die();
-            audioSource?.PlayOneShot(destroyClip);
         }
     }
 
