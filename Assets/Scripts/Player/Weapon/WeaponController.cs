@@ -34,6 +34,8 @@ namespace Player.Weapon
 
         [BoxGroup("Sounds")]
         [SerializeField] private AudioClip shootFx;
+        [BoxGroup("Sounds")]
+        [SerializeField] private AudioClip overheathFx;
         private AudioSource audioSource;
 
 
@@ -160,6 +162,7 @@ namespace Player.Weapon
         {
             StopCoolingCooldown();
             StartCoroutine(OverheatCooldown());
+            audioSource?.PlayOneShot(overheathFx);
         }
 
         private IEnumerator FireRateCooldown()

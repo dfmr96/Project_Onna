@@ -14,6 +14,7 @@ namespace Player
         [SerializeField] private Animator animator;
         [SerializeField] private Transform visualRoot;
         [SerializeField] private AudioClip hurtFx;
+        [SerializeField] private AudioClip healthFx;
         
         [Header("Params")]
         [SerializeField] private float torsoRotationSpeed = 10f;
@@ -196,6 +197,8 @@ namespace Player
                 }
             }
         }
+
+        public void PlayHealthEffect() { audioSource?.PlayOneShot(healthFx); }
 
         private string GetColorProperty(Material mat)
         {

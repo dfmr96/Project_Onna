@@ -149,6 +149,7 @@ namespace Player
             _currentTime = Mathf.Min(_currentTime + timeRecovered, StatContext.Source.Get(statRefs.maxVitalTime));
             ClampEnergy();
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
+            _playerView?.PlayHealthEffect();
         }
 
         private void ClampEnergy()

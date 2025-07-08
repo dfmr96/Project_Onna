@@ -1259,6 +1259,7 @@ MonoBehaviour:
   animator: {fileID: 1276326954052208887}
   visualRoot: {fileID: 1592005984796363887}
   hurtFx: {fileID: 8300000, guid: 59d794063924baa4fac1b832c2d9e292, type: 3}
+  healthFx: {fileID: 8300000, guid: d0f484da1817b7f4189a3721200ccf8d, type: 3}
   torsoRotationSpeed: 10
   rotationSpeed: 10
   minAimDistance: 2
@@ -1278,6 +1279,11 @@ MonoBehaviour:
   statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
   heightTextSpawn: 1.5
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
+  _playerInventory:
+    playerWallet:
+      coins: 0
+    playerItemsHolder:
+      _upgradesBoughtList: []
 --- !u!114 &4339932572223991893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2446,6 +2452,7 @@ MonoBehaviour:
   shootGunParticlesPrefab: {fileID: 198000012944515248, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
   laserOrigin: {fileID: 2511859693823612000}
   shootFx: {fileID: 8300000, guid: eb192c69ffce50d4c9eb79b0bc16ac7e, type: 3}
+  overheathFx: {fileID: 8300000, guid: 62d7fcc486ccf424084211b80c981a87, type: 3}
 --- !u!82 &7066039255632587307
 AudioSource:
   m_ObjectHideFlags: 0
