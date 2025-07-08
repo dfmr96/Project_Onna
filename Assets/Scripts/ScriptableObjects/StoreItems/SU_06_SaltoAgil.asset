@@ -10,11 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
-  m_Name: Piernas Largas
+  m_Name: SU_06_SaltoAgil
   m_EditorClassIdentifier: 
-  upgradeName: Piernas Largas
-  description: +0.5 de velocidad de movimiento. (Max +4 de velocidad de movimiento)
-  icon: {fileID: -1471847155, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
-  cost: 10
-  maxLevel: 4
-  upgradeEffect: {fileID: 11400000, guid: dc7c50f8cc5c46f478df8a4e4a4d7234, type: 2}
+  upgradeName: "Salto \xC1gil"
+  description: "-0.05 segundos de reducci\xF3n de tiempo de espera del Dash. (Max
+    -.0.20 segundos)"
+  icon: {fileID: 0}
+  valueMode: 2
+  _levels:
+  - value: -0.5
+    cost: 70
+  - value: -1
+    cost: 150
+  - value: -1.5
+    cost: 250
+  - value: -2
+    cost: 400
+  upgradeEffect: {fileID: 0}

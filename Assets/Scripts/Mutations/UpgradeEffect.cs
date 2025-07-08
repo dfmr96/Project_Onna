@@ -12,6 +12,8 @@ namespace Mutations
         [SerializeField] protected StatReferences statRefs;
         [SerializeField] protected MetaStatBlock testMetaStats;
         [SerializeField] protected StatBlock testBaseStats;
+        //
+        //public abstract void Apply(IStatTarget player, float value, ValueMode mode);
         public abstract void Apply(IStatTarget player);
     }
 }
