@@ -12,6 +12,7 @@ public class EnemyStunnedSOBase : ScriptableObject
 
     protected Transform playerTransform;
     protected EnemyView _enemyView;
+    protected EnemyModel _enemyModel;
 
     private NavMeshAgent _navMeshAgent;
 
@@ -29,6 +30,7 @@ public class EnemyStunnedSOBase : ScriptableObject
     public virtual void DoEnterLogic()
     {
         _enemyView = gameObject.GetComponent<EnemyView>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();    
 
     }
     public virtual void DoExitLogic() { ResetValues(); }
