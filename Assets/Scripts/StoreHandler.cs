@@ -19,6 +19,8 @@ public class StoreHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI onnaFragments;
     [SerializeField] private Image detailBackgroundImage;
     [SerializeField] private List<Sprite> levelBackgrounds;
+    [SerializeField] private AudioClip buttonClickClip;
+    [SerializeField] private AudioClip upgradeClip;
     private UpgradeData selectedData;
     private BuyUpgradeButton selectedButton;
     private HubManager hub;
@@ -53,6 +55,7 @@ public class StoreHandler : MonoBehaviour
         upgradeCost.text = button.Data.Cost.ToString();
         selectedData = button.Data;
         selectedButton = button;
+        AudioManager.Instance?.PlayOneShot(buttonClickClip);
         HandleBuyChance(selectedButton);
     }
 
@@ -108,6 +111,7 @@ public class StoreHandler : MonoBehaviour
         selectedData.UpgradeEffect?.Apply(player.StatContext.Meta);
         hub.PlayerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
         hub.UpdateCoins();
+        AudioManager.Instance?.PlayOneShot(upgradeClip);
         CheckUpgradesAvailables();
         HandleBuyChance(selectedButton);
     }

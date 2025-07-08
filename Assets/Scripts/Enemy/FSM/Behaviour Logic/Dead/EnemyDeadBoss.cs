@@ -1,3 +1,4 @@
+using Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     {
         base.DoExitLogic();
 
+        GameModeSelector.SelectedMode = GameMode.Hub;
         SceneManager.LoadScene("HUB");
 
     }
@@ -46,7 +48,6 @@ public class EnemyDeadBoss : EnemyDeadSOBase
                 Vector3 spawnPos = transform.position + Vector3.up * midHeight;
                 GameObject particles = Instantiate(particleExplosion, spawnPos, Quaternion.identity);
 
-                //GameObject particles = Instantiate(particleExplosion, transform.position, Quaternion.identity);
                 Destroy(particles, 1.5f);
             }
         }

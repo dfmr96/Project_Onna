@@ -13,8 +13,6 @@ namespace Player
         public static Action OnPlayerDie;
         public static Action<float> OnUpdateTime;
 
-        [InfoBox("WARNING: PlayerModel now requires StatContext injection at runtime via PlayerModelBootstrapper. " +
-                 "Make sure this prefab is not used directly without it.", EInfoBoxType.Warning)]        
         [SerializeField] private bool devMode;
         [SerializeField] private StatReferences statRefs;
 
@@ -38,6 +36,7 @@ namespace Player
         public bool DevMode => devMode;
 
         private PlayerView _playerView;
+        private bool passiveDrainEnabled = true;
 
         private void Start()
         {
@@ -77,9 +76,22 @@ namespace Player
                 devMode = !DevMode;
             }
 
-            if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub)
+            if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub && passiveDrainEnabled)
             {
                 ApplyPassiveDrain();
+            }
+        }
+        
+        public void EnablePassiveDrain(bool enable)
+        {
+            passiveDrainEnabled = enable;
+            if (enable)
+            {
+                Debug.Log("🔋 Passive Drain enabled.");
+            }
+            else
+            {
+                Debug.Log("🔋 Passive Drain disabled.");
             }
         }
 

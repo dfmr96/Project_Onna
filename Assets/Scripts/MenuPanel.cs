@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuPanel : MonoBehaviour
@@ -13,6 +11,8 @@ public class MenuPanel : MonoBehaviour
         levelProgression.ResetProgress();
         SceneManagementUtils.AsyncLoadSceneByName(hubLevelName, loadCanvasPrefab, this);
     }
+
+    public void PlaySound(AudioClip audioClip) { AudioManager.Instance?.PlayOneShot(audioClip); }
 
     public void ExitButton() { Application.Quit(); }
 }
