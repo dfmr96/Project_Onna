@@ -22,6 +22,7 @@ namespace Player
         private float _lastDashTime = -Mathf.Infinity;
         private Vector3 _dashDirection;
         private const float DashDurationSeconds = 0.2f;
+        private float _dashSpeed;
         [SerializeField] private ParticleSystem particleDash;
 
         private Rigidbody _rb;
@@ -113,7 +114,7 @@ namespace Player
                 else
                 {
                     particleDash.Play();
-                    Move(_dashDirection, _playerModel.DashDistance);
+                    Move(_dashDirection, _dashSpeed);
                     return;
                 }
             }
@@ -198,6 +199,8 @@ namespace Player
             _dashEndTime = Time.time + DashDurationSeconds;
             _dashDirection = _direction.normalized;
             _lastDashTime = Time.time;
+
+            _dashSpeed = _playerModel.DashDistance / DashDurationSeconds;
         }
 
         private void OnDrawGizmos()
