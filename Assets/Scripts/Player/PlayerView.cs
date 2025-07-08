@@ -13,6 +13,7 @@ namespace Player
         [SerializeField] private GameObject weaponInstance; 
         [SerializeField] private Animator animator;
         [SerializeField] private Transform visualRoot;
+        [SerializeField] private AudioClip hurtFx;
         
         [Header("Params")]
         [SerializeField] private float torsoRotationSpeed = 10f;
@@ -24,6 +25,8 @@ namespace Player
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int Speed = Animator.StringToHash("Speed");
+
+        private AudioSource audioSource; 
 
         //Efecto Visual de Dano
         private Color flashColor = Color.white;
@@ -49,6 +52,7 @@ namespace Player
 
         private void Start()
         {
+            audioSource = GetComponent<AudioSource>();
             renderers = GetComponentsInChildren<Renderer>();
             originalColors = new Color[renderers.Length][];
 
@@ -154,7 +158,11 @@ namespace Player
         public void PlayDamageEffect()
         {
             StartCoroutine(FlashCoroutine());
+            //La unica forma de comunicarle al view de que el jugador recibio daño es acá
+            //En general el view es el que deberia controlar el sonido pero en muchos casos no hay comunicación entre scripts
+            //Y como esto no lo codie yo no quiero meterme mucho - Sim.
 
+            audioSource.PlayOneShot(hurtFx);
         }
 
         private IEnumerator FlashCoroutine()

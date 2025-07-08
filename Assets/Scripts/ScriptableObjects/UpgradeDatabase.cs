@@ -9,16 +9,16 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "UpgradeDatabase", menuName = "Databases/UpgradeDatabase")]
     public class UpgradeDatabase : ScriptableObject
     {
-        [SerializeField] private List<UpgradeData> allUpgrades = new List<UpgradeData>();
-        [SerializeField] private SerializedDictionary<string, UpgradeData> lookup;
+        [SerializeField] private List<StoreUpgradeData> allUpgrades = new List<StoreUpgradeData>();
+        [SerializeField] private SerializedDictionary<string, StoreUpgradeData> lookup;
 
-        public List<UpgradeData> AllUpgrades => allUpgrades;
+        public List<StoreUpgradeData> AllUpgrades => allUpgrades;
 
         public void Init()
         {
             if (lookup != null) return;
 
-            lookup = new SerializedDictionary<string, UpgradeData>();
+            lookup = new SerializedDictionary<string, StoreUpgradeData>();
             foreach (var upgrade in allUpgrades)
             {
                 if (upgrade == null) continue;
@@ -31,7 +31,7 @@ namespace ScriptableObjects
             }
         }
 
-        public UpgradeData GetUpgrade(string id)
+        public StoreUpgradeData GetUpgrade(string id)
         {
             Init();
             return lookup.TryGetValue(id, out var upgrade) ? upgrade : null;
@@ -41,13 +41,13 @@ namespace ScriptableObjects
         [Button("Buscar todos los UpgradeData del proyecto")]
         public void BuscarTodosLosUpgrades()
         {
-            string[] guids = AssetDatabase.FindAssets("t:UpgradeData");
+            string[] guids = AssetDatabase.FindAssets("t:StoreUpgradeData");
             allUpgrades.Clear();
 
             foreach (string guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
-                UpgradeData data = AssetDatabase.LoadAssetAtPath<UpgradeData>(path);
+                StoreUpgradeData data = AssetDatabase.LoadAssetAtPath<StoreUpgradeData>(path);
                 if (data != null && !allUpgrades.Contains(data))
                     allUpgrades.Add(data);
             }

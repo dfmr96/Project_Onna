@@ -28,7 +28,7 @@ public class Pillar : MonoBehaviour, IDamageable
     [SerializeField] private ParticleSystem particleExplosion;
 
     private ParticleSystem explosionInstance;
-
+    private AudioSource audioSource;
 
 
 
@@ -42,8 +42,6 @@ public class Pillar : MonoBehaviour, IDamageable
 
     private void Start()
     {
-       
-
         orbSpawner = GameManager.Instance.orbSpawner;
         //_bossModel = GetComponentInParent<BossModel>();
 
@@ -64,6 +62,7 @@ public class Pillar : MonoBehaviour, IDamageable
 
         targetPosition = transform.position;
 
+        audioSource = GetComponent<AudioSource>();
     }
 
     void SpawnParticle(Vector3 pos)
@@ -136,6 +135,9 @@ public class Pillar : MonoBehaviour, IDamageable
 
         //UI
         OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+
+        //Sonido
+        audioSource.Play();
 
         //empezamos a subir
         StartCoroutine(RiseUpCoroutine());
