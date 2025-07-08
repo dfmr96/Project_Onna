@@ -10,5 +10,5 @@ public class OptionsMenu : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void PlaySound(AudioClip audioClip) { AudioManager.Instance?.PlayOneShot(audioClip); }
+    public void PlaySound(AudioClip audioClip) { AudioManager.Instance?.PlaySFX(audioClip); }
 }

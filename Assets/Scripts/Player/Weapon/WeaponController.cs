@@ -32,6 +32,10 @@ namespace Player.Weapon
         private ParticleSystem muzzleFlashInstance;
         private LineRenderer lineRenderer;
 
+        [BoxGroup("Sounds")]
+        [SerializeField] private AudioClip shootFx;
+        private AudioSource audioSource;
+
 
         private Coroutine _coolingCooldownCoroutine;
         private PlayerModel _playerModel;
@@ -51,6 +55,7 @@ namespace Player.Weapon
         private void Start()
         {
             InitializeVisuals();
+            audioSource = GetComponent<AudioSource>();
         }
 
         private void InitializeVisuals()
@@ -123,6 +128,7 @@ namespace Player.Weapon
 
             var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
             bullet.Setup(bulletSetting.BulletSpeed,bulletSetting.AttackRange, bulletSetting.Damage);
+            audioSource.PlayOneShot(shootFx);
         }
 
         private void StartCoolingCooldown()

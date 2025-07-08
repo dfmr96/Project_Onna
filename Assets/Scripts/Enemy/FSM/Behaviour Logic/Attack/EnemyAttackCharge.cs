@@ -54,8 +54,8 @@ public class EnemyAttackCharge : EnemyAttackSOBase
             if (postChargeTimer >= postChargeDelay)
             {
                 isPostCharging = false;
-                enemy.SetShield(true);
                 _timer = 0f;
+                enemy.SetShield(true);
 
             }
             return;
@@ -65,6 +65,8 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         if (distanceToPlayer > _distanceToCountExit)
         {
             EndAttackAnimations();
+            enemy.SetShield(true);
+
             enemy.fsm.ChangeState(enemy.ChaseState);
             return;
         }
@@ -144,6 +146,8 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         isCharging = false;
         _enemyView.PlayAttackAnimation(false);
 
+        //enemy.SetShield(false);
+
         _enemyView.PlayMeleeAttackAnimation(true);
         _hasAttackedOnce = true;
         _timer = 0f;
@@ -178,7 +182,6 @@ public class EnemyAttackCharge : EnemyAttackSOBase
 
         _enemyView.PlayAttackAnimation(false);
         //enemy.SetShield(true);
-        enemy.SetShield(false);
         isLookingPlayer = true;
 
         isPostCharging = true;

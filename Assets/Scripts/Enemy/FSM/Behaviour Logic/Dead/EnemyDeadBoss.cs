@@ -14,6 +14,8 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     [SerializeField] private string bossMessage= "You... have only delayed the inevitable...";
     [SerializeField] private float messageDuration=8f;
     [SerializeField] private GameObject particleExplosion;
+    [SerializeField] private GameObject loadingScreenPrefab;
+
 
 
     public override void DoEnterLogic()
@@ -29,8 +31,10 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     {
         base.DoExitLogic();
 
-        GameModeSelector.SelectedMode = GameMode.Hub;
-        SceneManager.LoadScene("HUB");
+        //GameModeSelector.SelectedMode = GameMode.Hub;
+        //SceneManager.LoadScene("HUB");
+
+        SceneManagementUtils.AsyncLoadSceneByName("HUB", loadingScreenPrefab, PlayerHelper.GetPlayer().GetComponent<PlayerController>());
 
     }
 
@@ -50,6 +54,8 @@ public class EnemyDeadBoss : EnemyDeadSOBase
 
                 Destroy(particles, 1.5f);
             }
+
+            enemy.gameObject.GetComponent<BossController>().PlayAudioDead();
         }
 
         if (_timer > animationTime)

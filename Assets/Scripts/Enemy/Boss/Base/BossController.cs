@@ -41,6 +41,9 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
     [SerializeField] private BossUIController bossUIController;
 
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip deathClip;
+
 
     #endregion
 
@@ -176,6 +179,8 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         {
             bossUIController.UpdatePillarHealth(i, pillars[i].CurrentHealth, pillars[i].MaxHealth);
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -216,11 +221,6 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         return model.statsSO.ProjectileDamage;
     }
 
-    //public void DoAttack(IDamageable target)
-    //{
-    //    target.TakeDamage(GetDamage());
-    //    Debug.Log("Daño hecho por el estado Melee");
-    //}
 
     #endregion
 
@@ -251,6 +251,12 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private void HandleDeath(BossModel enemy)
     {
         fsm.ChangeState(DeadState);
+    }
+
+    public void PlayAudioDead()
+    {
+        audioSource.PlayOneShot(deathClip);
+
     }
 
     #endregion
@@ -364,6 +370,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         float shieldRadius = shieldCollider.radius * shield.transform.lossyScale.x; 
 
         Vector3 toPlayer = playerTransform.position - shieldCenter;
+        toPlayer.y = 0f;
         float distance = toPlayer.magnitude;
 
         if (distance < shieldRadius)

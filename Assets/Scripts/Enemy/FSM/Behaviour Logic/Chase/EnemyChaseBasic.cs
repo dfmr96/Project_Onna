@@ -13,7 +13,14 @@ public class EnemyChaseBasic : EnemyChaseSOBase
     {
         base.DoEnterLogic();
         _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed * _speedAgentMultiply;
-        _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed * _speedAgentMultiply; 
+        _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed * _speedAgentMultiply;
+
+        //Soluciona efecto de hielo en desaceleracion
+        _navMeshAgent.acceleration = 999f;      // Respuesta rápida a cambios
+        _navMeshAgent.angularSpeed = 1000f;     // Lo máximo posible, que no limite
+        _navMeshAgent.stoppingDistance = 0;     // No frena por cercanía
+        _navMeshAgent.autoBraking = false;      // Que no frene automáticamente
+        _navMeshAgent.updateRotation = false;   // Vamos a rotar manualmente
     }
 
     public override void DoExitLogic()
@@ -39,9 +46,11 @@ public class EnemyChaseBasic : EnemyChaseSOBase
         }
         else
         {
+           
             _navMeshAgent.isStopped = true;
             _navMeshAgent.velocity = Vector3.zero;
             _navMeshAgent.ResetPath(); 
+
             enemy.fsm.ChangeState(enemy.AttackState);
         }
 
@@ -54,6 +63,15 @@ public class EnemyChaseBasic : EnemyChaseSOBase
         //{
         //    enemy.fsm.ChangeState(enemy.AttackState);
         //}
+
+
+        Vector3 direction = (playerTransform.position - transform.position);
+        direction.y = 0f;
+        if (direction.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _enemyModel.statsSO.rotationSpeed * Time.deltaTime * _speedAgentMultiply);
+        }
     }
 
     public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
