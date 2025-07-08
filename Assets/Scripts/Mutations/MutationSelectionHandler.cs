@@ -12,8 +12,13 @@ namespace Mutations
         [SerializeField] private MutationOptionUI mutationUIPrefab;
         [SerializeField] private Transform uiContainer;
 
+        private PlayerModel _playerModel;
         private void Start()
         {
+            
+            PlayerHelper.DisableInput();
+            _playerModel = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
+            _playerModel.EnablePassiveDrain(false);
             if (selector == null || mutationUIPrefab == null || uiContainer == null)
             {
                 Debug.LogError("❌ Faltan referencias en MutationSelectionHandler.");
@@ -44,6 +49,7 @@ namespace Mutations
             {
                 var ui = Instantiate(mutationUIPrefab, uiContainer);
                 ui.SetData(mutation);
+                ui.SetCloseUI(CloseUI);
                 //ui.OnSelected += OnMutationSelected;
             }
             Debug.Log("Mutations View UI instantiated successfully.");
@@ -52,23 +58,11 @@ namespace Mutations
             Debug.Log("Showing UI for mutation selection.");
         }
 
-        private void OnMutationSelected(MutationData chosen)
-        {
-            Debug.Log($"🧬 Seleccionaste: {chosen.MutationName}");
-            ApplyMutation(chosen);
-            CloseUI();
-        }
-
-        private void ApplyMutation(MutationData data)
-        {
-            var player = PlayerHelper.GetPlayer();
-            var playerModel = player.GetComponent<PlayerModel>();
-            data.UpgradeEffect.Apply(playerModel.StatContext.Meta);
-        }
-
         private void CloseUI()
         {
-            gameObject.SetActive(false); // o Destroy(gameObject) si preferís que se destruya
+            PlayerHelper.EnableInput();
+            _playerModel.EnablePassiveDrain(true);
+            gameObject.SetActive(false); 
         }
     }
 }
