@@ -43,6 +43,11 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _colorState = AttackColorState.None;
 
         ResetColor();
+
+
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.velocity = Vector3.zero;
+        _navMeshAgent.ResetPath();
     }
 
     public override void DoExitLogic()
@@ -59,6 +64,9 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _hasAttackedOnce = false;
         _isAttacking = false;
         _colorState = AttackColorState.None;
+
+        _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed;
+        _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
     }
 
     public override void DoFrameUpdateLogic()
@@ -116,6 +124,17 @@ public class EnemyAttackMelee : EnemyAttackSOBase
             Attack();
             _timer = 0f;
         }
+
+        // Rotación manual hacia el jugador
+        Vector3 directionToPlayer = playerTransform.position - transform.position;
+        directionToPlayer.y = 0f; // Opcional: evita que incline la cabeza hacia arriba o abajo
+        if (directionToPlayer != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _enemyModel.statsSO.rotationSpeed * Time.deltaTime);
+        }
+
+
     }
 
     private void Attack()
