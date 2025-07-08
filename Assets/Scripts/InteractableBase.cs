@@ -1,11 +1,11 @@
 using Player;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class InteractableBase : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject interactPrefab;
     [SerializeField] private Vector3 promptOffset = new Vector3(0, 2f, 0);
+    [SerializeField] private AudioClip interactAudio;
 
     protected GameObject interactPrompt;
     protected Transform playerPos;
@@ -40,5 +40,5 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         }
     }
 
-    public abstract void Interact();
+    public virtual void Interact() { AudioManager.Instance?.PlayOneShot(interactAudio); }
 }

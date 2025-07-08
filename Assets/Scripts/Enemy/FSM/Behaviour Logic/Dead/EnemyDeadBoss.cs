@@ -1,3 +1,4 @@
+using Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     {
         base.DoExitLogic();
 
+        GameModeSelector.SelectedMode = GameMode.Hub;
         SceneManager.LoadScene("HUB");
 
     }
