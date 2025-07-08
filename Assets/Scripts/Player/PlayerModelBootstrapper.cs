@@ -76,6 +76,11 @@ namespace Player
                 Debug.LogError("❌ PlayerModel no encontrado en el jugador instanciado.");
                 return;
             }
+            
+            var inventory = SaveSystem.LoadInventory();
+            inventory.PlayerItemsHolder.RestoreFromSave();
+
+            playerModel.InjectInventory(inventory);
 
             _statContext = new PlayerStatContext();
 

@@ -26,6 +26,7 @@ public class StoreHandler : MonoBehaviour
     private HubManager hub;
     
     private PlayerModel player;
+    private PlayerInventory playerInventory;
     private PlayerModelBootstrapper playerModelBootstrapper;
     private bool showDebugPanel = false;
 
@@ -34,13 +35,7 @@ public class StoreHandler : MonoBehaviour
     private IEnumerator DelayedCheck()
     {
         yield return null;
-        SaveSystem.DebugInventoryJson();
-
-        var inventory = SaveSystem.LoadInventory();
-        inventory.PlayerItemsHolder.RestoreFromSave(); 
-
-        hub.PlayerInventory = inventory;
-
+        playerInventory = PlayerHelper.GetPlayer().GetComponent<PlayerModel>().Inventory;
         CheckAvailableUpgrades();
     }
 
@@ -73,13 +68,18 @@ public class StoreHandler : MonoBehaviour
     {
         MetaStatSaveSystem.Save(playerModelBootstrapper.MetaStats, playerModelBootstrapper.Registry);
         
-        hub.PlayerInventory.PlayerItemsHolder.PrepareForSave();
-        SaveSystem.SaveInventory(HubManager.Instance.PlayerInventory);
+        playerInventory.PlayerItemsHolder.PrepareForSave();
+        SaveSystem.SaveInventory(playerInventory);
         
         hub.CloseStore();
     }
-    public void UpdateCurrencyStatus() { onnaFragments.text = "Onna Fragments: " + hub.PlayerInventory.PlayerWallet.Coins; }
-    public void CheckAvailableUpgrades()
+
+    private void UpdateCurrencyStatus()
+    {
+        onnaFragments.text = "Onna Fragments: " + playerInventory.PlayerWallet.Coins;
+    }
+
+    private void CheckAvailableUpgrades()
     {
         UpdateCurrencyStatus();
 
@@ -103,7 +103,7 @@ public class StoreHandler : MonoBehaviour
         int index = Mathf.Clamp(currentLevel, 0, levelBackgrounds.Count - 1);
         detailBackgroundImage.sprite = levelBackgrounds[index];
         
-        bool canUpgrade = hub.PlayerInventory.PlayerItemsHolder.CanUpgrade(button.Data);
+        bool canUpgrade = playerInventory.PlayerItemsHolder.CanUpgrade(button.Data);
         int cost = button.Data.GetCost(currentLevel);
 
         upgradeButton.interactable = canUpgrade && CanAffordUpgrade(button.Data, currentLevel);
@@ -118,12 +118,12 @@ public class StoreHandler : MonoBehaviour
         int currentLevel = GetCurrentUpgradeLevel(selectedData);
         int cost = selectedData.GetCost(currentLevel);
 
-        if (!hub.PlayerInventory.PlayerItemsHolder.CanUpgrade(selectedData)) return;
-        if (!hub.PlayerInventory.PlayerWallet.TrySpend(cost)) return;
+        if (!playerInventory.PlayerItemsHolder.CanUpgrade(selectedData)) return;
+        if (!playerInventory.PlayerWallet.TrySpend(cost)) return;
 
         player = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
         selectedData.UpgradeEffect?.Apply(player.StatContext.Meta);
-        hub.PlayerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
+        playerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
         hub.UpdateCoins();
         AudioManager.Instance?.PlayOneShot(upgradeClip);
         CheckAvailableUpgrades();
@@ -137,14 +137,14 @@ public class StoreHandler : MonoBehaviour
     
     private int GetCurrentUpgradeLevel(StoreUpgradeData data)
     {
-        hub.PlayerInventory.PlayerItemsHolder.UpgradesBoughtDictionary.TryGetValue(data, out var level);
+        playerInventory.PlayerItemsHolder.UpgradesBoughtDictionary.TryGetValue(data, out var level);
         return level;
     }
 
     private bool CanAffordUpgrade(StoreUpgradeData data, int level)
     {
         int cost = data.GetCost(level);
-        return cost >= 0 && hub.PlayerInventory.PlayerWallet.CheckCost(cost);
+        return cost >= 0 && playerInventory.PlayerWallet.CheckCost(cost);
     }
 
     private void UpdateUpgradeDetail(StoreUpgradeData data, int level)
@@ -177,17 +177,17 @@ public class StoreHandler : MonoBehaviour
 
         if (GUI.Button(new Rect(panelX, panelY + 2 * (buttonHeight + spacing), panelWidth, buttonHeight), "➕ Add 100 Coins", buttonStyle))
         {
-            hub.PlayerInventory.PlayerWallet.AddCoins(100);
+            playerInventory.PlayerWallet.AddCoins(100);
             Debug.Log("Added 100 coins!");
             UpdateCurrencyStatus();
         }
 
         if (GUI.Button(new Rect(panelX, panelY + 3 * (buttonHeight + spacing), panelWidth, buttonHeight), "🧹 Limpiar mejoras", buttonStyle))
         {
-            hub.PlayerInventory.PlayerItemsHolder.ClearUpgrades();
-            hub.PlayerInventory.PlayerItemsHolder.PrepareForSave(); 
-            SaveSystem.SaveInventory(hub.PlayerInventory);
-            hub.PlayerInventory = SaveSystem.LoadInventory();
+            playerInventory.PlayerItemsHolder.ClearUpgrades();
+            playerInventory.PlayerItemsHolder.PrepareForSave(); 
+            SaveSystem.SaveInventory(playerInventory);
+            playerInventory = SaveSystem.LoadInventory();
             Debug.Log("Mejoras borradas del inventario y guardadas.");
             CheckAvailableUpgrades();
         }
