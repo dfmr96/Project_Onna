@@ -31,23 +31,18 @@ public class BossModel : MonoBehaviour, IDamageable
     //private Transform healthBar;
     //private Transform healthFill;
 
+    
     private void Start()
     {
         MaxHealth = statsSO.MaxHealth;
         CurrentHealth = MaxHealth;
-
+ 
         view = GetComponent<BossView>();
         enemy = GetComponent<BossController>();
         orbSpawner = GameManager.Instance.orbSpawner;
 
-        ////Instanciar la barra de vida
-        //if (healthBarPrefab != null)
-        //{
-        //    GameObject barInstance = Instantiate(healthBarPrefab, transform);
-        //    barInstance.transform.localPosition = new Vector3(0, heightBarSpawn, 0);
-        //    healthBar = barInstance.transform;
-        //    healthFill = healthBar.Find("Fill");
-        //}
+
+       
     }
 
     public void PrintMessage(String text, float lifeTime)

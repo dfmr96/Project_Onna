@@ -225,6 +225,7 @@ Transform:
   - {fileID: 538891594163707522}
   - {fileID: 5359676381938084319}
   - {fileID: 2932224105165415023}
+  - {fileID: 5760348410843278669}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8564744329156200767
@@ -571,4 +572,90 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 680263624431698553, guid: 6ab4a941639d4c241aaf47a18141b78e, type: 3}
   m_PrefabInstance: {fileID: 5940809726584676006}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7040555794269096334
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4244870425483508392}
+    m_Modifications:
+    - target: {fileID: 69018332000712655, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 69018332000712655, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 69018332000712655, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.9912152
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.671
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5970415382964712956, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5970415382964712956, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.8218881
+      objectReference: {fileID: 0}
+    - target: {fileID: 5970415382964712956, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.8531733
+      objectReference: {fileID: 0}
+    - target: {fileID: 6441873369525384307, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+      propertyPath: m_Name
+      value: vfx_SpawnTorret
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+--- !u!4 &5760348410843278669 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3334293670390588611, guid: fe4a3ee317fb5384bbd730979773bf90, type: 3}
+  m_PrefabInstance: {fileID: 7040555794269096334}
   m_PrefabAsset: {fileID: 0}
