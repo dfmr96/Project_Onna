@@ -40,5 +40,5 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         }
     }
 
-    public virtual void Interact() { AudioManager.Instance?.PlayOneShot(interactAudio); }
+    public virtual void Interact() { AudioManager.Instance?.PlaySFX(interactAudio); }
 }

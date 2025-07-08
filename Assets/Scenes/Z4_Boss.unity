@@ -16523,10 +16523,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: pilarSpawnClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
     - target: {fileID: 2559190927366410254, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_Name
       value: Boss Monarch
       objectReference: {fileID: 0}
+    - target: {fileID: 4283978977039039019, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: pilarSpawnClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
     - target: {fileID: 4283978977039039019, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: bossSpawnPoints.Array.data[0]
       value: 
@@ -16599,6 +16607,14 @@ PrefabInstance:
       propertyPath: torretSpawnPoints.Array.data[5]
       value: 
       objectReference: {fileID: 1195343639}
+    - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: pilarSpawnClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: pilarSpawnClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
     - target: {fileID: 4589468880134367855, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_LocalPosition.x
       value: 22.94
@@ -16655,6 +16671,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5822719952390353106, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: MaxDistance
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5822719952390353106, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: rolloffMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5822719952390353106, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7094732233544628150, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -16687,6 +16715,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: pilarSpawnClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
