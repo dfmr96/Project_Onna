@@ -63,10 +63,9 @@ public class EnemyModel : MonoBehaviour, IDamageable
             }
         }
 
+        view.PlayDamageEffect();
         CurrentHealth -= damageAmount;
         OnHealthChanged?.Invoke(CurrentHealth);
-
-        view.PlayDamageEffect();
 
         UpdateHealthBar();
 

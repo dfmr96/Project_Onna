@@ -9,7 +9,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     private enum AttackColorState { None, FadeIn, FadeOut }
     private AttackColorState _colorState = AttackColorState.None;
 
-    private bool _isAttacking = false;
+    //private bool _isAttacking = false;
     private float _attackAnimationTimer = 0f;
 
     [Header("Visual")]
@@ -38,7 +38,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
 
         _navMeshAgent.SetDestination(playerTransform.position);
         _hasAttackedOnce = false;
-        _isAttacking = false;
+        //_isAttacking = false;
         _attackAnimationTimer = 0f;
         _colorState = AttackColorState.None;
 
@@ -62,7 +62,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _enemyView.OnAttackImpact -= OnAttackImpact;
 
         _hasAttackedOnce = false;
-        _isAttacking = false;
+        //_isAttacking = false;
         _colorState = AttackColorState.None;
 
         _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed;
