@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyChaseSOBase : ScriptableObject
 {
-    protected IEnemyBaseController enemy;
+    protected EnemyController enemy;
     protected Transform transform;
     protected GameObject gameObject;
     protected EnemyModel _enemyModel;
@@ -19,20 +19,20 @@ public class EnemyChaseSOBase : ScriptableObject
     [SerializeField][Range(0f, 50f)] protected float minDistanceToPlayer = 5f;
 
 
-    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
     {
         this.gameObject = gameObject;
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
 
     }
 
     public virtual void DoEnterLogic()
     {
-        _enemyModel = gameObject.GetComponent<EnemyModel>();
+        _enemyModel = enemy.GetComponent<EnemyModel>();
         _navMeshAgent.isStopped = false;
 
     }

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyHurtSOBase : ScriptableObject
 {
-    protected IEnemyBaseController enemy;
+    protected EnemyController enemy;
     protected Transform transform;
     protected GameObject gameObject;
 
@@ -18,20 +18,20 @@ public class EnemyHurtSOBase : ScriptableObject
     [SerializeField] protected float _timeHurt = 0.1f;
 
 
-    public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+    public virtual void Initialize(GameObject gameObject, EnemyController enemy)
     {
         this.gameObject = gameObject;
         this.enemy = enemy;
         transform = gameObject.transform;
 
         playerTransform = PlayerHelper.GetPlayer().transform;
-        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        _navMeshAgent = enemy.GetComponent<NavMeshAgent>();
 
     }
 
     public virtual void DoEnterLogic()
     {
-        _enemyView = gameObject.GetComponent<EnemyView>();
+        _enemyView = enemy.GetComponent<EnemyView>();
 
     }
     public virtual void DoExitLogic() { ResetValues(); }

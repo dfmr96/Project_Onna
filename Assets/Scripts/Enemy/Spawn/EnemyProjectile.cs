@@ -18,10 +18,7 @@ public class EnemyProjectile : MonoBehaviour
     private float _timer = 0f;
 
 
-
-   
-
-private void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -84,6 +81,7 @@ private void Awake()
             hasHit = true;
 
             damageable.TakeDamage(damage);
+            Debug.Log("Player damaged");
 
             PlayImpactParticles();
 

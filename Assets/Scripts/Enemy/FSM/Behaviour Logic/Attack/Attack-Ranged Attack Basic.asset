@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58faa3e49d6e9c84a84cddc039abe71a, type: 3}
   m_Name: Attack-Ranged Attack Basic
   m_EditorClassIdentifier: 
-  _distanceToCountExit: 9
+  _distanceToCountExit: 3
   AttackingMovingSpeed: 0
   isMovingSpeedChangesOnAttack: 0
   _timeBetweenAttacks: 1.5
   _initialAttackDelay: 0.3
+  _targetColor: {r: 0, g: 0, b: 0, a: 1}
   isLookingPlayer: 1
   rotationSpeed: 5
-  personalDistance: 3.5
+  personalDistance: 5
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 256

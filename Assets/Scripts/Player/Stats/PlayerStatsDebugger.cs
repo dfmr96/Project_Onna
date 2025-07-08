@@ -8,21 +8,10 @@ namespace Player.Stats
         [SerializeField] private StatReferences statRefs;
         private PlayerModel player;
         private bool showDebugger = true;
-        private GUIStyle emptyStyle;
 
         private void Start()
         {
             player = FindObjectOfType<PlayerModel>();
-            emptyStyle = new GUIStyle();
-            emptyStyle.normal.background = Texture2D.whiteTexture; // Necesitamos un fondo sólido para aplicar el color
-            
-            Debug.Log("🧪 StatsDebugger initialized.");
-            if (player != null)
-                Debug.Log("🧪 PlayerModel found: " + player.name);
-            if (player?.StatContext != null)
-                Debug.Log("🧪 StatContext present.");
-            if (player?.StatContext?.Meta == null)
-                Debug.LogWarning("⚠️ Meta stats not loaded at Start.");
         }
 
         private void OnGUI()
@@ -51,40 +40,6 @@ namespace Player.Stats
             DrawStat("Max Ammo", statRefs.maxAmmo);
 
             GUILayout.EndArea();
-            
-            // Si no queremos mostrar la barra fuera de Run, podemos envolverla en una condición
-            if (player != null)
-            {
-                // Posición de la barra (cambia el rect según dónde quieras ubicarla)
-                Rect healthBarRect = new Rect(Screen.width - 210, 10, 200, 25);
-
-                // Fondo de la barra
-                GUI.color = Color.gray;
-                GUI.Box(healthBarRect, GUIContent.none);
-
-                // Calcula el fill
-                float normalizedHealth = Mathf.Clamp01(player.CurrentHealth / player.MaxHealth);
-
-                // Calcula el ancho según la vida actual
-                float filledWidth = healthBarRect.width * normalizedHealth;
-
-                // Dibuja la barra de vida en verde (puedes elegir otro color)
-                GUI.color = Color.green;
-                GUI.Box(new Rect(healthBarRect.x, healthBarRect.y, filledWidth, healthBarRect.height), GUIContent.none, emptyStyle);
-
-
-                // Texto encima de la barra
-                GUI.color = Color.black;
-                string healthText = $"{player.CurrentHealth:0}/{player.MaxHealth:0}";
-                GUI.Label(healthBarRect, $"❤️ {healthText}");
-                
-                // Texto debajo de la barra de vida indicando el estado de Passive Drain
-                GUI.color = player.DevMode ? Color.yellow : Color.green;
-                string passiveDrainStatus = player.DevMode ? "⚠️ Passive Drain DESACTIVADO (DevMode)" : "✅ Passive Drain ACTIVO";
-                Rect passiveDrainRect = new Rect(healthBarRect.x, healthBarRect.y + healthBarRect.height + 5, 300, 25);
-                GUI.Label(passiveDrainRect, passiveDrainStatus);
-
-            }
         }
 
         private void DrawStat(string label, StatDefinition def)

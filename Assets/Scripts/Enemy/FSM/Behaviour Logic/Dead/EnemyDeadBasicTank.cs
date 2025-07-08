@@ -38,7 +38,7 @@ public class EnemyDeadBasicTank : EnemyDeadSOBase
         }
     }
 
-    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+    public override void Initialize(GameObject gameObject, EnemyController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

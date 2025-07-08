@@ -8,9 +8,7 @@ public class EnemyPatrolInRandomPoints : EnemyPatrolSOBase
     {
 
     protected float initialSpeed;
-    private  float walkSpeed = 2f;
-
-
+    private float walkSpeed = 2f;
     public override void DoEnterLogic()
         {
             base.DoEnterLogic();
@@ -54,7 +52,7 @@ public class EnemyPatrolInRandomPoints : EnemyPatrolSOBase
 
     }
 
-        public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+        public override void Initialize(GameObject gameObject, EnemyController enemy)
         {
             base.Initialize(gameObject, enemy);
         }

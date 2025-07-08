@@ -10,36 +10,29 @@ public class HubManager : MonoBehaviour
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] private TextMeshProUGUI currencyText;
     [SerializeField] private GameObject storePrefab;
-    [SerializeField] private AudioClip gameMusicClip;
     private GameObject storeInstance;
-    
-    private PlayerInventory playerInventory;
-
+    private PlayerInventory _playerInventory;
+    public PlayerInventory PlayerInventory => _playerInventory;
     private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         Instance = this;
     }
 
-    private void Start() { AudioManager.Instance?.PlayMusic(gameMusicClip); }
-
     public void Init()
     {
         levelProgression.ResetProgress();
-        playerInventory = PlayerHelper.GetPlayer().GetComponent<PlayerModel>().Inventory;
+        _playerInventory = new PlayerInventory();
+
         // Si venimos de una run con monedas las sumamos
         if (RunData.CurrentCurrency != null)
         {
-            playerInventory.PlayerWallet.AddCoins(RunData.CurrentCurrency.Coins);
+            PlayerInventory.PlayerWallet.AddCoins(RunData.CurrentCurrency.Coins);
             RunData.Clear();
-        } //TODO Esto no debe ir aqui
+        }
         UpdateCoins();
     }
-
-    public void UpdateCoins()
-    {
-        currencyText.text = "Onna Fragments: " + playerInventory.PlayerWallet.Coins.ToString();
-    }
+    public void UpdateCoins() { currencyText.text = "Onna Fragments: " + PlayerInventory.PlayerWallet.Coins.ToString(); }
     public void OpenStore()
     {
         if (storeInstance != null) return;
@@ -61,8 +54,5 @@ public class HubManager : MonoBehaviour
     }
 
     [ContextMenu("Add Currency")]
-    void ApplyCurrency()
-    {
-        playerInventory.PlayerWallet.AddCoins(100); UpdateCoins();
-    }
+    void ApplyCurrency() { PlayerInventory.PlayerWallet.AddCoins(100); UpdateCoins(); }
 }

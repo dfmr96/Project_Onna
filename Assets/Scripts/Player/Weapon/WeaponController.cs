@@ -8,8 +8,7 @@ namespace Player.Weapon
 {
     public class WeaponController : MonoBehaviour
     {
-        public static event Action<int, int> OnShoot;
-        public static event Action<float, float> OnCooling;
+        public static Action<int, int> OnShoot;
 
         [BoxGroup("Bullet")] 
         [SerializeField] private BulletSettings bulletSetting;
@@ -22,22 +21,6 @@ namespace Player.Weapon
         [SerializeField] private int currentAmmo;
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private bool canFire = true;
-
-        [BoxGroup("Laser Effect")]
-        [SerializeField] private ParticleSystem laserGunParticlesPrefab;
-        [SerializeField] private ParticleSystem shootGunParticlesPrefab;
-        [SerializeField] private Transform laserOrigin;
-        private float laserLength;
-        private ParticleSystem impactParticlesInstance;
-        private ParticleSystem muzzleFlashInstance;
-        private LineRenderer lineRenderer;
-
-        [BoxGroup("Sounds")]
-        [SerializeField] private AudioClip shootFx;
-        [BoxGroup("Sounds")]
-        [SerializeField] private AudioClip overheathFx;
-        private AudioSource audioSource;
-
 
         private Coroutine _coolingCooldownCoroutine;
         private PlayerModel _playerModel;
@@ -53,41 +36,7 @@ namespace Player.Weapon
         {
             EventBus.Unsubscribe<PlayerInitializedSignal>(OnPlayerReady);
         }
-
-        private void Start()
-        {
-            InitializeVisuals();
-            audioSource = GetComponent<AudioSource>();
-        }
-
-        private void InitializeVisuals()
-        {
-            lineRenderer = GetComponentInChildren<LineRenderer>(true);
-            laserLength = bulletSetting.AttackRange;
-            lineRenderer.enabled = true;
-            lineRenderer.positionCount = 2;
-            lineRenderer.useWorldSpace = true;
-
-            if (laserGunParticlesPrefab != null)
-            {
-                impactParticlesInstance = Instantiate(laserGunParticlesPrefab);
-                impactParticlesInstance.transform.SetParent(null);
-                impactParticlesInstance.Stop();
-            }
-
-            if (shootGunParticlesPrefab != null)
-            {
-                muzzleFlashInstance = Instantiate(shootGunParticlesPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
-                muzzleFlashInstance.transform.SetParent(null);
-                muzzleFlashInstance.Stop();
-            }
-        }
-
-        private void Update()
-        {
-            LaserEffect();
-        }
-
+        
         private void OnPlayerReady(PlayerInitializedSignal signal)
         {
             _playerModel = signal.Model;
@@ -121,48 +70,31 @@ namespace Player.Weapon
 
         private void FireBullet()
         {
-            if (muzzleFlashInstance != null)
-            {
-                muzzleFlashInstance.transform.position = bulletSetting.BulletSpawnPoint.position;
-                muzzleFlashInstance.transform.rotation = bulletSetting.BulletSpawnPoint.rotation;
-                muzzleFlashInstance.Play();
-            }
-
             var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
             bullet.Setup(bulletSetting.BulletSpeed,bulletSetting.AttackRange, bulletSetting.Damage);
-            audioSource.PlayOneShot(shootFx);
         }
 
         private void StartCoolingCooldown()
         {
             if (_coolingCooldownCoroutine == null)
             {
-                Debug.Log("Cooling cooldown Called");
+                _coolingCooldownCoroutine = StartCoroutine(CoolingCooldown());
             }
-            else
-            {
-                StopCoroutine(_coolingCooldownCoroutine);
-                Debug.Log("Cooling cooldown restarted");
-            }
-            _coolingCooldownCoroutine = StartCoroutine(CoolingCooldown());
         }
 
-        private void StopCoolingCooldown()
+        private void ResetCoolingCooldown()
         {
             if (_coolingCooldownCoroutine != null)
             {
                 StopCoroutine(_coolingCooldownCoroutine);
-                
-                Debug.Log("Cooling cooldown stopped");
                 _coolingCooldownCoroutine = null;
             }
         }
 
         private void StartOverheatCooldown()
         {
-            StopCoolingCooldown();
+            ResetCoolingCooldown();
             StartCoroutine(OverheatCooldown());
-            audioSource?.PlayOneShot(overheathFx);
         }
 
         private IEnumerator FireRateCooldown()
@@ -174,62 +106,18 @@ namespace Player.Weapon
 
         private IEnumerator OverheatCooldown()
         {
-            Debug.Log("Overheat cooldown Called");
-            OnCooling?.Invoke(Settings.CoolingCooldown, Settings.CoolingCooldown);
-            Debug.Log("OnCooling event called");
             canFire = false;
             yield return new WaitForSeconds(Settings.OverheatCooldown);
             currentAmmo = (int)ammoSettings.MaxAmmo;
-            
-            OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
             canFire = true;
-            Debug.Log("Overheat cooldown Finished");
         }
 
         private IEnumerator CoolingCooldown()
         {
-            float coolingTimer = 0f;
-            
-            while (coolingTimer < Settings.CoolingCooldown)
-            {
-                coolingTimer += Time.deltaTime;
-                OnCooling?.Invoke(coolingTimer, Settings.CoolingCooldown);
-                yield return null;
-            }
+            yield return new WaitForSeconds(Settings.CoolingCooldown);
             currentAmmo = (int)ammoSettings.MaxAmmo;
             _coolingCooldownCoroutine = null;
-            Debug.Log("Cooling cooldown finished");
             OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
-        }
-
-        private void LaserEffect()
-        {
-            Vector3 direction = laserOrigin.forward;
-            Vector3 endPos = laserOrigin.position + direction * laserLength;
-
-            Ray ray = new Ray(laserOrigin.position, direction);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, laserLength))
-            {
-                endPos = hit.point;
-            }
-
-            lineRenderer.SetPosition(0, laserOrigin.position);
-            lineRenderer.SetPosition(1, endPos);
-
-            //particulas al final del rayo
-            if (impactParticlesInstance != null)
-            {
-                impactParticlesInstance.transform.position = endPos;
-
-                Vector3 toLaserOrigin = (laserOrigin.position - endPos).normalized;
-                if (toLaserOrigin != Vector3.zero)
-                    impactParticlesInstance.transform.rotation = Quaternion.LookRotation(toLaserOrigin);
-
-                if (!impactParticlesInstance.isPlaying)
-                    impactParticlesInstance.Play();
-            }
         }
     }
 }

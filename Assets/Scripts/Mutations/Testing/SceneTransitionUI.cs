@@ -14,7 +14,7 @@ namespace Mutations.Testing
             var bootstrapper = FindObjectOfType<PlayerModelBootstrapper>();
             var metaStats = bootstrapper.MetaStats;
             var registry = bootstrapper.Registry; 
-            //MetaStatSaveSystem.Save(metaStats, registry); //TODO Ojo
+            MetaStatSaveSystem.Save(metaStats, registry);
             GameModeSelector.SelectedMode = GameMode.Run;
             SceneManager.LoadScene("RoomScene");
         }

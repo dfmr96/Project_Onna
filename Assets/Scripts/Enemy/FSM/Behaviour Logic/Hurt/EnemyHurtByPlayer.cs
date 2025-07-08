@@ -17,7 +17,7 @@ using UnityEngine.AI;
         _navMeshAgent.ResetPath();
         _navMeshAgent.velocity = Vector3.zero;
 
-        _enemyView.HandleDamage();
+        _enemyView.PlayDamageAnimation();
 
         }
 
@@ -44,7 +44,7 @@ using UnityEngine.AI;
             }
     }
 
-        public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+        public override void Initialize(GameObject gameObject, EnemyController enemy)
         {
             base.Initialize(gameObject, enemy);
         }

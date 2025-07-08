@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 268992cecd7d4c14991808fa8330a3ba, type: 3}
   m_Name: Attack-Charging attack Tank type
   m_EditorClassIdentifier: 
-  _distanceToCountExit: 8
+  _distanceToCountExit: 3
   AttackingMovingSpeed: 0
   isMovingSpeedChangesOnAttack: 0
-  _timeBetweenAttacks: 4
+  _timeBetweenAttacks: 1
   _initialAttackDelay: 0.6
+  _targetColor: {r: 0, g: 0, b: 0, a: 1}
   isLookingPlayer: 1
   rotationSpeed: 10
-  chargeSpeed: 60
-  chargeDuration: 1
-  meleeRange: 3
-  postChargeDelay: 2
+  chargeSpeed: 50
+  chargeDuration: 0.5

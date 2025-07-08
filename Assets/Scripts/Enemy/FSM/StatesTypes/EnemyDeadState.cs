@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyDeadState : EnemyState<BaseEnemyController>
+public class EnemyDeadState : EnemyState
 {
 
 
-    private EnemyDeadSOBase deadBehavior;
+   
 
 
-
-    public EnemyDeadState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm, EnemyDeadSOBase deadBehavior) : base(enemy, fsm)
+    public EnemyDeadState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
     {
    
-        this.deadBehavior = deadBehavior;
-    }
 
- 
+    }
 
     public override void EnterState()
     {
         base.EnterState();
-        deadBehavior.DoEnterLogic();
+        enemy.EnemyDeadBaseInstance.DoEnterLogic();
      
 
     }
@@ -30,7 +27,7 @@ public class EnemyDeadState : EnemyState<BaseEnemyController>
     public override void ExitState()
     {
         base.ExitState();
-        deadBehavior.DoExitLogic();
+        enemy.EnemyDeadBaseInstance.DoExitLogic();
 
 
 
@@ -39,7 +36,7 @@ public class EnemyDeadState : EnemyState<BaseEnemyController>
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-        deadBehavior.DoFrameUpdateLogic();
+        enemy.EnemyDeadBaseInstance.DoFrameUpdateLogic();
 
 
       

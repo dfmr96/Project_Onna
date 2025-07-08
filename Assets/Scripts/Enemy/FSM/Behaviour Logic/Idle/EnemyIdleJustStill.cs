@@ -7,8 +7,8 @@ using UnityEngine.AI;
 
 public class EnemyIdleJustStill : EnemyIdleSOBase
 {
-    //[SerializeField] private float duration = 2f;
-    //private float timer = 0f;
+    [SerializeField] private float duration = 2f;
+    private float timer = 0f;
 
     public override void DoEnterLogic()
     {
@@ -16,7 +16,7 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
 
-        //timer = 0f;
+        timer = 0f;
     }
 
     public override void DoExitLogic()
@@ -28,33 +28,28 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
     {
         base.DoFrameUpdateLogic();
 
-        //timer += Time.deltaTime;
+        timer += Time.deltaTime;
 
-        //if (timer > duration)
-        //{
-        //    float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-        //    if (distanceToPlayer > model.statsSO.AttackRange)
-        //    {
-        //        enemy.fsm.ChangeState(enemy.ChaseState);
-
-        //    }
-        //    else
-        //    {
-        //        enemy.fsm.ChangeState(enemy.AttackState);
-
-        //    }
-
-        //}
-
-        if (enemy.isWhitinCombatRadius)
+        if (timer > duration)
         {
-            enemy.fsm.ChangeState(enemy.AttackState);
+            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+            if (distanceToPlayer > model.statsSO.AttackRange)
+            {
+                enemy.fsm.ChangeState(enemy.ChaseState);
+
+            }
+            else
+            {
+                enemy.fsm.ChangeState(enemy.AttackState);
+
+            }
+
         }
 
     }
 
-    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+    public override void Initialize(GameObject gameObject, EnemyController enemy)
     {
         base.Initialize(gameObject, enemy);
     }
@@ -62,7 +57,7 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
     public override void ResetValues()
     {
         base.ResetValues();
-        //_navMeshAgent.isStopped = false;
+        _navMeshAgent.isStopped = false;
 
     }
 

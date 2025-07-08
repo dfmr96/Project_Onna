@@ -1,5 +1,4 @@
-﻿using System;
-using Player;
+﻿using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +13,6 @@ namespace Mutations.Testing
         [SerializeField] private Button selectButton;
         
         private MutationData mutation;
-        private Action OnClose;
 
         public void SetData(MutationData mutationData)
         {
@@ -35,8 +33,8 @@ namespace Mutations.Testing
                 selectButton.onClick.AddListener(OnSelected);
             }
         }
-
-        private void OnSelected()
+        
+        public void OnSelected()
         {
             var playerStats = PlayerHelper.GetPlayer().GetComponent<PlayerModel>().StatContext.Runtime;
             if (playerStats == null)
@@ -45,20 +43,10 @@ namespace Mutations.Testing
                 return;
             }
 
-            mutation.UpgradeEffect.Apply(playerStats, mutation.UpgradeBonus, mutation.Mode); 
+            mutation.UpgradeEffect.Apply(playerStats);
             Debug.Log($"✅ Mutación aplicada: {mutation.MutationName}");
 
-            OnClose?.Invoke();
-        }
-        
-        public void SetCloseUI(Action callback)
-        {
-            OnClose = callback;
-        }
-        
-        public void SetInteractable(bool value)
-        {
-            selectButton.interactable = value;
+            transform.parent.gameObject.SetActive(false);
         }
     }
 }

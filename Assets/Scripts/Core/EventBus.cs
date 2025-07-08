@@ -38,7 +38,7 @@ namespace Core
             var type = typeof(T);
             LastSignals[type] = signal;
 
-            //Debug.Log($"EventBus: Publicando {typeof(T).Name}");
+            Debug.Log($"EventBus: Publicando {typeof(T).Name}");
 
             if (Subscribers.TryGetValue(type, out var list))
             {

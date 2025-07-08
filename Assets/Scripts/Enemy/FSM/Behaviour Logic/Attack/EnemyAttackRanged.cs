@@ -3,29 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 [CreateAssetMenu(fileName = "Attack-Ranged Attack Basic", menuName = "Enemy Logic/Attack Logic/Ranged Attack With Projectiles")]
 
 public class EnemyAttackRanged : EnemyAttackSOBase
 {
-        /*
-        #Ataque
-        7 attackStartDistance: a qué distancia empieza a atacar.
-        9 attackExitDistance: si el jugador se aleja más de esto, deja de atacar.
-        3.5 tooCloseDistance: si el jugador está más cerca que esto, el enemigo se pone nervioso y escapa.
-
-        #Chase
-        6 chaseMinDistance: cuando llega a esta distancia, deja de perseguir y se prepara para atacar.
-
-        #Strafe
-        3 strafeMoveDistance: cuánto se mueve lateralmente.
-        0.2 strafeStopThreshold: cuando está lo suficientemente cerca del punto lateral, para.
-
-        #Escape
-        6 escapeSafeDistance: si el player está dentro de esta distancia, huye.
-        8 escapeRetreatDistance: cuán lejos intenta alejarse del player.
-        */
+    //[SerializeField] SerializedDictionary<int, EnemyAttackRanged> m_;
 
     private bool _hasAttackedOnce;
     private float _strafeTimer;
@@ -34,6 +17,7 @@ public class EnemyAttackRanged : EnemyAttackSOBase
 
     [SerializeField] private float personalDistance;
     [SerializeField] private LayerMask obstacleLayers;
+    //[SerializeField] private float projectileRadius = 0.2f;
     [SerializeField] private float strafeDistance = 3f;
     [SerializeField] private float strafeCooldown = 2f;
     [SerializeField] private float strafeStopDistance = 0.2f;
@@ -62,6 +46,7 @@ public class EnemyAttackRanged : EnemyAttackSOBase
 
     public override void DoFrameUpdateLogic()
     {
+
         base.DoFrameUpdateLogic();
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
@@ -69,26 +54,35 @@ public class EnemyAttackRanged : EnemyAttackSOBase
 
         if (!enemy.isWhitinCombatRadius)
         {
-            EndStrafe();
-            ResetValues();
             enemy.fsm.ChangeState(enemy.SearchState);
-            return;
+            
         }
-
-        if (distanceToPlayer <= personalDistance)
+        else if (distanceToPlayer <= personalDistance)
         {
-            EndStrafe();
-            ResetValues();
             enemy.fsm.ChangeState(enemy.EscapeState);
-            return;
+
         }
 
+        // Si está haciendo strafe, esperar a que termine
         if (_isStrafing)
         {
-            HandleStrafe();
+            float distance = Vector3.Distance(transform.position, _strafeTarget);
+            if (distance > strafeStopDistance)
+            {
+                Vector3 direction = (_strafeTarget - transform.position).normalized;
+                Vector3 movement = direction * _enemyModel.statsSO.moveSpeed * Time.deltaTime;
+
+                enemy.Rb.MovePosition(enemy.Rb.position + movement);
+            }
+            else
+            {
+                EndStrafe();
+            }
+
             return;
         }
 
+        // Si no tiene línea de visión, intentar reposicionarse
         if (!HasLineOfSightToPlayer(out Vector3 directionToPlayer))
         {
             if (_strafeTimer >= strafeCooldown)
@@ -98,41 +92,30 @@ public class EnemyAttackRanged : EnemyAttackSOBase
             return;
         }
 
-        _timer += Time.deltaTime;
-
-        if (!_hasAttackedOnce && _timer >= _initialAttackDelay)
+        if (!_hasAttackedOnce)
         {
+            if (_timer >= _initialAttackDelay)
+            {
+                ShootProjectile();
+                _hasAttackedOnce = true;
+                _timer = 0f;
+            }
+        }
+        else if (_timer >= _timeBetweenAttacks)
+        {
+            //TriggerAttackColorEffect();
+
             ShootProjectile();
-            _hasAttackedOnce = true;
             _timer = 0f;
         }
-        else if (_hasAttackedOnce && _timer >= _timeBetweenAttacks)
-        {
-            ShootProjectile();
-            _timer = 0f;
-        }
-    }
 
-
-    private void HandleStrafe()
-    {
-        float distance = Vector3.Distance(transform.position, _strafeTarget);
-        if (distance > strafeStopDistance)
-        {
-            Vector3 direction = (_strafeTarget - transform.position).normalized;
-            Vector3 movement = direction * _enemyModel.statsSO.moveSpeed * Time.deltaTime;
-
-            enemy.Rb.MovePosition(enemy.Rb.position + movement);
-        }
-        else
-        {
-            EndStrafe();
-        }
+        
     }
 
 
 
-    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+
+    public override void Initialize(GameObject gameObject, EnemyController enemy)
     {
         base.Initialize(gameObject, enemy);
     }
@@ -151,16 +134,6 @@ public class EnemyAttackRanged : EnemyAttackSOBase
     private void ShootProjectile()
     {
          _enemyView.PlayAttackAnimation(true);
-
-        //ROTAR hacia el jugador
-        Vector3 direction = (playerTransform.position - transform.position).normalized;
-        direction.y = 0f; //para no inclinar hacia arriba/abajo si el jugador esta a otra altura
-
-        if (direction != Vector3.zero)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f); //o un valor menor para suavizar
-        }
     }
 
 

@@ -20,14 +20,6 @@ public class FloatingDamageText : MonoBehaviour
         startColor = textMesh.color;
     }
 
-    public void Initialize(string text, float lifeTime)
-    {
-        textMesh = GetComponent<TextMeshPro>();
-        textMesh.text = text;
-        startColor = Color.yellow;
-        fadeDuration = lifeTime;
-    }
-
     void Update()
     {
         elapsed += Time.deltaTime;

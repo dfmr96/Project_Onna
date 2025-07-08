@@ -1,16 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using Player;
 using Player.Stats.Runtime;
 using UnityEngine;
 
-public class HubEndTrigger : InteractableBase
+public class HubEndTrigger : LevelTrigger
 {
-    [SerializeField] private LevelProgression levelProgression;
-    [SerializeField] private GameObject loadCanvasPrefab;
-    public override void Interact()
+    protected override void OnTrigger(Collider other)
     {
-        base.Interact();
-        PlayerHelper.DisableInput();
-        SceneManagementUtils.AsyncLoadSceneByName(levelProgression.GetNextRoom(), loadCanvasPrefab, this);
+        PlayerHelper.DisableInput(); 
+        LoadNextLevel(); 
         RunData.Initialize();
     }
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
+  m_Name: Entrenamiento Militar
+  m_EditorClassIdentifier: 
+  upgradeName: 'Entrenamiento Militar  '
+  description: "+3 de da\xF1o base.(Max +15 de da\xF1o base)  "
+  icon: {fileID: -720915868, guid: 0438e44b17312f746aa2fcb42dab02be, type: 3}
+  cost: 15
+  maxLevel: 4
+  upgradeEffect: {fileID: 11400000, guid: 5d26c1ccca105104287281502e8be308, type: 2}

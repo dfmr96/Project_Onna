@@ -5,42 +5,33 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyChaseState : EnemyState<BaseEnemyController>
+public class EnemyChaseState : EnemyState
 {
+  
 
-
-    private EnemyChaseSOBase chaseBehavior;
-
-
-    public EnemyChaseState(BaseEnemyController enemy, EnemyStateMachine<BaseEnemyController> fsm, EnemyChaseSOBase chaseBehavior) : base(enemy, fsm)
+    public EnemyChaseState(EnemyController enemy, EnemyStateMachine fsm) : base(enemy, fsm)
     {
-        this.chaseBehavior = chaseBehavior;
 
     }
 
     public override void EnterState()
     {
         base.EnterState();
-        //enemy.EnemyPatrolBaseInstance.DoEnterLogic();
-        chaseBehavior.DoEnterLogic();
-
+        enemy.EnemyChaseBaseInstance.DoEnterLogic();
 
     }
 
     public override void ExitState()
     {
         base.ExitState();
-        //enemy.EnemyPatrolBaseInstance.DoExitLogic();
-        chaseBehavior.DoExitLogic();
+        enemy.EnemyChaseBaseInstance.DoExitLogic();
 
     }
 
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-        //enemy.EnemyPatrolBaseInstance.DoFrameUpdateLogic();
-        chaseBehavior.DoFrameUpdateLogic();
-        //Debug.Log("Persiguiendo al jugador hacia: " + PlayerHelper.GetPlayer().transform.position);
+        enemy.EnemyChaseBaseInstance.DoFrameUpdateLogic();
 
 
     }

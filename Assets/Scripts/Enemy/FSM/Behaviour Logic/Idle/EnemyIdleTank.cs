@@ -51,7 +51,7 @@ public class EnemyIdleTank : EnemyIdleSOBase
 
     }
 
-    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+    public override void Initialize(GameObject gameObject, EnemyController enemy)
     {
         base.Initialize(gameObject, enemy);
     }

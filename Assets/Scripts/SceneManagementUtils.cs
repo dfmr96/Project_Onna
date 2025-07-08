@@ -1,12 +1,10 @@
 using System.Collections;
 using Player;
-using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class SceneManagementUtils
 {
-    private static RoomScenesData _roomData;
     public static void LoadSceneByName(string sceneName) { SceneManager.LoadScene(sceneName); }
     public static void LoadSceneByIndex(int sceneIndex) { SceneManager.LoadScene(sceneIndex); }
     public static void LoadActiveScene() { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
@@ -19,8 +17,6 @@ public static class SceneManagementUtils
 
     private static IEnumerator LazyLoad(string sceneName, GameObject loadingScreenPrefab, MonoBehaviour mono)
     {
-        if (_roomData == null) _roomData = LoadDatabase();
-        
         GameObject loadingScreen = Object.Instantiate(loadingScreenPrefab);
         Object.DontDestroyOnLoad(loadingScreen);
 
@@ -39,10 +35,8 @@ public static class SceneManagementUtils
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            RoomInfo roomInfo = _roomData.GetRoom(scene.name);
-            Debug.Log($"{scene.name} loaded with Zone: {roomInfo.Zone}, Subzone: {roomInfo.Level}");
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            loadingScreen.GetComponent<LoadingScreen>().SetLevelInfo(roomInfo.Zone, roomInfo.Level);
+            loadingScreen.GetComponent<LoadingScreen>().SetLevelName(scene.name);
             loadingScreen.GetComponent<Animator>().SetTrigger("FadeOut");
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -55,12 +49,5 @@ public static class SceneManagementUtils
         {
             yield return null;
         }
-    }
-
-    private static RoomScenesData LoadDatabase()
-    {
-        var db = Resources.Load<RoomScenesData>("RoomsDB");
-        if (db == null) Debug.LogError("No se encontró RoomDatabase en Resources.");
-        return db;
     }
 }

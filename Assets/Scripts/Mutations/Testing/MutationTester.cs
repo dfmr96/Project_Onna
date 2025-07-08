@@ -71,7 +71,7 @@ namespace Mutations.Testing
             }
 
             Debug.Log($"✅ Aplicando mutación: {effect.GetType().Name}");
-            //effect.Apply(player.StatContext.Runtime); //TODO: Implementar el método Apply en UpgradeEffect
+            effect.Apply(player.StatContext.Runtime);
 
             float val = player.StatContext.Runtime.Get(player.StatRefs.movementSpeed);
             Debug.Log($"🔍 Valor actual de movementSpeed tras aplicar: {val}");
