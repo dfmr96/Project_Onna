@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a980c3ede781443bca97b6deaac8b3, type: 3}
   m_Name: EnemyMeleeStats
   m_EditorClassIdentifier: 
-  MaxHealth: 100
+  MaxHealth: 150
   isShieldActive: 0
-  AttackDamage: 5
+  AttackDamage: 15
   AttackRange: 1.8
   combatAngle: 30.27
   obstacleCombatLayers:
@@ -26,7 +26,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   ShootForce: 15
-  moveSpeed: 6
+  moveSpeed: 8
   rotationSpeed: 400
   RandomMovementRange: 30
   radiusSpawnOrb: 1.5
