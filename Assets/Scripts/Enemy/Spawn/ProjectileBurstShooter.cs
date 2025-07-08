@@ -85,5 +85,6 @@ public class ProjectileBurstShooter : MonoBehaviour
         );
 
         _bossView?.PlayProjectilesAttackAnimation();
+        _bossView?.ShootShotgun();
     }
 }

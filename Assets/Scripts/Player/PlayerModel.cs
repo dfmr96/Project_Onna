@@ -131,14 +131,10 @@ namespace Player
                     Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
                     GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
                     textObj.GetComponent<FloatingDamageText>().Initialize(timeTaken);
-
-                  
                 }
             }
-
-            OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
-
             Debug.Log("Getting Damage");
+            OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             if (_currentTime <= 0)
                 Die();
