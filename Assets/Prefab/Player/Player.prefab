@@ -1224,6 +1224,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0e4611df-c29a-4503-aa9a-b54815d032c4
     m_ActionName: Player/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4339932572223991893}
+        m_TargetAssemblyTypeName: Player.PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0a958f4e-cbca-4059-9edc-052539c7d62f
+    m_ActionName: Player/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1246,6 +1262,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   particleDash: {fileID: 7503733378160212234}
+  pausePanelPrefab: {fileID: 7905859700189851728, guid: 928eff2e53e2eb846b4c83d4286a14f8, type: 3}
 --- !u!114 &597474821443021411
 MonoBehaviour:
   m_ObjectHideFlags: 0

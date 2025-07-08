@@ -13,6 +13,7 @@ namespace Player
         public event Action FirePerformed;
         public event Action DashPerformed;
         public event Action InteractionPerformed;
+        public event Action OnPauseGame;
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -46,6 +47,14 @@ namespace Player
             if (context.performed)
             {
                 DashPerformed?.Invoke();
+            }
+        }
+
+        public void OnPause(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnPauseGame?.Invoke();
             }
         }
     }

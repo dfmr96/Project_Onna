@@ -25,6 +25,10 @@ namespace Player
         private float _dashSpeed;
         [SerializeField] private ParticleSystem particleDash;
 
+        [Header("PAUSE GAME")]
+        [SerializeField] private GameObject pausePanelPrefab;
+        private GameObject pausePanelInstance;
+
         private Rigidbody _rb;
         
         private Vector3 _aimDirection = Vector3.forward;
@@ -74,6 +78,7 @@ namespace Player
             _playerInput = GetComponent<PlayerInput>();
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _playerInputHandler.DashPerformed += HandleDash;
+            _playerInputHandler.OnPauseGame += PauseGame;
             _rb = GetComponent<Rigidbody>();
 
             _playerInputHandler.InteractionPerformed += HandleInteraction;
@@ -124,6 +129,13 @@ namespace Player
             }
 
             Move(_direction, _playerModel.Speed);
+        }
+
+        //TO DO 
+        //SACAR ESTO DE ACA X DIOS
+        private void PauseGame()
+        {
+            pausePanelInstance = Instantiate(pausePanelPrefab);
         }
 
         private void HandleAiming(Vector2 rawInput)
