@@ -36,12 +36,16 @@ public class EnemyView : MonoBehaviour
     private float recoilSpeed = 5f;
     [SerializeField] private ParticleSystem deathParticlesPrefab;
     private float deadAngle = 40f;
+    private AudioSource audioSource;
+
+    [SerializeField] private AudioClip shootAudioClip;
 
 
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
     public Animator Animator => animator;
 
@@ -100,7 +104,7 @@ public class EnemyView : MonoBehaviour
 
         projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.statsSO.AttackDamage);
         
-
+        audioSource.PlayOneShot(shootAudioClip);
     }
 
     public void TorretShootProjectileFunc()

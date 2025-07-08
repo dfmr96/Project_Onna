@@ -10,6 +10,7 @@ public class HubManager : MonoBehaviour
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] private TextMeshProUGUI currencyText;
     [SerializeField] private GameObject storePrefab;
+    [SerializeField] private AudioClip gameMusicClip;
     private GameObject storeInstance;
     private PlayerInventory _playerInventory;
     public PlayerInventory PlayerInventory
@@ -23,6 +24,8 @@ public class HubManager : MonoBehaviour
         if (Instance != null && Instance != this) Destroy(gameObject);
         Instance = this;
     }
+
+    private void Start() { AudioManager.Instance?.PlayMusic(gameMusicClip); }
 
     public void Init()
     {

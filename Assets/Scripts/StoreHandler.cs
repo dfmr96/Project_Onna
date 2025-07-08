@@ -57,7 +57,7 @@ public class StoreHandler : MonoBehaviour
         upgradeCost.text = button.Data.Cost.ToString();
         selectedData = button.Data;
         selectedButton = button;
-        AudioManager.Instance?.PlayOneShot(buttonClickClip);
+        AudioManager.Instance?.PlaySFX(buttonClickClip);
         HandleBuyChance(selectedButton);
     }
 
@@ -117,7 +117,7 @@ public class StoreHandler : MonoBehaviour
         selectedData.UpgradeEffect?.Apply(player.StatContext.Meta);
         hub.PlayerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
         hub.UpdateCoins();
-        AudioManager.Instance?.PlayOneShot(upgradeClip);
+        AudioManager.Instance?.PlaySFX(upgradeClip);
         CheckUpgradesAvailables();
         HandleBuyChance(selectedButton);
     }

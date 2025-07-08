@@ -41,6 +41,9 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
     [SerializeField] private BossUIController bossUIController;
 
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip deathClip;
+
 
     #endregion
 
@@ -176,6 +179,8 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         {
             bossUIController.UpdatePillarHealth(i, pillars[i].CurrentHealth, pillars[i].MaxHealth);
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -251,6 +256,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     private void HandleDeath(BossModel enemy)
     {
         fsm.ChangeState(DeadState);
+        audioSource.PlayOneShot(deathClip);
     }
 
     #endregion

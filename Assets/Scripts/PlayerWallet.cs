@@ -6,11 +6,7 @@ public class PlayerWallet
     [SerializeField] private int coins;
     public int Coins => coins;
 
-    public void AddCoins(int amount)
-    {
-        coins += amount;
-        Debug.LogWarning($"Se sumaron {amount} monedas. Total: {Coins}");
-    }
+    public void AddCoins(int amount) { coins += amount; }
 
     public bool CheckCost(int ammount)
     {

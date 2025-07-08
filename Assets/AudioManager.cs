@@ -3,14 +3,23 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    private AudioSource audioSource;
+    private AudioSource musicAudioSource;
+    private AudioSource sfxAudioSource;
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
+
+        musicAudioSource = GetComponent<AudioSource>();
+        musicAudioSource.loop = true;
+        sfxAudioSource = GetComponent<AudioSource>();
     }
-    private void Start() { audioSource = GetComponent<AudioSource>(); }
-    public void PlayOneShot(AudioClip audioClip) { audioSource.PlayOneShot(audioClip); }
+    public void PlaySFX(AudioClip audioClip) { sfxAudioSource.PlayOneShot(audioClip); }
+    public void PlayMusic(AudioClip audioClip) 
+    {
+        musicAudioSource.clip = audioClip;
+        musicAudioSource.Play();
+    }
 }
