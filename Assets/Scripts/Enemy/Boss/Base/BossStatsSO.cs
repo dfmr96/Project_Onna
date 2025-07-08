@@ -7,9 +7,21 @@ public class BossStatsSO : ScriptableObject
     public float MaxHealth = 100f;
     public bool isShieldActive = false;
 
+    [Header("Combat Projectiles")]
+    public float ProjectileDamage = 5f;
+    public float ShootForce = 15f;
+    public int minProjectilesPerBurst = 3;
+    public int maxProjectilesPerBurst = 5;
+    public float delayBetweenShots = 0.2f;
+    public float delayBetweenBursts = 2f;
+    public float spreadAngle = 15f;
 
-    [Header("Combat")]
-    public float AttackDamage = 20f;
+    [Header("Combat Laser")]
+    public float LaserDamagePerSecond = 25f;
+    public float LaserTickRate = 0.2f;
+    public float LaserLenght = 20f;
+
+    [Header("Attack Range Vision")]
     public float AttackRange = 10f;
 
     [Header("Vision Combat Stats")]
@@ -20,14 +32,6 @@ public class BossStatsSO : ScriptableObject
     public float detectionRange = 10f;
     public float visionAngle = 45f;
     public LayerMask obstacleDetectionLayers;
-
-    [Header("Ranged Combat")]
-    public float ShootForce = 15f;
-
-    //[Header("Movement")]
-    //public float moveSpeed = 6f;
-    //public float rotationSpeed = 400f;
-    //public float RandomMovementRange = 30f;
 
     [Header("Pillar Stats")]
     public float PillarMaxHealth = 100f;

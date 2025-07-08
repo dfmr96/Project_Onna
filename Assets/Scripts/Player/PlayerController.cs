@@ -14,12 +14,15 @@ namespace Player
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private LayerMask groundLayer;
 
+       
+
         [Header("Dash")]
         private bool _isDashing = false;
         private float _dashEndTime = 0f;
         private float _lastDashTime = -Mathf.Infinity;
         private Vector3 _dashDirection;
-        private const float DashDurationSeconds = 0.12f;
+        private const float DashDurationSeconds = 0.2f;
+        [SerializeField] private ParticleSystem particleDash;
 
         private Rigidbody _rb;
         
@@ -76,6 +79,14 @@ namespace Player
             _playerInputHandler.FirePerformed += HandleFire;
         }
 
+        private void Start()
+        {
+            if (particleDash != null)
+            {
+                particleDash.Stop();
+            }
+        }
+
         void Update()
         {
             if (!_isReady)
@@ -94,16 +105,23 @@ namespace Player
             
             if (_isDashing)
             {
+
                 if (Time.time > _dashEndTime)
                 {
                     _isDashing = false;
                 }
                 else
                 {
+                    particleDash.Play();
                     Move(_dashDirection, _playerModel.DashDistance);
                     return;
                 }
             }
+            else
+            {
+                particleDash.Stop();
+            }
+
             Move(_direction, _playerModel.Speed);
         }
 

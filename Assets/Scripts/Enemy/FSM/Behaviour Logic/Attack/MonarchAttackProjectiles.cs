@@ -5,10 +5,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Attack-Ranged Attack Projectiles", menuName = "Enemy Logic/Boss Attack Logic/Ranged Attack With Projectiles")]
 public class MonarchAttackProjectiles : EnemyAttackSOBase
 {
-    private ProjectileBurstShooter _burstShooter;
+
+ 
+    [Header("Boss Messages")]
     [SerializeField] private float messageDuration = 4f;
     [SerializeField] List<string> bossMessage;
+
     private bool doOnce = true;
+    private ProjectileBurstShooter _burstShooter;
+
 
 
     public override void DoEnterLogic()

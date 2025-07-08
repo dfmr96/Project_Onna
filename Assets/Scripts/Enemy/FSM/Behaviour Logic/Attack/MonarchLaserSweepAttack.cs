@@ -5,14 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Attack-LaserSweep", menuName = "Enemy Logic/Boss Attack Logic/Laser Sweep")]
 public class MonarchLaserSweepAttack : EnemyAttackSOBase
 {
+
+    [Header("Laser Config")]
     [SerializeField] private float laserDuration = 5f;
     [SerializeField] private float laserCooldown = 2f;
-
     [SerializeField] private float rotationSmoothness = 2f;
     [SerializeField] private float rotationMultiply = 20f;
-    [SerializeField] private float trackingDelay = 0.5f;        
+    [SerializeField] private float trackingDelay = 0.5f;
+
+    [Header("Boss Messages")]
     [SerializeField] private float messageDuration = 4f;
     [SerializeField] List<string> bossMessage;
+
 
     private LaserDamage _laser;
     private float _elapsedTime;

@@ -7,8 +7,8 @@ using UnityEngine.AI;
 
 public class EnemyIdleJustStill : EnemyIdleSOBase
 {
-    [SerializeField] private float duration = 2f;
-    private float timer = 0f;
+    //[SerializeField] private float duration = 2f;
+    //private float timer = 0f;
 
     public override void DoEnterLogic()
     {
@@ -16,7 +16,7 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
 
-        timer = 0f;
+        //timer = 0f;
     }
 
     public override void DoExitLogic()
@@ -62,7 +62,7 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
     public override void ResetValues()
     {
         base.ResetValues();
-        _navMeshAgent.isStopped = false;
+        //_navMeshAgent.isStopped = false;
 
     }
 
