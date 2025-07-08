@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28dc6eb0af9b75449f4cc8ed32cb514, type: 3}
   m_Name: EnemyBossMonarchStats
   m_EditorClassIdentifier: 
-  MaxHealth: 300
+  MaxHealth: 1000
   isShieldActive: 0
-  ProjectileDamage: 5
+  ProjectileDamage: 15
   ShootForce: 15
   minProjectilesPerBurst: 3
   maxProjectilesPerBurst: 5
@@ -34,7 +34,7 @@ MonoBehaviour:
   obstacleDetectionLayers:
     serializedVersion: 2
     m_Bits: 256
-  PillarMaxHealth: 20
+  PillarMaxHealth: 200
   pillarRadiusSpawnOrb: 1.5
   PillarRastroOrbOnHit: 1
   pillarNumberOfOrbsOnHit: 1
