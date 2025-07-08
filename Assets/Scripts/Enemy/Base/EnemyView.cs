@@ -249,7 +249,7 @@ public class EnemyView : MonoBehaviour
     public void HandleDamage()
     {
         animator.SetTrigger("IsDamaged");
-        audioSource.PlayOneShot(damagedAudioClip);
+        audioSource?.PlayOneShot(damagedAudioClip);
     }
 
     //public void PlayDamageAnimation()
