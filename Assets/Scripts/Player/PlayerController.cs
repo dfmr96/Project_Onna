@@ -14,8 +14,6 @@ namespace Player
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private LayerMask groundLayer;
 
-       
-
         [Header("Dash")]
         private bool _isDashing = false;
         private float _dashEndTime = 0f;
@@ -24,10 +22,6 @@ namespace Player
         private const float DashDurationSeconds = 0.025f;
         private float _dashSpeed;
         [SerializeField] private ParticleSystem particleDash;
-
-        [Header("PAUSE GAME")]
-        [SerializeField] private GameObject pausePanelPrefab;
-        private GameObject pausePanelInstance;
 
         private Rigidbody _rb;
         
@@ -78,7 +72,6 @@ namespace Player
             _playerInput = GetComponent<PlayerInput>();
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _playerInputHandler.DashPerformed += HandleDash;
-            _playerInputHandler.OnPauseGame += PauseGame;
             _rb = GetComponent<Rigidbody>();
 
             _playerInputHandler.InteractionPerformed += HandleInteraction;
@@ -87,10 +80,7 @@ namespace Player
 
         private void Start()
         {
-            if (particleDash != null)
-            {
-                particleDash.Stop();
-            }
+            if (particleDash != null) { particleDash.Stop(); }
         }
 
         void Update()
@@ -123,19 +113,9 @@ namespace Player
                     return;
                 }
             }
-            else
-            {
-                particleDash.Stop();
-            }
+            else particleDash.Stop();
 
             Move(_direction, _playerModel.Speed);
-        }
-
-        //TO DO 
-        //SACAR ESTO DE ACA X DIOS
-        private void PauseGame()
-        {
-            pausePanelInstance = Instantiate(pausePanelPrefab);
         }
 
         private void HandleAiming(Vector2 rawInput)
@@ -161,32 +141,31 @@ namespace Player
             }
         }
 
-        private void Move(Vector3 direction, float speed)
-        {
-            if (direction.sqrMagnitude <= 0.01f) return;
-
-            Vector3 moveDir = direction.normalized;
-            float moveDistance = speed * Time.fixedDeltaTime;
-            Vector3 moveVector = moveDir * moveDistance;
-
-            if (_rb.SweepTest(moveDir, out RaycastHit hit, moveDistance) && !hit.collider.isTrigger)
-            {
-                float adjustedDistance = Mathf.Max(hit.distance - 0.05f, 0f);
-                Vector3 adjustedMove = moveDir * adjustedDistance;
-                _rb.MovePosition(_rb.position + adjustedMove);
-            }
-            else _rb.MovePosition(_rb.position + moveVector);
-        }
-
-        // Old move method
+        //OLD MOVE METHOD WITH COLLISION DETECTION
         //private void Move(Vector3 direction, float speed)
         //{
-        //    if (direction.sqrMagnitude > 0.01f)
+        //    if (direction.sqrMagnitude <= 0.01f) return;
+
+        //    Vector3 moveDir = direction.normalized;
+        //    float moveDistance = speed * Time.fixedDeltaTime;
+        //    Vector3 moveVector = moveDir * moveDistance;
+
+        //    if (_rb.SweepTest(moveDir, out RaycastHit hit, moveDistance) && !hit.collider.isTrigger)
         //    {
-        //        Vector3 targetPosition = _rb.position + direction.normalized * (speed * Time.fixedDeltaTime);
-        //        _rb.MovePosition(targetPosition);
+        //        float adjustedDistance = Mathf.Max(hit.distance - 0.05f, 0f);
+        //        Vector3 adjustedMove = moveDir * adjustedDistance;
+        //        _rb.MovePosition(_rb.position + adjustedMove);
         //    }
+        //    else _rb.MovePosition(_rb.position + moveVector);
         //}
+        private void Move(Vector3 direction, float speed)
+        {
+            if (direction.sqrMagnitude > 0.01f)
+            {
+                Vector3 targetPosition = _rb.position + direction.normalized * (speed * Time.fixedDeltaTime);
+                _rb.MovePosition(targetPosition);
+            }
+        }
 
         private void Rotate(Vector3 aimDirection)
         {
