@@ -363,6 +363,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statsSO: {fileID: 11400000, guid: adaf0ea2f720628449ccdae3427bcd57, type: 2}
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
+  jumpingCoinsTextPrefab: {fileID: 3376755756987271297, guid: 6ef9f7569b8aec740b0780b7df95fe24, type: 3}
+  heightCoinsTextSpawn: 2
   heightTextSpawn: 2
   healthBarPrefab: {fileID: 8508845231606679208, guid: 8623097c3dba54948ab913cd6882f592, type: 3}
   heightBarSpawn: 2.5
@@ -381,6 +383,9 @@ MonoBehaviour:
   firePoint2: {fileID: 3283853659466723465}
   turretHead: {fileID: 4480628916664112943}
   deathParticlesPrefab: {fileID: 5246763172288597999}
+  spawnParticlesPrefab: {fileID: 0}
+  shootAudioClip: {fileID: 0}
+  damagedAudioClip: {fileID: 0}
 --- !u!1001 &5363594436522755015
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -141,6 +141,27 @@ namespace Player
             }
         }
 
+        //OLD MOVE2.0 METHOD WITH COLLISION DETECTION
+        private void Move(Vector3 direction, float speed)
+        {
+            if (direction.sqrMagnitude <= 0.01f) return;
+
+            Vector3 moveDir = direction.normalized;
+            float moveDistance = speed * Time.fixedDeltaTime;
+
+            if (Physics.CapsuleCast(_rb.position, _rb.position + Vector3.up * 1.8f, 0.4f, moveDir, out RaycastHit hit, moveDistance, ~0, QueryTriggerInteraction.Ignore))
+            {
+                if (!hit.collider.isTrigger)
+                {
+                    Vector3 slideDir = Vector3.ProjectOnPlane(moveDir, hit.normal).normalized;
+                    _rb.MovePosition(_rb.position + slideDir * moveDistance);
+                    return;
+                }
+            }
+
+            _rb.MovePosition(_rb.position + moveDir * moveDistance);
+        }
+
         //OLD MOVE METHOD WITH COLLISION DETECTION
         //private void Move(Vector3 direction, float speed)
         //{
@@ -158,14 +179,14 @@ namespace Player
         //    }
         //    else _rb.MovePosition(_rb.position + moveVector);
         //}
-        private void Move(Vector3 direction, float speed)
-        {
-            if (direction.sqrMagnitude > 0.01f)
-            {
-                Vector3 targetPosition = _rb.position + direction.normalized * (speed * Time.fixedDeltaTime);
-                _rb.MovePosition(targetPosition);
-            }
-        }
+        //private void Move(Vector3 direction, float speed)
+        //{
+        //    if (direction.sqrMagnitude > 0.01f)
+        //    {
+        //        Vector3 targetPosition = _rb.position + direction.normalized * (speed * Time.fixedDeltaTime);
+        //        _rb.MovePosition(targetPosition);
+        //    }
+        //}
 
         private void Rotate(Vector3 aimDirection)
         {
