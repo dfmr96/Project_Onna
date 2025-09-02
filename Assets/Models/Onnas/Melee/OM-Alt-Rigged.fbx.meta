@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d8c54d72c75b2444a80abb7a41990d4a
+guid: 2d7071b124aab4e4fb5f44ca853f0997
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,33 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: BLACK
-    second: {fileID: 2100000, guid: 7c2da580fa35869478b77de97b73fac8, type: 2}
+      name: OM-BASE
+    second: {fileID: 2100000, guid: b09d319636a1ce24e8454afd68df982f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: BLUE
-    second: {fileID: 2100000, guid: e85153a408df8084ea5d23c9ca39000d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: GREEN
-    second: {fileID: 2100000, guid: 73a5ce5c1c63463499073c21a95e3348, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: PURPLE
-    second: {fileID: 2100000, guid: 8712bb398461bf841ae9e81cd2328f1e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: RED
-    second: {fileID: 2100000, guid: b1a661da165514e429c42d1fc7678c06, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: YELLOW
-    second: {fileID: 2100000, guid: b74272959f43b374c9ace6ffc8a63420, type: 2}
+      name: WHITE
+    second: {fileID: 2100000, guid: 7d66d24860b1a7648b9388c0155baffc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -54,7 +34,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -123,13 +103,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
