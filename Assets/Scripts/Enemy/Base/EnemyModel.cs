@@ -23,6 +23,8 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
     [Header("Floating Damage Text Effect")]
     [SerializeField] private GameObject floatingTextPrefab;
+    [SerializeField] private GameObject jumpingCoinsTextPrefab;
+    [SerializeField] private float heightCoinsTextSpawn = 2f;
     [SerializeField] private float heightTextSpawn = 2f;
 
     [Header("Health bar")]
@@ -69,7 +71,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
         UpdateHealthBar();
 
-        // Mostrar texto flotante
+        //Mostrar texto flotante Daño
         if (floatingTextPrefab != null)
         {
             Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
@@ -99,6 +101,14 @@ public class EnemyModel : MonoBehaviour, IDamageable
         if (RunData.CurrentCurrency != null)
         {
             RunData.CurrentCurrency.AddCoins(statsSO.CoinsToDrop);
+
+            //Mostrar texto flotante Coins
+            if (jumpingCoinsTextPrefab != null)
+            {
+                Vector3 spawnPos = transform.position + Vector3.up * heightCoinsTextSpawn;
+                GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
+                textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
+            }
 
         }
         OnDeath?.Invoke(this);

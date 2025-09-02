@@ -24,6 +24,8 @@ public class BossModel : MonoBehaviour, IDamageable
     [Header("Floating Damage Text Effect")]
     [SerializeField] private GameObject floatingTextPrefab;
     [SerializeField] private float heightTextSpawn = 2f;
+    [SerializeField] private GameObject jumpingCoinsTextPrefab;
+    [SerializeField] private float heightCoinsTextSpawn = 2f;
 
     //[Header("Health bar")]
     //[SerializeField] private GameObject healthBarPrefab;
@@ -31,7 +33,7 @@ public class BossModel : MonoBehaviour, IDamageable
     //private Transform healthBar;
     //private Transform healthFill;
 
-    
+
     private void Start()
     {
         MaxHealth = statsSO.MaxHealth;
@@ -52,6 +54,7 @@ public class BossModel : MonoBehaviour, IDamageable
             Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
             GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
             textObj.GetComponent<FloatingDamageText>().Initialize(text, lifeTime);
+
         }
     }
     public void TakeDamage(float damageAmount)
@@ -116,6 +119,14 @@ public class BossModel : MonoBehaviour, IDamageable
         if (RunData.CurrentCurrency != null)
         {
             RunData.CurrentCurrency.AddCoins(statsSO.CoinsToDrop);
+
+            //Mostrar texto flotante Coins
+            if (jumpingCoinsTextPrefab != null)
+            {
+                Vector3 spawnPos = transform.position + Vector3.up * heightCoinsTextSpawn;
+                GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
+                textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
+            }
 
         }
         OnDeath?.Invoke(this);
