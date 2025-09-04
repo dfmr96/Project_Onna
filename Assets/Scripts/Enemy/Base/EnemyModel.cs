@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Enemy.Spawn;
 using Player.Stats.Runtime;
 using UnityEngine;
-//using VContainer;
 
 
 
@@ -28,19 +27,6 @@ public class EnemyModel : MonoBehaviour, IDamageable
     [SerializeField] private GameObject jumpingCoinsTextPrefab;
     [SerializeField] private float heightCoinsTextSpawn = 2f;
     [SerializeField] private float heightTextSpawn = 2f;
-
-    //private FloatingDamageText floatingTextPrefab;
-    //private JumpingCoinsText jumpingCoinsTextPrefab;
-
-    //[Inject]
-    //public void Construct(FloatingDamageText floatingTextPrefab, JumpingCoinsText jumpingCoinsTextPrefab)
-    //{
-    //    this.floatingTextPrefab = floatingTextPrefab;
-    //    this.jumpingCoinsTextPrefab = jumpingCoinsTextPrefab;
-
-    //    Debug.Log("Floating prefab inyectado: " + (floatingTextPrefab != null));
-    //    Debug.Log("Coins prefab inyectado: " + (jumpingCoinsTextPrefab != null));
-    //}
 
     [Header("Health bar")]
     [SerializeField] private GameObject healthBarPrefab;
@@ -71,7 +57,6 @@ public class EnemyModel : MonoBehaviour, IDamageable
     {
         if (enemy.GetShield()) return;
 
-        //Debug.Log("Damagen received: " + damageAmount);
         if (statsSO.RastroOrbOnHit && orbSpawner != null)
         {
             for (int i = 0; i < statsSO.numberOfOrbsOnHit; i++)
@@ -93,8 +78,6 @@ public class EnemyModel : MonoBehaviour, IDamageable
             GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
             textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
 
-            //var textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-            //textObj.Initialize(damageAmount);
         }
 
         if (CurrentHealth <= 0) Die();
@@ -127,8 +110,6 @@ public class EnemyModel : MonoBehaviour, IDamageable
                 GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
                 textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
 
-                //var textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
-                //textObj.Initialize(statsSO.CoinsToDrop);
             }
 
         }
