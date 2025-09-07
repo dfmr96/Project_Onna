@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7322891865410476109
+--- !u!114 &-6911716244608760545
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CelShadingTest
-  m_Shader: {fileID: -6465566751694194690, guid: de2333287e5f68e4495718fdf9aa5421, type: 3}
+  m_Name: CelChsadinTest2 2
+  m_Shader: {fileID: -6465566751694194690, guid: 6473e21d35318bc4986a169de9410ac8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -76,7 +76,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Shadin_Ramp:
+    - _Shader_Ramp:
         m_Texture: {fileID: 2800000, guid: f31ea646e55177c46b85181a44a20654, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -132,8 +132,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Dark_Color: {r: 0.21626909, g: 0.38285324, b: 0.4716981, a: 0}
+    - _DarkColor: {r: 0.2830189, g: 0.23317909, b: 0.18956925, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Lit_Color: {r: 0.1769241, g: 0.30163574, b: 0.3735848, a: 0}
+    - _LitColor: {r: 0.16226411, g: 0.12930918, b: 0.098889254, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
