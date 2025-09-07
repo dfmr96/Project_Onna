@@ -15,6 +15,7 @@ public class EnemyView : MonoBehaviour
 
     private float _distanceToCountExit = 3f;
 
+    private Coroutine flashCoroutine = null;
     private Renderer targetRenderer; 
     private Color flashColor = Color.white;
     private float flashDuration = 0.1f;
@@ -27,6 +28,8 @@ public class EnemyView : MonoBehaviour
     //for enemy torret
     private bool useFirstFirePoint = true;
     //Cambiar mas adelante
+    private Coroutine recoilCoroutine;
+
     public Transform firePoint2;
     public Transform turretHead;
     private Quaternion initialRotation;
@@ -69,7 +72,7 @@ public class EnemyView : MonoBehaviour
         targetRenderer = GetComponentInChildren<Renderer>();
 
         material = targetRenderer.material;
-        originalColor = material.GetColor("_Color");
+        originalColor = material.color;
 
         //torret
         initialRotation = turretHead.localRotation;
@@ -156,7 +159,9 @@ public class EnemyView : MonoBehaviour
     {
         if (turretHead == null) return;
 
-        StopAllCoroutines(); // Detener recoil anteriores
+        if (recoilCoroutine != null)
+            StopCoroutine(recoilCoroutine);
+        
         StartCoroutine(RecoilCoroutine());
     }
 
@@ -272,17 +277,26 @@ public class EnemyView : MonoBehaviour
 
     public void PlayDamageEffect()
     {
-        StartCoroutine(FlashCoroutine());
 
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+        }
+
+        material.color = originalColor;
+
+        flashCoroutine = StartCoroutine(FlashCoroutine());
     }
 
     private IEnumerator FlashCoroutine()
     {
-        material.SetColor("_Color", flashColor);
-
+        material.color = flashColor;
         yield return new WaitForSeconds(flashDuration);
+        material.color = originalColor;
+        flashCoroutine = null;
 
-        material.SetColor("_Color", originalColor);
+
+
     }
 }
 
