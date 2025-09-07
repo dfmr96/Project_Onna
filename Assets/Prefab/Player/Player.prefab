@@ -718,13 +718,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
-    'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform 'mixamorig:RightArm'\n\tTransform
-    'mixamorig:LeftLeg'\n\tTransform 'mixamorig:LeftShoulder'\n\tTransform 'mixamorig:RightFoot'\n\tTransform
-    'mixamorig:Head'\n\tTransform 'mixamorig:LeftUpLeg'\n\tand more ...\n\tFrom animation
-    clip 'Pistol Strafe Left'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1262,7 +1256,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   particleDash: {fileID: 7503733378160212234}
-  pausePanelPrefab: {fileID: 7905859700189851728, guid: 928eff2e53e2eb846b4c83d4286a14f8, type: 3}
 --- !u!114 &597474821443021411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1652,14 +1645,14 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6208646447134160744, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: 2100000, guid: fa39eaba9267ae748aa7a279c43752e6, type: 2}
   - {fileID: 1788269377728665300, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: 1546698591103355196, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
-  - {fileID: -7553255600785431401, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
-  - {fileID: 2843458586951752533, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: 2100000, guid: 9fde7833bc9512647ab452e39ae43cb0, type: 2}
+  - {fileID: 2100000, guid: a95339ddf17bfe744a7bc96e4def07f9, type: 2}
   - {fileID: 1871964995938752917, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: 2899781441393906059, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
-  - {fileID: -7516014009013606798, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: 2100000, guid: a95339ddf17bfe744a7bc96e4def07f9, type: 2}
   - {fileID: -1300646908919207460, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: -4115205817925291450, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: -2455235682004149424, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
