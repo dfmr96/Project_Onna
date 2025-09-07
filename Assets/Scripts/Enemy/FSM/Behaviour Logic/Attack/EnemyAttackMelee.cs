@@ -6,26 +6,26 @@ public class EnemyAttackMelee : EnemyAttackSOBase
 {
     private bool _hasAttackedOnce = false;
 
-    //private enum AttackColorState { None, FadeIn, FadeOut }
-    //private AttackColorState _colorState = AttackColorState.None;
+    private enum AttackColorState { None, FadeIn, FadeOut }
+    private AttackColorState _colorState = AttackColorState.None;
 
     //private bool _isAttacking = false;
     private float _attackAnimationTimer = 0f;
 
-    //[Header("Visual")]
-    //[SerializeField] private Color attackColor = Color.red;
-    //[SerializeField] private float fadeDuration = 0.5f; 
+    [Header("Visual")]
+    [SerializeField] private Color attackColor = Color.red;
+    [SerializeField] private float fadeDuration = 0.5f; 
 
 
     public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
 
-        //_enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
-        //if (_enemyRenderer != null)
-        //{
-        //    _originalColor = _enemyRenderer.material.color;
-        //}
+        _enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
+        if (_enemyRenderer != null)
+        {
+            _originalColor = _enemyRenderer.material.color;
+        }
     }
 
     public override void DoEnterLogic()
@@ -40,9 +40,9 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _hasAttackedOnce = false;
         //_isAttacking = false;
         _attackAnimationTimer = 0f;
-        //_colorState = AttackColorState.None;
+        _colorState = AttackColorState.None;
 
-        //ResetColor();
+        ResetColor();
 
 
         _navMeshAgent.isStopped = true;
@@ -54,7 +54,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     {
         base.DoExitLogic();
 
-        //ResetColor();
+        ResetColor();
         _enemyView.PlayAttackAnimation(false);
 
         _enemyModel.OnHealthChanged -= HandleHealthChanged;
@@ -63,7 +63,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
 
         _hasAttackedOnce = false;
         //_isAttacking = false;
-        //_colorState = AttackColorState.None;
+        _colorState = AttackColorState.None;
 
         _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed;
         _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
@@ -77,37 +77,37 @@ public class EnemyAttackMelee : EnemyAttackSOBase
 
         if (distanceToPlayer > _distanceToCountExit)
         {
-            //ResetColor();
+            ResetColor();
             _enemyView.PlayAttackAnimation(false);
             enemy.fsm.ChangeState(enemy.SearchState);
             return;
         }
 
         // === Manejo del color en degradé ===
-        //switch (_colorState)
-        //{
-        //    case AttackColorState.FadeIn:
-        //        _attackAnimationTimer += Time.deltaTime;
-        //        UpdateAttackColorEffect(_attackAnimationTimer / fadeDuration);
-        //        if (_attackAnimationTimer >= fadeDuration)
-        //            _attackAnimationTimer = fadeDuration;
-        //        break;
+        switch (_colorState)
+        {
+            case AttackColorState.FadeIn:
+                _attackAnimationTimer += Time.deltaTime;
+                UpdateAttackColorEffect(_attackAnimationTimer / fadeDuration);
+                if (_attackAnimationTimer >= fadeDuration)
+                    _attackAnimationTimer = fadeDuration;
+                break;
 
-        //    case AttackColorState.FadeOut:
-        //        _attackAnimationTimer += Time.deltaTime;
-        //        UpdateAttackColorEffect(1f - (_attackAnimationTimer / fadeDuration));
-        //        if (_attackAnimationTimer >= fadeDuration)
-        //        {
-        //            _attackAnimationTimer = 0f;
-        //            _colorState = AttackColorState.None;
-        //            ResetColor();
-        //        }
-        //        break;
+            case AttackColorState.FadeOut:
+                _attackAnimationTimer += Time.deltaTime;
+                UpdateAttackColorEffect(1f - (_attackAnimationTimer / fadeDuration));
+                if (_attackAnimationTimer >= fadeDuration)
+                {
+                    _attackAnimationTimer = 0f;
+                    _colorState = AttackColorState.None;
+                    ResetColor();
+                }
+                break;
 
-        //    default:
-        //        ResetColor();
-        //        break;
-        //}
+            default:
+                ResetColor();
+                break;
+        }
 
         // === Lógica de ataques ===
         if (!_hasAttackedOnce)
@@ -151,13 +151,13 @@ public class EnemyAttackMelee : EnemyAttackSOBase
 
     private void OnAttackStarted()
     {
-        //_colorState = AttackColorState.FadeIn;
+        _colorState = AttackColorState.FadeIn;
         _attackAnimationTimer = 0f;
     }
 
     private void OnAttackImpact()
     {
-        //_colorState = AttackColorState.FadeOut;
+        _colorState = AttackColorState.FadeOut;
         _attackAnimationTimer = 0f;
     }
 
@@ -169,20 +169,20 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         }
     }
 
-    //private void UpdateAttackColorEffect(float t)
-    //{
-    //    if (_enemyRenderer == null) return;
+    private void UpdateAttackColorEffect(float t)
+    {
+        if (_enemyRenderer == null) return;
 
-    //    t = Mathf.Clamp01(t);
-    //    //Color lerpedColor = Color.Lerp(_originalColor, attackColor, t);
-    //    _enemyRenderer.material.color = lerpedColor;
-    //}
+        t = Mathf.Clamp01(t);
+        Color lerpedColor = Color.Lerp(_originalColor, attackColor, t);
+        _enemyRenderer.material.color = lerpedColor;
+    }
 
-    //private void ResetColor()
-    //{
-    //    if (_enemyRenderer != null)
-    //    {
-    //        _enemyRenderer.material.color = _originalColor;
-    //    }
-    //}
+    private void ResetColor()
+    {
+        if (_enemyRenderer != null)
+        {
+            _enemyRenderer.material.color = _originalColor;
+        }
+    }
 }

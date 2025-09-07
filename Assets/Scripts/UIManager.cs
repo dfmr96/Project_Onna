@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
     private void UpdateTimeUI(float timePercent) 
     {
         timeCircle.fillAmount = timePercent;
-        //Debug.Log(timePercent);
+        Debug.Log(timePercent);
     }
 
     private void UpdateWeaponCooldown(int actualAmmo, int totalAmmo)

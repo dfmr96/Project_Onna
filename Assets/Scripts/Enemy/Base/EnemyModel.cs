@@ -6,7 +6,6 @@ using Player.Stats.Runtime;
 using UnityEngine;
 
 
-
 public class EnemyModel : MonoBehaviour, IDamageable
 {
     [Header("Stats Config")]
@@ -57,6 +56,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
     {
         if (enemy.GetShield()) return;
 
+        //Debug.Log("Damagen received: " + damageAmount);
         if (statsSO.RastroOrbOnHit && orbSpawner != null)
         {
             for (int i = 0; i < statsSO.numberOfOrbsOnHit; i++)
@@ -74,10 +74,9 @@ public class EnemyModel : MonoBehaviour, IDamageable
         //Mostrar texto flotante Daño
         if (floatingTextPrefab != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
+            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
             GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
             textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
-
         }
 
         if (CurrentHealth <= 0) Die();
@@ -109,7 +108,6 @@ public class EnemyModel : MonoBehaviour, IDamageable
                 Vector3 spawnPos = transform.position + Vector3.up * heightCoinsTextSpawn;
                 GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
                 textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
-
             }
 
         }
