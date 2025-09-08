@@ -10,8 +10,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image timeCircle;
     [SerializeField] private Image weaponOverheat;
     [SerializeField] private Image weaponCooling;
-    
-    
+
+
     //private CooldownSettings _coolingSettings;
     private float targetCooldownFill;
     private float fillSpeed = 2f;
@@ -23,9 +23,10 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerModel.OnUpdateTime += UpdateTimeUI; 
-        WeaponController.OnShoot += UpdateWeaponCooldown;
+        PlayerModel.OnUpdateTime += UpdateTimeUI;
+        //WeaponController.OnShoot += UpdateWeaponCooldown;
         //WeaponController.OnCooling += UpdateCoolingCooldown;
+        WeaponController.OnShoot += UpdateBulletsLeft;
 
         var player = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
         if (player != null)
@@ -37,8 +38,10 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerModel.OnUpdateTime -= UpdateTimeUI; 
-        WeaponController.OnShoot -= UpdateWeaponCooldown;
+        PlayerModel.OnUpdateTime -= UpdateTimeUI;
+        WeaponController.OnShoot -= UpdateBulletsLeft;
+
+        //WeaponController.OnShoot -= UpdateWeaponCooldown;
         //WeaponController.OnCooling -= UpdateCoolingCooldown;
     }
     private void Update()
@@ -52,39 +55,53 @@ public class UIManager : MonoBehaviour
             );
         }
     }
-    private void UpdateTimeUI(float timePercent) 
+
+
+
+    private void UpdateTimeUI(float timePercent)
     {
         timeCircle.fillAmount = timePercent;
         //Debug.Log(timePercent);
     }
 
-    private void UpdateWeaponCooldown(int actualAmmo, int totalAmmo)
+
+
+    private void UpdateBulletsLeft(int actualAmmo, int totalAmmo)
     {
-        targetCooldownFill = 1f - (float)actualAmmo / totalAmmo;
+
     }
 
-    private void UpdateCoolingCooldown(float coolingTimer, float coolingCooldown)
-    {
-        //Debug.Log(coolingTimer + "/" + coolingCooldown);
-        weaponCooling.fillAmount = 1f - (coolingTimer / coolingCooldown);
-        
-        /*if (_coolingSettings == null)
-        {
-            _coolingSettings = coolingSettings;
-            Debug.Log("Cooling settings set");
-        }
-        
-        float coolingCooldown = _coolingSettings.CoolingCooldown;
-        float coolingTimer = 0;
-        
-        Debug.Log("Pre Cooling timer: " + coolingTimer);
-        while (coolingTimer < coolingCooldown)
-        {
-            coolingTimer += Time.deltaTime;
-            weaponCooling.fillAmount = 1f - (coolingTimer / coolingCooldown);
-            
-        }
-        weaponCooling.fillAmount = 0;
-        Debug.Log("Post Cooling timer: " + coolingTimer);*/
-    }
 }
+
+
+
+    //private void UpdateWeaponCooldown(int actualAmmo, int totalAmmo)
+    //{
+    //    targetCooldownFill = 1f - (float)actualAmmo / totalAmmo;
+    //}
+
+    //private void UpdateCoolingCooldown(float coolingTimer, float coolingCooldown)
+    //{
+    //    //Debug.Log(coolingTimer + "/" + coolingCooldown);
+    //    weaponCooling.fillAmount = 1f - (coolingTimer / coolingCooldown);
+
+    //    /*if (_coolingSettings == null)
+    //    {
+    //        _coolingSettings = coolingSettings;
+    //        Debug.Log("Cooling settings set");
+    //    }
+
+    //    float coolingCooldown = _coolingSettings.CoolingCooldown;
+    //    float coolingTimer = 0;
+
+    //    Debug.Log("Pre Cooling timer: " + coolingTimer);
+    //    while (coolingTimer < coolingCooldown)
+    //    {
+    //        coolingTimer += Time.deltaTime;
+    //        weaponCooling.fillAmount = 1f - (coolingTimer / coolingCooldown);
+
+    //    }
+    //    weaponCooling.fillAmount = 0;
+    //    Debug.Log("Post Cooling timer: " + coolingTimer);*/
+    //}
+
