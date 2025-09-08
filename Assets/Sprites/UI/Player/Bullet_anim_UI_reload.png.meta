@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 47e6a84546f66c74ca56443e6431899d
+guid: a0287db917970344ca864289d5b60399
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HP_Bar_n_Bullets_0
+      name: Bullet_anim_UI_reload_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 151
-        width: 101
-        height: 101
+        x: 0
+        y: 0
+        width: 32
+        height: 47
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed8012f48b2ac0a4da7cb8d4d8432e3f
-      internalID: -1384653630
+      spriteID: b9e3e47a44041544b8ce99614e23cbf2
+      internalID: -1177271392
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HP_Bar_n_Bullets_1
+      name: Bullet_anim_UI_reload_1
       rect:
         serializedVersion: 2
-        x: 18
-        y: 72
-        width: 77
-        height: 72
+        x: 32
+        y: 0
+        width: 32
+        height: 47
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 30a56c943242b9649a08c235e1e06ecf
-      internalID: 75072743
+      spriteID: a88a7a18253a79f478f13788ec9abdaf
+      internalID: 1965131237
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HP_Bar_n_Bullets_2
+      name: Bullet_anim_UI_reload_2
       rect:
         serializedVersion: 2
-        x: 120
-        y: 196
-        width: 15
-        height: 27
+        x: 64
+        y: 0
+        width: 32
+        height: 47
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7c165b346e4ea644fadeada184a98741
-      internalID: 918815670
+      spriteID: 2567509239984aa40867de9b1ffa8e1d
+      internalID: 1574285136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HP_Bar_n_Bullets_3
+      name: Bullet_anim_UI_reload_3
       rect:
         serializedVersion: 2
-        x: 169
-        y: 196
-        width: 14
-        height: 27
+        x: 96
+        y: 0
+        width: 32
+        height: 47
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,8 +187,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 113bfaf5bfc377845b8b830f90221bd8
-      internalID: 196747158
+      spriteID: 00caae4c8548a0449ada0218b69ad195
+      internalID: -490896266
       vertices: []
       indices: 
       edges: []
@@ -196,7 +196,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: c0e7139e6c6f0df4f80e653bfcc4d269
     internalID: 0
     vertices: []
     indices: 
@@ -204,10 +204,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      HP_Bar_n_Bullets_0: -1384653630
-      HP_Bar_n_Bullets_1: 75072743
-      HP_Bar_n_Bullets_2: 918815670
-      HP_Bar_n_Bullets_3: 196747158
+      Bullet_anim_UI_reload_0: -1177271392
+      Bullet_anim_UI_reload_1: 1965131237
+      Bullet_anim_UI_reload_2: 1574285136
+      Bullet_anim_UI_reload_3: -490896266
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

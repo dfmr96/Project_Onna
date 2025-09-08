@@ -19,9 +19,11 @@ namespace Player.Weapon
         //[SerializeField] private CooldownSettings cooldownSettings;
         [BoxGroup("Ammo")] 
         [SerializeField] private AmmoSettings ammoSettings;
+        public AmmoSettings AmmoSettings => ammoSettings;
 
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private int currentAmmo;
+        public int CurrentAmmo => currentAmmo;
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private bool canFire = true;
         [BoxGroup("Runtime Debug"), ReadOnly]
