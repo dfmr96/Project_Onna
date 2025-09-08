@@ -40,7 +40,6 @@ namespace Player
             if (context.performed)
             {
                 ReloadPerformed?.Invoke();
-                Debug.Log("RECERGA");
             }
         }
 

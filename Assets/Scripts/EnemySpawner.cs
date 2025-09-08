@@ -2,11 +2,15 @@ using UnityEngine;
 using System;
 using UnityEngine.AI;
 using Player;
+using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
+
+    [SerializeField] private float initialDelaySpawn = 3f;
+    [SerializeField] private float particleLifeTime = 4f;
+    [SerializeField] private GameObject spawnParticlesPrefab;
     [SerializeField] private GameObject mutationCanvasPrefab;
-    
     [SerializeField] private EnemySpawnInfo[] enemiesToSpawn;
     [SerializeField] private int wavesQuantity = 3;
     [SerializeField] private Transform[] spawnPoints;
@@ -23,15 +27,36 @@ public class EnemySpawner : MonoBehaviour
     private void Start() 
     {
         playerTransform = PlayerHelper.GetPlayer().transform;
+    
         StartWave();
     }
+
+
+
     public void StartWave()
     {
         actualWave++;
         Vector3 randomPosition;
         if (TryGetRandomNavMeshPosition(out randomPosition))
             transform.position = randomPosition;
-        else Debug.LogWarning("No se encontr� posici�n v�lida sobre el NavMesh.");
+        else Debug.LogWarning("No se encontro posicion valida sobre el NavMesh");
+
+
+        if (spawnParticlesPrefab != null)
+        {
+            Vector3 spawnPos = transform.position;
+            GameObject particles = Instantiate(spawnParticlesPrefab, spawnPos, Quaternion.Euler(-90f, 0f, 0f));
+
+            Destroy(particles, particleLifeTime);
+        }
+
+        StartCoroutine(DelayedStartWave());
+
+    }
+
+    private IEnumerator DelayedStartWave()
+    {
+        yield return new WaitForSeconds(initialDelaySpawn);
 
         for (int i = 0; i < spawnPoints.Length; i++)
         {
@@ -41,6 +66,8 @@ public class EnemySpawner : MonoBehaviour
             enemiesQuantity++;
         }
     }
+
+
     private bool TryGetRandomNavMeshPosition(out Vector3 result)
     {
         for (int i = 0; i < maxTries; i++)

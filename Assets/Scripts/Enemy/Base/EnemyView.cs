@@ -38,7 +38,6 @@ public class EnemyView : MonoBehaviour
     private float recoilDistance = 2f;
     private float recoilSpeed = 5f;
     [SerializeField] private ParticleSystem deathParticlesPrefab;
-    [SerializeField] private GameObject spawnParticlesPrefab;
 
     private float deadAngle = 40f;
     private AudioSource audioSource;
@@ -53,13 +52,7 @@ public class EnemyView : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        if (spawnParticlesPrefab != null)
-        {
-            Vector3 spawnPos = transform.position;
-            GameObject particles = Instantiate(spawnParticlesPrefab, spawnPos, Quaternion.Euler(-90f,0f,0f));
-
-            Destroy(particles, 1f);
-        }
+        
     }
     public Animator Animator => animator;
 
