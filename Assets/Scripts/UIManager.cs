@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image weaponCooling;
     
     
-    private CooldownSettings _coolingSettings;
+    //private CooldownSettings _coolingSettings;
     private float targetCooldownFill;
     private float fillSpeed = 2f;
     private void Awake()
@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
     {
         PlayerModel.OnUpdateTime += UpdateTimeUI; 
         WeaponController.OnShoot += UpdateWeaponCooldown;
-        WeaponController.OnCooling += UpdateCoolingCooldown;
+        //WeaponController.OnCooling += UpdateCoolingCooldown;
 
         var player = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
         if (player != null)
@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour
     {
         PlayerModel.OnUpdateTime -= UpdateTimeUI; 
         WeaponController.OnShoot -= UpdateWeaponCooldown;
-        WeaponController.OnCooling -= UpdateCoolingCooldown;
+        //WeaponController.OnCooling -= UpdateCoolingCooldown;
     }
     private void Update()
     {

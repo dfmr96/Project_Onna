@@ -11,6 +11,7 @@ namespace Player
         public Vector2 RawAimInput { get; private set; }
 
         public event Action FirePerformed;
+        public event Action ReloadPerformed;
         public event Action DashPerformed;
         public event Action InteractionPerformed;
         public event Action OnPauseGame;
@@ -33,6 +34,17 @@ namespace Player
                 FirePerformed?.Invoke();
             }
         }
+
+        public void OnReload(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                ReloadPerformed?.Invoke();
+                Debug.Log("RECERGA");
+            }
+        }
+
+        
 
         public void OnInteract(InputAction.CallbackContext context)
         {

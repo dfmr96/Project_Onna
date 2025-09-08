@@ -9,12 +9,14 @@ namespace Player.Weapon
     public class WeaponController : MonoBehaviour
     {
         public static event Action<int, int> OnShoot;
-        public static event Action<float, float> OnCooling;
+        //public static event Action<float, float> OnCooling;
+        public static event Action<float, float> OnReloading;
+
 
         [BoxGroup("Bullet")] 
         [SerializeField] private BulletSettings bulletSetting;
-        [BoxGroup("Cooldown")] 
-        [SerializeField] private CooldownSettings cooldownSettings;
+        //[BoxGroup("Cooldown")] 
+        //[SerializeField] private CooldownSettings cooldownSettings;
         [BoxGroup("Ammo")] 
         [SerializeField] private AmmoSettings ammoSettings;
 
@@ -22,6 +24,8 @@ namespace Player.Weapon
         [SerializeField] private int currentAmmo;
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private bool canFire = true;
+        [BoxGroup("Runtime Debug"), ReadOnly]
+        [SerializeField] private bool isReloading = false;
 
         [BoxGroup("Laser Effect")]
         [SerializeField] private ParticleSystem laserGunParticlesPrefab;
@@ -39,10 +43,15 @@ namespace Player.Weapon
         private AudioSource audioSource;
 
 
-        private Coroutine _coolingCooldownCoroutine;
+        //private Coroutine _coolingCooldownCoroutine;
         private PlayerModel _playerModel;
 
-        public CooldownSettings Settings => cooldownSettings;
+        //public CooldownSettings Settings => cooldownSettings;
+
+
+        //Hardcodeado: Cambiar
+        private float fireRate = 0.2f;
+        private float reloadTime = 1f;
 
         private void OnEnable()
         {
@@ -86,6 +95,11 @@ namespace Player.Weapon
         private void Update()
         {
             LaserEffect();
+
+            //if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentAmmo < ammoSettings.MaxAmmo)
+            //{
+            //    StartCoroutine(Reload());
+            //}
         }
 
         private void OnPlayerReady(PlayerInitializedSignal signal)
@@ -94,15 +108,25 @@ namespace Player.Weapon
 
             var stats = _playerModel.StatContext.Source;
             var refs = _playerModel.StatRefs;
-            Settings.Init(stats, refs);
+            //Settings.Init(stats, refs);
             bulletSetting.Init(stats, refs);
             ammoSettings.Init(stats, refs);
             currentAmmo = (int)ammoSettings.MaxAmmo;
         }
 
+        public void Reloading()
+        {
+            if (!isReloading && currentAmmo != ammoSettings.MaxAmmo)
+            {
+                StartCoroutine(Reload());
+            }
+        }
+
         public void Attack()
         {
-            if (!canFire || currentAmmo <= 0) return;
+            //if (!canFire || currentAmmo <= 0) return;
+            if (!canFire || isReloading || currentAmmo <= 0) return;
+
 
             FireBullet();
             currentAmmo--;
@@ -110,12 +134,14 @@ namespace Player.Weapon
 
             if (currentAmmo <= 0)
             {
-                StartOverheatCooldown();
+                //StartOverheatCooldown();
+                StartCoroutine(Reload());
+
             }
             else
             {
                 StartCoroutine(FireRateCooldown());
-                StartCoolingCooldown();
+                //StartCoolingCooldown();
             }
         }
 
@@ -133,74 +159,97 @@ namespace Player.Weapon
             audioSource.PlayOneShot(shootFx);
         }
 
-        private void StartCoolingCooldown()
-        {
-            if (_coolingCooldownCoroutine == null)
-            {
-                Debug.Log("Cooling cooldown Called");
-            }
-            else
-            {
-                StopCoroutine(_coolingCooldownCoroutine);
-                Debug.Log("Cooling cooldown restarted");
-            }
-            _coolingCooldownCoroutine = StartCoroutine(CoolingCooldown());
-        }
+        //private void StartCoolingCooldown()
+        //{
+        //    if (_coolingCooldownCoroutine == null)
+        //    {
+        //        Debug.Log("Cooling cooldown Called");
+        //    }
+        //    else
+        //    {
+        //        StopCoroutine(_coolingCooldownCoroutine);
+        //        Debug.Log("Cooling cooldown restarted");
+        //    }
+        //    _coolingCooldownCoroutine = StartCoroutine(CoolingCooldown());
+        //}
 
-        private void StopCoolingCooldown()
-        {
-            if (_coolingCooldownCoroutine != null)
-            {
-                StopCoroutine(_coolingCooldownCoroutine);
+        //private void StopCoolingCooldown()
+        //{
+        //    if (_coolingCooldownCoroutine != null)
+        //    {
+        //        StopCoroutine(_coolingCooldownCoroutine);
                 
-                Debug.Log("Cooling cooldown stopped");
-                _coolingCooldownCoroutine = null;
-            }
-        }
+        //        Debug.Log("Cooling cooldown stopped");
+        //        _coolingCooldownCoroutine = null;
+        //    }
+        //}
 
-        private void StartOverheatCooldown()
-        {
-            StopCoolingCooldown();
-            StartCoroutine(OverheatCooldown());
-            audioSource?.PlayOneShot(overheathFx);
-        }
+        //private void StartOverheatCooldown()
+        //{
+        //    StopCoolingCooldown();
+        //    StartCoroutine(OverheatCooldown());
+        //    audioSource?.PlayOneShot(overheathFx);
+        //}
 
         private IEnumerator FireRateCooldown()
         {
             canFire = false;
-            yield return new WaitForSeconds(Settings.FireRate);
+            //yield return new WaitForSeconds(Settings.FireRate);
+            yield return new WaitForSeconds(fireRate);
+
             canFire = true;
         }
 
-        private IEnumerator OverheatCooldown()
+        private IEnumerator Reload()
         {
-            Debug.Log("Overheat cooldown Called");
-            OnCooling?.Invoke(Settings.CoolingCooldown, Settings.CoolingCooldown);
-            Debug.Log("OnCooling event called");
+            isReloading = true;
             canFire = false;
-            yield return new WaitForSeconds(Settings.OverheatCooldown);
-            currentAmmo = (int)ammoSettings.MaxAmmo;
-            
-            OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
-            canFire = true;
-            Debug.Log("Overheat cooldown Finished");
-        }
+            audioSource?.PlayOneShot(overheathFx);
 
-        private IEnumerator CoolingCooldown()
-        {
-            float coolingTimer = 0f;
-            
-            while (coolingTimer < Settings.CoolingCooldown)
+            float timer = 0f;
+            while (timer < reloadTime)
             {
-                coolingTimer += Time.deltaTime;
-                OnCooling?.Invoke(coolingTimer, Settings.CoolingCooldown);
+                timer += Time.deltaTime;
+                //OnReloading?.Invoke(timer, reloadTime); // para UI (barra de recarga)
                 yield return null;
             }
+
             currentAmmo = (int)ammoSettings.MaxAmmo;
-            _coolingCooldownCoroutine = null;
-            Debug.Log("Cooling cooldown finished");
             OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+
+            isReloading = false;
+            canFire = true;
         }
+
+        //private IEnumerator OverheatCooldown()
+        //{
+        //    Debug.Log("Overheat cooldown Called");
+        //    OnCooling?.Invoke(Settings.CoolingCooldown, Settings.CoolingCooldown);
+        //    Debug.Log("OnCooling event called");
+        //    canFire = false;
+        //    yield return new WaitForSeconds(Settings.OverheatCooldown);
+        //    currentAmmo = (int)ammoSettings.MaxAmmo;
+
+        //    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+        //    canFire = true;
+        //    Debug.Log("Overheat cooldown Finished");
+        //}
+
+        //private IEnumerator CoolingCooldown()
+        //{
+        //    float coolingTimer = 0f;
+
+        //    while (coolingTimer < Settings.CoolingCooldown)
+        //    {
+        //        coolingTimer += Time.deltaTime;
+        //        OnCooling?.Invoke(coolingTimer, Settings.CoolingCooldown);
+        //        yield return null;
+        //    }
+        //    currentAmmo = (int)ammoSettings.MaxAmmo;
+        //    _coolingCooldownCoroutine = null;
+        //    Debug.Log("Cooling cooldown finished");
+        //    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+        //}
 
         private void LaserEffect()
         {
@@ -231,5 +280,32 @@ namespace Player.Weapon
                     impactParticlesInstance.Play();
             }
         }
+
+
+
+        //Prueba visual para balubis
+
+        //private void OnGUI()
+        //{
+        //    int w = Screen.width;
+        //    int h = Screen.height;
+
+        //    string bars = new string('|', currentAmmo);
+
+        //    int rectWidth = 400;
+        //    int rectHeight = 30;
+
+        //    Rect rect = new Rect(
+        //        (w - rectWidth) / 2,
+        //        h - rectHeight - 20,
+        //        rectWidth,
+        //        rectHeight
+        //    );
+
+        //    GUI.Label(rect, $"Ammo: {bars}");
+        //}
     }
+
+
 }
+

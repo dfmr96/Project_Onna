@@ -1234,6 +1234,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0a958f4e-cbca-4059-9edc-052539c7d62f
     m_ActionName: Player/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4339932572223991893}
+        m_TargetAssemblyTypeName: Player.PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnReload
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 291d84bb-2504-47b5-9b29-52dd8d47d0ff
+    m_ActionName: Player/Reload[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -2496,11 +2512,14 @@ MonoBehaviour:
     bulletSpawnPoint: {fileID: 2511859693823612000}
   currentAmmo: 0
   canFire: 1
+  isReloading: 0
   laserGunParticlesPrefab: {fileID: 8700035473269227422, guid: f9ec70dbba2b28748a4ddf4f43aedd91, type: 3}
   shootGunParticlesPrefab: {fileID: 198000012944515248, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
   laserOrigin: {fileID: 6286168293087101770}
   shootFx: {fileID: 8300000, guid: eb192c69ffce50d4c9eb79b0bc16ac7e, type: 3}
   overheathFx: {fileID: 8300000, guid: 62d7fcc486ccf424084211b80c981a87, type: 3}
+  fireRate: 0.2
+  reloadTime: 1.5
 --- !u!82 &7066039255632587307
 AudioSource:
   m_ObjectHideFlags: 0

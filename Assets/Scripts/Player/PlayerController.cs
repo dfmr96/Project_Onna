@@ -76,6 +76,8 @@ namespace Player
 
             _playerInputHandler.InteractionPerformed += HandleInteraction;
             _playerInputHandler.FirePerformed += HandleFire;
+            _playerInputHandler.ReloadPerformed += HandleReload;
+
         }
 
         private void Start()
@@ -199,6 +201,11 @@ namespace Player
         private void HandleFire()
         {
             weaponController.Attack();
+        }
+
+        private void HandleReload()
+        {
+            weaponController.Reloading();
         }
 
         private void HandleInteraction()
