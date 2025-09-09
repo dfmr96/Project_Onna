@@ -3,6 +3,7 @@ using Player.Weapon;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -32,22 +33,33 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        StartCoroutine(InitBulletsDelayed());
+    }
+
     private void OnEnable()
     {
         PlayerModel.OnUpdateTime += UpdateTimeUI;
         WeaponController.OnShoot += UpdateBulletsLeft;
-
-        var weapon = PlayerHelper.GetPlayer().GetComponentInChildren<WeaponController>();
-        if (weapon != null)
-        {
-            InitBullets((int)weapon.AmmoSettings.MaxAmmo, weapon.CurrentAmmo);
-        }
     }
+
+
 
     private void OnDisable()
     {
         PlayerModel.OnUpdateTime -= UpdateTimeUI;
         WeaponController.OnShoot -= UpdateBulletsLeft;
+    }
+    
+    private IEnumerator InitBulletsDelayed()
+    {
+        yield return null; // espera un frame
+        var weapon = PlayerHelper.GetPlayer()?.GetComponentInChildren<WeaponController>();
+        if (weapon != null && weapon.AmmoSettings != null)
+        {
+            InitBullets((int)weapon.AmmoSettings.MaxAmmo, weapon.CurrentAmmo);
+        }
     }
 
     private void Update()
