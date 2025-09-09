@@ -8,23 +8,23 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
+    [Header("General UI")]
     [SerializeField] private UIData data;
     [SerializeField] private Image timeCircle;
-    //[SerializeField] private Image weaponOverheat;
-    //[SerializeField] private Image weaponCooling;
+    // [SerializeField] private Image weaponOverheat;
+    // [SerializeField] private Image weaponCooling;
 
-    // --- Balas ---
     [Header("Ammo UI")]
     [SerializeField] private Sprite fullBulletSprite;
     [SerializeField] private Sprite emptyBulletSprite;
     [SerializeField] private GameObject bulletPrefab;      // Prefab de bala (Image)
     [SerializeField] private Transform bulletContainer;    // Contenedor con HorizontalLayoutGroup
 
+    private List<bool> bulletFilledState = new List<bool>(); // true = llena, false = vacía
     private List<Image> bulletImages = new List<Image>();
 
-    //private CooldownSettings _coolingSettings;
-    private float targetCooldownFill;
     private float fillSpeed = 2f;
+    private float targetCooldownFill;
 
     private void Awake()
     {
@@ -44,7 +44,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     private void OnDisable()
     {
         PlayerModel.OnUpdateTime -= UpdateTimeUI;
@@ -53,6 +52,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        // Aquí podrías animar weaponOverheat o weaponCooling si lo quieres
         // if (weaponOverheat != null)
         // {
         //     weaponOverheat.fillAmount = Mathf.Lerp(
@@ -74,20 +74,23 @@ public class UIManager : MonoBehaviour
 
     private void InitBullets(int totalAmmo, int currentAmmo)
     {
-        // Limpio lo que hubiera antes
+        // Limpiar contenedor
         foreach (Transform child in bulletContainer)
-        {
             Destroy(child.gameObject);
-        }
-        bulletImages.Clear();
 
-        // Creo todas las balas
+        bulletImages.Clear();
+        bulletFilledState.Clear();
+
+        // Crear balas
         for (int i = 0; i < totalAmmo; i++)
         {
             GameObject bulletGO = Instantiate(bulletPrefab, bulletContainer);
             Image bulletImage = bulletGO.GetComponent<Image>();
-            bulletImage.sprite = (i < currentAmmo) ? fullBulletSprite : emptyBulletSprite;
             bulletImages.Add(bulletImage);
+
+            bool isFull = i < currentAmmo;
+            bulletImage.sprite = isFull ? fullBulletSprite : emptyBulletSprite;
+            bulletFilledState.Add(isFull);
         }
     }
 
@@ -104,23 +107,38 @@ public class UIManager : MonoBehaviour
             var bulletImage = bulletImages[i];
             var animator = bulletImage.GetComponent<Animator>();
 
-            if (i < actualAmmo)
+            bool shouldBeFull = i < actualAmmo;
+
+            // -------------------------------
+            // Animación solo si cambió de estado
+            // -------------------------------
+            if (bulletFilledState[i] != shouldBeFull)
             {
-                if (bulletImage.sprite != fullBulletSprite) 
+                if (shouldBeFull)
                 {
                     bulletImage.sprite = fullBulletSprite;
                     animator?.SetTrigger("ReloadTrigger");
                 }
-            }
-            else
-            {
-                if (bulletImage.sprite != emptyBulletSprite)
+                else
                 {
                     bulletImage.sprite = emptyBulletSprite;
                     animator?.SetTrigger("ShootTrigger");
                 }
+
+                bulletFilledState[i] = shouldBeFull;
+            }
+
+            // -------------------------------
+            // Resaltar la última bala llena
+            // -------------------------------
+            if (i == actualAmmo - 1 && shouldBeFull)
+            {
+                bulletImage.color = new Color(0.7f, 0.7f, 0.7f); // gris oscuro
+            }
+            else
+            {
+                bulletImage.color = Color.white; // color normal
             }
         }
     }
-
 }

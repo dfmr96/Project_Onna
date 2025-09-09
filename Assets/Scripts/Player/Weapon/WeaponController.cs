@@ -202,26 +202,27 @@ namespace Player.Weapon
             canFire = true;
         }
 
-        private IEnumerator Reload()
+       private IEnumerator Reload()
         {
             isReloading = true;
             canFire = false;
             audioSource?.PlayOneShot(overheathFx);
 
-            float timer = 0f;
-            while (timer < reloadTime)
-            {
-                timer += Time.deltaTime;
-                //OnReloading?.Invoke(timer, reloadTime); // para UI (barra de recarga)
-                yield return null;
-            }
+            float bulletReloadTime = 0.15f;
 
-            currentAmmo = (int)ammoSettings.MaxAmmo;
-            OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+            while (currentAmmo < ammoSettings.MaxAmmo)
+            {
+                yield return new WaitForSeconds(bulletReloadTime);
+
+                currentAmmo++;
+                OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo); 
+                // acá la UI recibe el update y puede animar esa bala
+            }
 
             isReloading = false;
             canFire = true;
         }
+
 
         //private IEnumerator OverheatCooldown()
         //{

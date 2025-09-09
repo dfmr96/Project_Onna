@@ -110,12 +110,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bullet_anim_UI_0
+      name: Bullet_anim_UI_Fire_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
+        width: 16
         height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -124,19 +124,40 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87d020c1fd65fe8488ee2302572c1045
-      internalID: -1990922750
+      spriteID: 8bbdfdba20421f644b094a0ebf523b2d
+      internalID: -2123475947
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_1
+      name: Bullet_anim_UI_Fire_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4ac18ea9f0ac1b41a48f76b29a270be
+      internalID: -1243667630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullet_anim_UI_Fire_2
       rect:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 32
+        width: 16
         height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -145,19 +166,40 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 710da848d8c10724195636030542743a
-      internalID: -1588168541
+      spriteID: 1338bbc3a241b7d418363dcf1c707993
+      internalID: 1455334691
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_2
+      name: Bullet_anim_UI_Fire_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 770652062eca3cf488f9a54e6c21da4a
+      internalID: 820250623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullet_anim_UI_Fire_4
       rect:
         serializedVersion: 2
         x: 64
         y: 0
-        width: 32
+        width: 16
         height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -166,19 +208,40 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88a2b36e873a25f4d8cdad544986c596
-      internalID: 445520941
+      spriteID: 77038cff268a8cd4ab43969830cf128e
+      internalID: 731568032
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_3
+      name: Bullet_anim_UI_Fire_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78bbf3d927394e34e83f298a99e1e387
+      internalID: 1147888710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullet_anim_UI_Fire_6
       rect:
         serializedVersion: 2
         x: 96
         y: 0
-        width: 32
+        width: 16
         height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -187,19 +250,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4b2fdd870cfadfd46b2136dcf01434c0
-      internalID: 1743254709
+      spriteID: eb9aff9836ec8684a8153fb8f4beaf97
+      internalID: 315392832
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_4
+      name: Bullet_anim_UI_Fire_7
       rect:
         serializedVersion: 2
-        x: 128
+        x: 112
         y: 0
-        width: 32
+        width: 16
         height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -208,71 +271,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c59f34a775b69e43b8d423c3f09ae8c
-      internalID: -1437102957
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bullet_anim_UI_5
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 32
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 045b646512e995b43a6bcd05d17ede5a
-      internalID: -2100989333
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bullet_anim_UI_6
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 32
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ba4ccb484527deb44a163d07cc9e08cc
-      internalID: 174284819
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bullet_anim_UI_7
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 0
-        width: 32
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3507df40db6f36b4f8324e787cb42a1e
-      internalID: -1752862226
+      spriteID: 135a50d7120812d4daeab7131dd1cae2
+      internalID: -1753225508
       vertices: []
       indices: 
       edges: []
@@ -288,14 +288,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Bullet_anim_UI_0: -1990922750
-      Bullet_anim_UI_1: -1588168541
-      Bullet_anim_UI_2: 445520941
-      Bullet_anim_UI_3: 1743254709
-      Bullet_anim_UI_4: -1437102957
-      Bullet_anim_UI_5: -2100989333
-      Bullet_anim_UI_6: 174284819
-      Bullet_anim_UI_7: -1752862226
+      Bullet_anim_UI_Fire_0: -2123475947
+      Bullet_anim_UI_Fire_1: -1243667630
+      Bullet_anim_UI_Fire_2: 1455334691
+      Bullet_anim_UI_Fire_3: 820250623
+      Bullet_anim_UI_Fire_4: 731568032
+      Bullet_anim_UI_Fire_5: 1147888710
+      Bullet_anim_UI_Fire_6: 315392832
+      Bullet_anim_UI_Fire_7: -1753225508
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
