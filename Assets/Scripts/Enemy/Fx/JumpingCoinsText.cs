@@ -18,7 +18,7 @@ public class JumpingCoinsText : MonoBehaviour
     public void Initialize(float damageAmount)
     {
         textMesh = GetComponent<TextMeshPro>();
-        textMesh.text = "+" + Mathf.RoundToInt(damageAmount).ToString() + "<sprite=0>";
+        textMesh.text = "+" + Mathf.RoundToInt(damageAmount).ToString() + "\u25CF";
         startColor = textMesh.color;
     }
 
