@@ -1121,6 +1121,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpawner: {fileID: 470771942}
+  enemySpawner: {fileID: 0}
+  doors: []
+  orbSpawner: {fileID: 0}
+  projectileSpawner: {fileID: 0}
 --- !u!4 &646876831
 Transform:
   m_ObjectHideFlags: 0
@@ -1953,6 +1957,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
   timeCircle: {fileID: 688035553}
+  fullBulletSprite: {fileID: 0}
+  emptyBulletSprite: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  bulletContainer: {fileID: 0}
 --- !u!4 &1164939226
 Transform:
   m_ObjectHideFlags: 0

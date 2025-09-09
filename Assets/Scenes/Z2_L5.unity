@@ -2276,17 +2276,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2439656591262172330, guid: 07e25ad6a02e1614884d7f6d1a65b8e5, type: 3}
   m_PrefabInstance: {fileID: 210176168}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &235025727 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6156820893710455934, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
-  m_PrefabInstance: {fileID: 687051907}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &238605585
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11113,7 +11102,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11667,17 +11656,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &1482096691 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1639324398063760207, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
-  m_PrefabInstance: {fileID: 687051907}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1499495548
 Mesh:
   m_ObjectHideFlags: 0
@@ -14667,17 +14645,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &1823789110 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6731829925903081011, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
-  m_PrefabInstance: {fileID: 687051907}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1827797329
 Mesh:
   m_ObjectHideFlags: 0
@@ -15621,9 +15588,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
-  timeCircle: {fileID: 1823789110}
-  weaponOverheat: {fileID: 1482096691}
-  weaponCooling: {fileID: 235025727}
+  timeCircle: {fileID: 0}
+  fullBulletSprite: {fileID: 0}
+  emptyBulletSprite: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  bulletContainer: {fileID: 0}
 --- !u!4 &1971396493
 Transform:
   m_ObjectHideFlags: 0
