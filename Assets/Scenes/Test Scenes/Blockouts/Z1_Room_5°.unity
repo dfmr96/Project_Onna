@@ -801,6 +801,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1302286532}
+    - target: {fileID: 2040033323876657841, guid: ef763941e5db55c49a5fe38ca279fdb3, type: 3}
+      propertyPath: m_Name
+      value: Object6
+      objectReference: {fileID: 0}
     - target: {fileID: 5432078261548670592, guid: ef763941e5db55c49a5fe38ca279fdb3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 19.500013
@@ -840,10 +844,6 @@ PrefabInstance:
     - target: {fileID: 5432078261548670592, guid: ef763941e5db55c49a5fe38ca279fdb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2040033323876657841, guid: ef763941e5db55c49a5fe38ca279fdb3, type: 3}
-      propertyPath: m_Name
-      value: Object6
       objectReference: {fileID: 0}
     - target: {fileID: 7075143844328652289, guid: ef763941e5db55c49a5fe38ca279fdb3, type: 3}
       propertyPath: m_Mesh
@@ -10816,6 +10816,10 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.04121518
       objectReference: {fileID: 0}
+    - target: {fileID: 4057348306094105487, guid: 5d5bd57e328a2484b9f2b14a7114233f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 6597899693275548709, guid: 5d5bd57e328a2484b9f2b14a7114233f, type: 3}
       propertyPath: m_Name
       value: EndLevelTrigger
@@ -12562,6 +12566,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
   timeCircle: {fileID: 683778407}
+  fullBulletSprite: {fileID: 0}
+  emptyBulletSprite: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  bulletContainer: {fileID: 0}
 --- !u!4 &1953785447
 Transform:
   m_ObjectHideFlags: 0

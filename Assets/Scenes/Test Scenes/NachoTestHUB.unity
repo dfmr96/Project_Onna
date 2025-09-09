@@ -3172,7 +3172,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e34d10764cf50346807f31fd64045fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactPrefab: {fileID: 0}
+  promptOffset: {x: 0, y: 2, z: 0}
+  interactAudio: {fileID: 0}
   hub: {fileID: 871380410}
+  data: {fileID: 0}
 --- !u!43 &154059224
 Mesh:
   m_ObjectHideFlags: 0
@@ -13688,6 +13692,7 @@ MonoBehaviour:
   levelProgression: {fileID: 11400000, guid: 47f7c09258b695a4b8f6403fd5067858, type: 2}
   currencyText: {fileID: 1509962980}
   storePrefab: {fileID: 4035500945392137438, guid: 41ce3e3c15474954ab0a91ff46864baa, type: 3}
+  gameMusicClip: {fileID: 0}
 --- !u!4 &871380411
 Transform:
   m_ObjectHideFlags: 0
@@ -20899,7 +20904,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -31227,6 +31233,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8359927832276916564, guid: 1ee35974fbcbbd244b8266041617bde6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

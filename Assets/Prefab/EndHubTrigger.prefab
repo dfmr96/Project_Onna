@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,5 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dc40ba32c2ef9a41a32e9d9971b32f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactPrefab: {fileID: 0}
+  promptOffset: {x: 0, y: 2, z: 0}
+  interactAudio: {fileID: 0}
   levelProgression: {fileID: 11400000, guid: 47f7c09258b695a4b8f6403fd5067858, type: 2}
   loadCanvasPrefab: {fileID: 1822515629045912885, guid: c214e4a145d9467458f42cd11ed1b19d, type: 3}
