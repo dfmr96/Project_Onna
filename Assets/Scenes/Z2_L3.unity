@@ -2658,10 +2658,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
   timeCircle: {fileID: 4305095}
-  fullBulletSprite: {fileID: 0}
-  emptyBulletSprite: {fileID: 0}
-  bulletPrefab: {fileID: 0}
-  bulletContainer: {fileID: 0}
+  weaponOverheat: {fileID: 948731170}
+  weaponCooling: {fileID: 948731169}
 --- !u!4 &146183210
 Transform:
   m_ObjectHideFlags: 0
@@ -16335,6 +16333,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+--- !u!114 &948731169 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6156820893710455934, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 948731168}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &948731170 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1639324398063760207, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 948731168}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &955933074
 Mesh:
   m_ObjectHideFlags: 0

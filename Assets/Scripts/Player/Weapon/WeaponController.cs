@@ -19,11 +19,9 @@ namespace Player.Weapon
         //[SerializeField] private CooldownSettings cooldownSettings;
         [BoxGroup("Ammo")] 
         [SerializeField] private AmmoSettings ammoSettings;
-        public AmmoSettings AmmoSettings => ammoSettings;
 
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private int currentAmmo;
-        public int CurrentAmmo => currentAmmo;
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private bool canFire = true;
         [BoxGroup("Runtime Debug"), ReadOnly]
@@ -52,7 +50,7 @@ namespace Player.Weapon
 
 
         //Hardcodeado: Cambiar
-        private float fireRate = 0.18f;
+        private float fireRate = 0.2f;
         private float reloadTime = 1f;
 
         private void OnEnable()
@@ -208,20 +206,20 @@ namespace Player.Weapon
             canFire = false;
             audioSource?.PlayOneShot(overheathFx);
 
-            float bulletReloadTime = 0.15f;
-
-            while (currentAmmo < ammoSettings.MaxAmmo)
+            float timer = 0f;
+            while (timer < reloadTime)
             {
-                yield return new WaitForSeconds(bulletReloadTime);
-
-                currentAmmo++;
-                OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo); 
-                // acá la UI recibe el update y puede animar esa bala
+                timer += Time.deltaTime;
+                //OnReloading?.Invoke(timer, reloadTime); // para UI (barra de recarga)
+                yield return null;
             }
+
+            currentAmmo = (int)ammoSettings.MaxAmmo;
+            OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+
             isReloading = false;
             canFire = true;
         }
-
 
         //private IEnumerator OverheatCooldown()
         //{
@@ -283,6 +281,29 @@ namespace Player.Weapon
             }
         }
 
+
+
+        //Prueba visual para balubis
+
+        //private void OnGUI()
+        //{
+        //    int w = Screen.width;
+        //    int h = Screen.height;
+
+        //    string bars = new string('|', currentAmmo);
+
+        //    int rectWidth = 400;
+        //    int rectHeight = 30;
+
+        //    Rect rect = new Rect(
+        //        (w - rectWidth) / 2,
+        //        h - rectHeight - 20,
+        //        rectWidth,
+        //        rectHeight
+        //    );
+
+        //    GUI.Label(rect, $"Ammo: {bars}");
+        //}
     }
 
 

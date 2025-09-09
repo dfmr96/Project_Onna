@@ -7915,6 +7915,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a6bffc7fe4d21bd43adac61e3354a5b3, type: 3}
   m_PrefabInstance: {fileID: 602098736}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &606922652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6156820893710455934, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 325280947}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &614828666
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20949,6 +20960,17 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &1642176063 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6731829925903081011, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 325280947}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1650929630
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22924,6 +22946,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 272650d83aa6ea0419d6bfb6c61e90e8, type: 3}
   m_PrefabInstance: {fileID: 1770297430}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1773087049 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1639324398063760207, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 325280947}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1781328753
 Mesh:
   m_ObjectHideFlags: 0
@@ -24809,11 +24842,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
-  timeCircle: {fileID: 0}
-  fullBulletSprite: {fileID: 0}
-  emptyBulletSprite: {fileID: 0}
-  bulletPrefab: {fileID: 0}
-  bulletContainer: {fileID: 0}
+  timeCircle: {fileID: 1642176063}
+  weaponOverheat: {fileID: 1773087049}
+  weaponCooling: {fileID: 606922652}
 --- !u!4 &1953785447
 Transform:
   m_ObjectHideFlags: 0
