@@ -79,7 +79,7 @@ public class UI_Ammo : MonoBehaviour
 
             if (i == actualAmmo - 1 && shouldBeFull)
             {
-                bulletImage.color = new Color(0.7f, 0.7f, 0.7f);
+                bulletImage.color = new Color(1.5f, 1.5f, 1.5f);
             }
             else
             {

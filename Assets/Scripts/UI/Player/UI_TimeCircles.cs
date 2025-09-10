@@ -18,14 +18,21 @@ public class UI_TimeCircles : MonoBehaviour
     [SerializeField] private Animator milestoneAnimator;
     [SerializeField] private UI_Shake uiShake;
 
-    private int lastMilestone = 0;
+    [Header("Blink Effect")]
+    [SerializeField] private Color blinkColor = Color.white; // color del titileo
+    [SerializeField] private float blinkSpeed = 3f; // velocidad del titileo
+    private List<Color> originalColors = new List<Color>(); // para guardar el color original de cada círculo
 
     private void Awake()
     {
-        // Inicializamos los estados de los indicadores
+        // Inicializamos los estados de los indicadores y colores originales
         for (int i = 0; i < lifeIndicators.Count; i++)
         {
             indicatorStates.Add(false);
+        }
+        foreach (var circle in timeCircles)
+        {
+            originalColors.Add(circle.color);
         }
     }
 
@@ -38,6 +45,7 @@ public class UI_TimeCircles : MonoBehaviour
         float maxTime = player.MaxHealth;
 
         UpdateCircles(currentTime, maxTime);
+        UpdateBlink(currentTime);
     }
 
     private void UpdateCircles(float currentTime, float maxTime)
@@ -54,9 +62,8 @@ public class UI_TimeCircles : MonoBehaviour
                 circle.gameObject.SetActive(true);
 
                 float segmentStart = i * secondsPerCircle;
-
-                // Calcula fill entre minFill y maxFill
                 float fill = Mathf.Clamp01((currentTime - segmentStart) / secondsPerCircle);
+
                 circle.fillAmount = Mathf.Lerp(minFill, maxFill, fill);
 
                 if (indicator != null)
@@ -91,5 +98,21 @@ public class UI_TimeCircles : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void UpdateBlink(float currentTime)
+    {
+        // Titilea solo la sección que se está por vaciar
+        int circleIndex = Mathf.FloorToInt(currentTime / secondsPerCircle);
+        if (circleIndex < 0 || circleIndex >= timeCircles.Count) return;
+
+        Image circle = timeCircles[circleIndex];
+        float t = Mathf.PingPong(Time.time * blinkSpeed, 1f);
+        circle.color = Color.Lerp(originalColors[circleIndex], blinkColor, t);
+    }
+
+    public void ShakeOnDamage()
+    {
+        uiShake?.Shake(0.25f, 8f); // Shake más intenso
     }
 }
