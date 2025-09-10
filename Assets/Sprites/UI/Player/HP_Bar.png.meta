@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a0287db917970344ca864289d5b60399
+guid: 39d8fc017e091e848974dbecf7f14c26
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,106 +110,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bullet_anim_UI_reload_0
+      name: HP_Bar_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 4
-        width: 16
-        height: 43
+        y: 101
+        width: 101
+        height: 101
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9e3e47a44041544b8ce99614e23cbf2
-      internalID: -1177271392
+      spriteID: 6e8e0c54b909efe4cb7ae457bec09dcf
+      internalID: 1067807554
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_reload_1
+      name: HP_Bar_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 4
-        width: 16
-        height: 43
+        x: 101
+        y: 101
+        width: 101
+        height: 101
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a88a7a18253a79f478f13788ec9abdaf
-      internalID: 1965131237
+      spriteID: fc96c6e1fd8c7c444b781e7291301cab
+      internalID: 1901876385
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_reload_2
+      name: HP_Bar_2
       rect:
         serializedVersion: 2
-        x: 32
-        y: 4
-        width: 16
-        height: 43
+        x: 202
+        y: 101
+        width: 101
+        height: 101
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2567509239984aa40867de9b1ffa8e1d
-      internalID: 1574285136
+      spriteID: 9134c5cd3ce4092488f8c172695667c7
+      internalID: 550978456
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_reload_3
+      name: HP_Bar_3
       rect:
         serializedVersion: 2
-        x: 48
-        y: 4
-        width: 16
-        height: 43
+        x: 0
+        y: 0
+        width: 101
+        height: 101
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 00caae4c8548a0449ada0218b69ad195
-      internalID: -490896266
+      spriteID: 1499393590fcb93439e8870a4bbe2274
+      internalID: 571161871
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bullet_anim_UI_reload_4
+      name: HP_Bar_4
       rect:
         serializedVersion: 2
-        x: 64
-        y: 4
-        width: 16
-        height: 43
+        x: 101
+        y: 0
+        width: 101
+        height: 101
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: abe214c94071acf4e9ee9ad864d1b022
-      internalID: 447635622
+      spriteID: 91080d857ee0cca42a3a1eec2f406021
+      internalID: 1568488650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HP_Bar_5
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 0
+        width: 101
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0abcc9c26160e5646986071777123c74
+      internalID: 513099647
       vertices: []
       indices: 
       edges: []
@@ -217,7 +238,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: c0e7139e6c6f0df4f80e653bfcc4d269
+    spriteID: a28cdb31a1af3f74f899ee347f163d57
     internalID: 0
     vertices: []
     indices: 
@@ -225,11 +246,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Bullet_anim_UI_reload_0: -1177271392
-      Bullet_anim_UI_reload_1: 1965131237
-      Bullet_anim_UI_reload_2: 1574285136
-      Bullet_anim_UI_reload_3: -490896266
-      Bullet_anim_UI_reload_4: 447635622
+      HP_Bar_0: 1067807554
+      HP_Bar_1: 1901876385
+      HP_Bar_2: 550978456
+      HP_Bar_3: 571161871
+      HP_Bar_4: 1568488650
+      HP_Bar_5: 513099647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

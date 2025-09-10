@@ -101,30 +101,26 @@ namespace Player
         private void ApplyPassiveDrain()
         {
             float damagePerFrame = DrainRate * Time.deltaTime;
-            ApplyDamage(damagePerFrame, false);
+            ApplyDamage(damagePerFrame, false, false);
         }
 
         public void TakeDamage(float timeTaken)
         {
-            ApplyDamage(timeTaken, true);
+            ApplyDamage(timeTaken, true, true);
 
             _playerView.PlayDamageEffect();
         }
         
-        public void ApplyDamage(float timeTaken, bool applyResistance)
+       public void ApplyDamage(float timeTaken, bool applyResistance, bool isDirectDamage = false)
         {
             float resistance = applyResistance ? Mathf.Clamp01(StatContext.Source.Get(statRefs.damageResistance)) : 0f;
             float effectiveDamage = timeTaken * (1f - resistance);
 
             _currentTime -= effectiveDamage;
             ClampEnergy();
+
             if (applyResistance)
             {
-                Debug.Log($"" +
-                          $"🧪 Damage recibido: Base = {timeTaken}, " +
-                          $"Resistance = {(resistance * 100f)}%, " +
-                          $"Final = {effectiveDamage}");
-
                 // Mostrar texto flotante
                 if (floatingTextPrefab != null)
                 {
@@ -133,12 +129,21 @@ namespace Player
                     textObj.GetComponent<FloatingDamageText>().Initialize(timeTaken);
                 }
             }
-            Debug.Log("Getting Damage");
+
+            // Shake solo si es daño directo
+            if (isDirectDamage)
+            {
+                var shake = FindObjectOfType<UI_Shake>();
+                if (shake != null)
+                    shake.Shake(0.25f, 8f);
+            }
+
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             if (_currentTime <= 0)
                 Die();
         }
+
 
         public void RecoverTime(float timeRecovered)
         {
