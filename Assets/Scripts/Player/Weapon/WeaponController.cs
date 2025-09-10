@@ -222,38 +222,14 @@ namespace Player.Weapon
             reloadUI = FindObjectOfType<UI_SkillCheck>();
             if (reloadUI == null) yield break;
 
-            reloadUI.Show();
-            reloadUI.ResetBar();
-
             isSkillCheckActive = true;
-            skillCheckSuccess = false;
-
-            float elapsed = 0f;
-            float duration = 2f;
-
-            while (elapsed < duration && !skillCheckSuccess)
+            reloadUI.Show(); // dispara la animación y la barra
+            while (isSkillCheckActive)
             {
-                elapsed += Time.deltaTime;
-                reloadUI.UpdateMovingBar(elapsed / duration);
                 yield return null;
             }
 
-            if (!skillCheckSuccess)
-            {
-                float bulletReloadTime = 0.15f * 2f;
-                while (currentAmmo < ammoSettings.MaxAmmo)
-                {
-                    yield return new WaitForSeconds(bulletReloadTime);
-                    currentAmmo++;
-                    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
-                }
-
-                Debug.Log("❌ Fallaste -> Recarga lenta");
-            }
-
-            reloadUI.Hide();
-            isSkillCheckActive = false;
-
+            // aplicar efecto según skillCheckSuccess
             if (skillCheckSuccess)
             {
                 nextShotDoubleDamage = true;
@@ -261,29 +237,27 @@ namespace Player.Weapon
                 OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
                 Debug.Log("✅ Recarga rápida exitosa!");
             }
+            else
+            {
+                // recarga lenta
+                float bulletReloadTime = 0.15f * 2f;
+                while (currentAmmo < ammoSettings.MaxAmmo)
+                {
+                    yield return new WaitForSeconds(bulletReloadTime);
+                    currentAmmo++;
+                    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+                }
+                Debug.Log("❌ Fallaste -> Recarga lenta");
+            }
         }
+
 
         public void TrySkillCheck()
         {
-            if (!isSkillCheckActive) return;
-
-            if (reloadUI.IsOverTarget())
-            {
-                skillCheckSuccess = true;
-                nextShotDoubleDamage = true;
-                currentAmmo = (int)ammoSettings.MaxAmmo;
-                OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
-                Debug.Log("✅ Recarga rápida exitosa!");
-            }
-            else
-            {
-                skillCheckSuccess = false;
-                Debug.Log("❌ Fallaste -> recarga lenta");
-            }
-
-            reloadUI.Hide();
-            isSkillCheckActive = false;
+            if (!isSkillCheckActive || reloadUI == null) return;
+            reloadUI.TrySkillCheck();
         }
+
 
         private void LaserEffect()
         {
@@ -311,6 +285,11 @@ namespace Player.Weapon
         public void SetSkillCheckSuccess(bool success)
         {
             skillCheckSuccess = success;
+        }
+
+        public void NotifySkillCheckEnded()
+        {
+            isSkillCheckActive = false;
         }
     }
 }

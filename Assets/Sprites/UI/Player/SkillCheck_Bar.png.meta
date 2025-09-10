@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 03bce79152ceab0408a642e202d25a41
+guid: af981ff1fd4a21a43a8da4d439513961
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,18 +108,106 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: SkillCheck_Bar_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 99
+        width: 122
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e7397473eb45ab41b97e035590c9e9e
+      internalID: 768508246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillCheck_Bar_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 75
+        width: 116
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70c1e0a73f1f6374ca131978d8d1f746
+      internalID: -1506698279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillCheck_Bar_2
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 39
+        width: 27
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 402b1850e74c09a498f7da3a32dd8fa0
+      internalID: 1553495148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkillCheck_Bar_3
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 4
+        width: 7
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c27f2ae6a4a3f55459da49418f90e560
+      internalID: 1868082711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 90494af679cf0c345a6bf99c9927eeb7
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SkillCheck_Bar_0: 768508246
+      SkillCheck_Bar_1: -1506698279
+      SkillCheck_Bar_2: 1553495148
+      SkillCheck_Bar_3: 1868082711
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
