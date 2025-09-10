@@ -87,4 +87,28 @@ public class UI_Ammo : MonoBehaviour
             }
         }
     }
+
+
+    public IEnumerator BlinkEmptyBullets(int times = 6, float interval = 0.1f)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            foreach (var img in bulletImages)
+            {
+                if (img.sprite == emptyBulletSprite)
+                {
+                    img.enabled = !img.enabled; // toggle on/off
+                }
+            }
+            yield return new WaitForSeconds(interval);
+        }
+
+        // aseguramos que queden todos visibles al terminar
+        foreach (var img in bulletImages)
+        {
+            if (img.sprite == emptyBulletSprite)
+                img.enabled = true;
+        }
+    }
+
 }
