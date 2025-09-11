@@ -16,6 +16,18 @@ public class UI_Ammo : MonoBehaviour
     private List<bool> bulletFilledState = new List<bool>();
     private List<Image> bulletImages = new List<Image>();
 
+    [Header("Sonidos")]
+    [SerializeField] private AudioClip reloadBulletSfx;
+    private AudioSource audioSource;
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
+
     public IEnumerator InitBulletsDelayed()
     {
         yield return null;
@@ -67,6 +79,10 @@ public class UI_Ammo : MonoBehaviour
                 {
                     bulletImage.sprite = fullBulletSprite;
                     animator?.SetTrigger("ReloadTrigger");
+
+                    // reproducir sonido de recarga de bala
+                    if(reloadBulletSfx != null)
+                        audioSource.PlayOneShot(reloadBulletSfx);
                 }
                 else
                 {
@@ -76,7 +92,6 @@ public class UI_Ammo : MonoBehaviour
 
                 bulletFilledState[i] = shouldBeFull;
             }
-
             if (i == actualAmmo - 1 && shouldBeFull)
             {
                 bulletImage.color = new Color(1.5f, 1.5f, 1.5f);
@@ -87,4 +102,28 @@ public class UI_Ammo : MonoBehaviour
             }
         }
     }
+
+
+    public IEnumerator BlinkEmptyBullets(int times = 6, float interval = 0.1f)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            foreach (var img in bulletImages)
+            {
+                if (img.sprite == emptyBulletSprite)
+                {
+                    img.enabled = !img.enabled; // toggle on/off
+                }
+            }
+            yield return new WaitForSeconds(interval);
+        }
+
+        // aseguramos que queden todos visibles al terminar
+        foreach (var img in bulletImages)
+        {
+            if (img.sprite == emptyBulletSprite)
+                img.enabled = true;
+        }
+    }
+
 }

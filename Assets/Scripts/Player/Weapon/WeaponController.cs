@@ -9,21 +9,19 @@ namespace Player.Weapon
     public class WeaponController : MonoBehaviour
     {
         public static event Action<int, int> OnShoot;
-        //public static event Action<float, float> OnCooling;
         public static event Action<float, float> OnReloading;
 
-
-        [BoxGroup("Bullet")] 
+        [BoxGroup("Bullet")]
         [SerializeField] private BulletSettings bulletSetting;
-        //[BoxGroup("Cooldown")] 
-        //[SerializeField] private CooldownSettings cooldownSettings;
-        [BoxGroup("Ammo")] 
+
+        [BoxGroup("Ammo")]
         [SerializeField] private AmmoSettings ammoSettings;
         public AmmoSettings AmmoSettings => ammoSettings;
 
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private int currentAmmo;
         public int CurrentAmmo => currentAmmo;
+
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private bool canFire = true;
         [BoxGroup("Runtime Debug"), ReadOnly]
@@ -33,10 +31,15 @@ namespace Player.Weapon
         [SerializeField] private ParticleSystem laserGunParticlesPrefab;
         [SerializeField] private ParticleSystem shootGunParticlesPrefab;
         [SerializeField] private Transform laserOrigin;
+
         private float laserLength;
         private ParticleSystem impactParticlesInstance;
         private ParticleSystem muzzleFlashInstance;
         private LineRenderer lineRenderer;
+
+        private bool isSkillCheckActive = false;
+        private bool skillCheckSuccess = false;
+        private UI_SkillCheck reloadUI;
 
         [BoxGroup("Sounds")]
         [SerializeField] private AudioClip shootFx;
@@ -44,25 +47,30 @@ namespace Player.Weapon
         [SerializeField] private AudioClip overheathFx;
         private AudioSource audioSource;
 
+        [BoxGroup("Runtime Debug"), ReadOnly]
+        [SerializeField] private bool nextShotDoubleDamage = false;
 
-        //private Coroutine _coolingCooldownCoroutine;
         private PlayerModel _playerModel;
 
-        //public CooldownSettings Settings => cooldownSettings;
-
-
-        //Hardcodeado: Cambiar
-        private float fireRate = 0.2f;
-        private float reloadTime = 1f;
+        // Hardcodeado
+        private float fireRate = 0.15f;
 
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerInitializedSignal>(OnPlayerReady);
+
+            var inputHandler = FindObjectOfType<PlayerInputHandler>();
+            if (inputHandler != null)
+                inputHandler.ReloadPerformed += OnReloadInput;
         }
-        
+
         private void OnDisable()
         {
             EventBus.Unsubscribe<PlayerInitializedSignal>(OnPlayerReady);
+
+            var inputHandler = FindObjectOfType<PlayerInputHandler>();
+            if (inputHandler != null)
+                inputHandler.ReloadPerformed -= OnReloadInput;
         }
 
         private void Start()
@@ -97,11 +105,6 @@ namespace Player.Weapon
         private void Update()
         {
             LaserEffect();
-
-            //if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentAmmo < ammoSettings.MaxAmmo)
-            //{
-            //    StartCoroutine(Reload());
-            //}
         }
 
         private void OnPlayerReady(PlayerInitializedSignal signal)
@@ -110,10 +113,22 @@ namespace Player.Weapon
 
             var stats = _playerModel.StatContext.Source;
             var refs = _playerModel.StatRefs;
-            //Settings.Init(stats, refs);
+
             bulletSetting.Init(stats, refs);
             ammoSettings.Init(stats, refs);
             currentAmmo = (int)ammoSettings.MaxAmmo;
+        }
+
+        private void OnReloadInput()
+        {
+            if (isSkillCheckActive)
+            {
+                TrySkillCheck();
+            }
+            else
+            {
+                Reloading();
+            }
         }
 
         public void Reloading()
@@ -126,9 +141,7 @@ namespace Player.Weapon
 
         public void Attack()
         {
-            //if (!canFire || currentAmmo <= 0) return;
             if (!canFire || isReloading || currentAmmo <= 0) return;
-
 
             FireBullet();
             currentAmmo--;
@@ -136,14 +149,11 @@ namespace Player.Weapon
 
             if (currentAmmo <= 0)
             {
-                //StartOverheatCooldown();
                 StartCoroutine(Reload());
-
             }
             else
             {
                 StartCoroutine(FireRateCooldown());
-                //StartCoolingCooldown();
             }
         }
 
@@ -156,125 +166,113 @@ namespace Player.Weapon
                 muzzleFlashInstance.Play();
             }
 
+            float damage = bulletSetting.Damage;
+            if (nextShotDoubleDamage)
+            {
+                damage *= 2f;
+                nextShotDoubleDamage = false;
+            }
+
             var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
-            bullet.Setup(bulletSetting.BulletSpeed,bulletSetting.AttackRange, bulletSetting.Damage);
+            bullet.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, damage);
+
             audioSource.PlayOneShot(shootFx);
         }
-
-        //private void StartCoolingCooldown()
-        //{
-        //    if (_coolingCooldownCoroutine == null)
-        //    {
-        //        Debug.Log("Cooling cooldown Called");
-        //    }
-        //    else
-        //    {
-        //        StopCoroutine(_coolingCooldownCoroutine);
-        //        Debug.Log("Cooling cooldown restarted");
-        //    }
-        //    _coolingCooldownCoroutine = StartCoroutine(CoolingCooldown());
-        //}
-
-        //private void StopCoolingCooldown()
-        //{
-        //    if (_coolingCooldownCoroutine != null)
-        //    {
-        //        StopCoroutine(_coolingCooldownCoroutine);
-                
-        //        Debug.Log("Cooling cooldown stopped");
-        //        _coolingCooldownCoroutine = null;
-        //    }
-        //}
-
-        //private void StartOverheatCooldown()
-        //{
-        //    StopCoolingCooldown();
-        //    StartCoroutine(OverheatCooldown());
-        //    audioSource?.PlayOneShot(overheathFx);
-        //}
 
         private IEnumerator FireRateCooldown()
         {
             canFire = false;
-            //yield return new WaitForSeconds(Settings.FireRate);
             yield return new WaitForSeconds(fireRate);
-
             canFire = true;
         }
 
-       private IEnumerator Reload()
+        private IEnumerator Reload()
         {
+            bool isEmptyReload = currentAmmo == 0;
+            float bulletReloadTime = 0.15f;
+
             isReloading = true;
             canFire = false;
             audioSource?.PlayOneShot(overheathFx);
 
-            float bulletReloadTime = 0.15f;
-
-            while (currentAmmo < ammoSettings.MaxAmmo)
+            if (isEmptyReload)
             {
-                yield return new WaitForSeconds(bulletReloadTime);
+                var ammoUI = FindObjectOfType<UI_Ammo>();
+                if (ammoUI != null)
+                    yield return ammoUI.StartCoroutine(ammoUI.BlinkEmptyBullets());
 
-                currentAmmo++;
-                OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo); 
-                // acá la UI recibe el update y puede animar esa bala
+                yield return StartCoroutine(EmptyReloadMinigame());
+            }
+            else
+            {
+                while (currentAmmo < ammoSettings.MaxAmmo)
+                {
+                    yield return new WaitForSeconds(bulletReloadTime);
+                    currentAmmo++;
+                    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+                }
             }
 
             isReloading = false;
             canFire = true;
         }
 
+        private IEnumerator EmptyReloadMinigame()
+        {
+            reloadUI = FindObjectOfType<UI_SkillCheck>();
+            if (reloadUI == null) yield break;
 
-        //private IEnumerator OverheatCooldown()
-        //{
-        //    Debug.Log("Overheat cooldown Called");
-        //    OnCooling?.Invoke(Settings.CoolingCooldown, Settings.CoolingCooldown);
-        //    Debug.Log("OnCooling event called");
-        //    canFire = false;
-        //    yield return new WaitForSeconds(Settings.OverheatCooldown);
-        //    currentAmmo = (int)ammoSettings.MaxAmmo;
+            isSkillCheckActive = true;
+            reloadUI.Show(); // dispara la animación y la barra
+            while (isSkillCheckActive)
+            {
+                yield return null;
+            }
 
-        //    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
-        //    canFire = true;
-        //    Debug.Log("Overheat cooldown Finished");
-        //}
+            // aplicar efecto según skillCheckSuccess
+            if (skillCheckSuccess)
+            {
+                nextShotDoubleDamage = true;
+                currentAmmo = (int)ammoSettings.MaxAmmo;
+                OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+                Debug.Log("✅ Recarga rápida exitosa!");
+            }
+            else
+            {
+                // recarga lenta
+                float bulletReloadTime = 0.15f * 2f;
+                while (currentAmmo < ammoSettings.MaxAmmo)
+                {
+                    yield return new WaitForSeconds(bulletReloadTime);
+                    currentAmmo++;
+                    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+                }
+                Debug.Log("❌ Fallaste -> Recarga lenta");
+            }
+        }
 
-        //private IEnumerator CoolingCooldown()
-        //{
-        //    float coolingTimer = 0f;
 
-        //    while (coolingTimer < Settings.CoolingCooldown)
-        //    {
-        //        coolingTimer += Time.deltaTime;
-        //        OnCooling?.Invoke(coolingTimer, Settings.CoolingCooldown);
-        //        yield return null;
-        //    }
-        //    currentAmmo = (int)ammoSettings.MaxAmmo;
-        //    _coolingCooldownCoroutine = null;
-        //    Debug.Log("Cooling cooldown finished");
-        //    OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
-        //}
+        public void TrySkillCheck()
+        {
+            if (!isSkillCheckActive || reloadUI == null) return;
+            reloadUI.TrySkillCheck();
+        }
+
 
         private void LaserEffect()
         {
             Vector3 direction = laserOrigin.forward;
             Vector3 endPos = laserOrigin.position + direction * laserLength;
 
-            Ray ray = new Ray(laserOrigin.position, direction);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, laserLength))
-            {
+            if (Physics.Raycast(laserOrigin.position, direction, out RaycastHit hit, laserLength))
                 endPos = hit.point;
-            }
 
             lineRenderer.SetPosition(0, laserOrigin.position);
             lineRenderer.SetPosition(1, endPos);
 
-            //particulas al final del rayo
             if (impactParticlesInstance != null)
             {
                 impactParticlesInstance.transform.position = endPos;
-
                 Vector3 toLaserOrigin = (laserOrigin.position - endPos).normalized;
                 if (toLaserOrigin != Vector3.zero)
                     impactParticlesInstance.transform.rotation = Quaternion.LookRotation(toLaserOrigin);
@@ -284,31 +282,14 @@ namespace Player.Weapon
             }
         }
 
+        public void SetSkillCheckSuccess(bool success)
+        {
+            skillCheckSuccess = success;
+        }
 
-
-        //Prueba visual para balubis
-
-        //private void OnGUI()
-        //{
-        //    int w = Screen.width;
-        //    int h = Screen.height;
-
-        //    string bars = new string('|', currentAmmo);
-
-        //    int rectWidth = 400;
-        //    int rectHeight = 30;
-
-        //    Rect rect = new Rect(
-        //        (w - rectWidth) / 2,
-        //        h - rectHeight - 20,
-        //        rectWidth,
-        //        rectHeight
-        //    );
-
-        //    GUI.Label(rect, $"Ammo: {bars}");
-        //}
+        public void NotifySkillCheckEnded()
+        {
+            isSkillCheckActive = false;
+        }
     }
-
-
 }
-
