@@ -1,15 +1,16 @@
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
-Shader "PortalDoor"
+Shader "PortalOpened"
 {
 	Properties
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
 		[ASEBegin]_TextureSample0("Texture Sample 0", 2D) = "white" {}
-		[ASEEnd]_Float7("Float 7", Float) = 1
+		[ASEEnd][HDR]_Color1("Color 1", Color) = (0.2533665,0,0.5849056,0)
+		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
-		_TransmissionShadow( "Transmission Shadow", Range( 0, 1 ) ) = 0.5
+		//_TransmissionShadow( "Transmission Shadow", Range( 0, 1 ) ) = 0.5
 		//_TransStrength( "Trans Strength", Range( 0, 50 ) ) = 1
 		//_TransNormal( "Trans Normal Distortion", Range( 0, 1 ) ) = 0.5
 		//_TransScattering( "Trans Scattering", Range( 1, 50 ) ) = 2
@@ -31,7 +32,7 @@ Shader "PortalDoor"
 		
 
 		Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Transparent" "Queue"="Transparent" }
-		Cull Back
+		Cull Off
 		AlphaToMask Off
 		HLSLINCLUDE
 		#pragma target 2.0
@@ -156,11 +157,11 @@ Shader "PortalDoor"
 
 			HLSLPROGRAM
 			#define _NORMAL_DROPOFF_TS 1
-			#define _TRANSMISSION_ASE 1
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -199,7 +200,8 @@ Shader "PortalDoor"
 			    #define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			
+			#define ASE_NEEDS_FRAG_WORLD_VIEW_DIR
+
 
 			struct VertexInput
 			{
@@ -232,7 +234,8 @@ Shader "PortalDoor"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Float7;
+			float4 _TextureSample0_ST;
+			float4 _Color1;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -256,14 +259,14 @@ Shader "PortalDoor"
 			sampler2D _TextureSample0;
 
 
-					float2 voronoihash1( float2 p )
+					float2 voronoihash21( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
+					float voronoi21( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -274,39 +277,7 @@ Shader "PortalDoor"
 							for ( int i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash1( n + g );
-								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
-								float d = 0.5 * ( abs(r.x) + abs(r.y) );
-						 		if( d<F1 ) {
-						 			F2 = F1;
-						 			F1 = d; mg = g; mr = r; id = o;
-						 		} else if( d<F2 ) {
-						 			F2 = d;
-						 		}
-						 	}
-						}
-						return F1;
-					}
-			
-					float2 voronoihash19( float2 p )
-					{
-						
-						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
-						return frac( sin( p ) *43758.5453);
-					}
-			
-					float voronoi19( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
-					{
-						float2 n = floor( v );
-						float2 f = frac( v );
-						float F1 = 8.0;
-						float F2 = 8.0; float2 mg = 0;
-						for ( int j = -1; j <= 1; j++ )
-						{
-							for ( int i = -1; i <= 1; i++ )
-						 	{
-						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash19( n + g );
+						 		float2 o = voronoihash21( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -517,44 +488,49 @@ Shader "PortalDoor"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float4 color6 = IsGammaSpace() ? float4(0.2672497,0,0.6226415,0) : float4(0.05805722,0,0.3456162,0);
-				float mulTime15 = _TimeParameters.x * 4.0;
-				float temp_output_12_0 = sin( mulTime15 );
-				float time1 = ( _TimeParameters.y * 4.0 * temp_output_12_0 );
-				float2 coords1 = IN.ase_texcoord7.xy * 8.1;
-				float2 id1 = 0;
-				float2 uv1 = 0;
-				float voroi1 = voronoi1( coords1, time1, id1, uv1, 0 );
-				float4 temp_output_5_0 = ( color6 + voroi1 );
-				float4 temp_output_47_0 = ( color6 + temp_output_5_0 );
+				float2 uv_TextureSample0 = IN.ase_texcoord7.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float4 tex2DNode27 = tex2D( _TextureSample0, uv_TextureSample0 );
+				float temp_output_3_0_g1 = ( ( 0.01 * saturate( _TimeParameters.y ) ) - tex2DNode27.r );
+				float4 color98 = IsGammaSpace() ? float4(0.1022266,0,0.4245283,0) : float4(0.01037185,0,0.1507122,0);
 				
-				float2 temp_cast_1 = (0.5).xx;
-				float2 temp_cast_2 = (sin( _TimeParameters.x * 0.125 )).xx;
-				float2 texCoord114 = IN.ase_texcoord7.xy * temp_cast_1 + temp_cast_2;
-				float mulTime135 = _TimeParameters.x * _Float7;
-				float4 temp_cast_3 = (voroi1).xxxx;
-				float4 clampResult10 = clamp( temp_output_5_0 , float4( 0,0,0,0 ) , float4( 1,0,0,0 ) );
-				float time19 = temp_output_12_0;
-				float2 coords19 = IN.ase_texcoord7.xy * 7.02;
-				float2 id19 = 0;
-				float2 uv19 = 0;
-				float voroi19 = voronoi19( coords19, time19, id19, uv19, 0 );
-				float4 temp_cast_4 = (0.7).xxxx;
+				float time21 = 0.0;
+				float2 texCoord47_g1 = IN.ase_texcoord7.xy * float2( 1,1 ) + float2( 0,0 );
+				float2 temp_cast_2 = (0.5).xx;
+				float2 center45_g1 = temp_cast_2;
+				float2 delta6_g1 = ( texCoord47_g1 - center45_g1 );
+				float angle10_g1 = ( length( delta6_g1 ) * 6.61 );
+				float x23_g1 = ( ( cos( angle10_g1 ) * delta6_g1.x ) - ( sin( angle10_g1 ) * delta6_g1.y ) );
+				float2 break40_g1 = center45_g1;
+				float mulTime24 = _TimeParameters.x * 0.2;
+				float2 temp_cast_3 = (( 0.5 * mulTime24 )).xx;
+				float2 break41_g1 = temp_cast_3;
+				float y35_g1 = ( ( sin( angle10_g1 ) * delta6_g1.x ) + ( cos( angle10_g1 ) * delta6_g1.y ) );
+				float2 appendResult44_g1 = (float2(( x23_g1 + break40_g1.x + break41_g1.x ) , ( break40_g1.y + break41_g1.y + y35_g1 )));
+				float2 coords21 = appendResult44_g1 * 15.0;
+				float2 id21 = 0;
+				float2 uv21 = 0;
+				float voroi21 = voronoi21( coords21, time21, id21, uv21, 0 );
+				float4 temp_cast_4 = (0.12).xxxx;
+				float4 color76 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+				float4 lerpResult75 = lerp( _Color1 , color76 , voroi21);
+				float4 temp_output_30_0 = ( pow( ( tex2DNode27 * voroi21 ) , temp_cast_4 ) * lerpResult75 );
+				float fresnelNdotV38 = dot( ( tex2DNode27 * float4( 0.6981132,0.6981132,0.6981132,0 ) ).rgb, WorldViewDirection );
+				float fresnelNode38 = ( -1.3 + 1.0 * pow( 1.0 - fresnelNdotV38, saturate( _TimeParameters.y ) ) );
 				
-				float3 Albedo = ( ( float4( 0.6698113,0.6698113,0.6698113,0 ) * temp_output_47_0 ) + step( float4( 0.764151,0.764151,0.764151,0 ) , temp_output_47_0 ) ).rgb;
+				float3 Albedo = ( saturate( ( temp_output_3_0_g1 / fwidth( temp_output_3_0_g1 ) ) ) * color98 ).rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = 0;
+				float3 Emission = ( temp_output_30_0 + fresnelNode38 ).rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = ( saturate( ( sin( ( distance( ( 1.0 - texCoord114 ) , texCoord114 ) + mulTime135 ) ) * ( ( step( float4( 0.2735849,0.2735849,0.2735849,0 ) , tex2D( _TextureSample0, texCoord114 ) ) + float4( 0,0,0,0 ) ) + float4( 0,0,0,0 ) ) ) ) + step( temp_cast_3 , pow( ( clampResult10 * voroi19 ) , temp_cast_4 ) ) ).r;
+				float Alpha = temp_output_30_0.r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
 				float3 RefractionColor = 1;
 				float RefractionIndex = 1;
-				float3 Transmission = temp_output_47_0.rgb;
+				float3 Transmission = 1;
 				float3 Translucency = 1;
 				#ifdef ASE_DEPTH_WRITE_ON
 				float DepthValue = 0;
@@ -715,11 +691,11 @@ Shader "PortalDoor"
 
 			HLSLPROGRAM
 			#define _NORMAL_DROPOFF_TS 1
-			#define _TRANSMISSION_ASE 1
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -760,7 +736,8 @@ Shader "PortalDoor"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Float7;
+			float4 _TextureSample0_ST;
+			float4 _Color1;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -784,14 +761,14 @@ Shader "PortalDoor"
 			sampler2D _TextureSample0;
 
 
-					float2 voronoihash1( float2 p )
+					float2 voronoihash21( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
+					float voronoi21( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -802,39 +779,7 @@ Shader "PortalDoor"
 							for ( int i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash1( n + g );
-								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
-								float d = 0.5 * ( abs(r.x) + abs(r.y) );
-						 		if( d<F1 ) {
-						 			F2 = F1;
-						 			F1 = d; mg = g; mr = r; id = o;
-						 		} else if( d<F2 ) {
-						 			F2 = d;
-						 		}
-						 	}
-						}
-						return F1;
-					}
-			
-					float2 voronoihash19( float2 p )
-					{
-						
-						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
-						return frac( sin( p ) *43758.5453);
-					}
-			
-					float voronoi19( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
-					{
-						float2 n = floor( v );
-						float2 f = frac( v );
-						float F1 = 8.0;
-						float F2 = 8.0; float2 mg = 0;
-						for ( int j = -1; j <= 1; j++ )
-						{
-							for ( int i = -1; i <= 1; i++ )
-						 	{
-						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash19( n + g );
+						 		float2 o = voronoihash21( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -1007,29 +952,31 @@ Shader "PortalDoor"
 					#endif
 				#endif
 
+				float2 uv_TextureSample0 = IN.ase_texcoord2.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float4 tex2DNode27 = tex2D( _TextureSample0, uv_TextureSample0 );
+				float time21 = 0.0;
+				float2 texCoord47_g1 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
 				float2 temp_cast_0 = (0.5).xx;
-				float2 temp_cast_1 = (sin( _TimeParameters.x * 0.125 )).xx;
-				float2 texCoord114 = IN.ase_texcoord2.xy * temp_cast_0 + temp_cast_1;
-				float mulTime135 = _TimeParameters.x * _Float7;
-				float mulTime15 = _TimeParameters.x * 4.0;
-				float temp_output_12_0 = sin( mulTime15 );
-				float time1 = ( _TimeParameters.y * 4.0 * temp_output_12_0 );
-				float2 coords1 = IN.ase_texcoord2.xy * 8.1;
-				float2 id1 = 0;
-				float2 uv1 = 0;
-				float voroi1 = voronoi1( coords1, time1, id1, uv1, 0 );
-				float4 temp_cast_2 = (voroi1).xxxx;
-				float4 color6 = IsGammaSpace() ? float4(0.2672497,0,0.6226415,0) : float4(0.05805722,0,0.3456162,0);
-				float4 temp_output_5_0 = ( color6 + voroi1 );
-				float4 clampResult10 = clamp( temp_output_5_0 , float4( 0,0,0,0 ) , float4( 1,0,0,0 ) );
-				float time19 = temp_output_12_0;
-				float2 coords19 = IN.ase_texcoord2.xy * 7.02;
-				float2 id19 = 0;
-				float2 uv19 = 0;
-				float voroi19 = voronoi19( coords19, time19, id19, uv19, 0 );
-				float4 temp_cast_3 = (0.7).xxxx;
+				float2 center45_g1 = temp_cast_0;
+				float2 delta6_g1 = ( texCoord47_g1 - center45_g1 );
+				float angle10_g1 = ( length( delta6_g1 ) * 6.61 );
+				float x23_g1 = ( ( cos( angle10_g1 ) * delta6_g1.x ) - ( sin( angle10_g1 ) * delta6_g1.y ) );
+				float2 break40_g1 = center45_g1;
+				float mulTime24 = _TimeParameters.x * 0.2;
+				float2 temp_cast_1 = (( 0.5 * mulTime24 )).xx;
+				float2 break41_g1 = temp_cast_1;
+				float y35_g1 = ( ( sin( angle10_g1 ) * delta6_g1.x ) + ( cos( angle10_g1 ) * delta6_g1.y ) );
+				float2 appendResult44_g1 = (float2(( x23_g1 + break40_g1.x + break41_g1.x ) , ( break40_g1.y + break41_g1.y + y35_g1 )));
+				float2 coords21 = appendResult44_g1 * 15.0;
+				float2 id21 = 0;
+				float2 uv21 = 0;
+				float voroi21 = voronoi21( coords21, time21, id21, uv21, 0 );
+				float4 temp_cast_2 = (0.12).xxxx;
+				float4 color76 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+				float4 lerpResult75 = lerp( _Color1 , color76 , voroi21);
+				float4 temp_output_30_0 = ( pow( ( tex2DNode27 * voroi21 ) , temp_cast_2 ) * lerpResult75 );
 				
-				float Alpha = ( saturate( ( sin( ( distance( ( 1.0 - texCoord114 ) , texCoord114 ) + mulTime135 ) ) * ( ( step( float4( 0.2735849,0.2735849,0.2735849,0 ) , tex2D( _TextureSample0, texCoord114 ) ) + float4( 0,0,0,0 ) ) + float4( 0,0,0,0 ) ) ) ) + step( temp_cast_2 , pow( ( clampResult10 * voroi19 ) , temp_cast_3 ) ) ).r;
+				float Alpha = temp_output_30_0.r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
@@ -1069,11 +1016,11 @@ Shader "PortalDoor"
 
 			HLSLPROGRAM
 			#define _NORMAL_DROPOFF_TS 1
-			#define _TRANSMISSION_ASE 1
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -1114,7 +1061,8 @@ Shader "PortalDoor"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Float7;
+			float4 _TextureSample0_ST;
+			float4 _Color1;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1138,14 +1086,14 @@ Shader "PortalDoor"
 			sampler2D _TextureSample0;
 
 
-					float2 voronoihash1( float2 p )
+					float2 voronoihash21( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
+					float voronoi21( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -1156,39 +1104,7 @@ Shader "PortalDoor"
 							for ( int i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash1( n + g );
-								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
-								float d = 0.5 * ( abs(r.x) + abs(r.y) );
-						 		if( d<F1 ) {
-						 			F2 = F1;
-						 			F1 = d; mg = g; mr = r; id = o;
-						 		} else if( d<F2 ) {
-						 			F2 = d;
-						 		}
-						 	}
-						}
-						return F1;
-					}
-			
-					float2 voronoihash19( float2 p )
-					{
-						
-						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
-						return frac( sin( p ) *43758.5453);
-					}
-			
-					float voronoi19( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
-					{
-						float2 n = floor( v );
-						float2 f = frac( v );
-						float F1 = 8.0;
-						float F2 = 8.0; float2 mg = 0;
-						for ( int j = -1; j <= 1; j++ )
-						{
-							for ( int i = -1; i <= 1; i++ )
-						 	{
-						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash19( n + g );
+						 		float2 o = voronoihash21( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -1351,29 +1267,31 @@ Shader "PortalDoor"
 					#endif
 				#endif
 
+				float2 uv_TextureSample0 = IN.ase_texcoord2.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float4 tex2DNode27 = tex2D( _TextureSample0, uv_TextureSample0 );
+				float time21 = 0.0;
+				float2 texCoord47_g1 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
 				float2 temp_cast_0 = (0.5).xx;
-				float2 temp_cast_1 = (sin( _TimeParameters.x * 0.125 )).xx;
-				float2 texCoord114 = IN.ase_texcoord2.xy * temp_cast_0 + temp_cast_1;
-				float mulTime135 = _TimeParameters.x * _Float7;
-				float mulTime15 = _TimeParameters.x * 4.0;
-				float temp_output_12_0 = sin( mulTime15 );
-				float time1 = ( _TimeParameters.y * 4.0 * temp_output_12_0 );
-				float2 coords1 = IN.ase_texcoord2.xy * 8.1;
-				float2 id1 = 0;
-				float2 uv1 = 0;
-				float voroi1 = voronoi1( coords1, time1, id1, uv1, 0 );
-				float4 temp_cast_2 = (voroi1).xxxx;
-				float4 color6 = IsGammaSpace() ? float4(0.2672497,0,0.6226415,0) : float4(0.05805722,0,0.3456162,0);
-				float4 temp_output_5_0 = ( color6 + voroi1 );
-				float4 clampResult10 = clamp( temp_output_5_0 , float4( 0,0,0,0 ) , float4( 1,0,0,0 ) );
-				float time19 = temp_output_12_0;
-				float2 coords19 = IN.ase_texcoord2.xy * 7.02;
-				float2 id19 = 0;
-				float2 uv19 = 0;
-				float voroi19 = voronoi19( coords19, time19, id19, uv19, 0 );
-				float4 temp_cast_3 = (0.7).xxxx;
+				float2 center45_g1 = temp_cast_0;
+				float2 delta6_g1 = ( texCoord47_g1 - center45_g1 );
+				float angle10_g1 = ( length( delta6_g1 ) * 6.61 );
+				float x23_g1 = ( ( cos( angle10_g1 ) * delta6_g1.x ) - ( sin( angle10_g1 ) * delta6_g1.y ) );
+				float2 break40_g1 = center45_g1;
+				float mulTime24 = _TimeParameters.x * 0.2;
+				float2 temp_cast_1 = (( 0.5 * mulTime24 )).xx;
+				float2 break41_g1 = temp_cast_1;
+				float y35_g1 = ( ( sin( angle10_g1 ) * delta6_g1.x ) + ( cos( angle10_g1 ) * delta6_g1.y ) );
+				float2 appendResult44_g1 = (float2(( x23_g1 + break40_g1.x + break41_g1.x ) , ( break40_g1.y + break41_g1.y + y35_g1 )));
+				float2 coords21 = appendResult44_g1 * 15.0;
+				float2 id21 = 0;
+				float2 uv21 = 0;
+				float voroi21 = voronoi21( coords21, time21, id21, uv21, 0 );
+				float4 temp_cast_2 = (0.12).xxxx;
+				float4 color76 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+				float4 lerpResult75 = lerp( _Color1 , color76 , voroi21);
+				float4 temp_output_30_0 = ( pow( ( tex2DNode27 * voroi21 ) , temp_cast_2 ) * lerpResult75 );
 				
-				float Alpha = ( saturate( ( sin( ( distance( ( 1.0 - texCoord114 ) , texCoord114 ) + mulTime135 ) ) * ( ( step( float4( 0.2735849,0.2735849,0.2735849,0 ) , tex2D( _TextureSample0, texCoord114 ) ) + float4( 0,0,0,0 ) ) + float4( 0,0,0,0 ) ) ) ) + step( temp_cast_2 , pow( ( clampResult10 * voroi19 ) , temp_cast_3 ) ) ).r;
+				float Alpha = temp_output_30_0.r;
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 				float DepthValue = 0;
@@ -1406,11 +1324,11 @@ Shader "PortalDoor"
 
 			HLSLPROGRAM
 			#define _NORMAL_DROPOFF_TS 1
-			#define _TRANSMISSION_ASE 1
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -1426,7 +1344,8 @@ Shader "PortalDoor"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 
-			
+			#define ASE_NEEDS_FRAG_WORLD_POSITION
+
 
 			#pragma shader_feature _ _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
 
@@ -1455,7 +1374,8 @@ Shader "PortalDoor"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Float7;
+			float4 _TextureSample0_ST;
+			float4 _Color1;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1479,14 +1399,14 @@ Shader "PortalDoor"
 			sampler2D _TextureSample0;
 
 
-					float2 voronoihash1( float2 p )
+					float2 voronoihash21( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
+					float voronoi21( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -1497,39 +1417,7 @@ Shader "PortalDoor"
 							for ( int i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash1( n + g );
-								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
-								float d = 0.5 * ( abs(r.x) + abs(r.y) );
-						 		if( d<F1 ) {
-						 			F2 = F1;
-						 			F1 = d; mg = g; mr = r; id = o;
-						 		} else if( d<F2 ) {
-						 			F2 = d;
-						 		}
-						 	}
-						}
-						return F1;
-					}
-			
-					float2 voronoihash19( float2 p )
-					{
-						
-						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
-						return frac( sin( p ) *43758.5453);
-					}
-			
-					float voronoi19( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
-					{
-						float2 n = floor( v );
-						float2 f = frac( v );
-						float F1 = 8.0;
-						float F2 = 8.0; float2 mg = 0;
-						for ( int j = -1; j <= 1; j++ )
-						{
-							for ( int i = -1; i <= 1; i++ )
-						 	{
-						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash19( n + g );
+						 		float2 o = voronoihash21( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -1689,34 +1577,41 @@ Shader "PortalDoor"
 					#endif
 				#endif
 
-				float4 color6 = IsGammaSpace() ? float4(0.2672497,0,0.6226415,0) : float4(0.05805722,0,0.3456162,0);
-				float mulTime15 = _TimeParameters.x * 4.0;
-				float temp_output_12_0 = sin( mulTime15 );
-				float time1 = ( _TimeParameters.y * 4.0 * temp_output_12_0 );
-				float2 coords1 = IN.ase_texcoord2.xy * 8.1;
-				float2 id1 = 0;
-				float2 uv1 = 0;
-				float voroi1 = voronoi1( coords1, time1, id1, uv1, 0 );
-				float4 temp_output_5_0 = ( color6 + voroi1 );
-				float4 temp_output_47_0 = ( color6 + temp_output_5_0 );
+				float2 uv_TextureSample0 = IN.ase_texcoord2.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float4 tex2DNode27 = tex2D( _TextureSample0, uv_TextureSample0 );
+				float temp_output_3_0_g1 = ( ( 0.01 * saturate( _TimeParameters.y ) ) - tex2DNode27.r );
+				float4 color98 = IsGammaSpace() ? float4(0.1022266,0,0.4245283,0) : float4(0.01037185,0,0.1507122,0);
 				
-				float2 temp_cast_1 = (0.5).xx;
-				float2 temp_cast_2 = (sin( _TimeParameters.x * 0.125 )).xx;
-				float2 texCoord114 = IN.ase_texcoord2.xy * temp_cast_1 + temp_cast_2;
-				float mulTime135 = _TimeParameters.x * _Float7;
-				float4 temp_cast_3 = (voroi1).xxxx;
-				float4 clampResult10 = clamp( temp_output_5_0 , float4( 0,0,0,0 ) , float4( 1,0,0,0 ) );
-				float time19 = temp_output_12_0;
-				float2 coords19 = IN.ase_texcoord2.xy * 7.02;
-				float2 id19 = 0;
-				float2 uv19 = 0;
-				float voroi19 = voronoi19( coords19, time19, id19, uv19, 0 );
-				float4 temp_cast_4 = (0.7).xxxx;
+				float time21 = 0.0;
+				float2 texCoord47_g1 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float2 temp_cast_2 = (0.5).xx;
+				float2 center45_g1 = temp_cast_2;
+				float2 delta6_g1 = ( texCoord47_g1 - center45_g1 );
+				float angle10_g1 = ( length( delta6_g1 ) * 6.61 );
+				float x23_g1 = ( ( cos( angle10_g1 ) * delta6_g1.x ) - ( sin( angle10_g1 ) * delta6_g1.y ) );
+				float2 break40_g1 = center45_g1;
+				float mulTime24 = _TimeParameters.x * 0.2;
+				float2 temp_cast_3 = (( 0.5 * mulTime24 )).xx;
+				float2 break41_g1 = temp_cast_3;
+				float y35_g1 = ( ( sin( angle10_g1 ) * delta6_g1.x ) + ( cos( angle10_g1 ) * delta6_g1.y ) );
+				float2 appendResult44_g1 = (float2(( x23_g1 + break40_g1.x + break41_g1.x ) , ( break40_g1.y + break41_g1.y + y35_g1 )));
+				float2 coords21 = appendResult44_g1 * 15.0;
+				float2 id21 = 0;
+				float2 uv21 = 0;
+				float voroi21 = voronoi21( coords21, time21, id21, uv21, 0 );
+				float4 temp_cast_4 = (0.12).xxxx;
+				float4 color76 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+				float4 lerpResult75 = lerp( _Color1 , color76 , voroi21);
+				float4 temp_output_30_0 = ( pow( ( tex2DNode27 * voroi21 ) , temp_cast_4 ) * lerpResult75 );
+				float3 ase_worldViewDir = ( _WorldSpaceCameraPos.xyz - WorldPosition );
+				ase_worldViewDir = normalize(ase_worldViewDir);
+				float fresnelNdotV38 = dot( ( tex2DNode27 * float4( 0.6981132,0.6981132,0.6981132,0 ) ).rgb, ase_worldViewDir );
+				float fresnelNode38 = ( -1.3 + 1.0 * pow( 1.0 - fresnelNdotV38, saturate( _TimeParameters.y ) ) );
 				
 				
-				float3 Albedo = ( ( float4( 0.6698113,0.6698113,0.6698113,0 ) * temp_output_47_0 ) + step( float4( 0.764151,0.764151,0.764151,0 ) , temp_output_47_0 ) ).rgb;
-				float3 Emission = 0;
-				float Alpha = ( saturate( ( sin( ( distance( ( 1.0 - texCoord114 ) , texCoord114 ) + mulTime135 ) ) * ( ( step( float4( 0.2735849,0.2735849,0.2735849,0 ) , tex2D( _TextureSample0, texCoord114 ) ) + float4( 0,0,0,0 ) ) + float4( 0,0,0,0 ) ) ) ) + step( temp_cast_3 , pow( ( clampResult10 * voroi19 ) , temp_cast_4 ) ) ).r;
+				float3 Albedo = ( saturate( ( temp_output_3_0_g1 / fwidth( temp_output_3_0_g1 ) ) ) * color98 ).rgb;
+				float3 Emission = ( temp_output_30_0 + fresnelNode38 ).rgb;
+				float Alpha = temp_output_30_0.r;
 				float AlphaClipThreshold = 0.5;
 
 				#ifdef _ALPHATEST_ON
@@ -1747,11 +1642,11 @@ Shader "PortalDoor"
 
 			HLSLPROGRAM
 			#define _NORMAL_DROPOFF_TS 1
-			#define _TRANSMISSION_ASE 1
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -1795,7 +1690,8 @@ Shader "PortalDoor"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Float7;
+			float4 _TextureSample0_ST;
+			float4 _Color1;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1819,14 +1715,14 @@ Shader "PortalDoor"
 			sampler2D _TextureSample0;
 
 
-					float2 voronoihash1( float2 p )
+					float2 voronoihash21( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
+					float voronoi21( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -1837,39 +1733,7 @@ Shader "PortalDoor"
 							for ( int i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash1( n + g );
-								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
-								float d = 0.5 * ( abs(r.x) + abs(r.y) );
-						 		if( d<F1 ) {
-						 			F2 = F1;
-						 			F1 = d; mg = g; mr = r; id = o;
-						 		} else if( d<F2 ) {
-						 			F2 = d;
-						 		}
-						 	}
-						}
-						return F1;
-					}
-			
-					float2 voronoihash19( float2 p )
-					{
-						
-						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
-						return frac( sin( p ) *43758.5453);
-					}
-			
-					float voronoi19( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
-					{
-						float2 n = floor( v );
-						float2 f = frac( v );
-						float F1 = 8.0;
-						float F2 = 8.0; float2 mg = 0;
-						for ( int j = -1; j <= 1; j++ )
-						{
-							for ( int i = -1; i <= 1; i++ )
-						 	{
-						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash19( n + g );
+						 		float2 o = voronoihash21( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -2026,33 +1890,36 @@ Shader "PortalDoor"
 					#endif
 				#endif
 
-				float4 color6 = IsGammaSpace() ? float4(0.2672497,0,0.6226415,0) : float4(0.05805722,0,0.3456162,0);
-				float mulTime15 = _TimeParameters.x * 4.0;
-				float temp_output_12_0 = sin( mulTime15 );
-				float time1 = ( _TimeParameters.y * 4.0 * temp_output_12_0 );
-				float2 coords1 = IN.ase_texcoord2.xy * 8.1;
-				float2 id1 = 0;
-				float2 uv1 = 0;
-				float voroi1 = voronoi1( coords1, time1, id1, uv1, 0 );
-				float4 temp_output_5_0 = ( color6 + voroi1 );
-				float4 temp_output_47_0 = ( color6 + temp_output_5_0 );
+				float2 uv_TextureSample0 = IN.ase_texcoord2.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float4 tex2DNode27 = tex2D( _TextureSample0, uv_TextureSample0 );
+				float temp_output_3_0_g1 = ( ( 0.01 * saturate( _TimeParameters.y ) ) - tex2DNode27.r );
+				float4 color98 = IsGammaSpace() ? float4(0.1022266,0,0.4245283,0) : float4(0.01037185,0,0.1507122,0);
 				
-				float2 temp_cast_1 = (0.5).xx;
-				float2 temp_cast_2 = (sin( _TimeParameters.x * 0.125 )).xx;
-				float2 texCoord114 = IN.ase_texcoord2.xy * temp_cast_1 + temp_cast_2;
-				float mulTime135 = _TimeParameters.x * _Float7;
-				float4 temp_cast_3 = (voroi1).xxxx;
-				float4 clampResult10 = clamp( temp_output_5_0 , float4( 0,0,0,0 ) , float4( 1,0,0,0 ) );
-				float time19 = temp_output_12_0;
-				float2 coords19 = IN.ase_texcoord2.xy * 7.02;
-				float2 id19 = 0;
-				float2 uv19 = 0;
-				float voroi19 = voronoi19( coords19, time19, id19, uv19, 0 );
-				float4 temp_cast_4 = (0.7).xxxx;
+				float time21 = 0.0;
+				float2 texCoord47_g1 = IN.ase_texcoord2.xy * float2( 1,1 ) + float2( 0,0 );
+				float2 temp_cast_2 = (0.5).xx;
+				float2 center45_g1 = temp_cast_2;
+				float2 delta6_g1 = ( texCoord47_g1 - center45_g1 );
+				float angle10_g1 = ( length( delta6_g1 ) * 6.61 );
+				float x23_g1 = ( ( cos( angle10_g1 ) * delta6_g1.x ) - ( sin( angle10_g1 ) * delta6_g1.y ) );
+				float2 break40_g1 = center45_g1;
+				float mulTime24 = _TimeParameters.x * 0.2;
+				float2 temp_cast_3 = (( 0.5 * mulTime24 )).xx;
+				float2 break41_g1 = temp_cast_3;
+				float y35_g1 = ( ( sin( angle10_g1 ) * delta6_g1.x ) + ( cos( angle10_g1 ) * delta6_g1.y ) );
+				float2 appendResult44_g1 = (float2(( x23_g1 + break40_g1.x + break41_g1.x ) , ( break40_g1.y + break41_g1.y + y35_g1 )));
+				float2 coords21 = appendResult44_g1 * 15.0;
+				float2 id21 = 0;
+				float2 uv21 = 0;
+				float voroi21 = voronoi21( coords21, time21, id21, uv21, 0 );
+				float4 temp_cast_4 = (0.12).xxxx;
+				float4 color76 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+				float4 lerpResult75 = lerp( _Color1 , color76 , voroi21);
+				float4 temp_output_30_0 = ( pow( ( tex2DNode27 * voroi21 ) , temp_cast_4 ) * lerpResult75 );
 				
 				
-				float3 Albedo = ( ( float4( 0.6698113,0.6698113,0.6698113,0 ) * temp_output_47_0 ) + step( float4( 0.764151,0.764151,0.764151,0 ) , temp_output_47_0 ) ).rgb;
-				float Alpha = ( saturate( ( sin( ( distance( ( 1.0 - texCoord114 ) , texCoord114 ) + mulTime135 ) ) * ( ( step( float4( 0.2735849,0.2735849,0.2735849,0 ) , tex2D( _TextureSample0, texCoord114 ) ) + float4( 0,0,0,0 ) ) + float4( 0,0,0,0 ) ) ) ) + step( temp_cast_3 , pow( ( clampResult10 * voroi19 ) , temp_cast_4 ) ) ).r;
+				float3 Albedo = ( saturate( ( temp_output_3_0_g1 / fwidth( temp_output_3_0_g1 ) ) ) * color98 ).rgb;
+				float Alpha = temp_output_30_0.r;
 				float AlphaClipThreshold = 0.5;
 
 				half4 color = half4( Albedo, Alpha );
@@ -2080,11 +1947,11 @@ Shader "PortalDoor"
 
 			HLSLPROGRAM
 			#define _NORMAL_DROPOFF_TS 1
-			#define _TRANSMISSION_ASE 1
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -2126,7 +1993,8 @@ Shader "PortalDoor"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Float7;
+			float4 _TextureSample0_ST;
+			float4 _Color1;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -2150,14 +2018,14 @@ Shader "PortalDoor"
 			sampler2D _TextureSample0;
 
 
-					float2 voronoihash1( float2 p )
+					float2 voronoihash21( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
+					float voronoi21( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -2168,39 +2036,7 @@ Shader "PortalDoor"
 							for ( int i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash1( n + g );
-								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
-								float d = 0.5 * ( abs(r.x) + abs(r.y) );
-						 		if( d<F1 ) {
-						 			F2 = F1;
-						 			F1 = d; mg = g; mr = r; id = o;
-						 		} else if( d<F2 ) {
-						 			F2 = d;
-						 		}
-						 	}
-						}
-						return F1;
-					}
-			
-					float2 voronoihash19( float2 p )
-					{
-						
-						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
-						return frac( sin( p ) *43758.5453);
-					}
-			
-					float voronoi19( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
-					{
-						float2 n = floor( v );
-						float2 f = frac( v );
-						float F1 = 8.0;
-						float F2 = 8.0; float2 mg = 0;
-						for ( int j = -1; j <= 1; j++ )
-						{
-							for ( int i = -1; i <= 1; i++ )
-						 	{
-						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash19( n + g );
+						 		float2 o = voronoihash21( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -2366,29 +2202,31 @@ Shader "PortalDoor"
 					#endif
 				#endif
 
+				float2 uv_TextureSample0 = IN.ase_texcoord3.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float4 tex2DNode27 = tex2D( _TextureSample0, uv_TextureSample0 );
+				float time21 = 0.0;
+				float2 texCoord47_g1 = IN.ase_texcoord3.xy * float2( 1,1 ) + float2( 0,0 );
 				float2 temp_cast_0 = (0.5).xx;
-				float2 temp_cast_1 = (sin( _TimeParameters.x * 0.125 )).xx;
-				float2 texCoord114 = IN.ase_texcoord3.xy * temp_cast_0 + temp_cast_1;
-				float mulTime135 = _TimeParameters.x * _Float7;
-				float mulTime15 = _TimeParameters.x * 4.0;
-				float temp_output_12_0 = sin( mulTime15 );
-				float time1 = ( _TimeParameters.y * 4.0 * temp_output_12_0 );
-				float2 coords1 = IN.ase_texcoord3.xy * 8.1;
-				float2 id1 = 0;
-				float2 uv1 = 0;
-				float voroi1 = voronoi1( coords1, time1, id1, uv1, 0 );
-				float4 temp_cast_2 = (voroi1).xxxx;
-				float4 color6 = IsGammaSpace() ? float4(0.2672497,0,0.6226415,0) : float4(0.05805722,0,0.3456162,0);
-				float4 temp_output_5_0 = ( color6 + voroi1 );
-				float4 clampResult10 = clamp( temp_output_5_0 , float4( 0,0,0,0 ) , float4( 1,0,0,0 ) );
-				float time19 = temp_output_12_0;
-				float2 coords19 = IN.ase_texcoord3.xy * 7.02;
-				float2 id19 = 0;
-				float2 uv19 = 0;
-				float voroi19 = voronoi19( coords19, time19, id19, uv19, 0 );
-				float4 temp_cast_3 = (0.7).xxxx;
+				float2 center45_g1 = temp_cast_0;
+				float2 delta6_g1 = ( texCoord47_g1 - center45_g1 );
+				float angle10_g1 = ( length( delta6_g1 ) * 6.61 );
+				float x23_g1 = ( ( cos( angle10_g1 ) * delta6_g1.x ) - ( sin( angle10_g1 ) * delta6_g1.y ) );
+				float2 break40_g1 = center45_g1;
+				float mulTime24 = _TimeParameters.x * 0.2;
+				float2 temp_cast_1 = (( 0.5 * mulTime24 )).xx;
+				float2 break41_g1 = temp_cast_1;
+				float y35_g1 = ( ( sin( angle10_g1 ) * delta6_g1.x ) + ( cos( angle10_g1 ) * delta6_g1.y ) );
+				float2 appendResult44_g1 = (float2(( x23_g1 + break40_g1.x + break41_g1.x ) , ( break40_g1.y + break41_g1.y + y35_g1 )));
+				float2 coords21 = appendResult44_g1 * 15.0;
+				float2 id21 = 0;
+				float2 uv21 = 0;
+				float voroi21 = voronoi21( coords21, time21, id21, uv21, 0 );
+				float4 temp_cast_2 = (0.12).xxxx;
+				float4 color76 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+				float4 lerpResult75 = lerp( _Color1 , color76 , voroi21);
+				float4 temp_output_30_0 = ( pow( ( tex2DNode27 * voroi21 ) , temp_cast_2 ) * lerpResult75 );
 				
-				float Alpha = ( saturate( ( sin( ( distance( ( 1.0 - texCoord114 ) , texCoord114 ) + mulTime135 ) ) * ( ( step( float4( 0.2735849,0.2735849,0.2735849,0 ) , tex2D( _TextureSample0, texCoord114 ) ) + float4( 0,0,0,0 ) ) + float4( 0,0,0,0 ) ) ) ) + step( temp_cast_2 , pow( ( clampResult10 * voroi19 ) , temp_cast_3 ) ) ).r;
+				float Alpha = temp_output_30_0.r;
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 				float DepthValue = 0;
@@ -2427,11 +2265,11 @@ Shader "PortalDoor"
 
 			HLSLPROGRAM
 			#define _NORMAL_DROPOFF_TS 1
-			#define _TRANSMISSION_ASE 1
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
+			#define _EMISSION
 			#define ASE_SRP_VERSION 999999
 
 			#pragma prefer_hlslcc gles
@@ -2468,7 +2306,8 @@ Shader "PortalDoor"
 			    #define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			
+			#define ASE_NEEDS_FRAG_WORLD_VIEW_DIR
+
 
 			struct VertexInput
 			{
@@ -2501,7 +2340,8 @@ Shader "PortalDoor"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Float7;
+			float4 _TextureSample0_ST;
+			float4 _Color1;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -2525,14 +2365,14 @@ Shader "PortalDoor"
 			sampler2D _TextureSample0;
 
 
-					float2 voronoihash1( float2 p )
+					float2 voronoihash21( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
+					float voronoi21( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -2543,39 +2383,7 @@ Shader "PortalDoor"
 							for ( int i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash1( n + g );
-								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
-								float d = 0.5 * ( abs(r.x) + abs(r.y) );
-						 		if( d<F1 ) {
-						 			F2 = F1;
-						 			F1 = d; mg = g; mr = r; id = o;
-						 		} else if( d<F2 ) {
-						 			F2 = d;
-						 		}
-						 	}
-						}
-						return F1;
-					}
-			
-					float2 voronoihash19( float2 p )
-					{
-						
-						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
-						return frac( sin( p ) *43758.5453);
-					}
-			
-					float voronoi19( float2 v, float time, inout float2 id, inout float2 mr, float smoothness )
-					{
-						float2 n = floor( v );
-						float2 f = frac( v );
-						float F1 = 8.0;
-						float F2 = 8.0; float2 mg = 0;
-						for ( int j = -1; j <= 1; j++ )
-						{
-							for ( int i = -1; i <= 1; i++ )
-						 	{
-						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash19( n + g );
+						 		float2 o = voronoihash21( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -2785,44 +2593,49 @@ Shader "PortalDoor"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float4 color6 = IsGammaSpace() ? float4(0.2672497,0,0.6226415,0) : float4(0.05805722,0,0.3456162,0);
-				float mulTime15 = _TimeParameters.x * 4.0;
-				float temp_output_12_0 = sin( mulTime15 );
-				float time1 = ( _TimeParameters.y * 4.0 * temp_output_12_0 );
-				float2 coords1 = IN.ase_texcoord7.xy * 8.1;
-				float2 id1 = 0;
-				float2 uv1 = 0;
-				float voroi1 = voronoi1( coords1, time1, id1, uv1, 0 );
-				float4 temp_output_5_0 = ( color6 + voroi1 );
-				float4 temp_output_47_0 = ( color6 + temp_output_5_0 );
+				float2 uv_TextureSample0 = IN.ase_texcoord7.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float4 tex2DNode27 = tex2D( _TextureSample0, uv_TextureSample0 );
+				float temp_output_3_0_g1 = ( ( 0.01 * saturate( _TimeParameters.y ) ) - tex2DNode27.r );
+				float4 color98 = IsGammaSpace() ? float4(0.1022266,0,0.4245283,0) : float4(0.01037185,0,0.1507122,0);
 				
-				float2 temp_cast_1 = (0.5).xx;
-				float2 temp_cast_2 = (sin( _TimeParameters.x * 0.125 )).xx;
-				float2 texCoord114 = IN.ase_texcoord7.xy * temp_cast_1 + temp_cast_2;
-				float mulTime135 = _TimeParameters.x * _Float7;
-				float4 temp_cast_3 = (voroi1).xxxx;
-				float4 clampResult10 = clamp( temp_output_5_0 , float4( 0,0,0,0 ) , float4( 1,0,0,0 ) );
-				float time19 = temp_output_12_0;
-				float2 coords19 = IN.ase_texcoord7.xy * 7.02;
-				float2 id19 = 0;
-				float2 uv19 = 0;
-				float voroi19 = voronoi19( coords19, time19, id19, uv19, 0 );
-				float4 temp_cast_4 = (0.7).xxxx;
+				float time21 = 0.0;
+				float2 texCoord47_g1 = IN.ase_texcoord7.xy * float2( 1,1 ) + float2( 0,0 );
+				float2 temp_cast_2 = (0.5).xx;
+				float2 center45_g1 = temp_cast_2;
+				float2 delta6_g1 = ( texCoord47_g1 - center45_g1 );
+				float angle10_g1 = ( length( delta6_g1 ) * 6.61 );
+				float x23_g1 = ( ( cos( angle10_g1 ) * delta6_g1.x ) - ( sin( angle10_g1 ) * delta6_g1.y ) );
+				float2 break40_g1 = center45_g1;
+				float mulTime24 = _TimeParameters.x * 0.2;
+				float2 temp_cast_3 = (( 0.5 * mulTime24 )).xx;
+				float2 break41_g1 = temp_cast_3;
+				float y35_g1 = ( ( sin( angle10_g1 ) * delta6_g1.x ) + ( cos( angle10_g1 ) * delta6_g1.y ) );
+				float2 appendResult44_g1 = (float2(( x23_g1 + break40_g1.x + break41_g1.x ) , ( break40_g1.y + break41_g1.y + y35_g1 )));
+				float2 coords21 = appendResult44_g1 * 15.0;
+				float2 id21 = 0;
+				float2 uv21 = 0;
+				float voroi21 = voronoi21( coords21, time21, id21, uv21, 0 );
+				float4 temp_cast_4 = (0.12).xxxx;
+				float4 color76 = IsGammaSpace() ? float4(1,1,1,0) : float4(1,1,1,0);
+				float4 lerpResult75 = lerp( _Color1 , color76 , voroi21);
+				float4 temp_output_30_0 = ( pow( ( tex2DNode27 * voroi21 ) , temp_cast_4 ) * lerpResult75 );
+				float fresnelNdotV38 = dot( ( tex2DNode27 * float4( 0.6981132,0.6981132,0.6981132,0 ) ).rgb, WorldViewDirection );
+				float fresnelNode38 = ( -1.3 + 1.0 * pow( 1.0 - fresnelNdotV38, saturate( _TimeParameters.y ) ) );
 				
-				float3 Albedo = ( ( float4( 0.6698113,0.6698113,0.6698113,0 ) * temp_output_47_0 ) + step( float4( 0.764151,0.764151,0.764151,0 ) , temp_output_47_0 ) ).rgb;
+				float3 Albedo = ( saturate( ( temp_output_3_0_g1 / fwidth( temp_output_3_0_g1 ) ) ) * color98 ).rgb;
 				float3 Normal = float3(0, 0, 1);
-				float3 Emission = 0;
+				float3 Emission = ( temp_output_30_0 + fresnelNode38 ).rgb;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = ( saturate( ( sin( ( distance( ( 1.0 - texCoord114 ) , texCoord114 ) + mulTime135 ) ) * ( ( step( float4( 0.2735849,0.2735849,0.2735849,0 ) , tex2D( _TextureSample0, texCoord114 ) ) + float4( 0,0,0,0 ) ) + float4( 0,0,0,0 ) ) ) ) + step( temp_cast_3 , pow( ( clampResult10 * voroi19 ) , temp_cast_4 ) ) ).r;
+				float Alpha = temp_output_30_0.r;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
 				float3 RefractionColor = 1;
 				float RefractionIndex = 1;
-				float3 Transmission = temp_output_47_0.rgb;
+				float3 Transmission = 1;
 				float3 Translucency = 1;
 				#ifdef ASE_DEPTH_WRITE_ON
 				float DepthValue = 0;
@@ -2971,114 +2784,120 @@ Shader "PortalDoor"
 }
 /*ASEBEGIN
 Version=18900
-0;625;1625;366;1582.413;992.8146;2.090471;True;False
-Node;AmplifyShaderEditor.RangedFloatNode;13;-1367.711,271.38;Inherit;False;Constant;_Float1;Float 1;1;0;Create;True;0;0;0;False;0;False;4;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleTimeNode;15;-1221.561,390.4246;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SinTimeNode;2;-1038.315,180.9333;Inherit;False;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SinOpNode;12;-1030.69,394.9796;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;115;-1109.569,-522.4678;Inherit;False;Constant;_Float5;Float 5;1;0;Create;True;0;0;0;False;0;False;0.5;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SinTimeNode;128;-1198.941,-379.5262;Inherit;False;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;3;-831.6379,47.35835;Inherit;False;Constant;_Float0;Float 0;0;0;Create;True;0;0;0;False;0;False;8.1;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;14;-843.5618,304.5864;Inherit;True;3;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TextureCoordinatesNode;114;-909.5225,-537.4639;Inherit;True;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;110;-546.6543,-451.1438;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;0;False;0;False;-1;4af058ec0d5548e4aa7ff62f1ac0de46;4af058ec0d5548e4aa7ff62f1ac0de46;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.OneMinusNode;132;-435.269,-830.5595;Inherit;True;1;0;FLOAT2;0,0;False;1;FLOAT2;0
-Node;AmplifyShaderEditor.RangedFloatNode;134;181.0833,-699.506;Inherit;False;Property;_Float7;Float 7;3;0;Create;True;0;0;0;False;0;False;1;2;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.VoronoiNode;1;-593.2692,67.7368;Inherit;True;0;2;1;0;1;False;1;False;False;4;0;FLOAT2;0,0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;0;False;3;FLOAT;0;FLOAT2;1;FLOAT2;2
-Node;AmplifyShaderEditor.ColorNode;6;-675.6072,-168.2259;Inherit;False;Constant;_Color0;Color 0;0;0;Create;True;0;0;0;False;0;False;0.2672497,0,0.6226415,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleAddOpNode;5;-358.9942,54.07415;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;20;-762.9648,594.9375;Inherit;False;Constant;_Float2;Float 2;1;0;Create;True;0;0;0;False;0;False;7.02;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleTimeNode;135;347.7523,-738.1174;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.DistanceOpNode;133;-82.02003,-743.8322;Inherit;True;2;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.StepOpNode;118;-175.0441,-408.9734;Inherit;True;2;0;COLOR;0.2735849,0.2735849,0.2735849,0;False;1;COLOR;0.2,0.3773585,0.3773585,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.VoronoiNode;19;-561.9721,462.5058;Inherit;True;0;0;1;0;1;False;1;False;False;4;0;FLOAT2;0,0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;0;False;3;FLOAT;0;FLOAT2;1;FLOAT2;2
-Node;AmplifyShaderEditor.ClampOpNode;10;-176.1825,262.6582;Inherit;True;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;COLOR;1,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;136;546.3561,-847.6329;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;111;87.9083,-450.6049;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;116;660.1581,-599.5991;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SinOpNode;137;748.0225,-847.4805;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;18;46.47089,485.3428;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;31;92.51123,357.9288;Inherit;False;Constant;_Float3;Float 3;1;0;Create;True;0;0;0;False;0;False;0.7;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.PowerNode;30;307.0129,373.1869;Inherit;True;False;2;0;COLOR;0,0,0,0;False;1;FLOAT;1;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;47;101.1843,-137.8955;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;120;968.1871,-782.6843;Inherit;True;2;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.StepOpNode;16;569.5638,176.1107;Inherit;True;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SaturateNode;138;1085.858,-475.2964;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.StepOpNode;107;408.8339,-152.2077;Inherit;True;2;0;COLOR;0.764151,0.764151,0.764151,0;False;1;COLOR;0.4150943,0.3974724,0.3974724,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;108;403.7135,-378.2549;Inherit;True;2;2;0;COLOR;0.6698113,0.6698113,0.6698113,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;119;1131.052,-176.0177;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SinOpNode;130;-1093.771,-1069.034;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.StepOpNode;41;-555.0409,-1073.395;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;-0.69;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;46;-1374.478,-1310.898;Inherit;False;Property;_Float4;Float 4;1;0;Create;True;0;0;0;False;0;False;-0.09;1;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;131;-1449.563,-1073.736;Inherit;False;Property;_Float6;Float 6;2;0;Create;True;0;0;0;False;0;False;-0.09;0.5;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;109;663.1197,-239.435;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.SimpleTimeNode;129;-1296.142,-1065.684;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SinOpNode;122;-1018.687,-1306.196;Inherit;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.StepOpNode;32;-553.692,-1311.716;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleTimeNode;121;-1221.058,-1302.846;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;49;-191.027,-1216.223;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;104;1190.35,-100.2826;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=Universal2D;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;102;1190.35,-100.2826;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;101;1190.35,-100.2826;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;103;1190.35,-100.2826;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;106;1190.35,-100.2826;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalGBuffer;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;105;1190.35,-100.2826;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=DepthNormals;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;100;1589.491,-390.9919;Float;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;PortalDoor;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;18;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;38;Workflow;1;Surface;1;  Refraction Model;0;  Blend;0;Two Sided;1;Fragment Normal Space,InvertActionOnDeselection;0;Transmission;1;  Transmission Shadow;0,False,-1;Translucency;0;  Translucency Strength;1,False,-1;  Normal Distortion;0.5,False,-1;  Scattering;2,False,-1;  Direct;0.9,False,-1;  Ambient;0.1,False,-1;  Shadow;0.5,False,-1;Cast Shadows;1;  Use Shadow Threshold;0;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;1;Built-in Fog;1;_FinalColorxAlpha;0;Meta Pass;1;Override Baked GI;0;Extra Pre Pass;0;DOTS Instancing;0;Tessellation;0;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Write Depth;0;  Early Z;0;Vertex Position,InvertActionOnDeselection;1;0;8;False;True;True;True;True;True;True;True;False;;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;99;1190.35,-100.2826;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-WireConnection;15;0;13;0
-WireConnection;12;0;15;0
-WireConnection;14;0;2;4
-WireConnection;14;1;13;0
-WireConnection;14;2;12;0
-WireConnection;114;0;115;0
-WireConnection;114;1;128;1
-WireConnection;110;1;114;0
-WireConnection;132;0;114;0
-WireConnection;1;1;14;0
-WireConnection;1;2;3;0
-WireConnection;5;0;6;0
-WireConnection;5;1;1;0
-WireConnection;135;0;134;0
-WireConnection;133;0;132;0
-WireConnection;133;1;114;0
-WireConnection;118;1;110;0
-WireConnection;19;1;12;0
-WireConnection;19;2;20;0
-WireConnection;10;0;5;0
-WireConnection;136;0;133;0
-WireConnection;136;1;135;0
-WireConnection;111;0;118;0
-WireConnection;116;0;111;0
-WireConnection;137;0;136;0
-WireConnection;18;0;10;0
-WireConnection;18;1;19;0
-WireConnection;30;0;18;0
-WireConnection;30;1;31;0
-WireConnection;47;0;6;0
-WireConnection;47;1;5;0
-WireConnection;120;0;137;0
-WireConnection;120;1;116;0
-WireConnection;16;0;1;0
-WireConnection;16;1;30;0
-WireConnection;138;0;120;0
-WireConnection;107;1;47;0
-WireConnection;108;1;47;0
-WireConnection;119;0;138;0
-WireConnection;119;1;16;0
-WireConnection;130;0;129;0
-WireConnection;41;0;130;0
-WireConnection;41;1;114;1
-WireConnection;109;0;108;0
-WireConnection;109;1;107;0
-WireConnection;129;0;131;0
-WireConnection;122;0;121;0
-WireConnection;32;0;114;1
-WireConnection;32;1;122;0
-WireConnection;121;0;46;0
-WireConnection;49;0;32;0
-WireConnection;49;1;41;0
-WireConnection;100;0;109;0
-WireConnection;100;6;119;0
-WireConnection;100;14;47;0
+0;410;1625;581;941.3227;488.1004;1;True;False
+Node;AmplifyShaderEditor.Vector2Node;25;-1253.543,-195.8072;Inherit;False;Constant;_Vector1;Vector 1;0;0;Create;True;0;0;0;False;0;False;0.5,0;0,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
+Node;AmplifyShaderEditor.SimpleTimeNode;24;-1250.253,-24.6742;Inherit;False;1;0;FLOAT;0.2;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;11;-1014.723,-271.9854;Inherit;False;Constant;_Float2;Float 2;0;0;Create;True;0;0;0;False;0;False;6.61;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;10;-1013.305,-359.4819;Inherit;False;Constant;_Float1;Float 1;0;0;Create;True;0;0;0;False;0;False;0.5;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;26;-1033.517,-134.5066;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;23;-521.1859,-164.9312;Inherit;False;Constant;_Float4;Float 4;0;0;Create;True;0;0;0;False;0;False;15;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;9;-787.0186,-262.3736;Inherit;True;Twirl;-1;;1;90936742ac32db8449cd21ab6dd337c8;0;4;1;FLOAT2;0,0;False;2;FLOAT2;0,0;False;3;FLOAT;0;False;4;FLOAT2;0,0;False;1;FLOAT2;0
+Node;AmplifyShaderEditor.SinTimeNode;96;773.2497,-608.8273;Inherit;False;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;27;-603.7631,-602.0959;Inherit;True;Property;_TextureSample0;Texture Sample 0;0;0;Create;True;0;0;0;False;0;False;-1;None;8c4a7fca2884fab419769ccc0355c0c1;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.VoronoiNode;21;-360.2749,-285.8974;Inherit;True;0;0;1;0;1;False;1;False;False;4;0;FLOAT2;0,0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;0;False;3;FLOAT;0;FLOAT2;1;FLOAT2;2
+Node;AmplifyShaderEditor.SinTimeNode;80;459.6766,-24.164;Inherit;False;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SaturateNode;97;910.4586,-541.4355;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;76;-55.39309,32.11865;Inherit;False;Constant;_Color2;Color 2;2;0;Create;True;0;0;0;False;0;False;1,1,1,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;37;-68.76483,-225.5293;Inherit;False;Constant;_Float3;Float 3;2;0;Create;True;0;0;0;False;0;False;0.12;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;32;-69.68102,-150.5478;Inherit;False;Property;_Color1;Color 1;1;1;[HDR];Create;True;0;0;0;False;0;False;0.2533665,0,0.5849056,0;1.498039,0,1.001048,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;28;-148.7216,-475.6573;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;94;907.6259,-629.3397;Inherit;False;Constant;_Float8;Float 8;2;0;Create;True;0;0;0;False;0;False;0.01;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.PowerNode;36;91.53546,-437.2299;Inherit;True;False;2;0;COLOR;0,0,0,0;False;1;FLOAT;1;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;86;604.906,-131.9902;Inherit;False;Constant;_Float5;Float 5;2;0;Create;True;0;0;0;False;0;False;-1.3;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;91;617.7876,-360.1835;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0.6981132,0.6981132,0.6981132,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.LerpOp;75;148.3171,-135.9939;Inherit;True;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.SaturateNode;81;668.6517,-9.11969;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;95;1123.697,-642.02;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.FresnelNode;38;994.8158,-191.3094;Inherit;True;Standard;WorldNormal;ViewDir;False;False;5;0;FLOAT3;0,0,1;False;4;FLOAT3;0,0,0;False;1;FLOAT;0;False;2;FLOAT;1;False;3;FLOAT;5;False;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;92;1247.226,-724.2787;Inherit;True;Step Antialiasing;-1;;1;2a825e80dfb3290468194f83380797bd;0;2;1;FLOAT;0;False;2;FLOAT;0.02;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;30;400.9309,-503.0026;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.ColorNode;98;1472.057,-655.0522;Inherit;False;Constant;_Color3;Color 3;2;0;Create;True;0;0;0;False;0;False;0.1022266,0,0.4245283,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SinOpNode;53;1018.868,519.9709;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.OneMinusNode;51;421.8219,340.7044;Inherit;True;1;0;FLOAT2;0,0;False;1;FLOAT2;0
+Node;AmplifyShaderEditor.PowerNode;62;287.0938,-871.2153;Inherit;True;False;2;0;COLOR;0,0,0,0;False;1;FLOAT;1;False;1;COLOR;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;55;1136.972,283.1165;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;99;1708.379,-727.6073;Inherit;False;2;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;78;624.6249,160.6281;Inherit;False;Constant;_Float0;Float 0;2;0;Create;True;0;0;0;False;0;False;17.08;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;63;-115.107,-730.5292;Inherit;False;Constant;_Float7;Float 7;2;0;Create;True;0;0;0;False;0;False;10;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SinTimeNode;64;-116.6708,-890.7089;Inherit;False;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SimpleTimeNode;54;485.0783,575.0106;Inherit;False;1;0;FLOAT;5;False;1;FLOAT;0
+Node;AmplifyShaderEditor.StepOpNode;70;509.3329,-890.5427;Inherit;False;2;0;COLOR;0,0,0,0;False;1;COLOR;0.8679245,0.8679245,0.8679245,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;67;96.44301,-1122.263;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.ColorNode;68;-132.6831,-1334.52;Inherit;False;Constant;_Color0;Color 0;2;0;Create;True;0;0;0;False;0;False;1,0,0,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SaturateNode;72;680.3123,-875.8076;Inherit;False;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;56;774.8749,534.3168;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;1;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;45;836.6521,-923.3224;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;66;37.26492,-817.1158;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.OneMinusNode;43;-127.0226,-1126.787;Inherit;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TextureCoordinatesNode;47;176.2414,284.3083;Inherit;True;0;-1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.PowerNode;84;851.0706,98.80648;Inherit;True;False;2;0;FLOAT;0;False;1;FLOAT;1;False;1;FLOAT;0
+Node;AmplifyShaderEditor.PowerNode;59;1187.492,493.7811;Inherit;True;False;2;0;FLOAT;0;False;1;FLOAT;1;False;1;FLOAT;0
+Node;AmplifyShaderEditor.DistanceOpNode;50;582.1451,257.5088;Inherit;True;2;0;FLOAT2;0,0;False;1;FLOAT2;0,0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;39;1505.861,-443.1751;Inherit;True;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.RangedFloatNode;60;1031.776,603.7358;Inherit;False;Constant;_Float6;Float 6;2;0;Create;True;0;0;0;False;0;False;10;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;7;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalGBuffer;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;2;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;3;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;4;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;5;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=Universal2D;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;1901.242,-664.7559;Float;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;PortalOpened;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;18;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;38;Workflow;1;Surface;1;  Refraction Model;0;  Blend;0;Two Sided;1;Fragment Normal Space,InvertActionOnDeselection;0;Transmission;0;  Transmission Shadow;0,False,-1;Translucency;0;  Translucency Strength;1,False,-1;  Normal Distortion;0.5,False,-1;  Scattering;2,False,-1;  Direct;0.9,False,-1;  Ambient;0.1,False,-1;  Shadow;0.5,False,-1;Cast Shadows;1;  Use Shadow Threshold;0;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;1;Built-in Fog;1;_FinalColorxAlpha;0;Meta Pass;1;Override Baked GI;0;Extra Pre Pass;0;DOTS Instancing;0;Tessellation;0;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Write Depth;0;  Early Z;0;Vertex Position,InvertActionOnDeselection;1;0;8;False;True;True;True;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;6;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=DepthNormals;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+WireConnection;26;0;25;1
+WireConnection;26;1;24;0
+WireConnection;9;2;10;0
+WireConnection;9;3;11;0
+WireConnection;9;4;26;0
+WireConnection;21;0;9;0
+WireConnection;21;2;23;0
+WireConnection;97;0;96;4
+WireConnection;28;0;27;0
+WireConnection;28;1;21;0
+WireConnection;36;0;28;0
+WireConnection;36;1;37;0
+WireConnection;91;0;27;0
+WireConnection;75;0;32;0
+WireConnection;75;1;76;0
+WireConnection;75;2;21;0
+WireConnection;81;0;80;4
+WireConnection;95;0;94;0
+WireConnection;95;1;97;0
+WireConnection;38;0;91;0
+WireConnection;38;1;86;0
+WireConnection;38;3;81;0
+WireConnection;92;1;27;0
+WireConnection;92;2;95;0
+WireConnection;30;0;36;0
+WireConnection;30;1;75;0
+WireConnection;53;0;56;0
+WireConnection;51;0;47;0
+WireConnection;62;0;67;0
+WireConnection;62;1;66;0
+WireConnection;55;0;50;0
+WireConnection;55;1;59;0
+WireConnection;99;0;92;0
+WireConnection;99;1;98;0
+WireConnection;70;0;62;0
+WireConnection;67;0;43;0
+WireConnection;67;1;68;0
+WireConnection;72;0;70;0
+WireConnection;56;0;50;0
+WireConnection;56;1;54;0
+WireConnection;45;0;72;0
+WireConnection;45;1;30;0
+WireConnection;66;0;64;4
+WireConnection;66;1;63;0
+WireConnection;43;0;27;0
+WireConnection;84;0;50;0
+WireConnection;84;1;78;0
+WireConnection;59;0;53;0
+WireConnection;59;1;60;0
+WireConnection;50;0;47;0
+WireConnection;50;1;51;0
+WireConnection;39;0;30;0
+WireConnection;39;1;38;0
+WireConnection;1;0;99;0
+WireConnection;1;2;39;0
+WireConnection;1;6;30;0
 ASEEND*/
-//CHKSM=FB1BAC86873F70025B9004D3DAFFF23911A09EFA
+//CHKSM=A284744B39D7CB347FF08F401B5CB7466FB4FF3E
