@@ -89,6 +89,9 @@ public class EnemyAttackSOBase : ScriptableObject
         //_colorTransitionDuration = _initialAttackDelay;
         //_material = gameObject.GetComponentInChildren<Renderer>().material;
         //_originalColor = _material.color;
+
+        //isShieldActive = _bossModel.statsSO.;
+
     }
     public virtual void DoExitLogic() { ResetValues(); }
 
