@@ -200,12 +200,18 @@ namespace Player
     
         private void HandleFire()
         {
-            weaponController.Attack();
+            if (_playerView.CanUseWeapon())
+            {
+                weaponController.Attack();
+            }
         }
 
         private void HandleReload()
         {
-            weaponController.Reloading();
+            if (_playerView.CanUseWeapon())
+            {
+                weaponController.Reloading();
+            }
         }
 
         private void HandleInteraction()

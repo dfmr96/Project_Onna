@@ -1292,6 +1292,9 @@ MonoBehaviour:
   visualRoot: {fileID: 1592005984796363887}
   hurtFx: {fileID: 8300000, guid: 59d794063924baa4fac1b832c2d9e292, type: 3}
   healthFx: {fileID: 8300000, guid: d0f484da1817b7f4189a3721200ccf8d, type: 3}
+  rigBuilder: {fileID: 6354521171766058465}
+  hubAnimator: {fileID: 9100000, guid: ca70cfc19ca23754c8e6acd7ae2fd346, type: 2}
+  combatAnimator: {fileID: 9100000, guid: 7bab0c5a9a8f20e4ab9237b877e657fa, type: 2}
   torsoRotationSpeed: 10
   rotationSpeed: 10
   minAimDistance: 2
@@ -2518,6 +2521,7 @@ MonoBehaviour:
   laserOrigin: {fileID: 6286168293087101770}
   shootFx: {fileID: 8300000, guid: eb192c69ffce50d4c9eb79b0bc16ac7e, type: 3}
   overheathFx: {fileID: 8300000, guid: 62d7fcc486ccf424084211b80c981a87, type: 3}
+  nextShotDoubleDamage: 0
 --- !u!82 &7066039255632587307
 AudioSource:
   m_ObjectHideFlags: 0

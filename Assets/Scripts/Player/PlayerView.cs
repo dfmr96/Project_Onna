@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Player
 {
     public class PlayerView : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private Transform aimTarget; 
-        [SerializeField] private Transform torsoTransform; 
-        [SerializeField] private Transform weaponSocket;   
-        [SerializeField] private GameObject weaponInstance; 
+        [SerializeField] private Transform aimTarget;
+        [SerializeField] private Transform torsoTransform;
+        [SerializeField] private Transform weaponSocket;
+        [SerializeField] private GameObject weaponInstance;
         [SerializeField] private Animator animator;
         [SerializeField] private Transform visualRoot;
         [SerializeField] private AudioClip hurtFx;
         [SerializeField] private AudioClip healthFx;
+
+        [Header("Animation Systems")]
+        [SerializeField] private RigBuilder rigBuilder;
+        [SerializeField] private RuntimeAnimatorController hubAnimator;
+        [SerializeField] private RuntimeAnimatorController combatAnimator;
         
         [Header("Params")]
         [SerializeField] private float torsoRotationSpeed = 10f;
@@ -23,9 +29,11 @@ namespace Player
         
         private PlayerController _playerController;
         private PlayerInputHandler _playerInputHandler;
+        private bool _isInHub => GameModeSelector.SelectedMode == GameMode.Hub;
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int Speed = Animator.StringToHash("Speed");
+        private static readonly int IsInHub = Animator.StringToHash("IsInHub");
 
         private AudioSource audioSource; 
 
@@ -71,15 +79,54 @@ namespace Player
                         originalColors[i][j] = mat.GetColor(property);
                 }
             }
+
+            UpdateWeaponVisibility();
+            SetAnimatorForCurrentMode();
+            UpdateRigBuilderState();
         }
 
         private void Update()
         {
             Vector3 moveDir = _playerInputHandler.MovementInput;
 
-            UpdateAimTarget(_playerController.MouseWorldPos);
-            UpdateWeaponAim(_playerController.MouseWorldPos);
-            RotateVisualTowards(moveDir);
+            if (_isInHub)
+            {
+                UpdateHubMovement(moveDir);
+            }
+            else
+            {
+                UpdateAimTarget(_playerController.MouseWorldPos);
+                UpdateWeaponAim(_playerController.MouseWorldPos);
+                RotateVisualTowards(moveDir);
+            }
+        }
+
+        private void UpdateHubMovement(Vector3 moveDir)
+        {
+            float speed = moveDir.magnitude;
+
+            if (speed < 0.01f)
+            {
+                // Idle en HUB
+                animator.SetFloat(Speed, 0f);
+                animator.SetFloat(MoveX, 0f);
+                animator.SetFloat(MoveY, 0f);
+                return;
+            }
+
+            // En el HUB: orientación simple hacia donde se mueve
+            moveDir.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            visualRoot.rotation = Quaternion.Slerp(
+                visualRoot.rotation,
+                targetRotation,
+                Time.deltaTime * rotationSpeed
+            );
+
+            // Animación simple: solo hacia adelante cuando se mueve
+            animator.SetFloat(Speed, speed);
+            animator.SetFloat(MoveX, 0f);
+            animator.SetFloat(MoveY, 1f); // Siempre corriendo hacia adelante
         }
 
         private void RotateVisualTowards(Vector3 moveDir)
@@ -207,6 +254,26 @@ namespace Player
             _playerController = controller;
         }
 
+        private void SetAnimatorForCurrentMode()
+        {
+            if (_isInHub && hubAnimator != null)
+            {
+                animator.runtimeAnimatorController = hubAnimator;
+            }
+            else if (!_isInHub && combatAnimator != null)
+            {
+                animator.runtimeAnimatorController = combatAnimator;
+            }
+        }
+
+        private void UpdateRigBuilderState()
+        {
+            if (rigBuilder != null)
+            {
+                rigBuilder.enabled = !_isInHub;
+            }
+        }
+
         public void PlayDamageEffect()
         {
             StartCoroutine(FlashCoroutine());
@@ -259,6 +326,19 @@ namespace Player
                     return prop;
             }
             return null;
+        }
+
+        private void UpdateWeaponVisibility()
+        {
+            if (weaponInstance != null)
+            {
+                weaponInstance.SetActive(!_isInHub);
+            }
+        }
+
+        public bool CanUseWeapon()
+        {
+            return !_isInHub;
         }
 
         private void OnDrawGizmos()
