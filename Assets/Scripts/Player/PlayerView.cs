@@ -75,29 +75,80 @@ namespace Player
 
         private void Update()
         {
-            animator.SetFloat(Speed, _playerController.Speed);
             Vector3 moveDir = _playerInputHandler.MovementInput;
 
-            animator.SetFloat(MoveX, moveDir.x);
-            animator.SetFloat(MoveY, moveDir.z);
-
+            UpdateAimTarget(_playerController.MouseWorldPos);
+            UpdateWeaponAim(_playerController.MouseWorldPos);
             RotateVisualTowards(moveDir);
-            
-            UpdateAimTarget(_playerController.MouseWorldPos);     
-            UpdateWeaponAim(_playerController.MouseWorldPos);   
         }
 
         private void RotateVisualTowards(Vector3 moveDir)
         {
-            if (moveDir.sqrMagnitude < 0.01f) return;
+            if (moveDir.sqrMagnitude < 0.01f)
+            {
+                animator.SetFloat(Speed, 0f);
+                animator.SetFloat(MoveX, 0f);
+                animator.SetFloat(MoveY, 0f);
+                return;
+            }
 
             moveDir.y = 0;
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            Vector3 aimDir = GetAimDirection();
+
+            // Calcular producto punto para determinar relación entre movimiento y apuntado
+            float dotProduct = Vector3.Dot(moveDir.normalized, aimDir.normalized);
+
+            Vector3 legsDirection;
+            Vector3 relativeMovement;
+
+            // Escenario 1: Movimiento hacia adelante (dot > 0.7) - Las piernas miran hacia donde apunta
+            if (dotProduct > 0.7f)
+            {
+                legsDirection = aimDir;
+                relativeMovement = Vector3.forward; // Animación hacia adelante
+            }
+            // Escenario 3: Movimiento hacia atrás (dot < -0.7) - Las piernas miran hacia donde apunta, pero camina hacia atrás
+            else if (dotProduct < -0.7f)
+            {
+                legsDirection = aimDir;
+                relativeMovement = Vector3.back; // Animación hacia atrás
+            }
+            // Escenario 2: Movimiento lateral/strafe - Las piernas miran hacia donde apunta, movimiento lateral
+            else
+            {
+                legsDirection = aimDir;
+                // Calcular movimiento relativo al aim direction para strafe
+                Vector3 aimRight = Vector3.Cross(aimDir, Vector3.up);
+                float rightAmount = Vector3.Dot(moveDir.normalized, aimRight);
+                float forwardAmount = Vector3.Dot(moveDir.normalized, aimDir);
+                relativeMovement = new Vector3(rightAmount, 0f, forwardAmount);
+            }
+
+            // Rotar las piernas
+            Quaternion targetRotation = Quaternion.LookRotation(legsDirection);
             visualRoot.rotation = Quaternion.Slerp(
                 visualRoot.rotation,
                 targetRotation,
                 Time.deltaTime * rotationSpeed
             );
+
+            // Actualizar parámetros de animación basados en movimiento relativo a las piernas
+            animator.SetFloat(Speed, moveDir.magnitude);
+            animator.SetFloat(MoveX, relativeMovement.x);
+            animator.SetFloat(MoveY, relativeMovement.z);
+        }
+
+        private Vector3 GetAimDirection()
+        {
+            if (_playerController == null) return transform.forward;
+
+            Vector3 playerPos = transform.position;
+            playerPos.y = 0;
+            Vector3 mousePos = _playerController.MouseWorldPos;
+            mousePos.y = 0;
+
+            Vector3 aimDirection = (mousePos - playerPos).normalized;
+            return aimDirection.sqrMagnitude > 0.01f ? aimDirection : transform.forward;
         }
 
         public void UpdateAimTarget(Vector3 worldPos)
