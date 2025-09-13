@@ -96,3 +96,18 @@ Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/SRP (Legacy)/LWSRPT
 Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/SRP (Legacy)/LWSRPTemplates 4xx (Legacy).unitypackage.meta
 Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/SRP (Legacy)/USRPTemplates 7xx - 9xx (Legacy).unitypackage.meta
 Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/USRPTemplates.unitypackage.meta
+
+# Unity MCP - ignore all MCP related files
+.claude/
+**/mcp-*
+**/*mcp*
+**/MCP*
+**/*MCP*
+
+# NuGet - ignore NuGet packages and cache
+**/packages/
+**/*.nupkg
+**/packages.config
+**/NuGet.Config
+**/.nuget/
+**/nuget.exe
