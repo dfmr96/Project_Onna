@@ -10,11 +10,11 @@ namespace Player
     public class PlayerController : MonoBehaviour
     {
         private const float AimRaycastMaxDistance = 100f;
-    
+
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private LayerMask groundLayer;
 
-        [Header("Dash")]
+        [Header("Dash")] 
         private bool _isDashing = false;
         private float _dashEndTime = 0f;
         private float _lastDashTime = -Mathf.Infinity;
@@ -24,17 +24,20 @@ namespace Player
         [SerializeField] private ParticleSystem particleDash;
 
         private Rigidbody _rb;
-        
-        private Vector3 _aimDirection = Vector3.forward;
+
         private PlayerInputHandler _playerInputHandler;
-        private Vector3 _direction = Vector3.zero;
         private PlayerModel _playerModel;
         private PlayerInput _playerInput;
         private PlayerView _playerView;
-        private Vector3 _mouseWorldPos;
         private Camera _mainCamera;
         private IInteractable currentInteractable;
         private bool canInteract = true;
+
+        // Input data - se actualiza desde Input
+        private Vector3 _inputDirection = Vector3.zero;
+        private Vector3 _rawInputDirection = Vector3.zero;
+        private Vector2 _rawAimInput = Vector2.zero;
+        private Vector3 _mouseWorldPos;
 
         private bool _isReady = false;
 
@@ -51,21 +54,20 @@ namespace Player
         {
             EventBus.Unsubscribe<PlayerInitializedSignal>(OnPlayerInitialized);
         }
-        
+
         private void OnPlayerInitialized(PlayerInitializedSignal signal)
         {
             if (signal.Model != GetComponent<PlayerModel>()) return;
 
-//            Debug.Log("🎯 PlayerController: recibida señal PlayerInitializedSignal");
-
             _playerModel = signal.Model;
+            _playerModel.InitializeGameMode();
             _isReady = true;
         }
-    
+
         void Awake()
         {
             PlayerHelper.SetPlayer(gameObject);
-        
+
             _mainCamera = Camera.main;
             _playerView = GetComponent<PlayerView>();
             _playerView.SetPlayerController(this);
@@ -73,37 +75,40 @@ namespace Player
             _playerInputHandler = GetComponent<PlayerInputHandler>();
             _playerInputHandler.DashPerformed += HandleDash;
             _rb = GetComponent<Rigidbody>();
-
             _playerInputHandler.InteractionPerformed += HandleInteraction;
             _playerInputHandler.FirePerformed += HandleFire;
             _playerInputHandler.ReloadPerformed += HandleReload;
-
         }
 
         private void Start()
         {
-            if (particleDash != null) { particleDash.Stop(); }
+            if (particleDash != null)
+            {
+                particleDash.Stop();
+            }
         }
 
         void Update()
         {
             if (!_isReady)
-            {
-                Debug.Log("🕒 PlayerController: esperando inicialización...");
                 return;
-            }
 
-            _direction = _playerInputHandler.MovementInput;
-            HandleAiming(_playerInputHandler.RawAimInput);
+            // Capturar input
+            _inputDirection = _playerInputHandler.MovementInput;
+            _rawInputDirection = _playerInputHandler.RawMovementInput;
+            _rawAimInput = _playerInputHandler.RawAimInput;
+
+            // Procesar lógica de negocio
+            ProcessMovementLogic();
+            ProcessAimingLogic();
         }
 
         private void FixedUpdate()
         {
             _rb.velocity = Vector3.zero;
-            
+
             if (_isDashing)
             {
-
                 if (Time.time > _dashEndTime)
                 {
                     _isDashing = false;
@@ -117,31 +122,9 @@ namespace Player
             }
             else particleDash.Stop();
 
-            Move(_direction, _playerModel.Speed);
+            Move(_inputDirection, _playerModel.Speed);
         }
 
-        private void HandleAiming(Vector2 rawInput)
-        {
-            if (_playerInput.currentControlScheme == "Keyboard&Mouse")
-            {
-                Ray ray = _mainCamera.ScreenPointToRay(rawInput);
-
-                if (Physics.Raycast(ray, out RaycastHit hit, AimRaycastMaxDistance, groundLayer))
-                {
-                    _mouseWorldPos = hit.point;
-                    _mouseWorldPos.y = 0;
-
-                    var position = transform.position;
-                    Vector3 flatPos = new Vector3(position.x, 0f, position.z);
-                    _aimDirection = (MouseWorldPos - flatPos).normalized;
-                }
-            }
-            else if (_playerInput.currentControlScheme == "Gamepad")
-            {
-                Vector3 aim = new Vector3(rawInput.x, 0f, rawInput.y);
-                _aimDirection = Utils.IsoVectorConvert(aim).normalized;
-            }
-        }
 
         //OLD MOVE2.0 METHOD WITH COLLISION DETECTION
         private void Move(Vector3 direction, float speed)
@@ -151,7 +134,8 @@ namespace Player
             Vector3 moveDir = direction.normalized;
             float moveDistance = speed * Time.fixedDeltaTime;
 
-            if (Physics.CapsuleCast(_rb.position, _rb.position + Vector3.up * 1.8f, 0.4f, moveDir, out RaycastHit hit, moveDistance, ~0, QueryTriggerInteraction.Ignore))
+            if (Physics.CapsuleCast(_rb.position, _rb.position + Vector3.up * 1.8f, 0.4f, moveDir, out RaycastHit hit,
+                    moveDistance, ~0, QueryTriggerInteraction.Ignore))
             {
                 if (!hit.collider.isTrigger)
                 {
@@ -197,10 +181,10 @@ namespace Player
                 transform.rotation = Quaternion.LookRotation(aimDirection);
             }
         }
-    
+
         private void HandleFire()
         {
-            if (_playerView.CanUseWeapon())
+            if (_playerModel.CanShoot)
             {
                 weaponController.Attack();
             }
@@ -208,7 +192,7 @@ namespace Player
 
         private void HandleReload()
         {
-            if (_playerView.CanUseWeapon())
+            if (_playerModel.CanShoot)
             {
                 weaponController.Reloading();
             }
@@ -229,21 +213,70 @@ namespace Player
                     canInteract = false;
                 }
             }
+
             currentInteractable = closestInteractable;
         }
 
-        public void ToggleInteraction(bool value) { canInteract = value; }
+        public void ToggleInteraction(bool value)
+        {
+            canInteract = value;
+        }
 
         private void HandleDash()
         {
-            if (Time.time < _lastDashTime + _playerModel.DashCooldown || _direction == Vector3.zero) return;
+            if (Time.time < _lastDashTime + _playerModel.DashCooldown || _inputDirection == Vector3.zero) return;
 
             _isDashing = true;
             _dashEndTime = Time.time + DashDurationSeconds;
-            _dashDirection = _direction.normalized;
+            _dashDirection = _inputDirection.normalized;
             _lastDashTime = Time.time;
 
             _dashSpeed = _playerModel.DashDistance / DashDurationSeconds;
+        }
+
+        // MVC Methods - Lógica de negocio pura
+        private void ProcessMovementLogic()
+        {
+            // Actualizar el modelo con la dirección de movimiento
+            _playerModel.SetMovementDirection(_inputDirection);
+            _playerModel.SetRawMovementDirection(_rawInputDirection);
+            _playerModel.SetPosition(transform.position);
+        }
+
+        private void ProcessAimingLogic()
+        {
+            Vector3 aimDirection = CalculateAimDirection();
+            _playerModel.SetAimDirection(aimDirection);
+
+            // Actualizar capacidad de disparo basado en modo
+            GameMode currentMode = GameModeSelector.SelectedMode;
+            _playerModel.SetGameMode(currentMode);
+            _playerModel.SetCanShoot(currentMode != GameMode.Hub);
+        }
+
+        private Vector3 CalculateAimDirection()
+        {
+            if (_playerInput.currentControlScheme == "Keyboard&Mouse")
+            {
+                Ray ray = _mainCamera.ScreenPointToRay(_rawAimInput);
+
+                if (Physics.Raycast(ray, out RaycastHit hit, AimRaycastMaxDistance, groundLayer))
+                {
+                    _mouseWorldPos = hit.point;
+                    _mouseWorldPos.y = 0;
+
+                    var position = transform.position;
+                    Vector3 flatPos = new Vector3(position.x, 0f, position.z);
+                    return (_mouseWorldPos - flatPos).normalized;
+                }
+            }
+            else if (_playerInput.currentControlScheme == "Gamepad")
+            {
+                Vector3 aim = new Vector3(_rawAimInput.x, 0f, _rawAimInput.y);
+                return Utils.IsoVectorConvert(aim).normalized;
+            }
+
+            return Vector3.forward;
         }
 
         private void OnDrawGizmos()

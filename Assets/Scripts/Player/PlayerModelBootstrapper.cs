@@ -13,12 +13,13 @@ namespace Player
         public static PlayerModelBootstrapper Instance { get; private set; }
         [SerializeField] private GameMode currentMode;
 
-        [Header("Stats Setup")]
-        [SerializeField] private StatBlock baseStats;
+        [Header("Stats Setup")] [SerializeField]
+        private StatBlock baseStats;
+
         [SerializeField] private MetaStatBlock metaStats;
         [SerializeField] private StatReferences statRefs;
         [SerializeField] private StatRegistry registry;
-        
+
         private PlayerStatContext _statContext;
 
         public MetaStatBlock MetaStats => metaStats;
@@ -31,7 +32,7 @@ namespace Player
             Instance = this;
             DontDestroyOnLoad(gameObject);
             if (!ValidateDependencies()) return;
-            
+
             EventBus.Publish(new PlayerModelBootstrapperSignal(this));
         }
 
@@ -40,11 +41,12 @@ namespace Player
             //Debug.Log("🛰 Bootstrapper suscribiéndose al PlayerSpawnedSignal");
             EventBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
         }
-        
+
         private void OnDisable()
         {
             EventBus.Unsubscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
         }
+
         private bool ValidateDependencies()
         {
             bool isValid = true;
@@ -71,7 +73,7 @@ namespace Player
                 Debug.LogWarning("⚠️ PlayerSpawnedSignal recibido con GameObject nulo.");
                 return;
             }
-            
+
             Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
             var playerGO = signal.PlayerGO;
             Debug.Log($"📦 Recibido PlayerSpawnedSignal. GO = {playerGO?.name}");
@@ -81,7 +83,7 @@ namespace Player
                 Debug.LogError("❌ PlayerModel no encontrado en el jugador instanciado.");
                 return;
             }
-            
+
             var inventory = SaveSystem.LoadInventory();
             inventory.PlayerItemsHolder.RestoreFromSave();
             playerModel.InjectInventory(inventory);
@@ -113,12 +115,6 @@ namespace Player
 
             //Debug.Log("✅ StatContext inyectado correctamente en PlayerModel.");
             playerModel.InjectStatContext(_statContext);
-
         }
     }
-
-
-    
-    
-    
 }
