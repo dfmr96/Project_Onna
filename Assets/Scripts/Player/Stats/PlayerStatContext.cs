@@ -20,7 +20,7 @@ namespace Player.Stats
             source = runtimeStats;
             target = runtimeStats;
 
-            RunData.SetStats(runtimeStats);
+            //RunData.SetStats(runtimeStats);
         }
 
         public void SetupForHub(IStatSource source, MetaStatBlock metaStats)
