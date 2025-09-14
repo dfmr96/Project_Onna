@@ -6,6 +6,8 @@ public class NewMutationController
     private List<NewMutations> mutationPool;
     private System.Random rng = new();
 
+    public NewMutationEffect EffectManager { get; private set; }
+
     public NewMutationController(List<NewMutations> allMutations)
     {
         ResetRun();
@@ -14,6 +16,8 @@ public class NewMutationController
         systems[SystemType.Nerve] = new NewMutationSystem { systemType = SystemType.Nerve };
         systems[SystemType.Integumentary] = new NewMutationSystem { systemType = SystemType.Integumentary };
         systems[SystemType.Muscular] = new NewMutationSystem { systemType = SystemType.Muscular };
+
+        EffectManager = new NewMutationEffect();
     }
 
     public void ResetRun()
