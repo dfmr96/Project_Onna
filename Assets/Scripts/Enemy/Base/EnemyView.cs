@@ -42,6 +42,8 @@ public class EnemyView : MonoBehaviour
     [SerializeField] private AudioClip shootAudioClip;
     [SerializeField] private AudioClip damagedAudioClip;
 
+    private Coroutine flashCoroutine = null;
+    private Coroutine recoilCoroutine;
 
 
     private void Awake()
@@ -62,7 +64,9 @@ public class EnemyView : MonoBehaviour
         targetRenderer = GetComponentInChildren<Renderer>();
 
         material = targetRenderer.material;
-        originalColor = material.GetColor("_Color");
+        //originalColor = material.GetColor("_Color");
+        originalColor = material.color;
+
 
         //torret
         initialRotation = turretHead.localRotation;
@@ -149,7 +153,11 @@ public class EnemyView : MonoBehaviour
     {
         if (turretHead == null) return;
 
-        StopAllCoroutines(); // Detener recoil anteriores
+        //StopAllCoroutines(); // Detener recoil anteriores
+
+        if (recoilCoroutine != null)
+            StopCoroutine(recoilCoroutine);
+
         StartCoroutine(RecoilCoroutine());
     }
 
@@ -265,17 +273,31 @@ public class EnemyView : MonoBehaviour
 
     public void PlayDamageEffect()
     {
-        StartCoroutine(FlashCoroutine());
+        //StartCoroutine(FlashCoroutine());
+
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+        }
+
+        material.color = originalColor;
+
+        flashCoroutine = StartCoroutine(FlashCoroutine());
 
     }
 
     private IEnumerator FlashCoroutine()
     {
-        material.SetColor("_Color", flashColor);
+        //material.SetColor("_Color", flashColor);
 
+        //yield return new WaitForSeconds(flashDuration);
+
+        //material.SetColor("_Color", originalColor);
+
+        material.color = flashColor;
         yield return new WaitForSeconds(flashDuration);
-
-        material.SetColor("_Color", originalColor);
+        material.color = originalColor;
+        flashCoroutine = null;
     }
 }
 

@@ -118,7 +118,7 @@ TextureImporter:
         width: 101
         height: 101
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -134,12 +134,12 @@ TextureImporter:
       name: HP_Bar_n_Bullets_1
       rect:
         serializedVersion: 2
-        x: 18
-        y: 72
+        x: 10
+        y: 68
         width: 77
         height: 72
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,12 +155,12 @@ TextureImporter:
       name: HP_Bar_n_Bullets_2
       rect:
         serializedVersion: 2
-        x: 120
-        y: 196
-        width: 15
-        height: 27
+        x: 157
+        y: 144
+        width: 9
+        height: 2
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -177,11 +177,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 169
-        y: 196
-        width: 14
-        height: 27
+        y: 144
+        width: 9
+        height: 2
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -189,6 +189,69 @@ TextureImporter:
       bones: []
       spriteID: 113bfaf5bfc377845b8b830f90221bd8
       internalID: 196747158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HP_Bar_n_Bullets_4
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 168
+        width: 77
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 670bf988ffdee1545b07a69486fd50ac
+      internalID: 306719152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HP_Bar_n_Bullets_5
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 55
+        width: 77
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 301787f40e58798458acd5021aa37493
+      internalID: -1699133529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HP_Bar_n_Bullets_6
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 48
+        width: 77
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c9677d2c5684034db9e60a1c4c7a5ca
+      internalID: 1810997629
       vertices: []
       indices: 
       edges: []
@@ -208,6 +271,11 @@ TextureImporter:
       HP_Bar_n_Bullets_1: 75072743
       HP_Bar_n_Bullets_2: 918815670
       HP_Bar_n_Bullets_3: 196747158
+      HP_Bar_n_Bullets_4: 306719152
+      HP_Bar_n_Bullets_5: -1699133529
+      HP_Bar_n_Bullets_6: 1810997629
+      HP_Bar_n_Bullets_7: 1870119801
+      HP_Bar_n_Bullets_8: -1296862987
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -15,8 +15,8 @@ public class EnemyAttackSOBase : ScriptableObject
     protected GameObject gameObject;
     protected ProjectileSpawner _projectileSpawner;
 
-    protected Renderer _enemyRenderer;
-    protected Color _originalColor;
+    //protected Renderer _enemyRenderer;
+    //protected Color _originalColor;
 
     protected Transform playerTransform;
     protected NavMeshAgent _navMeshAgent;
@@ -36,12 +36,12 @@ public class EnemyAttackSOBase : ScriptableObject
 
 
     //InitialAttackDelay Visual
-    protected Material _material;
+    //protected Material _material;
 
-    protected float _colorChangeTimer = 0f;
-    protected float _colorTransitionDuration;
-    protected enum ColorPhase { None, ToRed, ToOriginal }
-    protected ColorPhase _colorPhase = ColorPhase.None;
+    //protected float _colorChangeTimer = 0f;
+    //protected float _colorTransitionDuration;
+    //protected enum ColorPhase { None, ToRed, ToOriginal }
+    //protected ColorPhase _colorPhase = ColorPhase.None;
     public virtual void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         this.gameObject = gameObject;
@@ -57,10 +57,10 @@ public class EnemyAttackSOBase : ScriptableObject
         _bossView = gameObject.GetComponent<BossView>();
         _projectileSpawner = GameManager.Instance.projectileSpawner;
 
-        _enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
-        _originalColor = _enemyRenderer.material.color;
+        //_enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
+        //_originalColor = _enemyRenderer.material.color;
 
-        Debug.Log("Cambio de ataque");
+        //Debug.Log("Cambio de ataque");
     }
 
     public virtual void DoEnterLogic()
@@ -86,9 +86,12 @@ public class EnemyAttackSOBase : ScriptableObject
         _navMeshAgent.isStopped = true;
 
         //InitialAttackDelay Visual
-        _colorTransitionDuration = _initialAttackDelay;
-        _material = gameObject.GetComponentInChildren<Renderer>().material;
-        _originalColor = _material.color;
+        //_colorTransitionDuration = _initialAttackDelay;
+        //_material = gameObject.GetComponentInChildren<Renderer>().material;
+        //_originalColor = _material.color;
+
+        //isShieldActive = _bossModel.statsSO.;
+
     }
     public virtual void DoExitLogic() { ResetValues(); }
 
@@ -138,11 +141,11 @@ public class EnemyAttackSOBase : ScriptableObject
         _navMeshAgent.speed = initialSpeed;
         _navMeshAgent.isStopped = false;
 
-        if (_material != null)
-            _material.color = _originalColor;
+        //if (_material != null)
+        //    _material.color = _originalColor;
 
-        _colorPhase = ColorPhase.None;
-        _colorChangeTimer = 0f;
+        //_colorPhase = ColorPhase.None;
+        //_colorChangeTimer = 0f;
         _timer = 0f;
 
     }
