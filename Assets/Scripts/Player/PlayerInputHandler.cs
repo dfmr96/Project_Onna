@@ -8,6 +8,7 @@ namespace Player
     public class PlayerInputHandler : MonoBehaviour
     {
         public Vector3 MovementInput { get; private set; }
+        public Vector3 RawMovementInput { get; private set; }
         public Vector2 RawAimInput { get; private set; }
 
         public event Action FirePerformed;
@@ -19,7 +20,8 @@ namespace Player
         public void OnMove(InputAction.CallbackContext context)
         {
             Vector2 input = context.ReadValue<Vector2>();
-            MovementInput = Utils.IsoVectorConvert(new Vector3(input.x, 0, input.y)).normalized;
+            RawMovementInput = new Vector3(input.x, 0, input.y);
+            MovementInput = Utils.IsoVectorConvert(RawMovementInput).normalized;
         }
 
         public void OnAim(InputAction.CallbackContext context)
@@ -43,7 +45,6 @@ namespace Player
             }
         }
 
-        
 
         public void OnInteract(InputAction.CallbackContext context)
         {

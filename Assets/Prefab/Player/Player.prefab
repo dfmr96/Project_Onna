@@ -1019,12 +1019,16 @@ GameObject:
   - component: {fileID: 1344316346459798503}
   - component: {fileID: 8144839512589497895}
   - component: {fileID: 3435388732386355774}
-  - component: {fileID: 597474821443021411}
   - component: {fileID: 2024501622075525127}
   - component: {fileID: 4339932572223991893}
   - component: {fileID: 2260689123518874433}
   - component: {fileID: 5174314178262618433}
   - component: {fileID: -2364824535458516691}
+  - component: {fileID: 5206305562450521121}
+  - component: {fileID: 3715669954240071290}
+  - component: {fileID: 4559322424049143066}
+  - component: {fileID: 879461727823975973}
+  - component: {fileID: 5225306903837380426}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1272,29 +1276,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   particleDash: {fileID: 7503733378160212234}
---- !u!114 &597474821443021411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3863611926642077226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ed99d6b90924ecfbf1e77ed4ab7ab48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aimTarget: {fileID: 6053471521623946320}
-  torsoTransform: {fileID: 2426973730375443924}
-  weaponSocket: {fileID: 5078222509281479290}
-  weaponInstance: {fileID: 8701406826864746605}
-  animator: {fileID: 1276326954052208887}
-  visualRoot: {fileID: 1592005984796363887}
-  hurtFx: {fileID: 8300000, guid: 59d794063924baa4fac1b832c2d9e292, type: 3}
-  healthFx: {fileID: 8300000, guid: d0f484da1817b7f4189a3721200ccf8d, type: 3}
-  torsoRotationSpeed: 10
-  rotationSpeed: 10
-  minAimDistance: 2
 --- !u!114 &2024501622075525127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1311,6 +1292,7 @@ MonoBehaviour:
   statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
   heightTextSpawn: 1.5
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
+  _playerView: {fileID: 5206305562450521121}
   _playerInventory:
     playerWallet:
       coins: 0
@@ -1464,6 +1446,90 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5206305562450521121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e683c08581c4cf44b7121bb866fec17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationView: {fileID: 3715669954240071290}
+  weaponView: {fileID: 4559322424049143066}
+  audioView: {fileID: 879461727823975973}
+  effectsView: {fileID: 5225306903837380426}
+  _playerController: {fileID: 3435388732386355774}
+  _playerModel: {fileID: 2024501622075525127}
+--- !u!114 &3715669954240071290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3b536947283ba646998bd5d248b246a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1276326954052208887}
+  visualRoot: {fileID: 1592005984796363887}
+  inputHandler: {fileID: 4339932572223991893}
+  rigBuilder: {fileID: 6354521171766058465}
+  hubAnimator: {fileID: 9100000, guid: ca70cfc19ca23754c8e6acd7ae2fd346, type: 2}
+  combatAnimator: {fileID: 9100000, guid: 7bab0c5a9a8f20e4ab9237b877e657fa, type: 2}
+  rotationSpeed: 100
+--- !u!114 &4559322424049143066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f4f33e0890ebbd48a0fc8db0b15d553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponInstance: {fileID: 8701406826864746605}
+  weaponSocket: {fileID: 5078222509281479290}
+  aimTarget: {fileID: 6053471521623946320}
+  torsoTransform: {fileID: 2426973730375443924}
+  minAimDistance: 2
+  torsoRotationSpeed: 25
+--- !u!114 &879461727823975973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 418f3803b86999f4e9375059b465a60e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 7066039255632587307}
+  hurtFx: {fileID: 8300000, guid: 59d794063924baa4fac1b832c2d9e292, type: 3}
+  healthFx: {fileID: 8300000, guid: d0f484da1817b7f4189a3721200ccf8d, type: 3}
+--- !u!114 &5225306903837380426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cacf3d103eef36447aae53af656a7b7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.1
 --- !u!1 &3904564356098327126
 GameObject:
   m_ObjectHideFlags: 0
@@ -2518,6 +2584,7 @@ MonoBehaviour:
   laserOrigin: {fileID: 6286168293087101770}
   shootFx: {fileID: 8300000, guid: eb192c69ffce50d4c9eb79b0bc16ac7e, type: 3}
   overheathFx: {fileID: 8300000, guid: 62d7fcc486ccf424084211b80c981a87, type: 3}
+  nextShotDoubleDamage: 0
 --- !u!82 &7066039255632587307
 AudioSource:
   m_ObjectHideFlags: 0
