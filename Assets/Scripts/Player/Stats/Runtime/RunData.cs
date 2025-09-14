@@ -9,7 +9,7 @@ namespace Player.Stats.Runtime
         public static void Initialize()
         {
             if (CurrentCurrency == null) CurrentCurrency = new RunCurrency();
-            if (NewMutationController == null) NewMutationController = new NewMutationController();
+            //if (NewMutationController == null) NewMutationController = new NewMutationController();
         }
         //public static void SetStats(RuntimeStats stats)
         //{
