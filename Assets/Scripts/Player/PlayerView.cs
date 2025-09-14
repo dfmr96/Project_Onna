@@ -1,228 +1,188 @@
-﻿using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Player
 {
+    /// <summary>
+    /// Componente View del patrón MVC que maneja la presentación
+    /// </summary>
     public class PlayerView : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private Transform aimTarget; 
-        [SerializeField] private Transform torsoTransform; 
-        [SerializeField] private Transform weaponSocket;   
-        [SerializeField] private GameObject weaponInstance; 
-        [SerializeField] private Animator animator;
-        [SerializeField] private Transform visualRoot;
-        [SerializeField] private AudioClip hurtFx;
-        [SerializeField] private AudioClip healthFx;
+        [Header("Sub-Views")] [SerializeField] private PlayerAnimationView animationView;
+        [SerializeField] private PlayerWeaponView weaponView;
+        [SerializeField] private PlayerAudioView audioView;
         
-        [Header("Params")]
-        [SerializeField] private float torsoRotationSpeed = 10f;
-        [SerializeField] private float rotationSpeed = 10f;
-        [SerializeField] private float minAimDistance = 2f;
-        
-        private PlayerController _playerController;
-        private PlayerInputHandler _playerInputHandler;
-        private static readonly int MoveX = Animator.StringToHash("MoveX");
-        private static readonly int MoveY = Animator.StringToHash("MoveY");
-        private static readonly int Speed = Animator.StringToHash("Speed");
 
-        private AudioSource audioSource; 
-
-        //Efecto Visual de Dano
-        private Color flashColor = Color.white;
-        private float flashDuration = 0.1f;
-        private Renderer[] renderers;
-        private Color[][] originalColors;
-        private readonly string[] colorPropertyNames = { "_BaseColor", "_Color", "_MainColor" };
-
-
+        [SerializeField] private PlayerEffectsView effectsView;
+        [SerializeField] private PlayerController _playerController;
+        [SerializeField] private PlayerModel _playerModel;
 
         private void Awake()
         {
-            if (weaponInstance != null && weaponSocket != null)
-            {
-                weaponInstance.transform.SetParent(weaponSocket, false);
-                weaponInstance.transform.localPosition = Vector3.zero;
-                weaponInstance.transform.localRotation = Quaternion.identity;
-            }
-
-            _playerInputHandler = GetComponent<PlayerInputHandler>();
-
+            // Obtener referencias a los otros componentes MVC
+            if (_playerController == null) _playerController = GetComponent<PlayerController>();
+            if (_playerModel == null) _playerModel = GetComponent<PlayerModel>();
         }
 
         private void Start()
         {
-            audioSource = GetComponent<AudioSource>();
-            renderers = GetComponentsInChildren<Renderer>();
-            originalColors = new Color[renderers.Length][];
+            InitializeSubViews();
+            SubscribeToModelEvents();
+        }
 
-            for (int i = 0; i < renderers.Length; i++)
+        private void OnDestroy()
+        {
+            UnsubscribeFromModelEvents();
+        }
+
+        private void InitializeSubViews()
+        {
+            // Inicializar todas las sub-views
+            animationView?.Initialize();
+            weaponView?.Initialize();
+            audioView?.Initialize();
+            effectsView?.Initialize();
+        }
+
+        private void SubscribeToModelEvents()
+        {
+            if (_playerModel == null)
             {
-                var mats = renderers[i].materials;
-                originalColors[i] = new Color[mats.Length];
+                Debug.LogWarning("PlayerModel is null, cannot subscribe to events");
+                return;
+            }
 
-                for (int j = 0; j < mats.Length; j++)
+            // Suscribirse a eventos del modelo
+            _playerModel.OnGameModeChanged += HandleGameModeChanged;
+            _playerModel.OnMovementDirectionChanged += HandleMovementDirectionChanged;
+            _playerModel.OnRawMovementDirectionChanged += HandleRawMovementDirectionChanged;
+            _playerModel.OnAimDirectionChanged += HandleAimDirectionChanged;
+            _playerModel.OnCanShootChanged += HandleCanShootChanged;
+
+            // Forzar actualización inicial del modo de juego
+            GameMode currentMode = _playerModel.CurrentGameMode;
+            HandleGameModeChanged(currentMode);
+        }
+
+        private void UnsubscribeFromModelEvents()
+        {
+            if (_playerModel == null) return;
+
+            // Desuscribirse de eventos del modelo
+            _playerModel.OnGameModeChanged -= HandleGameModeChanged;
+            _playerModel.OnMovementDirectionChanged -= HandleMovementDirectionChanged;
+            _playerModel.OnRawMovementDirectionChanged -= HandleRawMovementDirectionChanged;
+            _playerModel.OnAimDirectionChanged -= HandleAimDirectionChanged;
+            _playerModel.OnCanShootChanged -= HandleCanShootChanged;
+        }
+
+        // Event Handlers - Responden a cambios en el modelo
+        private void HandleGameModeChanged(GameMode newMode)
+        {
+            // Actualizar animaciones
+            animationView?.SetGameMode(newMode);
+
+            // Actualizar visibilidad del arma
+            bool shouldShowWeapon = newMode != GameMode.Hub;
+            weaponView?.SetWeaponVisibility(shouldShowWeapon);
+            
+            
+        }
+
+private void HandleMovementDirectionChanged(Vector3 moveDirection)
+        {
+            if (_playerModel == null) return;
+
+            GameMode currentMode = _playerModel.CurrentGameMode;
+
+            // Solo usar para rotación visual, NO para animaciones
+            // Las animaciones ahora las maneja HandleRawMovementDirectionChanged
+            if (currentMode == GameMode.Hub)
+            {
+                // En HUB: rotación simple hacia donde se mueve
+                if (moveDirection.sqrMagnitude > 0.01f)
                 {
-                    var mat = mats[j];
-                    string property = GetColorProperty(mat);
-
-                    if (!string.IsNullOrEmpty(property))
-                        originalColors[i][j] = mat.GetColor(property);
+                    // Solo rotación, sin animación
                 }
             }
-        }
-
-        private void Update()
-        {
-            animator.SetFloat(Speed, _playerController.Speed);
-            Vector3 moveDir = _playerInputHandler.MovementInput;
-
-            animator.SetFloat(MoveX, moveDir.x);
-            animator.SetFloat(MoveY, moveDir.z);
-
-            RotateVisualTowards(moveDir);
-            
-            UpdateAimTarget(_playerController.MouseWorldPos);     
-            UpdateWeaponAim(_playerController.MouseWorldPos);   
-        }
-
-        private void RotateVisualTowards(Vector3 moveDir)
-        {
-            if (moveDir.sqrMagnitude < 0.01f) return;
-
-            moveDir.y = 0;
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            visualRoot.rotation = Quaternion.Slerp(
-                visualRoot.rotation,
-                targetRotation,
-                Time.deltaTime * rotationSpeed
-            );
-        }
-
-        public void UpdateAimTarget(Vector3 worldPos)
-        {
-            if (aimTarget == null || torsoTransform == null) return;
-
-            // Mantener la altura del torso
-            worldPos.y = torsoTransform.position.y;
-
-            Vector3 direction = worldPos - torsoTransform.position;
-            direction.y = 0f;
-
-            float sqrDist = direction.sqrMagnitude;
-
-            // Si está demasiado cerca, reubicarlo a una distancia mínima
-            if (sqrDist < minAimDistance * minAimDistance)
+            else
             {
-                direction = direction.normalized * minAimDistance;
-                worldPos = torsoTransform.position + direction;
-            }
-
-            aimTarget.position = worldPos;
-
-            if (direction.sqrMagnitude > 0.01f)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(direction);
-                torsoTransform.rotation = Quaternion.Slerp(torsoTransform.rotation, targetRot, Time.deltaTime * torsoRotationSpeed);
+                // En Combat: la rotación la maneja el aim, no el movimiento
+                // No hacer nada aquí
             }
         }
 
-        public void UpdateWeaponAim(Vector3 targetPos)
+        private void HandleAimDirectionChanged(Vector3 aimDirection)
         {
-            if (weaponInstance == null || torsoTransform == null) return;
+            if (_playerModel.CurrentGameMode == GameMode.Hub) return;
 
-            Vector3 origin = torsoTransform.position; // usar el torso como centro
-            Vector3 dir = targetPos - origin;
-            dir.y = 0f;
-
-            float sqrDist = dir.sqrMagnitude;
-
-            // Si está muy cerca, reubicar
-            if (sqrDist < minAimDistance * minAimDistance)
-            {
-                dir = dir.normalized * minAimDistance;
-                targetPos = origin + dir;
-            }
-
-            // Mantener la altura del arma
-            targetPos.y = weaponInstance.transform.position.y;
-
-            weaponInstance.transform.LookAt(targetPos);
+            // Solo actualizar aim en modo combat
+            Vector3 mouseWorldPos = _playerController.MouseWorldPos;
+            weaponView?.UpdateAiming(mouseWorldPos);
         }
-        
+
+
+private void HandleRawMovementDirectionChanged(Vector3 rawMoveDirection)
+        {
+            if (_playerModel == null) return;
+
+            GameMode currentMode = _playerModel.CurrentGameMode;
+
+            if (currentMode == GameMode.Hub)
+            {
+                // En HUB: usar método principal UpdateMovement
+                animationView?.UpdateMovement(rawMoveDirection, currentMode);
+            }
+            else
+            {
+                // En Combat: usar método específico con aim
+                Vector3 aimDirection = _playerModel.AimDirection;
+                animationView?.UpdateCombatMovementWithAim(rawMoveDirection, aimDirection);
+            }
+        }
+
+        private void HandleCanShootChanged(bool canShoot)
+        {
+            // Lógica adicional si es necesaria cuando cambia la capacidad de disparo
+            // Por ejemplo, cambiar UI indicators, etc.
+        }
+
+        // Public methods llamados por el PlayerModel para efectos
+        public void PlayDamageEffect()
+        {
+            effectsView?.PlayDamageFlash();
+            audioView?.PlayDamageSound();
+        }
+
+        public void PlayHealthEffect()
+        {
+            audioView?.PlayHealthSound();
+        }
+
+        // Backward compatibility - métodos que otros componentes podrían usar
+        public bool CanUseWeapon()
+        {
+            return _playerModel?.CanShoot ?? false;
+        }
+
         public void SetPlayerController(PlayerController controller)
         {
             _playerController = controller;
         }
 
-        public void PlayDamageEffect()
-        {
-            StartCoroutine(FlashCoroutine());
-            //La unica forma de comunicarle al view de que el jugador recibio daño es acá
-            //En general el view es el que deberia controlar el sonido pero en muchos casos no hay comunicación entre scripts
-            //Y como esto no lo codie yo no quiero meterme mucho - Sim.
-
-            audioSource.PlayOneShot(hurtFx);
-        }
-
-        private IEnumerator FlashCoroutine()
-        {
-            // Cambia el color
-            foreach (var renderer in renderers)
-            {
-                foreach (var mat in renderer.materials)
-                {
-                    string property = GetColorProperty(mat);
-
-                    if (!string.IsNullOrEmpty(property))
-                        mat.SetColor(property, flashColor);
-                }
-            }
-
-            yield return new WaitForSeconds(flashDuration);
-
-            // Restaura colores
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                var mats = renderers[i].materials;
-
-                for (int j = 0; j < mats.Length; j++)
-                {
-                    var mat = mats[j];
-                    string property = GetColorProperty(mat);
-
-                    if (!string.IsNullOrEmpty(property))
-                        mat.SetColor(property, originalColors[i][j]);
-                }
-            }
-        }
-
-        public void PlayHealthEffect() { audioSource?.PlayOneShot(healthFx); }
-
-        private string GetColorProperty(Material mat)
-        {
-            foreach (var prop in colorPropertyNames)
-            {
-                if (mat.HasProperty(prop))
-                    return prop;
-            }
-            return null;
-        }
-
+        // Gizmos para debugging
         private void OnDrawGizmos()
         {
-            
-            if (torsoTransform != null)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(torsoTransform.position, minAimDistance);
-            }
+            if (_playerModel == null) return;
 
-            if (visualRoot != null)
+            // Mostrar información del estado actual
+            Gizmos.color = _playerModel.CurrentGameMode == GameMode.Hub ? Color.green : Color.red;
+            Gizmos.DrawWireSphere(transform.position + Vector3.up * 2f, 0.5f);
+
+            // Mostrar dirección de aim
+            if (_playerModel.CurrentGameMode != GameMode.Hub)
             {
-                Gizmos.color = Color.green;
-                Gizmos.DrawLine(visualRoot.position, visualRoot.position + visualRoot.forward * 2f);
+                Gizmos.color = Color.blue;
+                Gizmos.DrawRay(transform.position, _playerModel.AimDirection * 2f);
             }
         }
     }
