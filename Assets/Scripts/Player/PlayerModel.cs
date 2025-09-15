@@ -37,6 +37,7 @@ namespace Player
         public float CurrentHealth => _currentTime;
         public float DashCooldown => StatContext.Source.Get(statRefs.dashCooldown);
         public float DashDistance => StatContext.Source.Get(statRefs.dashDistance);
+        public float HealingMultiplier => StatContext.Source.Get(statRefs.healingMultiplier);
         public PlayerStatContext StatContext => _statContext;
         public bool DevMode => devMode;
         public GameMode CurrentGameMode => _currentGameMode;
@@ -164,11 +165,20 @@ namespace Player
 
         public void RecoverTime(float timeRecovered)
         {
-            _currentTime = Mathf.Min(_currentTime + timeRecovered, StatContext.Source.Get(statRefs.maxVitalTime));
+            // Aplicar multiplicador de curación
+            float actualHealing = timeRecovered * HealingMultiplier;
+
+            _currentTime = Mathf.Min(_currentTime + actualHealing, StatContext.Source.Get(statRefs.maxVitalTime));
             ClampEnergy();
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             _playerView?.PlayHealthEffect();
+
+            // Log para debug de mutaciones
+            if (HealingMultiplier != 1f)
+            {
+                Debug.Log($"[PlayerModel] Healing: {timeRecovered} base × {HealingMultiplier:F1} = {actualHealing:F1} recovered");
+            }
         }
 
         private void ClampEnergy()

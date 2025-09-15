@@ -43,6 +43,7 @@ namespace Player.Stats
 
             DrawStat("Max Vital", statRefs.maxVitalTime);
             DrawStat("Passive Drain Rate", statRefs.passiveDrainRate);
+            DrawStat("Healing Multiplier", statRefs.healingMultiplier);
             DrawStat("Damage Resistance", statRefs.damageResistance);
             DrawStat("Speed", statRefs.movementSpeed);
             DrawStat("Damage", statRefs.damage);

@@ -24,14 +24,19 @@ namespace Enemy.Spawn
         [SerializeField] private float lifetime = 5f;
 
         [Header("Attraction Settings")]
-        [SerializeField] private float attractionRadius = 5f;
-        [SerializeField] private float attractionSpeed = 5f;
+        [SerializeField] private float baseAttractionRadius = 5f;
+        [SerializeField] private float baseAttractionSpeed = 5f;
         
         private Transform attractionTarget;
         private Action _onCollected;
         private float timer;
         private Vector3 startPos;
         private GameObject playerGO;
+        private PlayerModel playerModel;
+
+        // Propiedades calculadas que incluyen stats del player
+        private float attractionRadius => GetCurrentAttractionRadius();
+        private float attractionSpeed => GetCurrentAttractionSpeed();
     
         //----------------------------------------------------------------------
         // Unity Methods
@@ -93,6 +98,13 @@ namespace Enemy.Spawn
             if (playerGO == null)
             {
                 Debug.LogWarning("[ORB] No player found. Attraction will not work.");
+                return;
+            }
+
+            playerModel = playerGO.GetComponent<PlayerModel>();
+            if (playerModel == null)
+            {
+                Debug.LogWarning("[ORB] PlayerModel not found. Using base attraction values.");
             }
         }
         
@@ -163,6 +175,34 @@ namespace Enemy.Spawn
         {
             attractionTarget = null;
             gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Obtiene el radio de atracción actual considerando los stats del player
+        /// </summary>
+        private float GetCurrentAttractionRadius()
+        {
+            if (playerModel?.StatContext?.Source != null && playerModel.StatRefs.orbAttractRange != null)
+            {
+                float playerRange = playerModel.StatContext.Source.Get(playerModel.StatRefs.orbAttractRange);
+                return baseAttractionRadius + playerRange; // Base + bonus del player
+            }
+
+            return baseAttractionRadius; // Fallback a valor base
+        }
+
+        /// <summary>
+        /// Obtiene la velocidad de atracción actual considerando los stats del player
+        /// </summary>
+        private float GetCurrentAttractionSpeed()
+        {
+            if (playerModel?.StatContext?.Source != null && playerModel.StatRefs.orbAttractSpeed != null)
+            {
+                float playerSpeedMultiplier = 1f + playerModel.StatContext.Source.Get(playerModel.StatRefs.orbAttractSpeed);
+                return baseAttractionSpeed * playerSpeedMultiplier; // Base * multiplicador del player
+            }
+
+            return baseAttractionSpeed; // Fallback a valor base
         }
     }
 }

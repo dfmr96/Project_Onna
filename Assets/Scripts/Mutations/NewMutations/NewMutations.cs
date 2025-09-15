@@ -1,3 +1,4 @@
+using Mutations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewMutation", menuName = "Mutation/")]

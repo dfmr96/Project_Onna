@@ -93,10 +93,10 @@ namespace Player
             switch (GameModeSelector.SelectedMode)
             {
                 case GameMode.Run:
-                    //var runtimeStats = RunData.CurrentStats ?? new RuntimeStats(baseStats, metaStats, statRefs);
-                    //RunData.SetStats(runtimeStats);
-                    //_statContext.SetupFromExistingRuntime(runtimeStats, metaStats);
-                    //Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando RuntimeStats en PlayerModel.");
+                    // Configuración temporal para Run mode usando MetaStatReader como fallback
+                    var runReader = new MetaStatReader(baseStats, metaStats);
+                    _statContext.SetupForHub(runReader, metaStats);
+                    Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Configuración temporal para Run mode.");
                     break;
 
                 case GameMode.Hub:

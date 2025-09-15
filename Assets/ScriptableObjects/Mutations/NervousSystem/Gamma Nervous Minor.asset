@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eecb8923c2c3718408204593406c8485, type: 3}
+  m_Name: Gamma Nervous Minor
+  m_EditorClassIdentifier: 
+  radiationType: 0
+  systemType: 0
+  slotType: 1
+  effectName: "Atracci\xF3n Gamma Neural"
+  description: Atrae orbes de vida desde {range}m de distancia a velocidad x{speed}
+  icon: {fileID: 0}
+  baseValue: 8
+  upgradeMultiplier: 1.25
+  maxLevel: 4
+  statType: 5
+  isMultiplier: 0
+  isTemporary: 0
+  temporaryDuration: 5
+  orbAttractRangeBase: 8
+  orbAttractSpeedBase: 1.5

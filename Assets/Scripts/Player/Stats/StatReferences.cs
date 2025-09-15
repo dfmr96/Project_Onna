@@ -10,6 +10,7 @@ namespace Player.Stats
         public StatDefinition initialVitalTime;
         public StatDefinition passiveDrainRate;
         public StatDefinition enemyHitPenalty;
+        public StatDefinition healingMultiplier;
 
         [Header("Combat Stats")]
         public StatDefinition damage;
@@ -28,6 +29,10 @@ namespace Player.Stats
         public StatDefinition dashDistance;
         public StatDefinition dashCooldown;
 
+        [Header("Orb Interaction Stats")]
+        public StatDefinition orbAttractRange;
+        public StatDefinition orbAttractSpeed;
+
 #if UNITY_EDITOR
         [ContextMenu("Auto Link From Registry")]
         public void AutoLinkFromRegistry()
@@ -44,6 +49,7 @@ namespace Player.Stats
             TryAssign(ref initialVitalTime, "InitialVitalTime", registry);
             TryAssign(ref passiveDrainRate, "PassiveDrainRate", registry);
             TryAssign(ref enemyHitPenalty, "EnemyHitPenalty", registry);
+            TryAssign(ref healingMultiplier, "HealingMultiplier", registry);
             TryAssign(ref damage, "Damage", registry);
             TryAssign(ref attackRange, "AttackRange", registry);
             TryAssign(ref fireRate, "FireRate", registry);
@@ -57,6 +63,8 @@ namespace Player.Stats
             TryAssign(ref coolingCooldown, "CoolingCooldown", registry);
             TryAssign(ref bulletSpeed, "BulletSpeed", registry);
             TryAssign(ref maxAmmo, "MaxAmmo", registry);
+            TryAssign(ref orbAttractRange, "OrbAttractRange", registry);
+            TryAssign(ref orbAttractSpeed, "OrbAttractSpeed", registry);
 
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssets();
