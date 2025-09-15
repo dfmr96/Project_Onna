@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a980c3ede781443bca97b6deaac8b3, type: 3}
   m_Name: EnemyTankStats
   m_EditorClassIdentifier: 
+  currentState: No State
   MaxHealth: 250
   isShieldActive: 1
   AttackDamage: 20
   AttackRange: 6
+  AttackTimeRate: 4
+  AttackInitialDelay: 0.6
   combatAngle: 30
   obstacleCombatLayers:
     serializedVersion: 2

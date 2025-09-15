@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum EnemyVariantType { Yellow, Red, Blue, Green, Purple, Dark }
+public enum EnemyVariantType { Yellow, Red, Blue, Green, Purple, Dark, Base }
 
 [CreateAssetMenu(fileName = "EnemyStatsVariant", menuName = "Enemy Stats/Enemy Variant")]
 public class EnemyVariantSO : ScriptableObject
@@ -11,7 +11,7 @@ public class EnemyVariantSO : ScriptableObject
     public float healthMultiplier = 1f;
     public float damageMultiplier = 1f;
     public float speedMultiplier = 1f;
-    //public float attackChargeTimeMultiplier = 1f;
+    public float attackChargeTimeMultiplier = 1f;
 
     [Header("DoT Attacks")]
     public bool hasDoT = false;
@@ -23,8 +23,10 @@ public class EnemyVariantSO : ScriptableObject
     public float explosionRadius = 0f;
     public float explosionDamage = 0f;
 
-    //public bool hasDefensivePhase = false;
-    //public float damageReductionDuringAttack = 0f;
+    [Header("Dark Defensive Phase")]
+    public bool hasDefensivePhase = false;
+    public float damageReductionDuringAttack = 1f;
 
+    [Header("Extra Orbs On Death")]
     public int extraOrbsOnDeath = 0;
 }

@@ -144,14 +144,19 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         InitializeState();
 
 
-    }
+}
 
-    void Update()
+void Update()
     {
         view.PlayMovingAnimation(_navMeshAgent.speed);
         fsm.CurrentState?.FrameUpdate();
 
-        Debug.Log("ESTADO: " + fsm.CurrentState);
+        //Debug.Log("ESTADO: " + fsm.CurrentState);
+
+        model.statsSO.currentState = fsm.CurrentState.ToString();
+
+    
+
 
     }
 
@@ -173,10 +178,10 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
     public override void ExecuteAttack(IDamageable target)
     {
-        target.TakeDamage(model.statsSO.AttackDamage);
+        target.TakeDamage(model.currentDamage);
     }
 
-    public float GetDamage() => model.statsSO.AttackDamage;
+    public float GetDamage() => model.currentDamage;
 
     //public void DoAttack(IDamageable target)
     //{
