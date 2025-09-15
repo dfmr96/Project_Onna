@@ -391,6 +391,7 @@ GameObject:
   - component: {fileID: 593686499}
   - component: {fileID: 593686498}
   - component: {fileID: 593686500}
+  - component: {fileID: 593686501}
   m_Layer: 0
   m_Name: MutationsCreator
   m_TagString: Untagged
@@ -440,6 +441,27 @@ MonoBehaviour:
   gammaNervousEffect: {fileID: 11400000, guid: 6dd52b42e924b954b8a8c799b359f620, type: 2}
   mutationLevel: 1
   showGUI: 1
+--- !u!114 &593686501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593686497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c46095f9d025bc4dacd6cc35b700e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gammaNervousMinorEffect: {fileID: 11400000, guid: d37ccae258125f4419a44820a2c2bb91, type: 2}
+  mutationLevel: 1
+  isMutationActive: 0
+  orbPrefab: {fileID: -2432096017035944209, guid: 078027728cd972a409dd8b7b65617d9e, type: 3}
+  orbsToSpawn: 5
+  spawnRadius: 15
+  spawnHeight: 1
+  showAttractionRange: 1
+  attractionRangeColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &948678161
 GameObject:
   m_ObjectHideFlags: 0
