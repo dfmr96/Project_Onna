@@ -1007,6 +1007,52 @@ Transform:
   - {fileID: 3752927625567475135}
   m_Father: {fileID: 8025509566666306244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3849535221611786289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3812021117369432484}
+  - component: {fileID: 6668341717595924518}
+  m_Layer: 6
+  m_Name: Melee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3812021117369432484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849535221611786289}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5232816373119301103}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6668341717595924518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849535221611786289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2673ebb1a373cd4b83931d08675deac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 200dff04412ec234abc0d2af9b9bc9f3, type: 2}
+  attackPoint: {fileID: 6096603574120293089}
 --- !u!1 &3863611926642077226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,6 +1096,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6096603574120293089}
+  - {fileID: 3812021117369432484}
   - {fileID: 1592005984796363887}
   - {fileID: 6924677166269443374}
   m_Father: {fileID: 0}
@@ -1254,6 +1301,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 291d84bb-2504-47b5-9b29-52dd8d47d0ff
     m_ActionName: Player/Reload[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4339932572223991893}
+        m_TargetAssemblyTypeName: Player.PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnMeleeAtack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 22eacb89-efb8-4446-837a-c84ba66cf020
+    m_ActionName: Player/Fire2[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1272,6 +1335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponController: {fileID: 1108355771667216337}
+  meleeController: {fileID: 6668341717595924518}
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -1288,16 +1352,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fc80a863b2473099f2be0da4db6173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devMode: 0
-  statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
-  heightTextSpawn: 1.5
-  floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
-  _playerView: {fileID: 5206305562450521121}
   _playerInventory:
     playerWallet:
       coins: 0
     playerItemsHolder:
       _upgradesBoughtList: []
+  devMode: 0
+  statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
+  heightTextSpawn: 1.5
+  floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
 --- !u!114 &4339932572223991893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1478,8 +1541,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1276326954052208887}
   visualRoot: {fileID: 1592005984796363887}
-  inputHandler: {fileID: 4339932572223991893}
   rigBuilder: {fileID: 6354521171766058465}
+  inputHandler: {fileID: 4339932572223991893}
   hubAnimator: {fileID: 9100000, guid: ca70cfc19ca23754c8e6acd7ae2fd346, type: 2}
   combatAnimator: {fileID: 9100000, guid: 7bab0c5a9a8f20e4ab9237b877e657fa, type: 2}
   rotationSpeed: 100

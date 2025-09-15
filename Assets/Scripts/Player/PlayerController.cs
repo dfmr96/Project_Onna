@@ -1,4 +1,3 @@
-using System;
 using Core;
 using Player.Weapon;
 using UnityEngine;
@@ -12,6 +11,7 @@ namespace Player
         private const float AimRaycastMaxDistance = 100f;
 
         [SerializeField] private WeaponController weaponController = null;
+        [SerializeField] private MeleeController meleeController = null;
         [SerializeField] private LayerMask groundLayer;
 
         [Header("Dash")] 
@@ -77,6 +77,7 @@ namespace Player
             _rb = GetComponent<Rigidbody>();
             _playerInputHandler.InteractionPerformed += HandleInteraction;
             _playerInputHandler.FirePerformed += HandleFire;
+            _playerInputHandler.MeleeAtackPerformed += HandleMelee;
             _playerInputHandler.ReloadPerformed += HandleReload;
         }
 
@@ -98,7 +99,7 @@ namespace Player
             _rawInputDirection = _playerInputHandler.RawMovementInput;
             _rawAimInput = _playerInputHandler.RawAimInput;
 
-            // Procesar lógica de negocio
+            // Procesar lógica de negocio - COMO QUE LOGICA DE NOGIOCIO EXPLIQUENME QUE CORNO ES ESTO!!! atte: sim!
             ProcessMovementLogic();
             ProcessAimingLogic();
         }
@@ -190,6 +191,11 @@ namespace Player
             }
         }
 
+        private void HandleMelee()
+        {
+            if (_playerModel.CanMelee) meleeController.Attack();
+        }
+
         private void HandleReload()
         {
             if (_playerModel.CanShoot)
@@ -217,10 +223,7 @@ namespace Player
             currentInteractable = closestInteractable;
         }
 
-        public void ToggleInteraction(bool value)
-        {
-            canInteract = value;
-        }
+        public void ToggleInteraction(bool value) => canInteract = value;
 
         private void HandleDash()
         {
@@ -252,6 +255,7 @@ namespace Player
             GameMode currentMode = GameModeSelector.SelectedMode;
             _playerModel.SetGameMode(currentMode);
             _playerModel.SetCanShoot(currentMode != GameMode.Hub);
+            _playerModel.SetCanMelee(currentMode != GameMode.Hub);
         }
 
         private Vector3 CalculateAimDirection()
@@ -279,9 +283,6 @@ namespace Player
             return Vector3.forward;
         }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawSphere(MouseWorldPos, 0.5f);
-        }
+        private void OnDrawGizmos() => Gizmos.DrawSphere(MouseWorldPos, 0.5f);
     }
 }

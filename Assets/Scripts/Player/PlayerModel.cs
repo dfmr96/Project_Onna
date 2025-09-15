@@ -3,7 +3,6 @@ using Core;
 using NaughtyAttributes;
 using Player.Stats;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Player
 {
@@ -19,6 +18,7 @@ namespace Player
         public event Action<Vector3> OnRawMovementDirectionChanged;
         public event Action<Vector3> OnAimDirectionChanged;
         public event Action<bool> OnCanShootChanged;
+        public event Action<bool> OnCanMeleeChanged;
         
         [SerializeField] PlayerInventory _playerInventory;
         [SerializeField] private bool devMode;
@@ -42,6 +42,7 @@ namespace Player
         public GameMode CurrentGameMode => _currentGameMode;
         public Vector3 AimDirection => _aimDirection;
         public bool CanShoot => _canShoot;
+        public bool CanMelee => _canMelee;
         public PlayerInventory Inventory => _playerInventory;
 
 
@@ -52,6 +53,7 @@ namespace Player
         private bool _isMoving;
         private Vector3 _aimDirection = Vector3.forward;
         private bool _canShoot = true;
+        private bool _canMelee = true;
         private float _currentTime;
         private PlayerStatContext _statContext;
         private PlayerView _playerView;
@@ -234,6 +236,15 @@ namespace Player
             }
         }
 
+        public void SetCanMelee(bool canMelee)
+        {
+            if (_canMelee != canMelee)
+            {
+                _canMelee = canMelee;
+                OnCanMeleeChanged?.Invoke(canMelee);
+            }
+        }
+
         /// <summary>
         /// Inicializa el modo de juego actual para el jugador basado en el modo seleccionado desde GameModeSelector.
         /// </summary>
@@ -248,6 +259,7 @@ namespace Player
 
             SetGameMode(selectedMode);
             SetCanShoot(_currentGameMode != GameMode.Hub);
+            SetCanMelee(_currentGameMode != GameMode.Hub);
             
         }
         

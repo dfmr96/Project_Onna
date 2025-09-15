@@ -24,6 +24,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Fire2",
+                    "type": "Button",
+                    "id": "22eacb89-efb8-4446-837a-c84ba66cf020",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Aim",
                     "type": "Value",
                     "id": "5f5fb504-0527-4ec0-82d4-41e5a843aea7",
@@ -221,6 +230,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb8a5e18-8edc-4af6-8dd7-7da6d178b26d",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Fire2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9156bd1-b6aa-47ff-a382-732941ff5e45",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Fire2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
