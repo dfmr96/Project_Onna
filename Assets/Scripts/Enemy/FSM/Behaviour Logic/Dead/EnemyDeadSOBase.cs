@@ -10,6 +10,7 @@ public class EnemyDeadSOBase : ScriptableObject
     protected Transform transform;
     protected GameObject gameObject;
     protected EnemyView _enemyView;
+    protected EnemyModel _enemyModel;
     protected CapsuleCollider _collider;
     protected BossModel _bossModel;
     protected BossView _bossView;
@@ -28,6 +29,7 @@ public class EnemyDeadSOBase : ScriptableObject
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
     }
 
     public virtual void DoEnterLogic()
@@ -36,6 +38,7 @@ public class EnemyDeadSOBase : ScriptableObject
         _collider = gameObject.GetComponent<CapsuleCollider>();
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
 
         _navMeshAgent.speed = 0;
         //_navMeshAgent.isStopped = true;
@@ -44,6 +47,13 @@ public class EnemyDeadSOBase : ScriptableObject
     }
     public virtual void DoExitLogic() { 
         ResetValues();
+
+        //Si tiene el buff de explotar 
+        if(_enemyModel.variantSO.explodesOnDeath)
+        {
+            DeathManager.Instance.InstantiateMutantDeath(transform, _enemyModel.variantSO.explosionLifetime);
+        }
+
         DeathManager.Instance.DestroyObject(enemy.gameObject);
 
 

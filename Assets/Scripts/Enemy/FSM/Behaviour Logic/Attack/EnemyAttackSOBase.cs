@@ -26,8 +26,6 @@ public class EnemyAttackSOBase : ScriptableObject
     [SerializeField] public float _distanceToCountExit = 3f;
     [SerializeField] protected float AttackingMovingSpeed;
     [SerializeField] protected bool isMovingSpeedChangesOnAttack;
-    [SerializeField] protected float _timeBetweenAttacks = 1.5f;
-    [SerializeField] protected float _initialAttackDelay = 0.3f;
     [SerializeField] protected bool isLookingPlayer = true;
     [SerializeField] protected float rotationSpeed = 5f;
 

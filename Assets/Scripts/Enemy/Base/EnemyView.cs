@@ -110,7 +110,7 @@ public class EnemyView : MonoBehaviour
         targetPos.y = firePoint.position.y; 
         Vector3 dir = (targetPos - firePoint.position).normalized;
 
-        projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.statsSO.AttackDamage);
+        projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.currentDamage);
         
         audioSource.PlayOneShot(shootAudioClip);
     }
@@ -130,7 +130,7 @@ public class EnemyView : MonoBehaviour
             targetPos.y = firePoint.position.y;
             dir = (targetPos - firePoint.position).normalized;
 
-            projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.statsSO.AttackDamage);
+            projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.currentDamage);
             DoRecoil();
 
         }
@@ -140,7 +140,7 @@ public class EnemyView : MonoBehaviour
             targetPos.y = firePoint2.position.y;
             dir = (targetPos - firePoint2.position).normalized;
 
-            projectileSpawner.SpawnProjectile(firePoint2.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.statsSO.AttackDamage);
+            projectileSpawner.SpawnProjectile(firePoint2.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.currentDamage);
             DoRecoil();
 
         }

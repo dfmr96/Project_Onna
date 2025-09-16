@@ -12,7 +12,7 @@ public class EnemyChaseBasic : EnemyChaseSOBase
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
-        _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed * _speedAgentMultiply;
+        _navMeshAgent.speed = _enemyModel.currentSpeed * _speedAgentMultiply;
         _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed * _speedAgentMultiply;
 
         //Soluciona efecto de hielo en desaceleracion
@@ -26,7 +26,7 @@ public class EnemyChaseBasic : EnemyChaseSOBase
     public override void DoExitLogic()
     {
         base.DoExitLogic();
-        _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed;
+        _navMeshAgent.speed = _enemyModel.currentSpeed;
         _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
 
     }

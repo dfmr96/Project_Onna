@@ -10,6 +10,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
 {
     [Header("Stats Config")]
     public EnemyStatsSO statsSO;
+    public EnemyVariantSO variantSO;
 
     public event Action<float> OnHealthChanged;
     public float MaxHealth { get; private set; }
@@ -33,10 +34,49 @@ public class EnemyModel : MonoBehaviour, IDamageable
     private Transform healthBar;
     private Transform healthFill;
 
+    [Header("Buff Stats Info:")]
+    public float currentHealth;
+    public float currentDamage;
+    public float currentSpeed;
+    public float currentAttackTimeRate;
+
+
+    private float healthMultiplier = 1f;
+    private float damageMultiplier = 1f;
+    private float speedMultiplier = 1f;
+    private float attackTimeRateMultiplier = 1f;
+    private float damageReductionDuringAttackMultiplier = 1f;
     private void Start()
     {
-        MaxHealth = statsSO.MaxHealth;
+       
+
+        ////////////   Buffs/Debuffs   //////////////
+        if (variantSO != null)
+        {
+             healthMultiplier = variantSO.healthMultiplier;
+             damageMultiplier = variantSO.damageMultiplier;
+             speedMultiplier = variantSO.speedMultiplier;
+             attackTimeRateMultiplier = variantSO.attackChargeTimeMultiplier;
+             damageReductionDuringAttackMultiplier = variantSO.damageReductionDuringAttack;
+
+        }
+
+
+        //MaxHealth = statsSO.MaxHealth;
+        //Vida
+        MaxHealth = statsSO.MaxHealth * healthMultiplier;
         CurrentHealth = MaxHealth;
+        currentHealth = CurrentHealth;
+
+        //Velocidad Movimiento
+        currentSpeed = statsSO.moveSpeed * speedMultiplier;
+
+        //Poder de Ataque
+        currentDamage = statsSO.AttackDamage * damageMultiplier;
+
+        //Tiempo entre ataques
+        currentAttackTimeRate = statsSO.AttackTimeRate * attackTimeRateMultiplier;  
+
 
         view = GetComponent<EnemyView>();
         enemy = GetComponent<EnemyController>();
@@ -50,7 +90,39 @@ public class EnemyModel : MonoBehaviour, IDamageable
             healthBar = barInstance.transform;
             healthFill = healthBar.Find("Fill");
         }
+
+        //if (variantSO != null && variantSO.variantType == EnemyVariantType.Yellow)
+        //{
+        //    Debug.Log("Soy un enemigo amarillo fortificado");
+        //}
+
+        //if (variantSO != null)
+        //{
+        //    switch (variantSO.variantType)
+        //    {
+        //        case EnemyVariantType.Green:
+        //            // Aplica DoT al jugador
+        //            //player.ApplyDot(variantSO.dotDamage, variantSO.dotDuration);
+        //            break;
+
+        //        case EnemyVariantType.Purple:
+        //            //if (CurrentHealth <= 0 && !hasExploded)
+        //            //{
+        //            //    Explode(variantSO.explosionRadius, variantSO.explosionDamage);
+        //            //    hasExploded = true;
+        //            //}
+        //            break;
+
+        //        case EnemyVariantType.Dark:
+        //            if (enemy.IsChargingAttack())
+        //            {
+        //                damageAmount *= (1f - variantSO.damageReductionDuringAttack);
+        //            }
+        //            break;
+        //    }
+        //}
     }
+
 
     public void TakeDamage(float damageAmount)
     {
@@ -66,7 +138,18 @@ public class EnemyModel : MonoBehaviour, IDamageable
         }
 
         view.PlayDamageEffect();
-        CurrentHealth -= damageAmount;
+
+        //Aplica Defensa si hay Buff (actualmente solo variante Dark)
+        if ((statsSO.currentState == "EnemyAttackState") && variantSO.hasDefensivePhase)
+        {
+            CurrentHealth -= damageAmount * damageReductionDuringAttackMultiplier;
+        }
+        else
+        {
+            CurrentHealth -= damageAmount;
+        }
+
+
         OnHealthChanged?.Invoke(CurrentHealth);
 
         UpdateHealthBar();

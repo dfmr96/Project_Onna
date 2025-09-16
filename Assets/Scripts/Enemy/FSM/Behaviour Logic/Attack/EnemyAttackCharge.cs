@@ -86,7 +86,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         //Si ya ataco una vez, espera el tiempo entre ataques
         if (_hasAttackedOnce)
         {
-            if (_timer >= _timeBetweenAttacks)
+            if (_timer >= _enemyModel.currentAttackTimeRate)
             {
                 _hasAttackedOnce = false;
                 _timer = 0f;
@@ -95,7 +95,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         }
 
         //Si no ataco todavia y cumplio el delay inicial
-        if (_timer >= _initialAttackDelay)
+        if (_timer >= _enemyModel.statsSO.AttackInitialDelay)
         {
             if (distanceToPlayer <= meleeRange)
             {

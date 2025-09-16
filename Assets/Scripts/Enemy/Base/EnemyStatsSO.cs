@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Logic", menuName = "Enemy Stats/Enemy Stats Base")]
 public class EnemyStatsSO : ScriptableObject
 {
+    [Header("Current State")]
+    public string currentState = "No State";
+
     [Header("Vitality")]
     public float MaxHealth = 100f;
     public bool isShieldActive = false;

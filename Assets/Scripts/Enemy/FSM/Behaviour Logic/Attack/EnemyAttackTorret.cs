@@ -46,13 +46,13 @@ public class EnemyAttackTorrent : EnemyAttackSOBase
 
         _timer += Time.deltaTime;
 
-        if (!_hasAttackedOnce && _timer >= _initialAttackDelay)
+        if (!_hasAttackedOnce && _timer >= _enemyModel.statsSO.AttackInitialDelay)
         {
             ShootProjectile();
             _hasAttackedOnce = true;
             _timer = 0f;
         }
-        else if (_hasAttackedOnce && _timer >= _timeBetweenAttacks)
+        else if (_hasAttackedOnce && _timer >= _enemyModel.currentAttackTimeRate)
         {
             ShootProjectile();
             _timer = 0f;

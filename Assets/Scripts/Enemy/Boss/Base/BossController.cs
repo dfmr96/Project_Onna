@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Player;
+using System;
 
 
 public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseController
@@ -188,6 +189,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         fsm.CurrentState?.FrameUpdate();
         view.PlayMovingAnimation(_navMeshAgent.speed);
         Debug.Log(fsm.CurrentState);
+
     }
 
     #endregion
@@ -419,7 +421,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
             if (availablePositions.Count == 0)
                 break; 
 
-            int randomIndex = Random.Range(0, availablePositions.Count);
+            int randomIndex = UnityEngine.Random.Range(0, availablePositions.Count);
             Transform selectedPosition = availablePositions[randomIndex];
 
             Instantiate(torretPrefab, selectedPosition.position, selectedPosition.rotation);
@@ -437,7 +439,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         foreach (var pillar in pillars)
         {
             //pos aleatoria
-            int randomIndex = Random.Range(0, availablePositions.Count);
+            int randomIndex = UnityEngine.Random.Range(0, availablePositions.Count);
             Transform selectedPosition = availablePositions[randomIndex];
 
             //colocamos el pilar en esa pos
