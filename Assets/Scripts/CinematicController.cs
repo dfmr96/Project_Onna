@@ -43,8 +43,7 @@ public class CinematicController : MonoBehaviour
         if (currentIndex >= cinematicSprites.Count)
         {
             GameModeSelector.SelectedMode = GameMode.Hub;
-            //SceneManagementUtils.AsyncLoadSceneByName(nextScene, loadCanvasPrefab, this);
-            SceneManagementUtils.LoadSceneByName(nextScene);
+            SceneManagementUtils.AsyncLoadSceneByName(nextScene, loadCanvasPrefab, this);
             return;
         }
 
