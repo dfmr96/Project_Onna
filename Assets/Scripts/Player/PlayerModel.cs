@@ -20,6 +20,14 @@ namespace Player
         private float _currentTime;
         private PlayerStatContext _statContext;
 
+        [Header("Enemy DoT Effect")]
+        [SerializeField] private GameObject poisonEffectPrefab;
+        [SerializeField] private Transform poisonAnchor;
+        [SerializeField] private Vector3 poisonOffset;
+        private Coroutine enemyDoT = null;
+        private float poisonTimeRemaining = 0f;
+        private ParticleSystem poisonEffectInstance;
+
         [Header("Floating Damage Text Effect")]
         [SerializeField] private float heightTextSpawn = 1.5f;
         [SerializeField] private GameObject floatingTextPrefab;
@@ -42,22 +50,7 @@ namespace Player
         [SerializeField] PlayerInventory _playerInventory;
         public PlayerInventory Inventory => _playerInventory;
 
-       
-        [Header("Enemy DoT Effect")]
-        [SerializeField] private GameObject poisonEffectPrefab;
-        [SerializeField] private Transform poisonAnchor;
-        [SerializeField] private Vector3 poisonOffset;
-        private Coroutine enemyDoT = null;
-        private float poisonTimeRemaining = 0f;
-        private ParticleSystem poisonEffectInstance;
-
-
-
-        private void Start()
-        {
-            _playerView = GetComponent<PlayerView>();
-
-        }
+        private void Start() => _playerView = GetComponent<PlayerView>();
 
         public void InjectStatContext(PlayerStatContext context)
         {
@@ -86,28 +79,17 @@ namespace Player
         private void Update()
         {
             //if (!_isInitialized) return;
-            if (Input.GetKeyDown(KeyCode.F2))
-            {
-                devMode = !DevMode;
-            }
+            if (Input.GetKeyDown(KeyCode.F2)) devMode = !DevMode;
 
             if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub && passiveDrainEnabled)
-            {
                 ApplyPassiveDrain();
-            }
         }
         
         public void EnablePassiveDrain(bool enable)
         {
             passiveDrainEnabled = enable;
-            if (enable)
-            {
-                Debug.Log("🔋 Passive Drain enabled.");
-            }
-            else
-            {
-                Debug.Log("🔋 Passive Drain disabled.");
-            }
+            if (enable) Debug.Log("🔋 Passive Drain enabled.");
+            else Debug.Log("🔋 Passive Drain disabled.");
         }
 
         private void ApplyPassiveDrain()
@@ -116,18 +98,54 @@ namespace Player
             ApplyDamage(damagePerFrame, false, false);
         }
 
-      
-
-
-
         public void TakeDamage(float timeTaken)
         {
             ApplyDamage(timeTaken, true, true);
-
             _playerView.PlayDamageEffect();
         }
-        
-       public void ApplyDamage(float timeTaken, bool applyResistance, bool isDirectDamage = false)
+
+        //Debuff
+        public void ApplyDebuffDoT(float dotDuration, float dps)
+        {
+            if (poisonEffectPrefab != null && poisonEffectInstance == null)
+            {
+                GameObject go = Instantiate(poisonEffectPrefab, poisonAnchor.position + poisonOffset, Quaternion.identity, poisonAnchor);
+                poisonEffectInstance = go.GetComponent<ParticleSystem>();
+            }
+            else if (poisonEffectInstance != null)
+            {
+                //Asegurarse de que siga al anchor con el offset
+                poisonEffectInstance.transform.position = poisonAnchor.position + poisonOffset;
+            }
+
+            poisonTimeRemaining = Mathf.Max(poisonTimeRemaining, dotDuration);
+
+            if (enemyDoT == null)
+                enemyDoT = StartCoroutine(EnemyDoTCoroutine(dotDuration, dps));
+        }
+
+        private IEnumerator EnemyDoTCoroutine(float dotDuration, float dps)
+        {
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Play();
+
+            while (poisonTimeRemaining > 0f)
+            {
+                float damagePerFrame = dps * Time.deltaTime;
+                ApplyDamage(damagePerFrame, false, false);
+
+                poisonTimeRemaining -= Time.deltaTime;
+                yield return null;
+            }
+
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Stop();
+
+            enemyDoT = null;
+        }
+
+
+        public void ApplyDamage(float timeTaken, bool applyResistance, bool isDirectDamage = false)
         {
             float resistance = applyResistance ? Mathf.Clamp01(StatContext.Source.Get(statRefs.damageResistance)) : 0f;
             float effectiveDamage = timeTaken * (1f - resistance);
@@ -149,6 +167,7 @@ namespace Player
             // Shake solo si es daño directo
             if (isDirectDamage)
             {
+                //PEDAZO DE FORRO SACA ESTO
                 var shake = FindObjectOfType<UI_Shake>();
                 if (shake != null)
                     shake.Shake(0.25f, 8f);
@@ -194,54 +213,6 @@ namespace Player
             }
         }
 
-        public void InjectInventory(PlayerInventory inventory)
-        {
-            _playerInventory = inventory;
-        }
-
-
-
-
-        //Debuff
-        public void ApplyDebuffDoT(float dotDuration, float dps)
-        {
-            if (poisonEffectPrefab != null && poisonEffectInstance == null)
-            {
-                GameObject go = Instantiate(poisonEffectPrefab, poisonAnchor.position + poisonOffset, Quaternion.identity, poisonAnchor);
-                poisonEffectInstance = go.GetComponent<ParticleSystem>();
-            }
-            else if (poisonEffectInstance != null)
-            {
-                //Asegurarse de que siga al anchor con el offset
-                poisonEffectInstance.transform.position = poisonAnchor.position + poisonOffset;
-            }
-
-            poisonTimeRemaining = Mathf.Max(poisonTimeRemaining, dotDuration);
-
-            if (enemyDoT == null)
-                enemyDoT = StartCoroutine(EnemyDoTCoroutine(dotDuration, dps));
-        }
-
-        private IEnumerator EnemyDoTCoroutine(float dotDuration, float dps)
-        {
-            if (poisonEffectInstance != null)
-                poisonEffectInstance.Play();
-
-            while (poisonTimeRemaining > 0f)
-            {
-                float damagePerFrame = dps * Time.deltaTime;
-                ApplyDamage(damagePerFrame, false, false);
-
-                poisonTimeRemaining -= Time.deltaTime;
-                yield return null;
-            }
-
-            if (poisonEffectInstance != null)
-                poisonEffectInstance.Stop();
-
-            enemyDoT = null;
-        }
-
-
+        public void InjectInventory(PlayerInventory inventory) => _playerInventory = inventory;
     }
 }
