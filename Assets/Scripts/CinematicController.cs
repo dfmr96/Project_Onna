@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using Player;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CinematicController : MonoBehaviour
 {
+    [SerializeField] GameObject loadCanvasPrefab;
+    [SerializeField] private string nextScene;
+    
     [Header("Sprites de la cinemática")]
     [SerializeField] private List<Sprite> cinematicSprites;
 
     [Header("UI de pantalla")]
     [SerializeField] private Image cinematicImage;
-
-    [Header("Nombre de la escena siguiente")]
-    [SerializeField] private string nextSceneName = "HubScene";
 
     private int currentIndex = 0;
     
@@ -39,11 +38,12 @@ public class CinematicController : MonoBehaviour
     private void AdvanceCinematic()
     {
         currentIndex++;
+        if (currentIndex > cinematicSprites.Count) return;
 
         if (currentIndex >= cinematicSprites.Count)
         {
             GameModeSelector.SelectedMode = GameMode.Hub;
-            SceneManager.LoadScene(nextSceneName);
+            SceneManagementUtils.AsyncLoadSceneByName(nextScene, loadCanvasPrefab, this);
             return;
         }
 

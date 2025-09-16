@@ -141,9 +141,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialDelaySpawn: 3
+  particleLifeTime: 4
   spawnParticlesPrefab: {fileID: 5169803093150543574, guid: fa65185353a88a842b840df16733e05b, type: 3}
   mutationCanvasPrefab: {fileID: 3489912951650629710, guid: 1b094c0d4b5ce7047a349be75aaeb4d2, type: 3}
-  enemiesToSpawn: []
+  enemiesToSpawn:
+  - prefab: {fileID: 5215764810527803941, guid: 485566aee052c934482ff62ef697c679, type: 3}
+    percentChance: 100
+    weight: 0
   wavesQuantity: 3
   spawnPoints:
   - {fileID: 5605882254545171578}
