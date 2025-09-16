@@ -11,7 +11,7 @@ namespace Player
 
         public string ToJson() => JsonUtility.ToJson(this);
         public static PlayerProgress FromJson(string json) => JsonUtility.FromJson<PlayerProgress>(json);
-        
+
         //TODO Add methods to save and load progress
     }
 }
