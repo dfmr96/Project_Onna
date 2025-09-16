@@ -69,8 +69,12 @@ public class EnemyView : MonoBehaviour
 
 
         //torret
-        initialRotation = turretHead.localRotation;
-        initialPosition = turretHead.localPosition;
+        if(turretHead != null)
+        {
+            initialRotation = turretHead.localRotation;
+            initialPosition = turretHead.localPosition;
+        }
+      
 
 
     }
