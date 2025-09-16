@@ -45,6 +45,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
     private float damageMultiplier = 1f;
     private float speedMultiplier = 1f;
     private float attackTimeRateMultiplier = 1f;
+    private float damageReductionDuringAttackMultiplier = 1f;
     private void Start()
     {
        
@@ -56,6 +57,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
              damageMultiplier = variantSO.damageMultiplier;
              speedMultiplier = variantSO.speedMultiplier;
              attackTimeRateMultiplier = variantSO.attackChargeTimeMultiplier;
+             damageReductionDuringAttackMultiplier = variantSO.damageReductionDuringAttack;
 
         }
 
@@ -140,8 +142,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
         //Aplica Defensa si hay Buff (actualmente solo variante Dark)
         if ((statsSO.currentState == "EnemyAttackState") && variantSO.hasDefensivePhase)
         {
-            CurrentHealth -= damageAmount * variantSO.damageReductionDuringAttack;
-            Debug.Log("Se defendio ok");
+            CurrentHealth -= damageAmount * damageReductionDuringAttackMultiplier;
         }
         else
         {
@@ -149,7 +150,6 @@ public class EnemyModel : MonoBehaviour, IDamageable
         }
 
 
-        //CurrentHealth -= damageAmount;
         OnHealthChanged?.Invoke(CurrentHealth);
 
         UpdateHealthBar();

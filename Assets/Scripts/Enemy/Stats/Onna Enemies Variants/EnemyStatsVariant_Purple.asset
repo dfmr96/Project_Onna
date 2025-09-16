@@ -16,10 +16,14 @@ MonoBehaviour:
   healthMultiplier: 1
   damageMultiplier: 1
   speedMultiplier: 1
+  attackChargeTimeMultiplier: 1
   hasDoT: 0
   dotDamage: 0
   dotDuration: 0
   explodesOnDeath: 1
-  explosionRadius: 3
-  explosionDamage: 20
+  explosionRadius: 2
+  explosionDamage: 10
+  explosionLifetime: 2
+  hasDefensivePhase: 0
+  damageReductionDuringAttack: 1
   extraOrbsOnDeath: 0

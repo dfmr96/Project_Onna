@@ -10,7 +10,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     //private AttackColorState _colorState = AttackColorState.None;
 
     //private bool _isAttacking = false;
-    private float _attackAnimationTimer = 0f;
+    //private float _attackAnimationTimer = 0f;
 
     //[Header("Visual")]
     //[SerializeField] private Color attackColor = Color.red;
@@ -39,7 +39,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _navMeshAgent.SetDestination(playerTransform.position);
         _hasAttackedOnce = false;
         //_isAttacking = false;
-        _attackAnimationTimer = 0f;
+        //_attackAnimationTimer = 0f;
         //_colorState = AttackColorState.None;
 
         //ResetColor();
@@ -152,13 +152,13 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     private void OnAttackStarted()
     {
         //_colorState = AttackColorState.FadeIn;
-        _attackAnimationTimer = 0f;
+        //_attackAnimationTimer = 0f;
     }
 
     private void OnAttackImpact()
     {
         //_colorState = AttackColorState.FadeOut;
-        _attackAnimationTimer = 0f;
+        //_attackAnimationTimer = 0f;
     }
 
     private void HandleHealthChanged(float currentHealth)

@@ -8,6 +8,8 @@ public class EnemyProjectile : MonoBehaviour
 {
     private float damage;
     [SerializeField] private float lifeTime = 5f;
+    private float _timer = 0f;
+
     [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
     protected Transform playerTransform;
     [SerializeField] float bulletSpeed;
@@ -15,7 +17,6 @@ public class EnemyProjectile : MonoBehaviour
     private bool hasHit = false;
     private Action onRelease;
     private Rigidbody rb;
-    private float _timer = 0f;
 
 
 

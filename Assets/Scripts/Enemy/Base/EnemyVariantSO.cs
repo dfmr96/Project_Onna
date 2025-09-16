@@ -20,8 +20,10 @@ public class EnemyVariantSO : ScriptableObject
 
     [Header("Explode On Death")]
     public bool explodesOnDeath = false;
-    public float explosionRadius = 0f;
-    public float explosionDamage = 0f;
+    public float explosionRadius = 1f;
+    public float explosionDamage = 5f;
+    public float explosionLifetime = 2f;
+
 
     [Header("Dark Defensive Phase")]
     public bool hasDefensivePhase = false;
