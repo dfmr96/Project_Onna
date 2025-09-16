@@ -132,6 +132,9 @@ public class BossModel : MonoBehaviour, IDamageable
         OnDeath?.Invoke(this);
     }
 
-
+    public void ApplyDebuffDoT(float dotDuration, float dps)
+    {
+        throw new NotImplementedException();
+    }
 }
 

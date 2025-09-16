@@ -24,4 +24,9 @@ public class EnemyExample : MonoBehaviour, IDamageable
         OnDie?.Invoke(gameObject);
         Destroy(gameObject);
     }
+
+    public void ApplyDebuffDoT(float dotDuration, float dps)
+    {
+        throw new NotImplementedException();
+    }
 }

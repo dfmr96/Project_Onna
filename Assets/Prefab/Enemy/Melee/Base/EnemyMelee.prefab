@@ -1654,7 +1654,7 @@ MonoBehaviour:
   firePoint: {fileID: 2976644028888273336}
   shieldObject: {fileID: 5590283411822690491}
   aggroChecksObject: {fileID: 3922803291852483100}
-  initialState: 0
+  initialState: 1
   attackPhases:
   - healthThreshold: 0
     attackSO: {fileID: 11400000, guid: dcde0ee0a61b0c244a1bf7b0a556bbfb, type: 2}
@@ -1687,6 +1687,10 @@ MonoBehaviour:
   heightTextSpawn: 2
   healthBarPrefab: {fileID: 8508845231606679208, guid: 8623097c3dba54948ab913cd6882f592, type: 3}
   heightBarSpawn: 2.5
+  currentHealth: 0
+  currentDamage: 0
+  currentSpeed: 0
+  currentAttackTimeRate: 0
 --- !u!114 &5494369513606284842
 MonoBehaviour:
   m_ObjectHideFlags: 0

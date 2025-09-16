@@ -18,11 +18,11 @@ public class EnemyProjectile : MonoBehaviour
     private Action onRelease;
     private Rigidbody rb;
 
+    private EnemyModel ownerModel;
 
 
-   
 
-private void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -34,12 +34,21 @@ private void Awake()
 
     }
 
-    public void Launch(Vector3 direction, float force, float damage, Action onReleaseCallback)
+    public void Launch(Vector3 direction, float force, float damage, EnemyModel owner, Action onReleaseCallback)
     {
         this.damage = damage;
         onRelease = onReleaseCallback;
         rb.velocity = direction * force;
+        this.ownerModel = owner;
+        _timer = 0f;
+        hasHit = false;
+    }
 
+    public void LaunchBoss(Vector3 direction, float force, float damage, Action onReleaseCallback)
+    {
+        this.damage = damage;
+        onRelease = onReleaseCallback;
+        rb.velocity = direction * force;
         _timer = 0f;
         hasHit = false;
     }
@@ -85,6 +94,12 @@ private void Awake()
             hasHit = true;
 
             damageable.TakeDamage(damage);
+
+            //Debuff veneno
+            if (ownerModel != null && ownerModel.variantSO.variantType == EnemyVariantType.Green)
+            {
+                damageable.ApplyDebuffDoT(ownerModel.variantSO.dotDuration, ownerModel.variantSO.dotDamage);
+            }
 
             PlayImpactParticles();
 

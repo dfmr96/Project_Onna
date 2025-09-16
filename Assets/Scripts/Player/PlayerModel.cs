@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Core;
 using NaughtyAttributes;
 using Player.Stats;
@@ -40,6 +41,17 @@ namespace Player
         
         [SerializeField] PlayerInventory _playerInventory;
         public PlayerInventory Inventory => _playerInventory;
+
+       
+        [Header("Enemy DoT Effect")]
+        [SerializeField] private GameObject poisonEffectPrefab;
+        [SerializeField] private Transform poisonAnchor;
+        [SerializeField] private Vector3 poisonOffset;
+        private Coroutine enemyDoT = null;
+        private float poisonTimeRemaining = 0f;
+        private ParticleSystem poisonEffectInstance;
+
+
 
         private void Start()
         {
@@ -103,6 +115,10 @@ namespace Player
             float damagePerFrame = DrainRate * Time.deltaTime;
             ApplyDamage(damagePerFrame, false, false);
         }
+
+      
+
+
 
         public void TakeDamage(float timeTaken)
         {
@@ -182,5 +198,50 @@ namespace Player
         {
             _playerInventory = inventory;
         }
+
+
+
+
+        //Debuff
+        public void ApplyDebuffDoT(float dotDuration, float dps)
+        {
+            if (poisonEffectPrefab != null && poisonEffectInstance == null)
+            {
+                GameObject go = Instantiate(poisonEffectPrefab, poisonAnchor.position + poisonOffset, Quaternion.identity, poisonAnchor);
+                poisonEffectInstance = go.GetComponent<ParticleSystem>();
+            }
+            else if (poisonEffectInstance != null)
+            {
+                //Asegurarse de que siga al anchor con el offset
+                poisonEffectInstance.transform.position = poisonAnchor.position + poisonOffset;
+            }
+
+            poisonTimeRemaining = Mathf.Max(poisonTimeRemaining, dotDuration);
+
+            if (enemyDoT == null)
+                enemyDoT = StartCoroutine(EnemyDoTCoroutine(dotDuration, dps));
+        }
+
+        private IEnumerator EnemyDoTCoroutine(float dotDuration, float dps)
+        {
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Play();
+
+            while (poisonTimeRemaining > 0f)
+            {
+                float damagePerFrame = dps * Time.deltaTime;
+                ApplyDamage(damagePerFrame, false, false);
+
+                poisonTimeRemaining -= Time.deltaTime;
+                yield return null;
+            }
+
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Stop();
+
+            enemyDoT = null;
+        }
+
+
     }
 }
