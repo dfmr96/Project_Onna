@@ -1,6 +1,7 @@
 using System;
 using Core;
 using NaughtyAttributes;
+using System.Collections;
 using Player.Stats;
 using UnityEngine;
 
@@ -24,6 +25,13 @@ namespace Player
         [SerializeField] private bool devMode;
         [SerializeField] private StatReferences statRefs;
 
+        [Header("Enemy DoT Effect")]
+        [SerializeField] private GameObject poisonEffectPrefab;
+        [SerializeField] private Transform poisonAnchor;
+        [SerializeField] private Vector3 poisonOffset;
+        private Coroutine enemyDoT = null;
+        private float poisonTimeRemaining = 0f;
+        private ParticleSystem poisonEffectInstance;
 
         [Header("Floating Damage Text Effect")] 
         [SerializeField] private float heightTextSpawn = 1.5f;
@@ -93,28 +101,19 @@ namespace Player
         private void Update()
         {
             //if (!_isInitialized) return;
-            if (Input.GetKeyDown(KeyCode.F2))
-            {
-                devMode = !DevMode;
-            }
+            if (Input.GetKeyDown(KeyCode.F2)) devMode = !DevMode;
 
             if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub && passiveDrainEnabled)
-            {
                 ApplyPassiveDrain();
-            }
         }
 
         public void EnablePassiveDrain(bool enable)
         {
             passiveDrainEnabled = enable;
             if (enable)
-            {
                 Debug.Log("🔋 Passive Drain enabled.");
-            }
             else
-            {
                 Debug.Log("🔋 Passive Drain disabled.");
-            }
         }
 
         private void ApplyPassiveDrain()
@@ -126,8 +125,46 @@ namespace Player
         public void TakeDamage(float timeTaken)
         {
             ApplyDamage(timeTaken, true, true);
-
             _playerView?.PlayDamageEffect();
+        }
+
+        public void ApplyDebuffDoT(float dotDuration, float dps)
+        {
+            if (poisonEffectPrefab != null && poisonEffectInstance == null)
+            {
+                GameObject go = Instantiate(poisonEffectPrefab, poisonAnchor.position + poisonOffset, Quaternion.identity, poisonAnchor);
+                poisonEffectInstance = go.GetComponent<ParticleSystem>();
+            }
+            else if (poisonEffectInstance != null)
+            {
+                //Asegurarse de que siga al anchor con el offset
+                poisonEffectInstance.transform.position = poisonAnchor.position + poisonOffset;
+            }
+
+            poisonTimeRemaining = Mathf.Max(poisonTimeRemaining, dotDuration);
+
+            if (enemyDoT == null)
+                enemyDoT = StartCoroutine(EnemyDoTCoroutine(dotDuration, dps));
+        }
+
+        private IEnumerator EnemyDoTCoroutine(float dotDuration, float dps)
+        {
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Play();
+
+            while (poisonTimeRemaining > 0f)
+            {
+                float damagePerFrame = dps * Time.deltaTime;
+                ApplyDamage(damagePerFrame, false, false);
+
+                poisonTimeRemaining -= Time.deltaTime;
+                yield return null;
+            }
+
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Stop();
+
+            enemyDoT = null;
         }
 
         public void ApplyDamage(float timeTaken, bool applyResistance, bool isDirectDamage = false)
@@ -182,11 +219,8 @@ namespace Player
         public void Die() => OnPlayerDie?.Invoke();
 
 
-        public void InjectInventory(PlayerInventory inventory)
-        {
-            _playerInventory = inventory;
-        }
-        
+        public void InjectInventory(PlayerInventory inventory) => _playerInventory = inventory;
+
         public void SetGameMode(GameMode newMode)
         {
             if (_currentGameMode != newMode)
@@ -196,10 +230,7 @@ namespace Player
             }
         }
 
-        public void SetPosition(Vector3 newPosition)
-        {
-            _currentPosition = newPosition;
-        }
+        public void SetPosition(Vector3 newPosition) => _currentPosition = newPosition;
 
         public void SetMovementDirection(Vector3 direction)
         {
