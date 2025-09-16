@@ -6,48 +6,51 @@ public class MeleeController : MonoBehaviour
     [SerializeField] private MeleeData data;
     [SerializeField] private Transform attackPoint;
 
-    private MeleeModel model;
+    public MeleeModel Model { get; private set; }
 
     private bool isAttacking = false;
     private bool onCoolDown = false;
     private int comboStep = 0;
+    private float lastAttackTime = 0f;
 
     //testing
     private bool showGizmo = false;
 
-    private void Awake() => model = new MeleeModel(data);
+    private void Awake() => Model = new MeleeModel(data);
 
     public void Attack()
     {
+        if (Time.time - lastAttackTime > Model.TimeBetweenCombo) comboStep = 0;
         if (!isAttacking && !onCoolDown) StartCoroutine(DoAttack());
-        //Aca deberia tirar un evento para ejecutar la animacion llamando al view, pero como no se si de eso se va a encargar el player
-        //en si por las dudas no lo toco por ahora
     }
 
     private IEnumerator DoAttack()
     {
         isAttacking = true;
+        lastAttackTime = Time.time;
         comboStep++;
         showGizmo = true;
 
+        Model.StartAttack(comboStep);
+
         if (attackPoint != null)
         {
-            Collider[] hits = Physics.OverlapSphere(attackPoint.position, model.Range);
+            Collider[] hits = Physics.OverlapSphere(attackPoint.position, Model.Range);
 
             foreach (Collider hit in hits)
             {
                 IDamageable damageable = hit.GetComponent<IDamageable>();
-                if (damageable != null && hit.gameObject.layer != 6) damageable.TakeDamage(model.Damage);
+                if (damageable != null && hit.gameObject.layer != 6) damageable.TakeDamage(Model.Damage);
             }
         }
-        yield return new WaitForSeconds(model.AttackDelay);
+        yield return new WaitForSeconds(Model.AttackDelay);
         isAttacking = false;
         showGizmo = false;
 
         if (comboStep >= 2)
         {
             onCoolDown = true;
-            yield return new WaitForSeconds(model.CoolDown);
+            yield return new WaitForSeconds(Model.CoolDown);
             comboStep = 0;
             onCoolDown = false;
         } 
@@ -57,6 +60,6 @@ public class MeleeController : MonoBehaviour
     {
         if (!showGizmo) return;
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(attackPoint.position, model.Range);
+        Gizmos.DrawWireSphere(attackPoint.position, Model.Range);
     }
 }

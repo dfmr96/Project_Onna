@@ -718,7 +718,14 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
+    'mixamorig:Spine1'\n\tTransform 'mixamorig:RightArm'\n\tTransform 'mixamorig:LeftLeg'\n\tTransform
+    'mixamorig:LeftShoulder'\n\tTransform 'mixamorig:RightFoot'\n\tTransform 'mixamorig:Head'\n\tTransform
+    'mixamorig:LeftUpLeg'\n\tTransform 'mixamorig:LeftArm'\n\tand more ...\n\tFrom
+    animation clip 'One Hand Club Combo_1'\n\tFrom animation clip 'One Hand Club
+    Combo_1 1'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1017,6 +1024,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3812021117369432484}
   - component: {fileID: 6668341717595924518}
+  - component: {fileID: 5461076056659542388}
   m_Layer: 6
   m_Name: Melee
   m_TagString: Untagged
@@ -1053,6 +1061,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 200dff04412ec234abc0d2af9b9bc9f3, type: 2}
   attackPoint: {fileID: 6096603574120293089}
+--- !u!114 &5461076056659542388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849535221611786289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 968231202597de34ea8846b71b108d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1276326954052208887}
+  meleeController: {fileID: 6668341717595924518}
 --- !u!1 &3863611926642077226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,6 +1545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationView: {fileID: 3715669954240071290}
   weaponView: {fileID: 4559322424049143066}
+  meleeView: {fileID: 5461076056659542388}
   audioView: {fileID: 879461727823975973}
   effectsView: {fileID: 5225306903837380426}
   _playerController: {fileID: 3435388732386355774}

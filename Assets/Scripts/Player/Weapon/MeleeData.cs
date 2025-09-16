@@ -6,10 +6,12 @@ public class MeleeData : ScriptableObject
     [SerializeField] private float damage;
     [SerializeField] private float range;
     [SerializeField] private float attackDelay;
+    [SerializeField] private float timeBetweenCombo;
     [SerializeField] private float coolDown;
 
     public float Damage => damage;
     public float Range => range;
     public float AttackDelay => attackDelay;
+    public float TimeBetweenCombo => timeBetweenCombo;
     public float CoolDown => coolDown;
 }
