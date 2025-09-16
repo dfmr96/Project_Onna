@@ -172,5 +172,12 @@ public class Pillar : MonoBehaviour, IDamageable
 
         transform.position = targetPosition;
     }
+
+
+
+    public void ApplyDebuffDoT(float dotDuration, float dps)
+    {
+        throw new NotImplementedException();
+    }
 }
 

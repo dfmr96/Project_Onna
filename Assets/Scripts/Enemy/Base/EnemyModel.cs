@@ -46,6 +46,8 @@ public class EnemyModel : MonoBehaviour, IDamageable
     private float speedMultiplier = 1f;
     private float attackTimeRateMultiplier = 1f;
     private float damageReductionDuringAttackMultiplier = 1f;
+    private float orbsMultiplier = 0f;
+
     private void Start()
     {
        
@@ -58,7 +60,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
              speedMultiplier = variantSO.speedMultiplier;
              attackTimeRateMultiplier = variantSO.attackChargeTimeMultiplier;
              damageReductionDuringAttackMultiplier = variantSO.damageReductionDuringAttack;
-
+             orbsMultiplier = variantSO.extraOrbsOnDeath;
         }
 
 
@@ -169,7 +171,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
     {
         if (statsSO.RastroOrbOnDeath && orbSpawner != null)
         {
-            for (int i = 0; i < statsSO.numberOfOrbsOnDeath; i++)
+            for (int i = 0; i < statsSO.numberOfOrbsOnDeath + orbsMultiplier; i++)
             {
                 orbSpawner.SpawnHealingOrb(transform.position, transform.forward);
             }
@@ -206,6 +208,12 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
         // Mover la barra hacia la izquierda para que "se vacíe" desde ahí
         healthFill.localPosition = new Vector3((normalizedHealth - 1f) / 2f, 0f, 0f);
+    }
+
+
+    public void ApplyDebuffDoT(float dotDuration, float dps)
+    {
+        throw new NotImplementedException();
     }
 
 }

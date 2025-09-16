@@ -1316,6 +1316,9 @@ MonoBehaviour:
       coins: 0
     playerItemsHolder:
       _upgradesBoughtList: []
+  poisonEffectPrefab: {fileID: 6126188424833946103, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
+  poisonAnchor: {fileID: 8025509566666306244}
+  poisonOffset: {x: 0, y: -1, z: 0}
 --- !u!114 &4339932572223991893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2518,6 +2521,7 @@ MonoBehaviour:
   laserOrigin: {fileID: 6286168293087101770}
   shootFx: {fileID: 8300000, guid: eb192c69ffce50d4c9eb79b0bc16ac7e, type: 3}
   overheathFx: {fileID: 8300000, guid: 62d7fcc486ccf424084211b80c981a87, type: 3}
+  nextShotDoubleDamage: 0
 --- !u!82 &7066039255632587307
 AudioSource:
   m_ObjectHideFlags: 0

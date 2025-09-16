@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -179,6 +180,12 @@ void Update()
     public override void ExecuteAttack(IDamageable target)
     {
         target.TakeDamage(model.currentDamage);
+
+        //Si el que ataque es una variante verde aplica veneno
+        if(model.variantSO.variantType == EnemyVariantType.Green)
+        {
+            target.ApplyDebuffDoT(model.variantSO.dotDuration, model.variantSO.dotDamage);
+        }
     }
 
     public float GetDamage() => model.currentDamage;
