@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Player;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CinematicController : MonoBehaviour
@@ -39,6 +38,7 @@ public class CinematicController : MonoBehaviour
     private void AdvanceCinematic()
     {
         currentIndex++;
+        if (currentIndex > cinematicSprites.Count) return;
 
         if (currentIndex >= cinematicSprites.Count)
         {
