@@ -3574,17 +3574,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
---- !u!114 &392682069 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
-  m_PrefabInstance: {fileID: 392682068}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3761164842a1514b98d2e5234e194f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &393675954
 Mesh:
   m_ObjectHideFlags: 0
@@ -17856,6 +17845,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01accb12e620836429e01794124dcfe8, type: 3}
+--- !u!114 &1636036419 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4110111664883540429, guid: 01accb12e620836429e01794124dcfe8, type: 3}
+  m_PrefabInstance: {fileID: 1636036418}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3761164842a1514b98d2e5234e194f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1637859517
 Mesh:
   m_ObjectHideFlags: 0
@@ -22345,7 +22345,7 @@ PrefabInstance:
     - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
       propertyPath: enemySpawner
       value: 
-      objectReference: {fileID: 392682069}
+      objectReference: {fileID: 1636036419}
     - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
       propertyPath: playerSpawner
       value: 
