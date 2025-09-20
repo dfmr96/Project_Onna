@@ -6,12 +6,13 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject optionsPanelPrefab;
     [SerializeField] private GameObject menuPanel;
+    [SerializeField] private GameObject spawner;
     private GameObject optionsPanelInstance = null;
     public void OptionsMenu()
     {
         if (optionsPanelInstance == null)
         {
-            optionsPanelInstance = Instantiate(optionsPanelPrefab, transform);
+            optionsPanelInstance = Instantiate(optionsPanelPrefab, spawner.transform);
             menuPanel.SetActive(false);
 
             OptionsMenu optionsMenu = optionsPanelInstance.GetComponent<OptionsMenu>();
