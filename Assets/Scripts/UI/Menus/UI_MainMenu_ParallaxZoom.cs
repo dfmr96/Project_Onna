@@ -16,6 +16,8 @@ public class UI_MainMenu_ParallaxZoom : MonoBehaviour
 
     [Header("Parallax Layers")]
     public ParallaxLayer[] layers;
+    public int CurrentIndex => currentIndex;
+    public int LayersCount => layers.Length;
 
     [Header("Ojo (UI)")]
     public RectTransform eye;
@@ -24,6 +26,12 @@ public class UI_MainMenu_ParallaxZoom : MonoBehaviour
 
     public float transitionTime = 1f;
     private int currentIndex = 0;
+
+
+    public IEnumerator ZoomTransitionCoroutine(int from, int to, bool forward)
+    {
+        yield return StartCoroutine(ZoomTransition(from, to, forward));
+    }
 
     private void Awake()
     {
