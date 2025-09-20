@@ -10,6 +10,7 @@ public class OptionsMenu : MonoBehaviour
     public GameObject AudioOptions;
     public GameObject ScreenOptions;
     public GameObject GraphicsOptions;
+    public GameObject chains;
 
     [Header("Botones")]
     public GameObject AudioButton;
@@ -51,36 +52,46 @@ public class OptionsMenu : MonoBehaviour
     }
 
     // --- Coroutines que esperan la transición ---
-    
+
     private IEnumerator OpenPanelCoroutine(GameObject panelToOpen)
     {
         // Llamar al Zoom Next (si aplica)
+        ScreenButton.SetActive(false);
+        AudioButton.SetActive(false);
+        GraphicsButton.SetActive(false);
+        chains.SetActive(false);
+       
+        MainBackButton.SetActive(false);
         if (UI_MainMenu_ParallaxZoom.Instance != null)
             yield return UI_MainMenu_ParallaxZoom.Instance.ZoomToNextCoroutine();
 
         // Activar el panel correspondiente
         panelToOpen.SetActive(true);
+        BackButton.SetActive(true);
+        
     }
 
     private IEnumerator BackCoroutine()
     {
-        // Llamar al Zoom Previous
-        if (UI_MainMenu_ParallaxZoom.Instance != null)
-            yield return UI_MainMenu_ParallaxZoom.Instance.ZoomToPreviousCoroutine();
-
-        // Volver a la vista principal de Options
         AudioOptions.SetActive(false);
         ScreenOptions.SetActive(false);
         GraphicsOptions.SetActive(false);
+        BackButton.SetActive(false);
+
+        if (UI_MainMenu_ParallaxZoom.Instance != null)
+            yield return UI_MainMenu_ParallaxZoom.Instance.ZoomToPreviousCoroutine();
+
+        chains.SetActive(true);
+        ScreenButton.SetActive(true);
+        AudioButton.SetActive(true);
+        GraphicsButton.SetActive(true);
+        MainBackButton.SetActive(true); 
     }
 
     private IEnumerator MainBackCoroutine()
     {
-        // Llamar al Zoom Previous
         if (UI_MainMenu_ParallaxZoom.Instance != null)
             yield return UI_MainMenu_ParallaxZoom.Instance.ZoomToPreviousCoroutine();
-
-        // Destruir este menú y mostrar el menú principal
         Destroy(gameObject);
     }
 

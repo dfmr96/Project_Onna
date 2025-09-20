@@ -59,8 +59,9 @@ public class UI_MainMenu_ParallaxZoom : MonoBehaviour
     {
         if (currentIndex < layers.Length - 1)
         {
-            yield return StartCoroutine(ZoomTransition(currentIndex, currentIndex + 1, true));
-            currentIndex++;
+            int nextIndex = currentIndex + 1;
+            yield return StartCoroutine(ZoomTransition(currentIndex, nextIndex, true));
+            currentIndex = nextIndex; // actualizar al final
         }
     }
 
@@ -68,11 +69,11 @@ public class UI_MainMenu_ParallaxZoom : MonoBehaviour
     {
         if (currentIndex > 0)
         {
-            yield return StartCoroutine(ZoomTransition(currentIndex, currentIndex - 1, false));
-            currentIndex--;
+            int prevIndex = currentIndex - 1;
+            yield return StartCoroutine(ZoomTransition(currentIndex, prevIndex, false));
+            currentIndex = prevIndex;
         }
     }
-
 
     private IEnumerator ZoomTransition(int from, int to, bool forward)
     {
