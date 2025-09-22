@@ -14,6 +14,8 @@ public class EnemyAttackSOBase : ScriptableObject
     protected Transform transform;
     protected GameObject gameObject;
     protected ProjectileSpawner _projectileSpawner;
+    protected Rigidbody _rb;
+
 
     //protected Renderer _enemyRenderer;
     //protected Color _originalColor;
@@ -54,6 +56,7 @@ public class EnemyAttackSOBase : ScriptableObject
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
         _projectileSpawner = GameManager.Instance.projectileSpawner;
+        _rb = gameObject.GetComponent<Rigidbody>(); 
 
         //_enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
         //_originalColor = _enemyRenderer.material.color;
@@ -78,6 +81,7 @@ public class EnemyAttackSOBase : ScriptableObject
         _enemyView = gameObject.GetComponent<EnemyView>();
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
+        _rb = gameObject.GetComponent<Rigidbody>();
 
         initialSpeed = _navMeshAgent.speed;
         _navMeshAgent.speed = 0;

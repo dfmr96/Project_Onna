@@ -74,7 +74,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         if (isCharging)
         {
             chargeTimer += Time.deltaTime;
-            _navMeshAgent.Move(chargeDirection * chargeSpeed * Time.deltaTime);
+            _navMeshAgent.velocity = chargeDirection * chargeSpeed;
 
             if (distanceToPlayer < 1 || chargeTimer >= chargeDuration)
             {
@@ -181,7 +181,6 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         _navMeshAgent.velocity = Vector3.zero;
 
         _enemyView.PlayAttackAnimation(false);
-        //enemy.SetShield(true);
         isLookingPlayer = true;
 
         isPostCharging = true;

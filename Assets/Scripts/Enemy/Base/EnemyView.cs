@@ -104,6 +104,30 @@ public class EnemyView : MonoBehaviour
         }
     }
 
+    //Evento para ataques tipo charge
+    public void AnimationChargeAttackFunc()
+    {
+        OnAttackImpact?.Invoke();
+
+        if (_playerTransform != null)
+        {
+            float hitRadius = _enemyModel.statsSO.AttackRange;
+            Vector3 hitCenter = transform.position + transform.forward * 1f; //Fix para asegurar que le pegue 
+
+            float distanceToPlayer = Vector3.Distance(_playerTransform.position, hitCenter);
+
+            if (distanceToPlayer <= hitRadius)
+            {
+                IDamageable damageablePlayer = _playerTransform.GetComponent<IDamageable>();
+                if (damageablePlayer != null)
+                    _enemyController.ExecuteAttack(damageablePlayer);
+            }
+        }
+    }
+
+
+
+
     public void AnimationShootProjectileFunc()
     {
         if (projectileSpawner == null) return;
