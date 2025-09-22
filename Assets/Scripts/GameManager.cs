@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
@@ -19,6 +20,9 @@ public class GameManager : MonoBehaviour
     public OrbSpawner orbSpawner;
     public ProjectileSpawner projectileSpawner;
 
+    //Evento para activar portal tras seleccion de mutacion
+    public static event Action OnMutationUIClosed;
+
     private void Awake()
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
@@ -33,7 +37,8 @@ public class GameManager : MonoBehaviour
     {
         enemySpawner.OnAllWavesCompleted -= WinGame;
         OpenDoorDebug();
-    } 
+
+    }
     private void DefeatGame()
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
@@ -61,5 +66,10 @@ public class GameManager : MonoBehaviour
         if (enemySpawner.gameObject.activeInHierarchy) Debug.Log("EnemySpawner linked successfully.");
         else Debug.LogError("EnemySpawner not found.");
         
+    }
+
+    public static void RaiseMutationUIClosed()
+    {
+        OnMutationUIClosed?.Invoke();
     }
 }
