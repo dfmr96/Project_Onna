@@ -45,6 +45,12 @@ namespace Player
 
         public Vector3 MouseWorldPos => _mouseWorldPos;
 
+
+
+        [SerializeField] private float minAimDistance = 1f; // Distancia mínima desde el player
+        private Vector3 _smoothedAimDir = Vector3.forward;
+        private Vector3 _lastValidAimDir = Vector3.forward; // Última dirección válida del aim
+
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerInitializedSignal>(OnPlayerInitialized);
@@ -246,32 +252,97 @@ namespace Player
             _playerModel.SetPosition(transform.position);
         }
 
+        //private void ProcessAimingLogic()
+        //{
+        //    Vector3 aimDirection = CalculateAimDirection();
+        //    _playerModel.SetAimDirection(aimDirection);
+
+        //    // Actualizar capacidad de disparo basado en modo
+        //    GameMode currentMode = GameModeSelector.SelectedMode;
+        //    _playerModel.SetGameMode(currentMode);
+        //    _playerModel.SetCanShoot(currentMode != GameMode.Hub);
+        //    _playerModel.SetCanMelee(currentMode != GameMode.Hub);
+        //}
+
+        //private Vector3 CalculateAimDirection()
+        //{
+        //    if (_playerInput.currentControlScheme == "Keyboard&Mouse")
+        //    {
+        //        Ray ray = _mainCamera.ScreenPointToRay(_rawAimInput);
+
+        //        if (Physics.Raycast(ray, out RaycastHit hit, AimRaycastMaxDistance, groundLayer))
+        //        {
+        //            _mouseWorldPos = hit.point;
+        //            _mouseWorldPos.y = 0;
+
+        //            var position = transform.position;
+        //            Vector3 flatPos = new Vector3(position.x, 0f, position.z);
+        //            return (_mouseWorldPos - flatPos).normalized;
+        //        }
+        //    }
+        //    else if (_playerInput.currentControlScheme == "Gamepad")
+        //    {
+        //        Vector3 aim = new Vector3(_rawAimInput.x, 0f, _rawAimInput.y);
+        //        return Utils.IsoVectorConvert(aim).normalized;
+        //    }
+
+        //    return Vector3.forward;
+        //}
+
+
         private void ProcessAimingLogic()
         {
-            Vector3 aimDirection = CalculateAimDirection();
-            _playerModel.SetAimDirection(aimDirection);
+            // Calcula la dirección hacia donde debe apuntar el jugador
+            Vector3 targetDir = CalculateAimDirection();
 
-            // Actualizar capacidad de disparo basado en modo
+            // Suaviza la dirección de aim entre frames para evitar vibración
+            // Vector3.Lerp interpola entre la dirección anterior y la nueva
+            _smoothedAimDir = Vector3.Lerp(_smoothedAimDir, targetDir, Time.deltaTime * 15f);
+
+            // Actualiza la dirección de aim en el modelo del jugador
+            _playerModel.SetAimDirection(_smoothedAimDir);
+
+            // Actualizar capacidad de disparo
             GameMode currentMode = GameModeSelector.SelectedMode;
             _playerModel.SetGameMode(currentMode);
             _playerModel.SetCanShoot(currentMode != GameMode.Hub);
             _playerModel.SetCanMelee(currentMode != GameMode.Hub);
         }
 
+
         private Vector3 CalculateAimDirection()
         {
             if (_playerInput.currentControlScheme == "Keyboard&Mouse")
             {
+                // Crea un rayo desde la cámara hacia la posición del cursor
                 Ray ray = _mainCamera.ScreenPointToRay(_rawAimInput);
 
-                if (Physics.Raycast(ray, out RaycastHit hit, AimRaycastMaxDistance, groundLayer))
-                {
-                    _mouseWorldPos = hit.point;
-                    _mouseWorldPos.y = 0;
+                // Definimos un plano horizontal en Y=0 para calcular la posición de impacto
+                Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
-                    var position = transform.position;
-                    Vector3 flatPos = new Vector3(position.x, 0f, position.z);
-                    return (_mouseWorldPos - flatPos).normalized;
+                if (groundPlane.Raycast(ray, out float enter))
+                {
+                    Vector3 hitPoint = ray.GetPoint(enter);
+                    _mouseWorldPos = hitPoint;
+                    _mouseWorldPos.y = 0f;
+
+                    Vector3 playerPos = new Vector3(transform.position.x, 0f, transform.position.z);
+                    Vector3 aimDir = _mouseWorldPos - playerPos;
+
+                    // Si el cursor está muy cerca, mantener la última dirección válida
+                    if (aimDir.magnitude < minAimDistance)
+                    {
+                        // Si está fuera de la distancia mínima, actualizamos la última dirección válida
+                        aimDir = _lastValidAimDir;
+                    }
+                    else
+                    {
+                        // Devolver la dirección normalizada lista para usar
+                        _lastValidAimDir = aimDir.normalized;
+                    }
+
+                    // Valor por defecto si no hay input válido
+                    return aimDir.normalized;
                 }
             }
             else if (_playerInput.currentControlScheme == "Gamepad")
@@ -282,6 +353,10 @@ namespace Player
 
             return Vector3.forward;
         }
+
+
+
+
 
         private void OnDrawGizmos() => Gizmos.DrawSphere(MouseWorldPos, 0.5f);
     }
