@@ -188,7 +188,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     {
         fsm.CurrentState?.FrameUpdate();
         view.PlayMovingAnimation(_navMeshAgent.speed);
-        Debug.Log(fsm.CurrentState);
+        //Debug.Log(fsm.CurrentState);
 
     }
 

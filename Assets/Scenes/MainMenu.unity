@@ -2632,6 +2632,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a70e9b4044aeff4c95a0a3a2de07fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicMixer: {fileID: -6473747141543690868, guid: 845ffc095bb9f6d4f9d9005fc8955943, type: 2}
+  sFXMixer: {fileID: 9207932144565318947, guid: 845ffc095bb9f6d4f9d9005fc8955943, type: 2}
 --- !u!82 &1505141841
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2644,7 +2646,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
