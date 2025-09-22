@@ -13,7 +13,7 @@ public class EnemyProjectile : MonoBehaviour
     [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
     protected Transform playerTransform;
     [SerializeField] float bulletSpeed;
-    [SerializeField] private LayerMask obstacleLayers;
+    [SerializeField] private LayerMask ignoreLayers;
     private bool hasHit = false;
     private Action onRelease;
     private Rigidbody rb;
@@ -81,12 +81,16 @@ public class EnemyProjectile : MonoBehaviour
 
         if (hasHit) return;
 
-        if (((1 << collision.gameObject.layer) & obstacleLayers) != 0)
-        {
-            PlayImpactParticles();
-            onRelease?.Invoke();
 
-        }
+        //if (((1 << collision.gameObject.layer) & obstacleLayers) != 0)
+        //{
+        //    PlayImpactParticles();
+        //    onRelease?.Invoke();
+
+        //}
+
+        // Ignoramos colisiones con capas de ignoreLayers
+        if (((1 << collision.gameObject.layer) & ignoreLayers) != 0) return;
 
 
         if ((collision.transform.root == playerTransform) && (collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable)))
@@ -106,6 +110,15 @@ public class EnemyProjectile : MonoBehaviour
 
             onRelease?.Invoke();
 
+
+        }
+        else
+        {
+            hasHit = true;
+
+            PlayImpactParticles();
+
+            onRelease?.Invoke();
 
         }
 
