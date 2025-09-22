@@ -31,6 +31,7 @@ public class HubManager : MonoBehaviour
         if (RunData.CurrentCurrency != null)
         {
             playerInventory.PlayerWallet.AddCoins(RunData.CurrentCurrency.Coins);
+            SaveSystem.SaveInventory(playerInventory);
             RunData.Clear();
         } //TODO Esto no debe ir aqui
         UpdateCoins();

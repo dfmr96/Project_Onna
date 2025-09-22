@@ -5,7 +5,6 @@ public static class SaveSystem
 {
     private static string Path => Application.persistentDataPath + "/playerInventory.json";
 
-    
     public static void SaveInventory(PlayerInventory inventory)
     {
         string json = JsonUtility.ToJson(inventory, true); 
@@ -25,6 +24,7 @@ public static class SaveSystem
         PlayerData data = LoadData();
         data.totalCoins = newCoins;
         WriteData(data);
+        Debug.LogWarning($"Saved: {newCoins}, total: {data.totalCoins}");
     }
 
     public static PlayerData LoadData()

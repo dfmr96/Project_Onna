@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 [System.Serializable]
 public class PlayerWallet
@@ -6,7 +5,7 @@ public class PlayerWallet
     [SerializeField] private int coins;
     public int Coins => coins;
 
-    public void AddCoins(int amount) { coins += amount; }
+    public void AddCoins(int amount) => coins += amount;
 
     public bool CheckCost(int ammount)
     {
