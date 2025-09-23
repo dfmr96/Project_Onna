@@ -103,6 +103,23 @@ namespace Player
             //if (!_isInitialized) return;
             if (Input.GetKeyDown(KeyCode.F2)) devMode = !DevMode;
 
+            //Agrega Vida
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                _currentTime = 9999999f;
+            }
+
+            //Vuelve Player al suelo
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                //_currentPosition = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
+
+                Vector3 pos = transform.position;
+                pos.y = 0f; 
+                transform.position = pos;
+
+            }
+
             if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub && passiveDrainEnabled)
                 ApplyPassiveDrain();
         }

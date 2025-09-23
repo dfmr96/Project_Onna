@@ -139,9 +139,12 @@ public class EnemyAttackSOBase : ScriptableObject
     }
     public virtual void ResetValues()
     {
-
-        _navMeshAgent.speed = initialSpeed;
-        _navMeshAgent.isStopped = false;
+        if(_navMeshAgent != null)
+        {
+            _navMeshAgent.speed = initialSpeed;
+            _navMeshAgent.isStopped = false;
+        }
+      
 
         //if (_material != null)
         //    _material.color = _originalColor;
