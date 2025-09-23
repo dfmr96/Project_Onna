@@ -897,7 +897,7 @@ Transform:
   m_GameObject: {fileID: 1202781920}
   serializedVersion: 2
   m_LocalRotation: {x: -0.08198323, y: -0.9180033, z: 0.2704418, w: -0.27822635}
-  m_LocalPosition: {x: -1.2533319, y: 2.341097, z: 1.5174357}
+  m_LocalPosition: {x: -3.1, y: 4.38, z: 4.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -947,6 +947,58 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &1269917047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1269917049}
+  - component: {fileID: 1269917048}
+  m_Layer: 0
+  m_Name: MouseAiming
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1269917048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269917047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4920c1f25eb71b4fb2a0f7d9b85a6b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimTarget: {fileID: 1595024983}
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
+  playerCamera: {fileID: 1202781922}
+  playerTransform: {fileID: 543450651797197638}
+  planeOffset: 0
+  showDebugRay: 1
+--- !u!4 &1269917049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269917047}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.19307192, y: 0.058206078, z: 0.7638396}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1307719660
 GameObject:
   m_ObjectHideFlags: 0
@@ -2109,6 +2161,7 @@ GameObject:
   - component: {fileID: 543450651797197638}
   - component: {fileID: 5866666019970238780}
   - component: {fileID: 5866666019970238781}
+  - component: {fileID: 5866666019970238782}
   m_Layer: 0
   m_Name: Runner_00_Rigged
   m_TagString: Untagged
@@ -2680,6 +2733,28 @@ MonoBehaviour:
   - m_Rig: {fileID: 1386755845}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &5866666019970238782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147877661180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac41ce046316a6c4bbf22a8075966e3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodyAimRig: {fileID: 249126314}
+  weaponPoseRig: {fileID: 628664544}
+  weaponAimingRig: {fileID: 1307719661}
+  weaponMeleeRig: {fileID: 1386755845}
+  handsIKRig: {fileID: 1896984774}
+  animator: {fileID: 5866666019970238780}
+  meleeKey: 102
+  pistolIdleKey: 105
+  pistolAimKey: 97
+  debugRigWeights: 0
 --- !u!4 &5901452233930080709
 Transform:
   m_ObjectHideFlags: 0
@@ -3024,3 +3099,4 @@ SceneRoots:
   - {fileID: 1595024983}
   - {fileID: 543450651797197638}
   - {fileID: 1416068768}
+  - {fileID: 1269917049}
