@@ -27448,12 +27448,48 @@ PrefabInstance:
       value: -279
       objectReference: {fileID: 0}
     - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: targetHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: pilarSpawnClip
       value: 
       objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 977880610714722684, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1201390218411636616, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531857186968268526, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504374682904647180, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2517597702836729204, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2559190927366410254, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_Name
       value: Boss Monarch
+      objectReference: {fileID: 0}
+    - target: {fileID: 3365431066029013018, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4283978977039039019, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: pilarSpawnClip
@@ -27532,9 +27568,33 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1195343639}
     - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: targetHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: pilarSpawnClip
       value: 
       objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: targetHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: pilarSpawnClip
       value: 
@@ -27579,6 +27639,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4597716655744050048, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611475687577616632, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5013303390003784377, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -27611,6 +27679,22 @@ PrefabInstance:
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6292288845244175282, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6297067027534311626, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6843389878649554874, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6980792069138532392, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7094732233544628150, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -27635,6 +27719,10 @@ PrefabInstance:
       propertyPath: m_Center.x
       value: 0.04590988
       objectReference: {fileID: 0}
+    - target: {fileID: 7281982573550457166, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7600270636621410905, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -27651,10 +27739,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7824436311764739646, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7828633954013463878, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: riseHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: targetHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: pilarSpawnClip
       value: 
       objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 9069917955587088092, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
