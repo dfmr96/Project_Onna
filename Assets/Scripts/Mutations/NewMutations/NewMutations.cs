@@ -1,7 +1,7 @@
 using Mutations;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewMutation", menuName = "Mutation/")]
+[CreateAssetMenu(fileName = "NewMutation", menuName = "NewMutation/Mutation")]
 public class NewMutations : ScriptableObject
 {
     [Header("Basics")]

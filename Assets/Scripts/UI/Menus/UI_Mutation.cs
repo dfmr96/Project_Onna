@@ -31,6 +31,8 @@ public class UI_Mutation : MonoBehaviour
     private SystemType activeSystem = SystemType.Nerve;
     private List<NewRadiationData> currentRolledRadiations = new();
 
+    public SystemType ActiveSystem => activeSystem;
+
     private void Start()
     {
         mController = RunData.NewMutationController;
@@ -84,26 +86,26 @@ public class UI_Mutation : MonoBehaviour
     private void UpdateSystemUI()
     {
         NewMutationSystem systemData = mController.GetSystem(activeSystem);
+        Debug.Log($"Active system: {activeSystem}");
 
         // Mostrar slots mayor y menor
     }
 
     private void UpdateRadiationUI()
     {
-        Debug.Log("Updating radiation UI");
 
         foreach (var radData in currentRolledRadiations)
         {
             GameObject btnObj = Instantiate(radiationButtonPrefab, radiationPanelParent);
             NewRadiationButton radButton = btnObj.GetComponent<NewRadiationButton>();
 
-            radButton.SetupButton(radData, activeSystem, SlotType.Major, mController);
+            radButton.SetupButton(radData, SlotType.Major, mController, this);
         }
     }
 
     public void RotateWithAnimation()
     {
-        if (!isRotating) StartCoroutine(RotateSequence());
+        if (!isRotating) OnNextSystem();
     }
 
     private IEnumerator RotateSequence()

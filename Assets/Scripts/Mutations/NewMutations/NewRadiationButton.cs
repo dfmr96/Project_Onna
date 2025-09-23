@@ -10,19 +10,19 @@ public class NewRadiationButton : MonoBehaviour
     [SerializeField] private Button button;
 
     private NewRadiationData currentData;
-    private SystemType currentSystem;
     private SlotType currentSlot;
     private NewMutationController controller;
+    private UI_Mutation ui;
 
     /// <summary>
     /// Initialice button
     /// </summary>
-    public void SetupButton(NewRadiationData data, SystemType system, SlotType slot, NewMutationController mutationController)
+    public void SetupButton(NewRadiationData data, SlotType slot, NewMutationController mutationController, UI_Mutation uiMutation)
     {
         currentData = data;
-        currentSystem = system;
         currentSlot = slot;
         controller = mutationController;
+        ui = uiMutation;
 
         if (iconImage != null && currentData != null)
             iconImage.sprite = currentData.Icon;
@@ -42,7 +42,7 @@ public class NewRadiationButton : MonoBehaviour
             return;
         }
 
-        bool success = controller.EquipRadiation(currentData.Type, currentSystem, currentSlot);
+        bool success = controller.EquipRadiation(currentData.Type, ui.ActiveSystem, currentSlot);
 
         if (success) button.interactable = false;
     }
@@ -50,5 +50,5 @@ public class NewRadiationButton : MonoBehaviour
     /// <summary>
     /// Update radiation
     /// </summary>
-    public void UpdateRadiation(NewRadiationData data, SystemType system, SlotType slot) => SetupButton(data, system, slot, controller);
+    public void UpdateRadiation(NewRadiationData data, SystemType system, SlotType slot, UI_Mutation uiMutation) => SetupButton(data, slot, controller, uiMutation);
 }
