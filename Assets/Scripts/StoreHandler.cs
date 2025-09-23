@@ -30,7 +30,14 @@ public class StoreHandler : MonoBehaviour
     private PlayerModelBootstrapper playerModelBootstrapper;
     private bool showDebugPanel = false;
 
-    private void Start() { StartCoroutine(DelayedCheck()); }
+    private void Start() {
+        
+        StartCoroutine(DelayedCheck());  
+        
+        
+        //Cursor Mouse
+        Cursor.visible = true;
+    }
 
     private IEnumerator DelayedCheck()
     {
@@ -70,6 +77,9 @@ public class StoreHandler : MonoBehaviour
         SaveSystem.SaveInventory(playerInventory);
         
         hub.CloseStore();
+
+        //Cursor Mouse
+        Cursor.visible = false;
     }
 
     private void UpdateCurrencyStatus()

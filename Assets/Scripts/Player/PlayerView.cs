@@ -29,6 +29,9 @@ namespace Player
         {
             InitializeSubViews();
             SubscribeToModelEvents();
+
+            //Cursor Mouse
+            Cursor.visible = false;
         }
 
         private void OnDestroy()

@@ -19,7 +19,9 @@ namespace Mutations
         private PlayerModel _playerModel;
         private void Start()
         {
-            
+            //Cursor Mouse
+            Cursor.visible = true;
+
             PlayerHelper.DisableInput();
             _playerModel = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
             _playerModel.EnablePassiveDrain(false);
@@ -104,6 +106,8 @@ namespace Mutations
             //Evento para activar portal tras seleccion de mutacion
             GameManager.RaiseMutationUIClosed();
 
+            //Cursor Mouse
+            Cursor.visible = false;
         }
     }
 }
