@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2229744195485286172}
   - component: {fileID: 2111902776531845330}
   - component: {fileID: 6382067779517872005}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ImpactEffectParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4902,7 +4902,7 @@ GameObject:
   - component: {fileID: 7205008923747395960}
   - component: {fileID: -4784366562710423813}
   - component: {fileID: 329693911384449480}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5040,9 +5040,9 @@ MonoBehaviour:
   lifeTime: 3
   impactEffectParticlesPrefab: {fileID: 4837991222772065140}
   bulletSpeed: 3
-  obstacleLayers:
+  ignoreLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 3200
 --- !u!1001 &986659794718611019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5051,6 +5051,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4845169167162463324}
     m_Modifications:
+    - target: {fileID: 867456590499508831, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1488604450672332376, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3611579213298384197, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
       propertyPath: m_LocalScale.x
       value: 4.28
@@ -5111,6 +5119,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: vfx_Projectile_02
       objectReference: {fileID: 0}
+    - target: {fileID: 7626139322179216226, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8847808085714912025, guid: dc33e45a4bb28854c941caca0629dcce, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5129,9 +5145,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4845169167162463324}
     m_Modifications:
+    - target: {fileID: 2491576256362421057, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3077343761403282166, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
       propertyPath: m_Name
       value: vfx_Impact_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3077343761403282166, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3987749403610019982, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5376181070979290840, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5521277632010768499, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
       propertyPath: m_LocalScale.x

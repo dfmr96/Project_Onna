@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "Attack-Charging attack Tank type", menuName = "Enemy Logic/Attack Logic/Charging attack Tank type")]
 public class EnemyAttackCharge : EnemyAttackSOBase
@@ -48,6 +49,9 @@ public class EnemyAttackCharge : EnemyAttackSOBase
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
+
+
+
         if (isPostCharging)
         {
             postChargeTimer += Time.deltaTime;
@@ -56,34 +60,35 @@ public class EnemyAttackCharge : EnemyAttackSOBase
                 isPostCharging = false;
                 _timer = 0f;
                 enemy.SetShield(true);
-
             }
             return;
         }
 
-        //Si se aleja del rango de ataque cambiar a busqueda
+        // Si se aleja del rango de ataque cambiar a busqueda
         if (distanceToPlayer > _distanceToCountExit)
         {
             EndAttackAnimations();
             enemy.SetShield(true);
-
             enemy.fsm.ChangeState(enemy.ChaseState);
             return;
         }
 
         if (isCharging)
         {
-            chargeTimer += Time.deltaTime;
-            _navMeshAgent.velocity = chargeDirection * chargeSpeed;
+            chargeTimer += Time.fixedDeltaTime;
 
-            if (distanceToPlayer < 1 || chargeTimer >= chargeDuration)
+            // Movimiento suave con física
+            _rb.MovePosition(_rb.position + chargeDirection * chargeSpeed * Time.fixedDeltaTime);
+
+            distanceToPlayer = Vector3.Distance(_rb.position, playerTransform.position);
+
+            if (distanceToPlayer < 1f || chargeTimer >= chargeDuration)
             {
                 EndCharge();
             }
-            return;
         }
 
-        //Si ya ataco una vez, espera el tiempo entre ataques
+        // Si ya atacó una vez, espera el tiempo entre ataques
         if (_hasAttackedOnce)
         {
             if (_timer >= _enemyModel.currentAttackTimeRate)
@@ -94,17 +99,13 @@ public class EnemyAttackCharge : EnemyAttackSOBase
             return;
         }
 
-        //Si no ataco todavia y cumplio el delay inicial
+        // Iniciar ataque si cumplió delay inicial
         if (_timer >= _enemyModel.statsSO.AttackInitialDelay)
         {
             if (distanceToPlayer <= meleeRange)
-            {
                 StartMeleeAttack();
-            }
-            else 
-            {
+            else
                 StartCharge();
-            }
         }
     }
 
@@ -114,6 +115,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
     public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
+        _rb.isKinematic = false;
     }
 
     public override void ResetValues()
@@ -159,34 +161,46 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         isLookingPlayer = false;
 
         _enemyView.PlayMeleeAttackAnimation(false);
-
         _enemyView.PlayAttackAnimation(true);
 
         enemy.SetShield(false);
-
-        _navMeshAgent.isStopped = false;
-        _navMeshAgent.ResetPath();
 
         chargeDirection = (playerTransform.position - enemy.transform.position).normalized;
         chargeTimer = 0f;
         isCharging = true;
         _hasAttackedOnce = true;
         _timer = 0f;
+
+        // Desactivamos NavMeshAgent para evitar conflictos
+        _navMeshAgent.enabled = false;
+
+        // Detener velocidad previa
+        _rb.velocity = Vector3.zero;
     }
 
     private void EndCharge()
     {
         isCharging = false;
+
+        // Reactivamos NavMeshAgent
+        _navMeshAgent.enabled = true;
         _navMeshAgent.isStopped = true;
-        _navMeshAgent.velocity = Vector3.zero;
+        _navMeshAgent.ResetPath();
+
+        // Detener Rigidbody
+        _rb.velocity = Vector3.zero;
 
         _enemyView.PlayAttackAnimation(false);
         isLookingPlayer = true;
 
         isPostCharging = true;
         postChargeTimer = 0f;
+
+     
     }
 
 
+
+  
 
 }

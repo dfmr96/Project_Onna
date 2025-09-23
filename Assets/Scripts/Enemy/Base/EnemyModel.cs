@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemy.Spawn;
 using Player.Stats.Runtime;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -33,6 +34,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
     [SerializeField] private float heightBarSpawn = 2.5f;
     private Transform healthBar;
     private Transform healthFill;
+
 
     [Header("Buff Stats Info:")]
     public float currentHealth;
@@ -88,9 +90,12 @@ public class EnemyModel : MonoBehaviour, IDamageable
         if (healthBarPrefab != null)
         {
             GameObject barInstance = Instantiate(healthBarPrefab, transform);
-            barInstance.transform.localPosition = new Vector3(0, heightBarSpawn, 0);
+            barInstance.transform.localPosition = new Vector3(0, heightBarSpawn, 0.05f);
+
             healthBar = barInstance.transform;
             healthFill = healthBar.Find("Fill");
+
+           
         }
 
         //if (variantSO != null && variantSO.variantType == EnemyVariantType.Yellow)
@@ -205,9 +210,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
         float normalizedHealth = Mathf.Clamp01(CurrentHealth / MaxHealth);
         healthFill.localScale = new Vector3(normalizedHealth, 1f, 1f);
-
-        // Mover la barra hacia la izquierda para que "se vacíe" desde ahí
-        healthFill.localPosition = new Vector3((normalizedHealth - 1f) / 2f, 0f, 0f);
+        healthFill.localPosition = new Vector3((normalizedHealth - 1f) / 2f, 0f, 0f); 
     }
 
 

@@ -64,6 +64,10 @@ public class Pillar : MonoBehaviour, IDamageable
         targetPosition = transform.position;
 
         audioSource = GetComponent<AudioSource>();
+
+
+        OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+
     }
 
     void SpawnParticle(Vector3 pos)
@@ -177,7 +181,7 @@ public class Pillar : MonoBehaviour, IDamageable
 
     public void ApplyDebuffDoT(float dotDuration, float dps)
     {
-        throw new NotImplementedException();
+        Debug.LogWarning("ApplyDebuffDoT called, but not implemented yet.");
     }
 }
 

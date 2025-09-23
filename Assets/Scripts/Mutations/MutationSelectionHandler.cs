@@ -99,7 +99,11 @@ namespace Mutations
         {
             PlayerHelper.EnableInput();
             _playerModel.EnablePassiveDrain(true);
-            gameObject.SetActive(false); 
+            gameObject.SetActive(false);
+
+            //Evento para activar portal tras seleccion de mutacion
+            GameManager.RaiseMutationUIClosed();
+
         }
     }
 }
