@@ -100,13 +100,13 @@ public class EnemyAttackRanged : EnemyAttackSOBase
 
         _timer += Time.deltaTime;
 
-        if (!_hasAttackedOnce && _timer >= _initialAttackDelay)
+        if (!_hasAttackedOnce && _timer >= _enemyModel.statsSO.AttackInitialDelay)
         {
             ShootProjectile();
             _hasAttackedOnce = true;
             _timer = 0f;
         }
-        else if (_hasAttackedOnce && _timer >= _timeBetweenAttacks)
+        else if (_hasAttackedOnce && _timer >= _enemyModel.currentAttackTimeRate)
         {
             ShootProjectile();
             _timer = 0f;
@@ -120,7 +120,7 @@ public class EnemyAttackRanged : EnemyAttackSOBase
         if (distance > strafeStopDistance)
         {
             Vector3 direction = (_strafeTarget - transform.position).normalized;
-            Vector3 movement = direction * _enemyModel.statsSO.moveSpeed * Time.deltaTime;
+            Vector3 movement = direction * _enemyModel.currentSpeed * Time.deltaTime;
 
             enemy.Rb.MovePosition(enemy.Rb.position + movement);
         }
@@ -222,7 +222,7 @@ public class EnemyAttackRanged : EnemyAttackSOBase
         _strafeTimer = 0f;
 
         _navMeshAgent.isStopped = false;
-        _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed;
+        _navMeshAgent.speed = _enemyModel.currentSpeed;
         _navMeshAgent.ResetPath();
         _navMeshAgent.velocity = Vector3.zero;
     }

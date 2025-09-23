@@ -1,9 +1,9 @@
 using System;
 using Core;
 using NaughtyAttributes;
+using System.Collections;
 using Player.Stats;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Player
 {
@@ -19,11 +19,19 @@ namespace Player
         public event Action<Vector3> OnRawMovementDirectionChanged;
         public event Action<Vector3> OnAimDirectionChanged;
         public event Action<bool> OnCanShootChanged;
+        public event Action<bool> OnCanMeleeChanged;
         
         [SerializeField] PlayerInventory _playerInventory;
         [SerializeField] private bool devMode;
         [SerializeField] private StatReferences statRefs;
 
+        [Header("Enemy DoT Effect")]
+        [SerializeField] private GameObject poisonEffectPrefab;
+        [SerializeField] private Transform poisonAnchor;
+        [SerializeField] private Vector3 poisonOffset;
+        private Coroutine enemyDoT = null;
+        private float poisonTimeRemaining = 0f;
+        private ParticleSystem poisonEffectInstance;
 
         [Header("Floating Damage Text Effect")] 
         [SerializeField] private float heightTextSpawn = 1.5f;
@@ -37,12 +45,12 @@ namespace Player
         public float CurrentHealth => _currentTime;
         public float DashCooldown => StatContext.Source.Get(statRefs.dashCooldown);
         public float DashDistance => StatContext.Source.Get(statRefs.dashDistance);
-        public float HealingMultiplier => StatContext.Source.Get(statRefs.healingMultiplier);
         public PlayerStatContext StatContext => _statContext;
         public bool DevMode => devMode;
         public GameMode CurrentGameMode => _currentGameMode;
         public Vector3 AimDirection => _aimDirection;
         public bool CanShoot => _canShoot;
+        public bool CanMelee => _canMelee;
         public PlayerInventory Inventory => _playerInventory;
 
 
@@ -53,6 +61,7 @@ namespace Player
         private bool _isMoving;
         private Vector3 _aimDirection = Vector3.forward;
         private bool _canShoot = true;
+        private bool _canMelee = true;
         private float _currentTime;
         private PlayerStatContext _statContext;
         private PlayerView _playerView;
@@ -92,28 +101,36 @@ namespace Player
         private void Update()
         {
             //if (!_isInitialized) return;
-            if (Input.GetKeyDown(KeyCode.F2))
+            if (Input.GetKeyDown(KeyCode.F2)) devMode = !DevMode;
+
+            //Agrega Vida
+            if (Input.GetKeyDown(KeyCode.F3))
             {
-                devMode = !DevMode;
+                _currentTime = 9999999f;
+            }
+
+            //Vuelve Player al suelo
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                //_currentPosition = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
+
+                Vector3 pos = transform.position;
+                pos.y = 0f; 
+                transform.position = pos;
+
             }
 
             if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub && passiveDrainEnabled)
-            {
                 ApplyPassiveDrain();
-            }
         }
 
         public void EnablePassiveDrain(bool enable)
         {
             passiveDrainEnabled = enable;
             if (enable)
-            {
                 Debug.Log("🔋 Passive Drain enabled.");
-            }
             else
-            {
                 Debug.Log("🔋 Passive Drain disabled.");
-            }
         }
 
         private void ApplyPassiveDrain()
@@ -125,8 +142,46 @@ namespace Player
         public void TakeDamage(float timeTaken)
         {
             ApplyDamage(timeTaken, true, true);
-
             _playerView?.PlayDamageEffect();
+        }
+
+        public void ApplyDebuffDoT(float dotDuration, float dps)
+        {
+            if (poisonEffectPrefab != null && poisonEffectInstance == null)
+            {
+                GameObject go = Instantiate(poisonEffectPrefab, poisonAnchor.position + poisonOffset, Quaternion.identity, poisonAnchor);
+                poisonEffectInstance = go.GetComponent<ParticleSystem>();
+            }
+            else if (poisonEffectInstance != null)
+            {
+                //Asegurarse de que siga al anchor con el offset
+                poisonEffectInstance.transform.position = poisonAnchor.position + poisonOffset;
+            }
+
+            poisonTimeRemaining = Mathf.Max(poisonTimeRemaining, dotDuration);
+
+            if (enemyDoT == null)
+                enemyDoT = StartCoroutine(EnemyDoTCoroutine(dotDuration, dps));
+        }
+
+        private IEnumerator EnemyDoTCoroutine(float dotDuration, float dps)
+        {
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Play();
+
+            while (poisonTimeRemaining > 0f)
+            {
+                float damagePerFrame = dps * Time.deltaTime;
+                ApplyDamage(damagePerFrame, false, false);
+
+                poisonTimeRemaining -= Time.deltaTime;
+                yield return null;
+            }
+
+            if (poisonEffectInstance != null)
+                poisonEffectInstance.Stop();
+
+            enemyDoT = null;
         }
 
         public void ApplyDamage(float timeTaken, bool applyResistance, bool isDirectDamage = false)
@@ -165,20 +220,11 @@ namespace Player
 
         public void RecoverTime(float timeRecovered)
         {
-            // Aplicar multiplicador de curación
-            float actualHealing = timeRecovered * HealingMultiplier;
-
-            _currentTime = Mathf.Min(_currentTime + actualHealing, StatContext.Source.Get(statRefs.maxVitalTime));
+            _currentTime = Mathf.Min(_currentTime + timeRecovered, StatContext.Source.Get(statRefs.maxVitalTime));
             ClampEnergy();
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             _playerView?.PlayHealthEffect();
-
-            // Log para debug de mutaciones
-            if (HealingMultiplier != 1f)
-            {
-                Debug.Log($"[PlayerModel] Healing: {timeRecovered} base × {HealingMultiplier:F1} = {actualHealing:F1} recovered");
-            }
         }
 
         private void ClampEnergy()
@@ -190,11 +236,8 @@ namespace Player
         public void Die() => OnPlayerDie?.Invoke();
 
 
-        public void InjectInventory(PlayerInventory inventory)
-        {
-            _playerInventory = inventory;
-        }
-        
+        public void InjectInventory(PlayerInventory inventory) => _playerInventory = inventory;
+
         public void SetGameMode(GameMode newMode)
         {
             if (_currentGameMode != newMode)
@@ -204,10 +247,7 @@ namespace Player
             }
         }
 
-        public void SetPosition(Vector3 newPosition)
-        {
-            _currentPosition = newPosition;
-        }
+        public void SetPosition(Vector3 newPosition) => _currentPosition = newPosition;
 
         public void SetMovementDirection(Vector3 direction)
         {
@@ -244,6 +284,15 @@ namespace Player
             }
         }
 
+        public void SetCanMelee(bool canMelee)
+        {
+            if (_canMelee != canMelee)
+            {
+                _canMelee = canMelee;
+                OnCanMeleeChanged?.Invoke(canMelee);
+            }
+        }
+
         /// <summary>
         /// Inicializa el modo de juego actual para el jugador basado en el modo seleccionado desde GameModeSelector.
         /// </summary>
@@ -258,6 +307,7 @@ namespace Player
 
             SetGameMode(selectedMode);
             SetCanShoot(_currentGameMode != GameMode.Hub);
+            SetCanMelee(_currentGameMode != GameMode.Hub);
             
         }
         

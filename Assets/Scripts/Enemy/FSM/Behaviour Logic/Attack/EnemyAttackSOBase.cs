@@ -14,6 +14,8 @@ public class EnemyAttackSOBase : ScriptableObject
     protected Transform transform;
     protected GameObject gameObject;
     protected ProjectileSpawner _projectileSpawner;
+    protected Rigidbody _rb;
+
 
     //protected Renderer _enemyRenderer;
     //protected Color _originalColor;
@@ -26,8 +28,6 @@ public class EnemyAttackSOBase : ScriptableObject
     [SerializeField] public float _distanceToCountExit = 3f;
     [SerializeField] protected float AttackingMovingSpeed;
     [SerializeField] protected bool isMovingSpeedChangesOnAttack;
-    [SerializeField] protected float _timeBetweenAttacks = 1.5f;
-    [SerializeField] protected float _initialAttackDelay = 0.3f;
     [SerializeField] protected bool isLookingPlayer = true;
     [SerializeField] protected float rotationSpeed = 5f;
 
@@ -56,6 +56,7 @@ public class EnemyAttackSOBase : ScriptableObject
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
         _projectileSpawner = GameManager.Instance.projectileSpawner;
+        _rb = gameObject.GetComponent<Rigidbody>(); 
 
         //_enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
         //_originalColor = _enemyRenderer.material.color;
@@ -80,6 +81,7 @@ public class EnemyAttackSOBase : ScriptableObject
         _enemyView = gameObject.GetComponent<EnemyView>();
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
+        _rb = gameObject.GetComponent<Rigidbody>();
 
         initialSpeed = _navMeshAgent.speed;
         _navMeshAgent.speed = 0;
@@ -137,9 +139,12 @@ public class EnemyAttackSOBase : ScriptableObject
     }
     public virtual void ResetValues()
     {
-
-        _navMeshAgent.speed = initialSpeed;
-        _navMeshAgent.isStopped = false;
+        if(_navMeshAgent != null)
+        {
+            _navMeshAgent.speed = initialSpeed;
+            _navMeshAgent.isStopped = false;
+        }
+      
 
         //if (_material != null)
         //    _material.color = _originalColor;

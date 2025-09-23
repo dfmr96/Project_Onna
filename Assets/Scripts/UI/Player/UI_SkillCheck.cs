@@ -20,7 +20,7 @@ namespace Player.Weapon
         private bool skillCheckSuccess = false;
         private Coroutine moveBarCoroutine;
 
-        private float duration = 2f; // duración del skillcheck
+        private float duration = 1f; // duración del skillcheck
 
         [Header("Sonidos")]
         [SerializeField] private AudioClip successSfx;

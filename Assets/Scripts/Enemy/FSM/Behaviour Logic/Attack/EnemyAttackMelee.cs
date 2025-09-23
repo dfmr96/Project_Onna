@@ -10,7 +10,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     //private AttackColorState _colorState = AttackColorState.None;
 
     //private bool _isAttacking = false;
-    private float _attackAnimationTimer = 0f;
+    //private float _attackAnimationTimer = 0f;
 
     //[Header("Visual")]
     //[SerializeField] private Color attackColor = Color.red;
@@ -39,7 +39,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _navMeshAgent.SetDestination(playerTransform.position);
         _hasAttackedOnce = false;
         //_isAttacking = false;
-        _attackAnimationTimer = 0f;
+        //_attackAnimationTimer = 0f;
         //_colorState = AttackColorState.None;
 
         //ResetColor();
@@ -65,7 +65,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         //_isAttacking = false;
         //_colorState = AttackColorState.None;
 
-        _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed;
+        _navMeshAgent.speed = _enemyModel.currentSpeed;
         _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
     }
 
@@ -112,14 +112,14 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         // === Lógica de ataques ===
         if (!_hasAttackedOnce)
         {
-            if (_timer >= _initialAttackDelay)
+            if (_timer >= _enemyModel.statsSO.AttackInitialDelay)
             {
                 Attack();
                 _hasAttackedOnce = true;
                 _timer = 0f;
             }
         }
-        else if (_timer >= _timeBetweenAttacks)
+        else if (_timer >= _enemyModel.currentAttackTimeRate)
         {
             Attack();
             _timer = 0f;
@@ -152,18 +152,18 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     private void OnAttackStarted()
     {
         //_colorState = AttackColorState.FadeIn;
-        _attackAnimationTimer = 0f;
+        //_attackAnimationTimer = 0f;
     }
 
     private void OnAttackImpact()
     {
         //_colorState = AttackColorState.FadeOut;
-        _attackAnimationTimer = 0f;
+        //_attackAnimationTimer = 0f;
     }
 
     private void HandleHealthChanged(float currentHealth)
     {
-        if (_timer >= _initialAttackDelay)
+        if (_timer >= _enemyModel.statsSO.AttackInitialDelay)
         {
             enemy.fsm.ChangeState(enemy.StunnedState);
         }

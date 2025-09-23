@@ -9,7 +9,7 @@ namespace Player.Weapon
     public class WeaponController : MonoBehaviour
     {
         public static event Action<int, int> OnShoot;
-        public static event Action<float, float> OnReloading;
+        //public static event Action<float, float> OnReloading;
 
         [BoxGroup("Bullet")]
         [SerializeField] private BulletSettings bulletSetting;

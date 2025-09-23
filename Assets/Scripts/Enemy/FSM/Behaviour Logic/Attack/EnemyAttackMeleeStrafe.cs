@@ -67,14 +67,15 @@ public class EnemyAttackMeleeStrafe : EnemyAttackSOBase
         {
             if (!_isAttacking)
             {
-                if (_timer >= _initialAttackDelay)
+                if (_timer >= _enemyModel.statsSO.AttackInitialDelay)
                 {
                     AttemptAttack();
                     _isAttacking = true;
                     _timer = 0f;
                 }
             }
-            else if (_timer >= _timeBetweenAttacks && _currentAttackCount < _maxConsecutiveAttacks)
+            
+            else if (_timer >= _enemyModel.currentAttackTimeRate && _currentAttackCount < _maxConsecutiveAttacks)
             {
                 AttemptAttack();
                 _currentAttackCount++;
@@ -150,7 +151,7 @@ public class EnemyAttackMeleeStrafe : EnemyAttackSOBase
         _strafeState = StrafeState.None;
 
         _navMeshAgent.isStopped = false;
-        _navMeshAgent.speed = _enemyModel.statsSO.moveSpeed;
+        _navMeshAgent.speed = _enemyModel.currentSpeed;
         _navMeshAgent.ResetPath();
         _navMeshAgent.velocity = Vector3.zero;
 

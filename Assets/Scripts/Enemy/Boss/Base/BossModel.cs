@@ -44,7 +44,8 @@ public class BossModel : MonoBehaviour, IDamageable
         orbSpawner = GameManager.Instance.orbSpawner;
 
 
-       
+        OnHealthChanged?.Invoke(CurrentHealth);
+
     }
 
     public void PrintMessage(String text, float lifeTime)
@@ -132,6 +133,9 @@ public class BossModel : MonoBehaviour, IDamageable
         OnDeath?.Invoke(this);
     }
 
-
+    public void ApplyDebuffDoT(float dotDuration, float dps)
+    {
+        Debug.LogWarning("ApplyDebuffDoT called, but not implemented yet.");
+    }
 }
 
