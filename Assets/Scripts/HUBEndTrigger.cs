@@ -6,11 +6,13 @@ public class HubEndTrigger : InteractableBase
 {
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] private GameObject loadCanvasPrefab;
+    [SerializeField] private NewMutationDatabase mutationDatabase;
     public override void Interact()
     {
         base.Interact();
         PlayerHelper.DisableInput();
-        SceneManagementUtils.AsyncLoadSceneByName(levelProgression.GetNextRoom(), loadCanvasPrefab, this);
-        RunData.Initialize();
+        //SceneManagementUtils.AsyncLoadSceneByName(levelProgression.GetNextRoom(), loadCanvasPrefab, this);
+        SceneManagementUtils.AsyncLoadSceneByName("Shader Test", loadCanvasPrefab, this);
+        RunData.Initialize(mutationDatabase);
     }
 }

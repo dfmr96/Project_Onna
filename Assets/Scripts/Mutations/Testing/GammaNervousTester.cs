@@ -102,10 +102,10 @@ namespace Mutations.Testing
             // Info actual
             if (playerModel?.StatContext != null)
             {
-                float healMult = playerModel.HealingMultiplier;
+                //float healMult = playerModel.HealingMultiplier;
                 float drainRate = playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate);
                 
-                GUILayout.Label($"Heal Mult: {healMult:F2}");
+                //GUILayout.Label($"Heal Mult: {healMult:F2}");
                 GUILayout.Label($"Drain Rate: {drainRate:F2}");
             }
             
@@ -171,9 +171,9 @@ namespace Mutations.Testing
             
             float testAmount = 2.0f;
             float beforeHealth = playerModel.CurrentHealth;
-            float healMult = playerModel.HealingMultiplier;
+            //float healMult = playerModel.HealingMultiplier;
             
-            Debug.Log($"[GammaNervousTester] Testing healing: {testAmount} × {healMult:F2} = {testAmount * healMult:F2}");
+            //Debug.Log($"[GammaNervousTester] Testing healing: {testAmount} × {healMult:F2} = {testAmount * healMult:F2}");
             Debug.Log($"[GammaNervousTester] Health before: {beforeHealth:F1}");
             
             playerModel.RecoverTime(testAmount);
@@ -230,17 +230,17 @@ namespace Mutations.Testing
             float actualHealing = afterHealth - beforeHealth;
 
             Debug.Log($"[GammaNervousTester] After: {afterHealth:F1}/{maxHealth:F1}");
-            Debug.Log($"[GammaNervousTester] Actual healing: {actualHealing:F2} (multiplier: {playerModel.HealingMultiplier:F2})");
+            //Debug.Log($"[GammaNervousTester] Actual healing: {actualHealing:F2} (multiplier: {playerModel.HealingMultiplier:F2})");
         }
 
         private void LogCurrentStats(string moment)
         {
             if (playerModel?.StatContext == null) return;
 
-            float healMult = playerModel.HealingMultiplier;
+            //float healMult = playerModel.HealingMultiplier;
             float drainRate = playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate);
 
-            Debug.Log($"[GammaNervousTester] {moment} - Healing Multiplier: {healMult:F2}, Drain Rate: {drainRate:F2}");
+            //Debug.Log($"[GammaNervousTester] {moment} - Healing Multiplier: {healMult:F2}, Drain Rate: {drainRate:F2}");
         }
     }
 }

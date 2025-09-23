@@ -26,8 +26,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start() 
     {
+        if (PlayerHelper.GetPlayer() == null) return;
         playerTransform = PlayerHelper.GetPlayer().transform;
-    
         StartWave();
     }
 
@@ -147,9 +147,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
     }
-    
-    private void ShowMutationSelection()
-    {
-        Instantiate(mutationCanvasPrefab);
-    }
+
+    [ContextMenu("Show mutation selection")]
+    private void ShowMutationSelection() => Instantiate(mutationCanvasPrefab);
 }
