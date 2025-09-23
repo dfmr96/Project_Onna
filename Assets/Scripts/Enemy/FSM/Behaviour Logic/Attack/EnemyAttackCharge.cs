@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,7 +17,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
     private bool isCharging = false;
     private float chargeTimer = 0f;
     private Vector3 chargeDirection;
-
+    private Vector3 chargeEndPoint;
 
 
     public override void DoEnterLogic()
@@ -77,6 +78,8 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         {
             chargeTimer += Time.fixedDeltaTime;
 
+        
+
             // Movimiento suave con física
             _rb.MovePosition(_rb.position + chargeDirection * chargeSpeed * Time.fixedDeltaTime);
 
@@ -85,6 +88,12 @@ public class EnemyAttackCharge : EnemyAttackSOBase
             if (distanceToPlayer < 1f || chargeTimer >= chargeDuration)
             {
                 EndCharge();
+            }
+
+            if (Vector3.Distance(enemy.transform.position, chargeEndPoint) < 0.5f)
+            {
+                isCharging = false;
+                _navMeshAgent.enabled = true; // volver al navmesh
             }
         }
 
@@ -165,17 +174,56 @@ public class EnemyAttackCharge : EnemyAttackSOBase
 
         enemy.SetShield(false);
 
-        chargeDirection = (playerTransform.position - enemy.transform.position).normalized;
+        //chargeDirection = (playerTransform.position - enemy.transform.position).normalized;
+        //chargeTimer = 0f;
+        //isCharging = true;
+        //_hasAttackedOnce = true;
+        //_timer = 0f;
+
+        //// Desactivamos NavMeshAgent para evitar conflictos
+        //_navMeshAgent.enabled = false;
+
+        //// Detener velocidad previa
+        //_rb.velocity = Vector3.zero;
+
+        // --- Nuevo: definir el punto final de charge dentro del NavMesh ---
+        Vector3 rawTarget = playerTransform.position;
+        Vector3 safeTarget = enemy.transform.position; // fallback
+
+        // Buscar punto cercano al jugador dentro del NavMesh
+        if (NavMesh.SamplePosition(rawTarget, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+        {
+            safeTarget = hit.position;
+        }
+
+        // Dirección hacia ese punto
+        chargeDirection = (safeTarget - enemy.transform.position).normalized;
+
+        // Limitar distancia máxima del charge (evita que se pase del NavMesh)
+        float maxChargeDistance = 5f; // ajustá según tu diseño
+        Vector3 finalTarget = enemy.transform.position + chargeDirection * maxChargeDistance;
+
+        // Asegurar que el final del charge esté sobre el NavMesh
+        if (NavMesh.SamplePosition(finalTarget, out NavMeshHit safeHit, 2f, NavMesh.AllAreas))
+        {
+            finalTarget = safeHit.position;
+        }
+
+        // Guardar como punto de destino final
+        chargeEndPoint = finalTarget;
+
+        // Reiniciar estados
         chargeTimer = 0f;
         isCharging = true;
         _hasAttackedOnce = true;
         _timer = 0f;
 
-        // Desactivamos NavMeshAgent para evitar conflictos
+        // Desactivar NavMeshAgent para no pelear con el Rigidbody
         _navMeshAgent.enabled = false;
 
-        // Detener velocidad previa
+        // Resetear velocidad previa
         _rb.velocity = Vector3.zero;
+
     }
 
     private void EndCharge()
@@ -196,7 +244,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         isPostCharging = true;
         postChargeTimer = 0f;
 
-     
+      
     }
 
 
