@@ -78,4 +78,24 @@ public class NewMutationController
     /// </summary>
     public NewMutationSystem GetSystem(SystemType type) => systems[type];
 
+    /// <summary>
+    /// Returns mutation equiped in a system and slot
+    /// </summary>
+    public NewMutations GetEquippedMutation(SystemType system, SlotType slot)
+    {
+        if (!systems.TryGetValue(system, out var sys)) return null;
+        return slot == SlotType.Major ? sys.mayorSlot.Mutation : sys.menorSlot.Mutation;
+    }
+
+    /// <summary>
+    /// Returns NewRadiationData for the mutation equiped in a system and slot
+    /// </summary>
+    public NewRadiationData GetEquippedRadiationData(SystemType system, SlotType slot)
+    {
+        var mutation = GetEquippedMutation(system, slot);
+        if (mutation == null) return null;
+
+        return _database?.GetRadiationData(mutation.Type);
+    }
+
 }
