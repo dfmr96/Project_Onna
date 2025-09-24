@@ -45,6 +45,7 @@ namespace Player
         public float CurrentHealth => _currentTime;
         public float DashCooldown => StatContext.Source.Get(statRefs.dashCooldown);
         public float DashDistance => StatContext.Source.Get(statRefs.dashDistance);
+        public float HealingMultiplier => StatContext.Source.Get(statRefs.healingMultiplier);
         public PlayerStatContext StatContext => _statContext;
         public bool DevMode => devMode;
         public GameMode CurrentGameMode => _currentGameMode;
