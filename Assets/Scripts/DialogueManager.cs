@@ -26,6 +26,9 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(NPCData npcData)
     {
+        //Cursor Mouse
+        Cursor.visible = true;
+
         if (dialogueInstance == null) dialogueInstance = Instantiate(dialoguePrefab);
 
         dialogueInstance.gameObject.SetActive(true);
@@ -67,5 +70,8 @@ public class DialogueManager : MonoBehaviour
         dialogueInstance.gameObject.SetActive(false);
         currentNode = null;
         PlayerHelper.EnableInput();
+
+        //Cursor Mouse
+        Cursor.visible = false;
     }
 }

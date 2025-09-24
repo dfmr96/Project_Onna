@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a980c3ede781443bca97b6deaac8b3, type: 3}
   m_Name: EnemyRangedStats
   m_EditorClassIdentifier: 
+  currentState: No State
   MaxHealth: 63
   isShieldActive: 0
   AttackDamage: 10
   AttackRange: 9
+  AttackTimeRate: 1.5
+  AttackInitialDelay: 0.3
   combatAngle: 360
   obstacleCombatLayers:
     serializedVersion: 2
@@ -26,12 +29,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   ShootForce: 15
-  moveSpeed: 10
+  moveSpeed: 12
   rotationSpeed: 400
   RandomMovementRange: 30
   radiusSpawnOrb: 1.5
   RastroOrbOnHit: 1
   numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
-  numberOfOrbsOnDeath: 2
+  numberOfOrbsOnDeath: 1
   CoinsToDrop: 1
