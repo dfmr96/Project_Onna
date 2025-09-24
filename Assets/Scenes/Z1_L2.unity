@@ -20433,6 +20433,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+--- !u!1 &1814756299 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 1814756298}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1821413675
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23402,6 +23407,10 @@ PrefabInstance:
       propertyPath: doors.Array.data[0]
       value: 
       objectReference: {fileID: 919998780}
+    - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
+      propertyPath: doors.Array.data[1]
+      value: 
+      objectReference: {fileID: 1814756299}
     - target: {fileID: 4193327727464083117, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
       propertyPath: m_Name
       value: GameManager
