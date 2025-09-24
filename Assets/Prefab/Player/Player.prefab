@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 77618325301829727}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.15, z: -0.09}
+  m_LocalPosition: {x: 0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -911,7 +911,7 @@ LineRenderer:
       key6: {r: 1, g: 0, b: 0, a: 1}
       key7: {r: 0, g: 0, b: 0, a: 1}
       ctime0: 0
-      ctime1: 65535
+      ctime1: 39662
       ctime2: 65535
       ctime3: 65535
       ctime4: 65535
@@ -919,7 +919,7 @@ LineRenderer:
       ctime6: 65535
       ctime7: 0
       atime0: 0
-      atime1: 65535
+      atime1: 39253
       atime2: 65535
       atime3: 65535
       atime4: 65535
@@ -934,7 +934,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 0.5, y: 0.5}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
@@ -1007,6 +1007,67 @@ Transform:
   - {fileID: 3752927625567475135}
   m_Father: {fileID: 8025509566666306244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3849535221611786289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3812021117369432484}
+  - component: {fileID: 6668341717595924518}
+  - component: {fileID: 5461076056659542388}
+  m_Layer: 6
+  m_Name: Melee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3812021117369432484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849535221611786289}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5232816373119301103}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6668341717595924518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849535221611786289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2673ebb1a373cd4b83931d08675deac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 200dff04412ec234abc0d2af9b9bc9f3, type: 2}
+  attackPoint: {fileID: 6096603574120293089}
+--- !u!114 &5461076056659542388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849535221611786289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 968231202597de34ea8846b71b108d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1276326954052208887}
+  meleeController: {fileID: 6668341717595924518}
 --- !u!1 &3863611926642077226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,6 +1111,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6096603574120293089}
+  - {fileID: 3812021117369432484}
   - {fileID: 1592005984796363887}
   - {fileID: 6924677166269443374}
   m_Father: {fileID: 0}
@@ -1254,6 +1316,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 291d84bb-2504-47b5-9b29-52dd8d47d0ff
     m_ActionName: Player/Reload[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4339932572223991893}
+        m_TargetAssemblyTypeName: Player.PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnMeleeAtack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 22eacb89-efb8-4446-837a-c84ba66cf020
+    m_ActionName: Player/Fire2[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1272,10 +1350,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponController: {fileID: 1108355771667216337}
+  meleeController: {fileID: 6668341717595924518}
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
   particleDash: {fileID: 7503733378160212234}
+  minAimDistance: 1
 --- !u!114 &2024501622075525127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1288,16 +1368,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fc80a863b2473099f2be0da4db6173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devMode: 0
-  statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
-  heightTextSpawn: 1.5
-  floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
-  _playerView: {fileID: 5206305562450521121}
   _playerInventory:
     playerWallet:
       coins: 0
     playerItemsHolder:
       _upgradesBoughtList: []
+  devMode: 0
+  statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
+  poisonEffectPrefab: {fileID: 6126188424833946103, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
+  poisonAnchor: {fileID: 7712607571364708695}
+  poisonOffset: {x: 0, y: -1, z: 0}
+  heightTextSpawn: 1.5
+  floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
 --- !u!114 &4339932572223991893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1460,6 +1542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationView: {fileID: 3715669954240071290}
   weaponView: {fileID: 4559322424049143066}
+  meleeView: {fileID: 5461076056659542388}
   audioView: {fileID: 879461727823975973}
   effectsView: {fileID: 5225306903837380426}
   _playerController: {fileID: 3435388732386355774}
@@ -1478,8 +1561,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1276326954052208887}
   visualRoot: {fileID: 1592005984796363887}
-  inputHandler: {fileID: 4339932572223991893}
   rigBuilder: {fileID: 6354521171766058465}
+  inputHandler: {fileID: 4339932572223991893}
   hubAnimator: {fileID: 9100000, guid: ca70cfc19ca23754c8e6acd7ae2fd346, type: 2}
   combatAnimator: {fileID: 9100000, guid: 7bab0c5a9a8f20e4ab9237b877e657fa, type: 2}
   rotationSpeed: 100
@@ -1685,7 +1768,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2922555603422679823}
   - component: {fileID: 8219208242327390073}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Runner00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1727,18 +1810,18 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fa39eaba9267ae748aa7a279c43752e6, type: 2}
-  - {fileID: 1788269377728665300, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: 6208646447134160744, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: 2100000, guid: eeb322dee52fdea4186fcdd678c113b5, type: 2}
   - {fileID: 1546698591103355196, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
-  - {fileID: 2100000, guid: 9fde7833bc9512647ab452e39ae43cb0, type: 2}
-  - {fileID: 2100000, guid: a95339ddf17bfe744a7bc96e4def07f9, type: 2}
-  - {fileID: 1871964995938752917, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: -7553255600785431401, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: 2843458586951752533, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: 2899781441393906059, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
-  - {fileID: 2100000, guid: a95339ddf17bfe744a7bc96e4def07f9, type: 2}
+  - {fileID: 2899781441393906059, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: -7516014009013606798, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: -1300646908919207460, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: -4115205817925291450, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
+  - {fileID: -6478536213147159724, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: -2455235682004149424, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
-  - {fileID: -876546973899608171, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   - {fileID: -6478536213147159724, guid: ff805b3c3147de24ea65ce1152f405dc, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -2161,7 +2244,7 @@ Transform:
   m_GameObject: {fileID: 7120414884439126169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.006, z: 0.326}
+  m_LocalPosition: {x: 0, y: -0.26, z: 0.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2289,7 +2372,7 @@ Transform:
   m_GameObject: {fileID: 7680795789683145431}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0.483}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2580,7 +2663,7 @@ MonoBehaviour:
   canFire: 1
   isReloading: 0
   laserGunParticlesPrefab: {fileID: 8700035473269227422, guid: f9ec70dbba2b28748a4ddf4f43aedd91, type: 3}
-  shootGunParticlesPrefab: {fileID: 198000012944515248, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+  shootGunParticlesPrefab: {fileID: -6140058637718067864, guid: 4f5fc4bbd01b03a4499a6ed77f175fc7, type: 3}
   laserOrigin: {fileID: 6286168293087101770}
   shootFx: {fileID: 8300000, guid: eb192c69ffce50d4c9eb79b0bc16ac7e, type: 3}
   overheathFx: {fileID: 8300000, guid: 62d7fcc486ccf424084211b80c981a87, type: 3}

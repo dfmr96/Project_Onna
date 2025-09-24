@@ -7,8 +7,10 @@ namespace Player
     /// </summary>
     public class PlayerView : MonoBehaviour
     {
-        [Header("Sub-Views")] [SerializeField] private PlayerAnimationView animationView;
+        [Header("Sub-Views")] 
+        [SerializeField] private PlayerAnimationView animationView;
         [SerializeField] private PlayerWeaponView weaponView;
+        [SerializeField] private MeleeView meleeView;
         [SerializeField] private PlayerAudioView audioView;
         
 
@@ -27,6 +29,9 @@ namespace Player
         {
             InitializeSubViews();
             SubscribeToModelEvents();
+
+            //Cursor Mouse
+            Cursor.visible = false;
         }
 
         private void OnDestroy()
@@ -39,6 +44,7 @@ namespace Player
             // Inicializar todas las sub-views
             animationView?.Initialize();
             weaponView?.Initialize();
+            meleeView?.Initialize();
             audioView?.Initialize();
             effectsView?.Initialize();
         }
@@ -121,7 +127,7 @@ private void HandleMovementDirectionChanged(Vector3 moveDirection)
         }
 
 
-private void HandleRawMovementDirectionChanged(Vector3 rawMoveDirection)
+        private void HandleRawMovementDirectionChanged(Vector3 rawMoveDirection)
         {
             if (_playerModel == null) return;
 

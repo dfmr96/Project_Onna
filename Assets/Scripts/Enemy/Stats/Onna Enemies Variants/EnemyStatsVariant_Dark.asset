@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: EnemyStatsVariant_Dark
   m_EditorClassIdentifier: 
   variantType: 5
-  healthMultiplier: 1
+  healthMultiplier: 1.7
   damageMultiplier: 1
   speedMultiplier: 1
+  attackChargeTimeMultiplier: 1
   hasDoT: 0
   dotDamage: 0
   dotDuration: 0
   explodesOnDeath: 0
   explosionRadius: 0
   explosionDamage: 0
+  explosionLifetime: 2
+  hasDefensivePhase: 1
+  damageReductionDuringAttack: 0.8
   extraOrbsOnDeath: 1

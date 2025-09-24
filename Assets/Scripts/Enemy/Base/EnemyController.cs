@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -144,14 +145,19 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         InitializeState();
 
 
-    }
+}
 
-    void Update()
+void Update()
     {
         view.PlayMovingAnimation(_navMeshAgent.speed);
         fsm.CurrentState?.FrameUpdate();
 
-        Debug.Log("ESTADO: " + fsm.CurrentState);
+        //Debug.Log("ESTADO: " + fsm.CurrentState);
+
+        model.statsSO.currentState = fsm.CurrentState.ToString();
+
+    
+
 
     }
 
@@ -173,10 +179,16 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
     public override void ExecuteAttack(IDamageable target)
     {
-        target.TakeDamage(model.statsSO.AttackDamage);
+        target.TakeDamage(model.currentDamage);
+
+        //Si el que ataque es una variante verde aplica veneno
+        if(model.variantSO.variantType == EnemyVariantType.Green)
+        {
+            target.ApplyDebuffDoT(model.variantSO.dotDuration, model.variantSO.dotDamage);
+        }
     }
 
-    public float GetDamage() => model.statsSO.AttackDamage;
+    public float GetDamage() => model.currentDamage;
 
     //public void DoAttack(IDamageable target)
     //{

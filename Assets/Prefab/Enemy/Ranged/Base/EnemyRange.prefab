@@ -384,7 +384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 624583759933527583}
   - component: {fileID: 9152121804643690749}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Elena
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -896,7 +896,7 @@ MonoBehaviour:
   firePoint: {fileID: 8502265577618094373}
   shieldObject: {fileID: 5756171975295050171}
   aggroChecksObject: {fileID: 2661972510452747920}
-  initialState: 0
+  initialState: 1
   attackPhases:
   - healthThreshold: 0
     attackSO: {fileID: 11400000, guid: a75b4e11a32232a4e82b78e0cb0cc09a, type: 2}
@@ -922,12 +922,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsSO: {fileID: 11400000, guid: fd041374f25ae7840887d78c8e860705, type: 2}
+  variantSO: {fileID: 11400000, guid: 6f3be1e739e0ddb4d8fc5215ad9f9082, type: 2}
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
-  jumpingCoinsTextPrefab: {fileID: 0}
+  jumpingCoinsTextPrefab: {fileID: 3376755756987271297, guid: 6ef9f7569b8aec740b0780b7df95fe24, type: 3}
   heightCoinsTextSpawn: 2
   heightTextSpawn: 2
   healthBarPrefab: {fileID: 8508845231606679208, guid: 8623097c3dba54948ab913cd6882f592, type: 3}
   heightBarSpawn: 2.5
+  currentHealth: 0
+  currentDamage: 0
+  currentSpeed: 0
+  currentAttackTimeRate: 0
 --- !u!114 &1210880959964216394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -942,7 +947,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint2: {fileID: 8502265577618094373}
   turretHead: {fileID: 8502265577618094373}
-  deathParticlesPrefab: {fileID: 4000606309234296067, guid: f84f5269c2501854292626425fb30685, type: 3}
+  deathParticlesPrefab: {fileID: 5444105318733727396, guid: cf82839c411151342a7b2337bda9fb34, type: 3}
+  damageMaterials:
+  - {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
+  - {fileID: 2100000, guid: af6434cb25cba5b4b94c7d70643d28f3, type: 2}
+  deathMaterials:
+  - {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
+  - {fileID: 2100000, guid: 972efdcfc14b1b940b8f89a9affc4c76, type: 2}
+  materialIndexesToFlash: 00000000
   shootAudioClip: {fileID: 8300000, guid: 307bfecd8caeba147b2a4016dfdad079, type: 3}
   damagedAudioClip: {fileID: 8300000, guid: 5432abd34717bbe4b8083fecca85ebda, type: 3}
 --- !u!82 &-3857017980269826844

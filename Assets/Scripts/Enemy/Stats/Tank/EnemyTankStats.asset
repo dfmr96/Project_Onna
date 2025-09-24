@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a980c3ede781443bca97b6deaac8b3, type: 3}
   m_Name: EnemyTankStats
   m_EditorClassIdentifier: 
-  MaxHealth: 250
+  currentState: No State
+  MaxHealth: 260
   isShieldActive: 1
   AttackDamage: 20
   AttackRange: 6
+  AttackTimeRate: 4
+  AttackInitialDelay: 0.6
   combatAngle: 30
   obstacleCombatLayers:
     serializedVersion: 2
@@ -25,13 +28,13 @@ MonoBehaviour:
   obstacleDetectionLayers:
     serializedVersion: 2
     m_Bits: 256
-  ShootForce: 15
-  moveSpeed: 2
-  rotationSpeed: 200
-  RandomMovementRange: 30
+  ShootForce: 13
+  moveSpeed: 1.8
+  rotationSpeed: 190
+  RandomMovementRange: 25
   radiusSpawnOrb: 2
   RastroOrbOnHit: 1
   numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
-  numberOfOrbsOnDeath: 3
+  numberOfOrbsOnDeath: 4
   CoinsToDrop: 1

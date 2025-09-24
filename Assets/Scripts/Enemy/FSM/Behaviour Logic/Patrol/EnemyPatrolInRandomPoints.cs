@@ -17,7 +17,7 @@ public class EnemyPatrolInRandomPoints : EnemyPatrolSOBase
 
             _enemyModel.OnHealthChanged += HandleHealthChanged;
 
-        initialSpeed = _enemyModel.statsSO.moveSpeed;
+        initialSpeed = _enemyModel.currentSpeed;
 
         //Se obliga a que el enemigo camine
         _navMeshAgent.speed = initialSpeed - walkSpeed;

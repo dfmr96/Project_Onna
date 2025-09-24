@@ -8,20 +8,21 @@ public class EnemyProjectile : MonoBehaviour
 {
     private float damage;
     [SerializeField] private float lifeTime = 5f;
+    private float _timer = 0f;
+
     [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
     protected Transform playerTransform;
     [SerializeField] float bulletSpeed;
-    [SerializeField] private LayerMask obstacleLayers;
+    [SerializeField] private LayerMask ignoreLayers;
     private bool hasHit = false;
     private Action onRelease;
     private Rigidbody rb;
-    private float _timer = 0f;
+
+    private EnemyModel ownerModel;
 
 
 
-   
-
-private void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -33,12 +34,21 @@ private void Awake()
 
     }
 
-    public void Launch(Vector3 direction, float force, float damage, Action onReleaseCallback)
+    public void Launch(Vector3 direction, float force, float damage, EnemyModel owner, Action onReleaseCallback)
     {
         this.damage = damage;
         onRelease = onReleaseCallback;
         rb.velocity = direction * force;
+        this.ownerModel = owner;
+        _timer = 0f;
+        hasHit = false;
+    }
 
+    public void LaunchBoss(Vector3 direction, float force, float damage, Action onReleaseCallback)
+    {
+        this.damage = damage;
+        onRelease = onReleaseCallback;
+        rb.velocity = direction * force;
         _timer = 0f;
         hasHit = false;
     }
@@ -71,12 +81,16 @@ private void Awake()
 
         if (hasHit) return;
 
-        if (((1 << collision.gameObject.layer) & obstacleLayers) != 0)
-        {
-            PlayImpactParticles();
-            onRelease?.Invoke();
 
-        }
+        //if (((1 << collision.gameObject.layer) & obstacleLayers) != 0)
+        //{
+        //    PlayImpactParticles();
+        //    onRelease?.Invoke();
+
+        //}
+
+        // Ignoramos colisiones con capas de ignoreLayers
+        if (((1 << collision.gameObject.layer) & ignoreLayers) != 0) return;
 
 
         if ((collision.transform.root == playerTransform) && (collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable)))
@@ -85,11 +99,26 @@ private void Awake()
 
             damageable.TakeDamage(damage);
 
+            //Debuff veneno
+            if (ownerModel != null && ownerModel.variantSO.variantType == EnemyVariantType.Green)
+            {
+                damageable.ApplyDebuffDoT(ownerModel.variantSO.dotDuration, ownerModel.variantSO.dotDamage);
+            }
+
             PlayImpactParticles();
 
 
             onRelease?.Invoke();
 
+
+        }
+        else
+        {
+            hasHit = true;
+
+            PlayImpactParticles();
+
+            onRelease?.Invoke();
 
         }
 

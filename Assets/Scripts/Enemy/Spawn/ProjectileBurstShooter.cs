@@ -77,7 +77,7 @@ public class ProjectileBurstShooter : MonoBehaviour
         Vector3 dir = (targetPos - _bossController.firePoint.position).normalized;
         dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
 
-        _spawner.SpawnProjectile(
+        _spawner.SpawnProjectileBoss(
             _bossController.firePoint.position,
             dir,
             _bossModel.statsSO.ShootForce,

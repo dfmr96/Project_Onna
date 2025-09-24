@@ -9,6 +9,8 @@ public class DeathManager : MonoBehaviour
     //Para usarlo->
     //DeathManager.Instance.DestroyObject(_gameObject, 1f);
 
+    [SerializeField] private GameObject mutantExplotionPrefab;
+
     private void Awake()
     {
         if (Instance == null)
@@ -26,4 +28,11 @@ public class DeathManager : MonoBehaviour
     {
         Destroy(obj, delay);
     }
+
+    public void InstantiateMutantDeath(Transform explotionPosition, float explotionLifetime)
+    {
+        GameObject prefab = Instantiate(mutantExplotionPrefab, explotionPosition.position, Quaternion.identity);
+        Destroy(prefab, explotionLifetime);
+    }
+
 }

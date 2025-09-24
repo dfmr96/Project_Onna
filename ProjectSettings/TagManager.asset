@@ -19,8 +19,8 @@ TagManager:
   - Projectile
   - Orb
   - ExternalWall
-  - 
-  - 
+  - EnemyHealthBar
+  - Post-Processing
   - 
   - 
   - 
@@ -41,4 +41,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: HealthBar
+    uniqueID: 982490619
     locked: 0

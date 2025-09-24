@@ -362,12 +362,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsSO: {fileID: 11400000, guid: adaf0ea2f720628449ccdae3427bcd57, type: 2}
+  variantSO: {fileID: 11400000, guid: 6f3be1e739e0ddb4d8fc5215ad9f9082, type: 2}
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
   jumpingCoinsTextPrefab: {fileID: 3376755756987271297, guid: 6ef9f7569b8aec740b0780b7df95fe24, type: 3}
   heightCoinsTextSpawn: 2
   heightTextSpawn: 2
   healthBarPrefab: {fileID: 8508845231606679208, guid: 8623097c3dba54948ab913cd6882f592, type: 3}
   heightBarSpawn: 2.5
+  currentHealth: 0
+  currentDamage: 0
+  currentSpeed: 0
+  currentAttackTimeRate: 0
 --- !u!114 &2138032106782261500
 MonoBehaviour:
   m_ObjectHideFlags: 0
