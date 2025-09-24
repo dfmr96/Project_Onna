@@ -38,16 +38,9 @@ namespace Mutations.Testing
                 Debug.LogWarning("[Test] Effect already applied! Remove first.");
                 return;
             }
-            
-            Debug.Log($"[Test] Applying Gamma Nervous Major Effect Level {testLevel}");
-            Debug.Log($"[Test] Before - Healing Multiplier: {playerModel.HealingMultiplier:F2}");
-            Debug.Log($"[Test] Before - Drain Rate: {playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate):F2}");
-            
+
             testEffect.ApplyEffect(playerModel.gameObject, testLevel);
             effectApplied = true;
-            
-            Debug.Log($"[Test] After - Healing Multiplier: {playerModel.HealingMultiplier:F2}");
-            Debug.Log($"[Test] After - Drain Rate: {playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate):F2}");
         }
         
         [ContextMenu("Test Remove Effect")]
@@ -65,15 +58,8 @@ namespace Mutations.Testing
                 return;
             }
             
-            Debug.Log("[Test] Removing Gamma Nervous Major Effect");
-            Debug.Log($"[Test] Before Remove - Healing Multiplier: {playerModel.HealingMultiplier:F2}");
-            Debug.Log($"[Test] Before Remove - Drain Rate: {playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate):F2}");
-            
             testEffect.RemoveEffect(playerModel.gameObject);
             effectApplied = false;
-            
-            Debug.Log($"[Test] After Remove - Healing Multiplier: {playerModel.HealingMultiplier:F2}");
-            Debug.Log($"[Test] After Remove - Drain Rate: {playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate):F2}");
         }
         
         [ContextMenu("Test Healing")]
@@ -87,17 +73,11 @@ namespace Mutations.Testing
             
             float testHealAmount = 1.0f;
             Debug.Log($"[Test] Testing healing with {testHealAmount} base amount");
-            Debug.Log($"[Test] Current healing multiplier: {playerModel.HealingMultiplier:F2}");
-            Debug.Log($"[Test] Expected heal: {testHealAmount * playerModel.HealingMultiplier:F2}");
             
             float beforeHealth = playerModel.CurrentHealth;
             playerModel.RecoverTime(testHealAmount);
             float afterHealth = playerModel.CurrentHealth;
             float actualHealing = afterHealth - beforeHealth;
-            
-            Debug.Log($"[Test] Before Health: {beforeHealth:F2}");
-            Debug.Log($"[Test] After Health: {afterHealth:F2}");
-            Debug.Log($"[Test] Actual Healing: {actualHealing:F2}");
         }
         
         private void RunTest()

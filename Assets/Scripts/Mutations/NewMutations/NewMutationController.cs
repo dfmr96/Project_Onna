@@ -1,26 +1,25 @@
-using System.Collections.Generic;
 using Mutations;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class NewMutationController
 {
     private Dictionary<SystemType, NewMutationSystem> systems = new();
-    private List<NewMutations> mutationPool;
-    private System.Random rng = new();
+    private NewMutationDatabase _database;
 
-    public NewMutationEffect EffectManager { get; private set; }
-
-    public NewMutationController(List<NewMutations> allMutations)
+    public NewMutationController(NewMutationDatabase database)
     {
         ResetRun();
-        mutationPool = allMutations;
+        _database = database;
 
         systems[SystemType.Nerve] = new NewMutationSystem { systemType = SystemType.Nerve };
         systems[SystemType.Integumentary] = new NewMutationSystem { systemType = SystemType.Integumentary };
         systems[SystemType.Muscular] = new NewMutationSystem { systemType = SystemType.Muscular };
-
-        EffectManager = new NewMutationEffect();
     }
 
+    /// <summary>
+    /// Resets de run (will be innecesary if we destroy NewMutationController when the run its over)
+    /// </summary>
     public void ResetRun()
     {
         foreach (var system in systems.Values)
@@ -30,25 +29,77 @@ public class NewMutationController
         }
     }
 
-    public NewMutationSystem GetSystem(SystemType type) => systems[type];
-
     /// <summary>
-    /// Return 3 mutations for showing in UI
+    /// Rolling 3 radiations for showing UI
     /// </summary>
-    public List<NewMutations> RollMutations(int count = 3)
+    public List<NewRadiationData> RollRadiations(int count = 3)
     {
-        List<NewMutations> result = new();
-        List<NewMutations> tempPool = new List<NewMutations>(mutationPool);
+        List<NewRadiationData> pool = new List<NewRadiationData>(_database.AllRadiations);
+        List<NewRadiationData> result = new List<NewRadiationData>();
+        var rng = new System.Random();
 
-        for (int i = 0; i < count && tempPool.Count > 0; i++)
+        for (int i = 0; i < count && pool.Count > 0; i++)
         {
-            int index = rng.Next(tempPool.Count);
-            result.Add(tempPool[index]);
-            tempPool.RemoveAt(index);
+            int index = rng.Next(pool.Count);
+            result.Add(pool[index]);
+            pool.RemoveAt(index);
         }
 
         return result;
     }
 
-    public void AssignMutation(NewMutations mutation, SystemType system, SlotType slot) { systems[system].AssignMutation(mutation, slot); }
+    /// <summary>
+    /// Equip radiation in a system
+    /// </summary>
+    public bool EquipRadiation(MutationType radiation, SystemType system, SlotType slot)
+    {
+        NewMutationSlot targetSlot = (slot == SlotType.Major) ? systems[system].mayorSlot : systems[system].menorSlot;
+
+        if (!targetSlot.IsEmpty) return false;
+
+        NewMutations mutation = _database.GetMutation(radiation, system, slot);
+
+        if (mutation == null) 
+        {
+            Debug.LogError("Mutation selected is unknown or null");
+            return false;
+        }
+
+        systems[system].AssignMutation(mutation, slot);
+        return true;
+    }
+
+    /// <summary>
+    /// Returns the system itself
+    /// </summary>
+    public NewMutationSystem GetSystem(SystemType type) => systems[type];
+
+    /// <summary>
+    /// Returns mutation equiped in a system and slot
+    /// </summary>
+    public NewMutations GetEquippedMutation(SystemType system, SlotType slot)
+    {
+        if (!systems.TryGetValue(system, out var sys)) return null;
+        return slot == SlotType.Major ? sys.mayorSlot.Mutation : sys.menorSlot.Mutation;
+    }
+
+    /// <summary>
+    /// Returns NewRadiationData for the mutation equiped in a system and slot
+    /// </summary>
+    public NewRadiationData GetEquippedRadiationData(SystemType system, SlotType slot)
+    {
+        var mutation = GetEquippedMutation(system, slot);
+        if (mutation == null) return null;
+
+        return _database?.GetRadiationData(mutation.Type);
+    }
+
+    /// <summary>
+    /// Returns a mutation
+    /// </summary>
+    public NewMutations GetMutationForSlot(MutationType radiation, SystemType system, SlotType slot)
+    {
+        return _database.GetMutation(radiation, system, slot);
+    }
+
 }
