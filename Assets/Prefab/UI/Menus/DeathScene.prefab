@@ -300,8 +300,8 @@ MonoBehaviour:
   - {fileID: 7623772105480351650}
   - {fileID: 1521380547342990215}
   - {fileID: 9042847798526790566}
-  fillDuration: 0.5
-  delayBetween: 0.1
+  fillDuration: 0.3
+  delayBetween: 0.08
 --- !u!1 &1209457687597141648
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +910,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1295753463671223179}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 674646847265707744}
+        m_TargetAssemblyTypeName: DefeatUIController, Assembly-CSharp
+        m_MethodName: OnReturnToHubButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6357631197029812899
 GameObject:
   m_ObjectHideFlags: 0

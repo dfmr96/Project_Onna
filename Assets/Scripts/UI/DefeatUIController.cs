@@ -20,4 +20,16 @@ public class DefeatUIController : MonoBehaviour
             arrangeLetters.ShowAndFillLetters();
         }
     }
+
+    public void OnReturnToHubButton()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ReturnToHub();
+        }
+        else
+        {
+            Debug.LogError("GameManager no encontrado en la escena.");
+        }
+    }
 }

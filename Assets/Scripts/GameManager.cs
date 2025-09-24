@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
         PlayerHelper.DisableInput();
+        Cursor.visible = true;
         Time.timeScale = 0f;
 
         // Instanciar partículas sobre el player (y mantenerlas en escena)
@@ -84,7 +85,7 @@ public class GameManager : MonoBehaviour
     }
 
     
-    private void ReturnToHub()
+    public void ReturnToHub()
     {
         GameModeSelector.SelectedMode = GameMode.Hub;
         PlayerHelper.EnableInput();
