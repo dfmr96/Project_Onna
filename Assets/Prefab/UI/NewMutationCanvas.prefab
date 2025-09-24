@@ -342,6 +342,10 @@ MonoBehaviour:
   radiationButtonPrefab: {fileID: 2850117227815430157, guid: abdc201efce07fc4899a2de549027407, type: 3}
   majorSlotButton: {fileID: 120029561294607822}
   minorSlotButton: {fileID: 9094120655807135057}
+  majorSlotDescription: {fileID: 6198134229956334829}
+  minorSlotDescription: {fileID: 7316268010432878385}
+  normalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  equippedTextColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
   targetImage: {fileID: 2862141644413610834}
   emptyMajorSlotSprite: {fileID: 2047437678, guid: 80c9dd4b79e318a468c719794454a074, type: 3}
   emptyMinorSlotSprite: {fileID: 1098939865, guid: 80c9dd4b79e318a468c719794454a074, type: 3}
@@ -668,12 +672,12 @@ GameObject:
   - component: {fileID: 1913319137137792199}
   - component: {fileID: 6198134229956334829}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: MajorDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5437344291271695607
 RectTransform:
   m_ObjectHideFlags: 0
@@ -721,7 +725,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\rMelee hits apply a heavy slow for a moment."
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 359aac6dcd4a9a64988e5459a22829cf, type: 2}
   m_sharedMaterial: {fileID: 310558686158869268, guid: 359aac6dcd4a9a64988e5459a22829cf, type: 2}
@@ -934,12 +938,12 @@ GameObject:
   - component: {fileID: 13673048225660751}
   - component: {fileID: 7316268010432878385}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: MinorDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8611306656980559910
 RectTransform:
   m_ObjectHideFlags: 0
@@ -987,7 +991,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\rVital time decreases more slowly."
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 359aac6dcd4a9a64988e5459a22829cf, type: 2}
   m_sharedMaterial: {fileID: 310558686158869268, guid: 359aac6dcd4a9a64988e5459a22829cf, type: 2}

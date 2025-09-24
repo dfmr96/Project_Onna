@@ -53,15 +53,11 @@ public class NewMutationController
     /// </summary>
     public bool EquipRadiation(MutationType radiation, SystemType system, SlotType slot)
     {
-        var targetSlot = (slot == SlotType.Major) ? systems[system].mayorSlot : systems[system].menorSlot;
+        NewMutationSlot targetSlot = (slot == SlotType.Major) ? systems[system].mayorSlot : systems[system].menorSlot;
 
-        if (!targetSlot.IsEmpty)
-        {
-            Debug.LogWarning($"Slot {slot} in {system} is already full.");
-            return false;
-        }
+        if (!targetSlot.IsEmpty) return false;
 
-        var mutation = _database.GetMutation(radiation, system, slot);
+        NewMutations mutation = _database.GetMutation(radiation, system, slot);
 
         if (mutation == null) 
         {
@@ -96,6 +92,14 @@ public class NewMutationController
         if (mutation == null) return null;
 
         return _database?.GetRadiationData(mutation.Type);
+    }
+
+    /// <summary>
+    /// Returns a mutation
+    /// </summary>
+    public NewMutations GetMutationForSlot(MutationType radiation, SystemType system, SlotType slot)
+    {
+        return _database.GetMutation(radiation, system, slot);
     }
 
 }

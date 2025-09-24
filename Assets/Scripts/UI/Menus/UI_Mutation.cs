@@ -15,6 +15,12 @@ public class UI_Mutation : MonoBehaviour
     [SerializeField] private GameObject radiationButtonPrefab;
     [SerializeField] private Button majorSlotButton;
     [SerializeField] private Button minorSlotButton;
+    [SerializeField] private TextMeshProUGUI majorSlotDescription;
+    [SerializeField] private TextMeshProUGUI minorSlotDescription;
+
+    [Header("Text colors")]
+    [SerializeField] private Color normalTextColor = Color.white;
+    [SerializeField] private Color equippedTextColor = new Color(0.7f, 0.7f, 0.7f);
 
     [Header("Images && Sprites")]
     [SerializeField] private Image targetImage;
@@ -68,9 +74,6 @@ public class UI_Mutation : MonoBehaviour
         _playerModel = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
         _playerModel.EnablePassiveDrain(false);
 
-        Time.timeScale = 0.1f;
-
-        StartCoroutine(EnableUIAfterDelay(3f));
         currentRolledRadiations = mController.RollRadiations();
         UpdateRadiationUI();
         UpdateSystemUI();
@@ -93,7 +96,11 @@ public class UI_Mutation : MonoBehaviour
         }
     }
 
-    public void OnRadiationSelected(NewRadiationData radData) => ShowSlotSelection(radData);
+    public void OnRadiationSelected(NewRadiationData radData)
+    {
+        ShowSlotSelection(radData);
+        ShowSlotDescriptions(radData);
+    }
 
     private void ShowSlotSelection(NewRadiationData radData)
     {
@@ -110,6 +117,48 @@ public class UI_Mutation : MonoBehaviour
         });
     }
 
+    private void ShowSlotDescriptions(NewRadiationData data)
+    {
+        if (isRotating) return;
+        NewMutations majorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Major);
+        NewMutations minorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Minor);
+
+        majorSlotDescription.text = majorMutation != null ? majorMutation.MajorEffectDescription : "";
+        majorSlotDescription.color = normalTextColor;
+
+        minorSlotDescription.text = minorMutation != null ? minorMutation.MinorEffectDescription : "";
+        minorSlotDescription.color = normalTextColor;
+    }
+
+    private void DestroySlotDescriptions()
+    {
+        var majorRad = mController.GetEquippedRadiationData(activeSystem, SlotType.Major);
+        if (majorRad != null)
+        {
+            var equippedMajorMutation = mController.GetMutationForSlot(
+                majorRad.Type,
+                activeSystem,
+                SlotType.Major
+            );
+            majorSlotDescription.text = equippedMajorMutation != null ? equippedMajorMutation.MajorEffectDescription : "";
+            majorSlotDescription.color = equippedTextColor;
+        }
+        else majorSlotDescription.text = "";
+
+        var minorRad = mController.GetEquippedRadiationData(activeSystem, SlotType.Minor);
+        if (minorRad != null)
+        {
+            var equippedMinorMutation = mController.GetMutationForSlot(
+                minorRad.Type,
+                activeSystem,
+                SlotType.Minor
+            );
+            minorSlotDescription.text = equippedMinorMutation != null ? equippedMinorMutation.MinorEffectDescription : "";
+            minorSlotDescription.color = equippedTextColor;
+        }
+        else minorSlotDescription.text = "";
+    }
+
     private void TryEquip(NewRadiationData radData, SlotType slot)
     {
         bool equipped = mController.EquipRadiation(radData.Type, activeSystem, slot);
@@ -122,6 +171,7 @@ public class UI_Mutation : MonoBehaviour
 
     private IEnumerator RotateAndSetSystem()
     {
+        DestroySlotDescriptions();
         yield return RotateSequence();
         UpdateSystemUI();
     }
@@ -131,13 +181,13 @@ public class UI_Mutation : MonoBehaviour
         UpdateSystemText();
         var majorRad = mController.GetEquippedRadiationData(activeSystem, SlotType.Major);
         if (majorRad != null)
-            majorSlotButton.GetComponent<Image>().sprite = majorRad.Icon;
+            majorSlotButton.GetComponent<Image>().sprite = majorRad.SmallIcon;
         else
             majorSlotButton.GetComponent<Image>().sprite = emptyMajorSlotSprite;
 
         var minorRad = mController.GetEquippedRadiationData(activeSystem, SlotType.Minor);
         if (minorRad != null)
-            minorSlotButton.GetComponent<Image>().sprite = minorRad.Icon;
+            minorSlotButton.GetComponent<Image>().sprite = minorRad.SmallIcon;
         else
             minorSlotButton.GetComponent<Image>().sprite = emptyMinorSlotSprite;
     }
@@ -194,6 +244,7 @@ public class UI_Mutation : MonoBehaviour
 
     public void OnRadiationEquipped()
     {
+        DestroySlotDescriptions();
         foreach (Transform child in radiationPanelParent)
         {
             Button b = child.GetComponent<Button>();
@@ -206,6 +257,7 @@ public class UI_Mutation : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
+        DestroySlotDescriptions();
         mutationAnimator.SetTrigger("Close");
 
         yield return new WaitForSeconds(GetAnimationLength(mutationAnimator, "Close"));
@@ -226,12 +278,6 @@ public class UI_Mutation : MonoBehaviour
         }
 
         targetImage.rectTransform.rotation = Quaternion.Euler(0, 0, targetAngle);
-    }
-
-    private IEnumerator EnableUIAfterDelay(float delay)
-    {
-        yield return new WaitForSecondsRealtime(delay);
-        Time.timeScale = 1f;
     }
 
     private float GetAnimationLength(Animator animator, string stateName)
