@@ -2941,6 +2941,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+--- !u!1 &325280948 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 325280947}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &329675110
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4233,8 +4238,12 @@ MonoBehaviour:
   doors:
   - {fileID: 0}
   - {fileID: 0}
+  deathScreenTransitionPrefab: {fileID: 7121083172180269478, guid: eca03162f29f38440b289a0a6ead248a, type: 3}
+  deathParticlesPrefab: {fileID: 8593464584776411535, guid: b21d155ec7ea5a349a0e36106f913148, type: 3}
+  playerHUD: {fileID: 325280948}
   orbSpawner: {fileID: 295472635}
   projectileSpawner: {fileID: 1061867379}
+  defeatUIPrefab: {fileID: 573205567}
 --- !u!4 &389155827
 Transform:
   m_ObjectHideFlags: 0
@@ -7512,6 +7521,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe829eb3a7f52f24fb58d51f9b3d8772, type: 3}
+--- !u!1 &573205567 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1295845407206138769, guid: fe829eb3a7f52f24fb58d51f9b3d8772, type: 3}
+  m_PrefabInstance: {fileID: 573205566}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &593574212
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27925,8 +27939,8 @@ SceneRoots:
   - {fileID: 850936261}
   - {fileID: 2389333258379008032}
   - {fileID: 3537240421776493859}
-  - {fileID: 325280947}
   - {fileID: 396824829}
   - {fileID: 1089854526}
   - {fileID: 1844777658}
   - {fileID: 1607555665}
+  - {fileID: 325280947}

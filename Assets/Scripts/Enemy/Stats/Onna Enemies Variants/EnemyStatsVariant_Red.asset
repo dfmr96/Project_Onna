@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   variantType: 1
   healthMultiplier: 0.7
-  damageMultiplier: 1.5
+  damageMultiplier: 1.65
   speedMultiplier: 1
+  attackChargeTimeMultiplier: 1
   hasDoT: 0
   dotDamage: 0
   dotDuration: 0
   explodesOnDeath: 0
   explosionRadius: 0
   explosionDamage: 0
+  explosionLifetime: 2
+  hasDefensivePhase: 0
+  damageReductionDuringAttack: 1
   extraOrbsOnDeath: 0

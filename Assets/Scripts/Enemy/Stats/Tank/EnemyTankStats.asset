@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyTankStats
   m_EditorClassIdentifier: 
   currentState: No State
-  MaxHealth: 250
+  MaxHealth: 260
   isShieldActive: 1
   AttackDamage: 20
   AttackRange: 6
@@ -28,13 +28,13 @@ MonoBehaviour:
   obstacleDetectionLayers:
     serializedVersion: 2
     m_Bits: 256
-  ShootForce: 15
-  moveSpeed: 2
-  rotationSpeed: 200
-  RandomMovementRange: 30
+  ShootForce: 13
+  moveSpeed: 1.8
+  rotationSpeed: 190
+  RandomMovementRange: 25
   radiusSpawnOrb: 2
   RastroOrbOnHit: 1
   numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
-  numberOfOrbsOnDeath: 3
+  numberOfOrbsOnDeath: 4
   CoinsToDrop: 1
