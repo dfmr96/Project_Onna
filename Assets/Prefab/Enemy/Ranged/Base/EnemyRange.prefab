@@ -947,7 +947,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint2: {fileID: 8502265577618094373}
   turretHead: {fileID: 8502265577618094373}
-  deathParticlesPrefab: {fileID: 4000606309234296067, guid: f84f5269c2501854292626425fb30685, type: 3}
+  deathParticlesPrefab: {fileID: 5444105318733727396, guid: cf82839c411151342a7b2337bda9fb34, type: 3}
+  damageMaterials:
+  - {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
+  - {fileID: 2100000, guid: af6434cb25cba5b4b94c7d70643d28f3, type: 2}
+  deathMaterials:
+  - {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
+  - {fileID: 2100000, guid: 972efdcfc14b1b940b8f89a9affc4c76, type: 2}
+  materialIndexesToFlash: 00000000
   shootAudioClip: {fileID: 8300000, guid: 307bfecd8caeba147b2a4016dfdad079, type: 3}
   damagedAudioClip: {fileID: 8300000, guid: 5432abd34717bbe4b8083fecca85ebda, type: 3}
 --- !u!82 &-3857017980269826844

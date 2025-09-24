@@ -6192,6 +6192,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7890870419348564450, guid: 1d6b73658b4590549af328789f4b3873, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2027034704}
     - targetCorrespondingSourceObject: {fileID: 6476718781653823652, guid: 1d6b73658b4590549af328789f4b3873, type: 3}
       insertIndex: -1
       addedObject: {fileID: 224600965}
@@ -19487,6 +19490,29 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2439656591262172330, guid: 07e25ad6a02e1614884d7f6d1a65b8e5, type: 3}
   m_PrefabInstance: {fileID: 2023352822}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2027034698 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7890870419348564450, guid: 1d6b73658b4590549af328789f4b3873, type: 3}
+  m_PrefabInstance: {fileID: 672079126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2027034704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027034698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a3a070408aa941ab83ae10be1708848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _intensity: 0.63
+  _shader: {fileID: 4800000, guid: ba40dc630e1d9417cb9ea22586ece1e1, type: 3}
+  _material: {fileID: 0}
+  _noiseTexture: {fileID: 0}
+  _trashFrame1: {fileID: 0}
+  _trashFrame2: {fileID: 0}
 --- !u!1001 &2056425702
 PrefabInstance:
   m_ObjectHideFlags: 0
