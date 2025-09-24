@@ -224,7 +224,7 @@ public class EnemyView : MonoBehaviour
     {
         if (deathParticlesPrefab != null)
         {
-            ParticleSystem deathParticlesInstance = Instantiate(deathParticlesPrefab, transform.position, Quaternion.identity);
+            ParticleSystem deathParticlesInstance = Instantiate(deathParticlesPrefab, transform.position + new Vector3(0,1,0), Quaternion.identity);
             deathParticlesInstance.Play();
 
             if (turretHead != null)
