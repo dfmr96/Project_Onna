@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] doors;
     private GameObject player;
     [SerializeField] private GameObject deathScreenTransitionPrefab;
+    [SerializeField] private GameObject deathParticlesPrefab; 
 
     [Header("Enemies Spawners")]
     public OrbSpawner orbSpawner;
@@ -51,6 +52,16 @@ public class GameManager : MonoBehaviour
         PlayerHelper.DisableInput();
         Time.timeScale = 0f;
 
+        // Instanciar partículas sobre el player (y mantenerlas en escena)
+        if (deathParticlesPrefab != null && player != null)
+        {
+            Instantiate(
+                deathParticlesPrefab,
+                player.transform.position,
+                Quaternion.identity
+            );
+        }
+
         // Instanciar transición visual sobre el player
         if (deathScreenTransitionPrefab != null && player != null)
         {
@@ -60,7 +71,6 @@ public class GameManager : MonoBehaviour
                 Quaternion.identity
             );
 
-            // Pasar referencia del prefab de derrota para que se instancie al final
             var transitionScript = transition.GetComponent<DeathScreenTransition>();
             if (transitionScript != null)
             {
