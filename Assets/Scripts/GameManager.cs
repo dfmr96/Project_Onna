@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using Player;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,10 +16,14 @@ public class GameManager : MonoBehaviour
     [Header("Doors")]
     [SerializeField] private GameObject[] doors;
     private GameObject player;
+    [SerializeField] private GameObject deathScreenTransitionPrefab;
 
     [Header("Enemies Spawners")]
     public OrbSpawner orbSpawner;
     public ProjectileSpawner projectileSpawner;
+
+    [SerializeField] private GameObject defeatUIPrefab;
+    private GameObject defeatUIInstance;
 
     //Evento para activar portal tras seleccion de mutacion
     public static event Action OnMutationUIClosed;
@@ -39,13 +44,45 @@ public class GameManager : MonoBehaviour
         OpenDoorDebug();
 
     }
+    
     private void DefeatGame()
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
+        PlayerHelper.DisableInput();
+        Time.timeScale = 0f;
+
+        // Instanciar transición visual sobre el player
+        if (deathScreenTransitionPrefab != null && player != null)
+        {
+            GameObject transition = Instantiate(
+                deathScreenTransitionPrefab,
+                player.transform.position,
+                Quaternion.identity
+            );
+
+            // Pasar referencia del prefab de derrota para que se instancie al final
+            var transitionScript = transition.GetComponent<DeathScreenTransition>();
+            if (transitionScript != null)
+            {
+                transitionScript.SetDefeatUI(defeatUIPrefab);
+            }
+        }
+        else
+        {
+            Debug.LogError("No se encontró el prefab de transición o el player.");
+        }
+    }
+
+    
+    private void ReturnToHub()
+    {
         GameModeSelector.SelectedMode = GameMode.Hub;
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
         SceneManagementUtils.LoadSceneByName("HUB");
     }
-    private void OpenDoorDebug() 
+
+    private void OpenDoorDebug()
     {
         foreach (GameObject door in doors) { Destroy(door); }
     }

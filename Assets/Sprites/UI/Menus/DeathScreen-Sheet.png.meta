@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 80c9dd4b79e318a468c719794454a074
+guid: 3b039a77fd215234993c171f83405b48
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_0
+      name: DeathScreen-Sheet_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 378
-        width: 242
-        height: 126
+        y: 720
+        width: 640
+        height: 360
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ab59fc1fedec4843bd4421ef06b5229
-      internalID: -1294400818
+      spriteID: 88e3aa6326af9f242beb3c97ff9f9fee
+      internalID: -427884785
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_1
+      name: DeathScreen-Sheet_1
       rect:
         serializedVersion: 2
-        x: 242
-        y: 378
-        width: 242
-        height: 126
+        x: 640
+        y: 720
+        width: 640
+        height: 360
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df3982baabf4c8849a1c17faed546a97
-      internalID: -696897784
+      spriteID: 013137b5e855bdc4797a435cec05e951
+      internalID: -1316101805
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_2
+      name: DeathScreen-Sheet_2
       rect:
         serializedVersion: 2
-        x: 484
-        y: 378
-        width: 242
-        height: 126
+        x: 1280
+        y: 720
+        width: 640
+        height: 360
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 379e6f1217da00545a9a02fec901fa5e
-      internalID: -1242040877
+      spriteID: 21cf9a339744286408e348182ebe94df
+      internalID: 238933865
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_3
+      name: DeathScreen-Sheet_3
       rect:
         serializedVersion: 2
-        x: 726
-        y: 378
-        width: 242
-        height: 126
+        x: 640
+        y: 360
+        width: 640
+        height: 360
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +187,188 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4ab1e93fe57842643b8e4c0a79550370
-      internalID: -2031037078
+      spriteID: adf973277ff3eb24b9955a858c9a87d2
+      internalID: 533722554
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_4
+      name: DeathScreen-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 360
+        width: 640
+        height: 360
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef21ab5c975c5ab4fbd7e08c964974e2
+      internalID: 1708125525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 360
+        width: 640
+        height: 360
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9902971452248504b8fbdb20b159afd9
+      internalID: 2111387892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 171
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed001194138db164ea391e5f3d420af3
+      internalID: 1992764837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 171
+        width: 29
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4642a487922b52042b4ac6d3096b998f
+      internalID: 1966763839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 183
+        width: 23
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6e84dee8bda9664c97e0cd262ce227a
+      internalID: -1573626303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 861
+        y: 183
+        width: 23
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa6695721c8d3bb4799684c93c9d16ac
+      internalID: 61908106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 183
+        width: 19
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a8ba5c16653dd64e901758f049c6e83
+      internalID: 1892145732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 157
+        width: 18
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 985ef7815e2ab2c4fbeed3acf9619b16
+      internalID: -1077194692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeathScreen-Sheet_12
       rect:
         serializedVersion: 2
         x: 968
-        y: 378
-        width: 242
-        height: 126
+        y: 183
+        width: 23
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,20 +376,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dd2cf46f43d3a1645935602679922405
-      internalID: 2090091675
+      spriteID: 9296ad43ab94d5440ad55a34f90412e7
+      internalID: -124791944
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_5
+      name: DeathScreen-Sheet_13
       rect:
         serializedVersion: 2
-        x: 0
-        y: 252
-        width: 242
-        height: 126
+        x: 994
+        y: 183
+        width: 25
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,20 +397,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7ac1540fd6a432445b3cdd5198dc38d1
-      internalID: -1252001754
+      spriteID: 57d7cb4095544964d846b8fafb95300a
+      internalID: -1850541314
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_6
+      name: DeathScreen-Sheet_15
       rect:
         serializedVersion: 2
-        x: 242
-        y: 252
-        width: 242
-        height: 126
+        x: 1026
+        y: 183
+        width: 18
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -250,20 +418,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 543d68b060b51454fa1f50881cec8ff7
-      internalID: 1413953317
+      spriteID: 9fc3306e746544548807cb2749aab863
+      internalID: -1591244450
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_7
+      name: DeathScreen-Sheet_16
       rect:
         serializedVersion: 2
-        x: 484
-        y: 252
-        width: 242
-        height: 126
+        x: 1079
+        y: 183
+        width: 15
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -271,20 +439,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 29168dc8bb5e55741a12a06fe8ff26a8
-      internalID: 895959298
+      spriteID: e62d8512b3b08ce478815fc3068c292a
+      internalID: 1438159382
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_8
+      name: DeathScreen-Sheet_17
       rect:
         serializedVersion: 2
-        x: 726
-        y: 252
-        width: 242
-        height: 126
+        x: 1097
+        y: 183
+        width: 8
+        height: 24
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -292,20 +460,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9e615476237b7b5408984e34ff002725
-      internalID: 1481386368
+      spriteID: b2238b6abee34244ea4a2129a63ec3b4
+      internalID: -436330888
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_9
+      name: DeathScreen-Sheet_18
       rect:
         serializedVersion: 2
-        x: 968
-        y: 252
-        width: 242
-        height: 126
+        x: 1112
+        y: 171
+        width: 43
+        height: 25
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -313,20 +481,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cf19851e12b13dd4491a89f2a6fdcaa3
-      internalID: -110115437
+      spriteID: 5042ca499dd8fef4587b7c0e8fe7ccbf
+      internalID: -138168351
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Mutation_HUD_Bars_10
+      name: DeathScreen-Sheet_19
       rect:
         serializedVersion: 2
-        x: 0
-        y: 126
-        width: 242
-        height: 126
+        x: 1158
+        y: 183
+        width: 20
+        height: 11
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -334,218 +502,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 10221e639efe8f1449d8d91250bc22c2
-      internalID: -445432955
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_11
-      rect:
-        serializedVersion: 2
-        x: 242
-        y: 126
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 303fbfafb0e89404d8df2c26bd5ccc57
-      internalID: -1324352474
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_12
-      rect:
-        serializedVersion: 2
-        x: 484
-        y: 126
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 27a4949f690716241a11dd3369907271
-      internalID: -761728833
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_13
-      rect:
-        serializedVersion: 2
-        x: 726
-        y: 126
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 483ebf66047b07c459af3e74546acae2
-      internalID: 525205496
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_14
-      rect:
-        serializedVersion: 2
-        x: 968
-        y: 126
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 14daeb6c55e7d2d43b488c15f17150dc
-      internalID: 696084496
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_15
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2d8d7389ba89b274fa13cb83729ab0c8
-      internalID: 1811268253
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_16
-      rect:
-        serializedVersion: 2
-        x: 242
-        y: 0
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f479829f205ee4049a804dab2a9ec05b
-      internalID: 1926764534
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_17
-      rect:
-        serializedVersion: 2
-        x: 484
-        y: 0
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 640845354bd7b244788e3e4d4d68fa65
-      internalID: 810450341
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_18
-      rect:
-        serializedVersion: 2
-        x: 726
-        y: 0
-        width: 242
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f39c19857263dde48ab74aae2c82d234
-      internalID: 1482490622
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_19
-      rect:
-        serializedVersion: 2
-        x: 1076
-        y: 32
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 22ca3a5aeb996d143a76443e54d10884
-      internalID: 2047437678
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mutation_HUD_Bars_20
-      rect:
-        serializedVersion: 2
-        x: 1144
-        y: 39
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f7d35073d85239442b2a6ff5d1097384
-      internalID: 1098939865
+      spriteID: 477a32e8361af284a9203cc7cf25a7b8
+      internalID: 1093606321
       vertices: []
       indices: 
       edges: []
@@ -553,7 +511,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 84aefc8cc2f26804396010d348316b58
     internalID: 0
     vertices: []
     indices: 
@@ -561,27 +519,26 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Mutation_HUD_Bars_0: -1294400818
-      Mutation_HUD_Bars_1: -696897784
-      Mutation_HUD_Bars_10: -445432955
-      Mutation_HUD_Bars_11: -1324352474
-      Mutation_HUD_Bars_12: -761728833
-      Mutation_HUD_Bars_13: 525205496
-      Mutation_HUD_Bars_14: 696084496
-      Mutation_HUD_Bars_15: 1811268253
-      Mutation_HUD_Bars_16: 1926764534
-      Mutation_HUD_Bars_17: 810450341
-      Mutation_HUD_Bars_18: 1482490622
-      Mutation_HUD_Bars_19: 2047437678
-      Mutation_HUD_Bars_2: -1242040877
-      Mutation_HUD_Bars_20: 1098939865
-      Mutation_HUD_Bars_3: -2031037078
-      Mutation_HUD_Bars_4: 2090091675
-      Mutation_HUD_Bars_5: -1252001754
-      Mutation_HUD_Bars_6: 1413953317
-      Mutation_HUD_Bars_7: 895959298
-      Mutation_HUD_Bars_8: 1481386368
-      Mutation_HUD_Bars_9: -110115437
+      DeathScreen-Sheet_0: -427884785
+      DeathScreen-Sheet_1: -1316101805
+      DeathScreen-Sheet_10: 1892145732
+      DeathScreen-Sheet_11: -1077194692
+      DeathScreen-Sheet_12: -124791944
+      DeathScreen-Sheet_13: -1850541314
+      DeathScreen-Sheet_14: -1784489747
+      DeathScreen-Sheet_15: -1591244450
+      DeathScreen-Sheet_16: 1438159382
+      DeathScreen-Sheet_17: -436330888
+      DeathScreen-Sheet_18: -138168351
+      DeathScreen-Sheet_19: 1093606321
+      DeathScreen-Sheet_2: 238933865
+      DeathScreen-Sheet_3: 533722554
+      DeathScreen-Sheet_4: 1708125525
+      DeathScreen-Sheet_5: 1992764837
+      DeathScreen-Sheet_6: 2111387892
+      DeathScreen-Sheet_7: 1966763839
+      DeathScreen-Sheet_8: -1573626303
+      DeathScreen-Sheet_9: 61908106
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

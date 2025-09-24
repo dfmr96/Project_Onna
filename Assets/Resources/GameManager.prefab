@@ -44,10 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b72e03c8dae0b489e9196f242f76de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpawner: {fileID: 6559758837609736390, guid: 01faf823f41ed9346832eba0296bee12, type: 3}
-  enemySpawner: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
+  playerSpawner: {fileID: 0}
+  enemySpawner: {fileID: 0}
   doors:
   - {fileID: 0}
   - {fileID: 0}
-  orbSpawner: {fileID: 2001152861161737939, guid: 2da761e05a6a1ee45b7f0d13e7999d02, type: 3}
-  projectileSpawner: {fileID: 8746142756585533408, guid: 9fa8ef95f1b6b84479c990006e80298a, type: 3}
+  deathScreenTransitionPrefab: {fileID: 3193517173025584275, guid: 114071dd1234ead4fa6bb8414063dd24, type: 3}
+  orbSpawner: {fileID: 0}
+  projectileSpawner: {fileID: 0}
+  defeatUIPrefab: {fileID: 7121083172180269478, guid: eca03162f29f38440b289a0a6ead248a, type: 3}
