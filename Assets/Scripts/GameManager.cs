@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using Player;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class GameManager : MonoBehaviour
     [Header("Enemies Spawners")]
     public OrbSpawner orbSpawner;
     public ProjectileSpawner projectileSpawner;
+
+    [SerializeField] private GameObject defeatUIPrefab;
+    private GameObject defeatUIInstance;
 
     //Evento para activar portal tras seleccion de mutacion
     public static event Action OnMutationUIClosed;
@@ -42,10 +46,35 @@ public class GameManager : MonoBehaviour
     private void DefeatGame()
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
+        PlayerHelper.DisableInput();
+        Time.timeScale = 0f;
+
+        // Instanciar UI de derrota
+        if (defeatUIPrefab != null && defeatUIInstance == null)
+        {
+            defeatUIInstance = Instantiate(defeatUIPrefab);
+
+            // Buscar el botón y asignar callback
+            UnityEngine.UI.Button button = defeatUIInstance.GetComponentInChildren<UnityEngine.UI.Button>();
+            if (button != null)
+            {
+                button.onClick.AddListener(ReturnToHub);
+            }
+        }
+        else
+        {
+            Debug.LogError("DefeatUIPrefab no asignado en GameManager.");
+        }
+    }
+
+    
+    private void ReturnToHub()
+    {
         GameModeSelector.SelectedMode = GameMode.Hub;
         SceneManagementUtils.LoadSceneByName("HUB");
     }
-    private void OpenDoorDebug() 
+
+    private void OpenDoorDebug()
     {
         foreach (GameObject door in doors) { Destroy(door); }
     }
