@@ -16,6 +16,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_EnemyMelee
       objectReference: {fileID: 0}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: damageMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: deathParticlesPrefab
+      value: 
+      objectReference: {fileID: 2197626818615626613, guid: 1095a5c9f65bfbe4383f63d5d1886c65, type: 3}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: deathMaterials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: damageMaterials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: deathMaterials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 15524a9d38e145b4ba3e6bf4f6cd2e15, type: 2}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: deathMaterials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 15524a9d38e145b4ba3e6bf4f6cd2e15, type: 2}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: damageMaterials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: af6434cb25cba5b4b94c7d70643d28f3, type: 2}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: damageMaterials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: materialIndexesToFlash.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: materialIndexesToFlash.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494369513606284842, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      propertyPath: materialIndexesToFlash.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6009956700418416738, guid: 485566aee052c934482ff62ef697c679, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

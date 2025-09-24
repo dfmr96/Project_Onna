@@ -15,9 +15,9 @@ public class EnemyView : MonoBehaviour
 
     private float _distanceToCountExit = 3f;
 
-    private Renderer targetRenderer; 
+    private Renderer targetRenderer;
     private Color flashColor = Color.white;
-    private float flashDuration = 0.1f;
+    private float flashDuration = .3f;
     private Material material;
     private Color originalColor;
 
@@ -35,12 +35,18 @@ public class EnemyView : MonoBehaviour
     private float recoilDistance = 2f;
     private float recoilSpeed = 5f;
     [SerializeField] private ParticleSystem deathParticlesPrefab;
+    [SerializeField] private Material[] damageMaterials;
+    [SerializeField] private Material[] deathMaterials;
+    private Material[] originalMaterials;// material temporal de daÃ±o
+    [SerializeField] private int[] materialIndexesToFlash = { 0 };
+
 
     private float deadAngle = 40f;
     private AudioSource audioSource;
 
     [SerializeField] private AudioClip shootAudioClip;
     [SerializeField] private AudioClip damagedAudioClip;
+    private bool isDead = false;
 
     private Coroutine flashCoroutine = null;
     private Coroutine recoilCoroutine;
@@ -51,7 +57,7 @@ public class EnemyView : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        
+
     }
     public Animator Animator => animator;
 
@@ -67,14 +73,14 @@ public class EnemyView : MonoBehaviour
         //originalColor = material.GetColor("_Color");
         originalColor = material.color;
 
-
+        originalMaterials = targetRenderer.materials;
         //torret
-        if(turretHead != null)
+        if (turretHead != null)
         {
             initialRotation = turretHead.localRotation;
             initialPosition = turretHead.localPosition;
         }
-      
+
 
 
     }
@@ -135,11 +141,11 @@ public class EnemyView : MonoBehaviour
         Transform firePoint = _enemyController.firePoint;
 
         Vector3 targetPos = _playerTransform.position;
-        targetPos.y = firePoint.position.y; 
+        targetPos.y = firePoint.position.y;
         Vector3 dir = (targetPos - firePoint.position).normalized;
 
         projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.currentDamage, _enemyModel);
-        
+
         audioSource.PlayOneShot(shootAudioClip);
     }
 
@@ -174,7 +180,7 @@ public class EnemyView : MonoBehaviour
         }
 
         //alterna entre firepoints
-        useFirstFirePoint = !useFirstFirePoint; 
+        useFirstFirePoint = !useFirstFirePoint;
     }
 
     public void DoRecoil()
@@ -191,15 +197,15 @@ public class EnemyView : MonoBehaviour
 
     private IEnumerator RecoilCoroutine()
     {
-        // Calculamos posición y rotación de retroceso
+        // Calculamos posiciï¿½n y rotaciï¿½n de retroceso
         Quaternion recoilRotation = initialRotation * Quaternion.Euler(-recoilAngle, 0f, 0f);
         Vector3 recoilPosition = initialPosition - turretHead.localRotation * Vector3.forward * recoilDistance;
 
-        // Aplicamos el retroceso instantáneo
+        // Aplicamos el retroceso instantï¿½neo
         turretHead.localRotation = recoilRotation;
         turretHead.localPosition = recoilPosition;
 
-        // Lerp suave hacia la posición y rotación original
+        // Lerp suave hacia la posiciï¿½n y rotaciï¿½n original
         float t = 0f;
         while (t < 1f)
         {
@@ -218,11 +224,13 @@ public class EnemyView : MonoBehaviour
     {
         if (deathParticlesPrefab != null)
         {
-            deathParticlesPrefab.Play();
+            ParticleSystem deathParticlesInstance = Instantiate(deathParticlesPrefab, transform.position + new Vector3(0,1,0), Quaternion.identity);
+            deathParticlesInstance.Play();
 
-            turretHead.localRotation = Quaternion.Euler(deadAngle, 0f, 0f);
+            if (turretHead != null)
+                turretHead.localRotation = Quaternion.Euler(deadAngle, 0f, 0f);
 
-            Destroy(deathParticlesPrefab, 2f);
+            Destroy(deathParticlesInstance.gameObject, 2f);
         }
     }
 
@@ -289,10 +297,36 @@ public class EnemyView : MonoBehaviour
     public void PlayDeathAnimation()
     {
         animator.SetTrigger("IsDead");
-     
+        isDead = true;
 
+        // activamos los materiales de muerte permanentemente
+        targetRenderer.materials = GetFittedMaterials(deathMaterials);
 
+        // cancelamos cualquier flash en curso
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+
+        PlayDeathParticles();
     }
+
+    private void ActivateDamageMaterials()
+    {
+        Material[] newMaterials = new Material[originalMaterials.Length];
+
+        for (int i = 0; i < originalMaterials.Length; i++)
+        {
+            if (i < damageMaterials.Length)
+                newMaterials[i] = damageMaterials[i];
+            else
+                newMaterials[i] = damageMaterials[damageMaterials.Length - 1];
+        }
+
+        targetRenderer.materials = newMaterials;
+    }
+
 
     public void UpdateHealthBar(float healthPercentage)
     {
@@ -301,17 +335,26 @@ public class EnemyView : MonoBehaviour
 
     public void PlayDamageEffect()
     {
-        //StartCoroutine(FlashCoroutine());
+        if (isDead) return; // si estÃ¡ muerto no hacemos flash
 
         if (flashCoroutine != null)
-        {
             StopCoroutine(flashCoroutine);
-        }
 
-        material.color = originalColor;
+        flashCoroutine = StartCoroutine(FlashDamageMaterialsCoroutine());
+    }
 
-        flashCoroutine = StartCoroutine(FlashCoroutine());
+    private IEnumerator FlashDamageMaterialsCoroutine()
+    {
+        // âš¡ aplicamos materiales de daÃ±o temporalmente
+        targetRenderer.materials = GetFittedMaterials(damageMaterials);
 
+        yield return new WaitForSeconds(flashDuration);
+
+        // ðŸŒ€ restauramos materiales originales solo si sigue vivo
+        if (!isDead)
+            targetRenderer.materials = originalMaterials;
+
+        flashCoroutine = null;
     }
 
     private IEnumerator FlashCoroutine()
@@ -322,10 +365,25 @@ public class EnemyView : MonoBehaviour
 
         //material.SetColor("_Color", originalColor);
 
-        material.color = flashColor;
+        //material.color = flashColor;
         yield return new WaitForSeconds(flashDuration);
-        material.color = originalColor;
-        flashCoroutine = null;
+        // material.color = originalColor;
+        //flashCoroutine = null;
+    }
+    
+    private Material[] GetFittedMaterials(Material[] source)
+    {
+        Material[] newMaterials = new Material[originalMaterials.Length];
+
+        for (int i = 0; i < originalMaterials.Length; i++)
+        {
+            if (i < source.Length)
+                newMaterials[i] = source[i];
+            else
+                newMaterials[i] = source[source.Length - 1]; // repetir el Ãºltimo si faltan
+        }
+
+        return newMaterials;
     }
 }
 

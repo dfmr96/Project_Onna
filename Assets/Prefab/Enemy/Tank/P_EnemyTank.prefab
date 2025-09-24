@@ -56,6 +56,34 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 8712bb398461bf841ae9e81cd2328f1e, type: 2}
+    - target: {fileID: 5362968577430954061, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
+      propertyPath: deathParticlesPrefab
+      value: 
+      objectReference: {fileID: 5444105318733727396, guid: cf82839c411151342a7b2337bda9fb34, type: 3}
+    - target: {fileID: 5362968577430954061, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
+      propertyPath: deathMaterials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362968577430954061, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
+      propertyPath: damageMaterials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362968577430954061, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
+      propertyPath: deathMaterials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 15524a9d38e145b4ba3e6bf4f6cd2e15, type: 2}
+    - target: {fileID: 5362968577430954061, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
+      propertyPath: deathMaterials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 15524a9d38e145b4ba3e6bf4f6cd2e15, type: 2}
+    - target: {fileID: 5362968577430954061, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
+      propertyPath: damageMaterials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
+    - target: {fileID: 5362968577430954061, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
+      propertyPath: damageMaterials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: af6434cb25cba5b4b94c7d70643d28f3, type: 2}
     - target: {fileID: 8501793177802542647, guid: 7cd03485fd7ae1f49be98de783cfdadd, type: 3}
       propertyPath: variantSO
       value: 
