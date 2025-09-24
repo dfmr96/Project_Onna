@@ -11,8 +11,7 @@ public class HubEndTrigger : InteractableBase
     {
         base.Interact();
         PlayerHelper.DisableInput();
-        //SceneManagementUtils.AsyncLoadSceneByName(levelProgression.GetNextRoom(), loadCanvasPrefab, this);
-        SceneManagementUtils.AsyncLoadSceneByName("Shader Test", loadCanvasPrefab, this);
+        SceneManagementUtils.AsyncLoadSceneByName(levelProgression.GetNextRoom(), loadCanvasPrefab, this);
         RunData.Initialize(mutationDatabase);
     }
 }

@@ -10,7 +10,6 @@ public class NewRadiationButton : MonoBehaviour
     [SerializeField] private Button button;
 
     private NewRadiationData currentData;
-    private SlotType currentSlot;
     private NewMutationController controller;
     private UI_Mutation ui;
 
@@ -22,7 +21,6 @@ public class NewRadiationButton : MonoBehaviour
         currentData = data;
         controller = mutationController;
         ui = uiMutation;
-        Debug.Log("Button setted");
 
         if (iconImage != null && currentData != null)
             iconImage.sprite = currentData.Icon;
@@ -41,8 +39,6 @@ public class NewRadiationButton : MonoBehaviour
             Debug.LogError("Something is out of reference");
             return;
         }
-
-        Debug.Log("Button clicked");
         ui.OnRadiationSelected(currentData);
     }
 

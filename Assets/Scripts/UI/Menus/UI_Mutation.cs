@@ -1,14 +1,16 @@
 using Mutations;
+using Player;
 using Player.Stats.Runtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_Mutation : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private Transform systemPanelParent;
+    [SerializeField] private TextMeshProUGUI systemName;
     [SerializeField] private Transform radiationPanelParent;
     [SerializeField] private GameObject radiationButtonPrefab;
     [SerializeField] private Button majorSlotButton;
@@ -31,6 +33,7 @@ public class UI_Mutation : MonoBehaviour
     private float currentRotation = 0f;
 
     private NewMutationController mController;
+    private PlayerModel _playerModel;
 
     private SystemType activeSystem = SystemType.Nerve;
     private List<NewRadiationData> currentRolledRadiations = new();
@@ -61,8 +64,17 @@ public class UI_Mutation : MonoBehaviour
 
     private void Initialize()
     {
+        PlayerHelper.DisableInput();
+        _playerModel = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
+        _playerModel.EnablePassiveDrain(false);
+
+        Time.timeScale = 0.1f;
+
+        StartCoroutine(EnableUIAfterDelay(3f));
         currentRolledRadiations = mController.RollRadiations();
         UpdateRadiationUI();
+        UpdateSystemUI();
+        UpdateSystemText();
     }
 
     public void OnNextSystem()
@@ -101,7 +113,11 @@ public class UI_Mutation : MonoBehaviour
     private void TryEquip(NewRadiationData radData, SlotType slot)
     {
         bool equipped = mController.EquipRadiation(radData.Type, activeSystem, slot);
-        if (equipped) UpdateSystemUI();
+        if (equipped) 
+        {
+            UpdateSystemUI();
+            OnRadiationEquipped();
+        }
     }
 
     private IEnumerator RotateAndSetSystem()
@@ -112,6 +128,7 @@ public class UI_Mutation : MonoBehaviour
 
     private void UpdateSystemUI()
     {
+        UpdateSystemText();
         var majorRad = mController.GetEquippedRadiationData(activeSystem, SlotType.Major);
         if (majorRad != null)
             majorSlotButton.GetComponent<Image>().sprite = majorRad.Icon;
@@ -124,6 +141,8 @@ public class UI_Mutation : MonoBehaviour
         else
             minorSlotButton.GetComponent<Image>().sprite = emptyMinorSlotSprite;
     }
+
+    private void UpdateSystemText() => systemName.text = activeSystem.ToString();
 
     private void UpdateRadiationUI()
     {
@@ -173,6 +192,27 @@ public class UI_Mutation : MonoBehaviour
         isRotating = false;
     }
 
+    public void OnRadiationEquipped()
+    {
+        foreach (Transform child in radiationPanelParent)
+        {
+            Button b = child.GetComponent<Button>();
+            if (b != null) b.interactable = false;
+        }
+        StartCoroutine(CloseAfterDelay(2f));
+    }
+
+    private IEnumerator CloseAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        mutationAnimator.SetTrigger("Close");
+
+        yield return new WaitForSeconds(GetAnimationLength(mutationAnimator, "Close"));
+        PlayerHelper.EnableInput();
+        Destroy(gameObject);
+    }
+
     private IEnumerator RotateTo(float targetAngle)
     {
         float startAngle = targetImage.rectTransform.eulerAngles.z;
@@ -188,6 +228,12 @@ public class UI_Mutation : MonoBehaviour
         targetImage.rectTransform.rotation = Quaternion.Euler(0, 0, targetAngle);
     }
 
+    private IEnumerator EnableUIAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        Time.timeScale = 1f;
+    }
+
     private float GetAnimationLength(Animator animator, string stateName)
     {
         RuntimeAnimatorController ac = animator.runtimeAnimatorController;
@@ -198,4 +244,6 @@ public class UI_Mutation : MonoBehaviour
         }
         return 0.5f;
     }
+
+    
 }
