@@ -71,6 +71,8 @@ public class GameManager : MonoBehaviour
     private void ReturnToHub()
     {
         GameModeSelector.SelectedMode = GameMode.Hub;
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
         SceneManagementUtils.LoadSceneByName("HUB");
     }
 
