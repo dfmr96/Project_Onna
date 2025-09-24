@@ -1592,6 +1592,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1737426287}
     m_Modifications:
     - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
+      propertyPath: playerHUD
+      value: 
+      objectReference: {fileID: 390790649}
+    - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
       propertyPath: orbSpawner
       value: 
       objectReference: {fileID: 1376500280}
@@ -5384,6 +5388,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+--- !u!1 &390790649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+  m_PrefabInstance: {fileID: 390790648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &392566120
 PrefabInstance:
   m_ObjectHideFlags: 0

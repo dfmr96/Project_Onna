@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] doors;
     private GameObject player;
     [SerializeField] private GameObject deathScreenTransitionPrefab;
-    [SerializeField] private GameObject deathParticlesPrefab; 
+    [SerializeField] private GameObject deathParticlesPrefab;
+    [SerializeField] private GameObject playerHUD;
 
     [Header("Enemies Spawners")]
     public OrbSpawner orbSpawner;
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
         PlayerModel.OnPlayerDie -= DefeatGame;
         PlayerHelper.DisableInput();
         Cursor.visible = true;
+        playerHUD.SetActive(false);
         Time.timeScale = 0f;
 
         // Instanciar partículas sobre el player (y mantenerlas en escena)
