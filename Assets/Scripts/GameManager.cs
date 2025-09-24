@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [Header("Doors")]
     [SerializeField] private GameObject[] doors;
     private GameObject player;
+    [SerializeField] private GameObject deathScreenTransitionPrefab;
 
     [Header("Enemies Spawners")]
     public OrbSpawner orbSpawner;
@@ -43,27 +44,32 @@ public class GameManager : MonoBehaviour
         OpenDoorDebug();
 
     }
+    
     private void DefeatGame()
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
         PlayerHelper.DisableInput();
         Time.timeScale = 0f;
 
-        // Instanciar UI de derrota
-        if (defeatUIPrefab != null && defeatUIInstance == null)
+        // Instanciar transición visual sobre el player
+        if (deathScreenTransitionPrefab != null && player != null)
         {
-            defeatUIInstance = Instantiate(defeatUIPrefab);
+            GameObject transition = Instantiate(
+                deathScreenTransitionPrefab,
+                player.transform.position,
+                Quaternion.identity
+            );
 
-            // Buscar el botón y asignar callback
-            UnityEngine.UI.Button button = defeatUIInstance.GetComponentInChildren<UnityEngine.UI.Button>();
-            if (button != null)
+            // Pasar referencia del prefab de derrota para que se instancie al final
+            var transitionScript = transition.GetComponent<DeathScreenTransition>();
+            if (transitionScript != null)
             {
-                button.onClick.AddListener(ReturnToHub);
+                transitionScript.SetDefeatUI(defeatUIPrefab);
             }
         }
         else
         {
-            Debug.LogError("DefeatUIPrefab no asignado en GameManager.");
+            Debug.LogError("No se encontró el prefab de transición o el player.");
         }
     }
 

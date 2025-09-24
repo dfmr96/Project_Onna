@@ -13,7 +13,6 @@ public class DefeatUIController : MonoBehaviour
         }
     }
 
-    // 👉 Este se llama con AnimationEvent al final de la animación
     public void OnIntroAnimationFinished()
     {
         if (arrangeLetters != null)
