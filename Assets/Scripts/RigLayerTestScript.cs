@@ -60,6 +60,9 @@ public class RigLayerTestScript : MonoBehaviour
 
     private void SetMeleeRigWeights()
     {
+        if (mouseAiming != null)
+            mouseAiming.StartMeleeMode();
+
         StartCoroutine(ForceRigWeights(1f, 0f, 0f, 1f, 0f, "Melee"));
     }
 
@@ -70,6 +73,9 @@ public class RigLayerTestScript : MonoBehaviour
 
     public void SetPistolAimState()
     {
+        if (mouseAiming != null)
+            mouseAiming.EndMeleeMode();
+
         Debug.Log("SetPistolAimState called - Starting coroutine to force rig weights...");
         StartCoroutine(ForceRigWeights(1f, 0f, 1f, 0f, 1f, "Pistol Aim"));
     }
@@ -95,6 +101,9 @@ public class RigLayerTestScript : MonoBehaviour
         if (weaponMeleeRig != null) Debug.Log($"Weapon Melee: {weaponMeleeRig.weight}");
         if (handsIKRig != null) Debug.Log($"Hands IK: {handsIKRig.weight}");
     }
+
+    [Header("Mouse Aiming")]
+    public MouseGroundAiming mouseAiming;
 
     [Header("Debug")]
     [Space]

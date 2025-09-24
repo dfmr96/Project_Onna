@@ -14,7 +14,11 @@ public class MouseGroundAiming : MonoBehaviour
     [Header("Debug")]
     public bool showDebugRay = true;
 
+    [Header("Melee Mode")]
+    public bool isInMeleeMode = false;
+
     private Plane groundPlane;
+    private Vector3 savedMeleeTarget;
 
     private void Start()
     {
@@ -39,6 +43,15 @@ public class MouseGroundAiming : MonoBehaviour
 
     private void HandleMouseAiming()
     {
+        if (isInMeleeMode)
+        {
+            if (aimTarget != null)
+            {
+                aimTarget.position = savedMeleeTarget;
+            }
+            return;
+        }
+
         Vector3 mousePosition = Input.mousePosition;
         Ray ray = playerCamera.ScreenPointToRay(mousePosition);
 
@@ -62,6 +75,22 @@ public class MouseGroundAiming : MonoBehaviour
                 Debug.DrawLine(ray.origin, hitPoint, Color.green);
             }
         }
+    }
+
+    public void StartMeleeMode()
+    {
+        if (aimTarget != null)
+        {
+            savedMeleeTarget = aimTarget.position;
+            isInMeleeMode = true;
+            Debug.Log($"Melee mode started - Target saved at: {savedMeleeTarget}");
+        }
+    }
+
+    public void EndMeleeMode()
+    {
+        isInMeleeMode = false;
+        Debug.Log("Melee mode ended - Returning to mouse aiming");
     }
 
     private void OnDrawGizmos()

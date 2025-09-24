@@ -984,6 +984,7 @@ MonoBehaviour:
   playerTransform: {fileID: 543450651797197638}
   planeOffset: 0
   showDebugRay: 1
+  isInMeleeMode: 0
 --- !u!4 &1269917049
 Transform:
   m_ObjectHideFlags: 0
@@ -1101,13 +1102,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1276326954052208887, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7bab0c5a9a8f20e4ab9237b877e657fa, type: 2}
     - target: {fileID: 3863611926642077226, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 3863611926642077226, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5232816373119301103, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2754,6 +2759,7 @@ MonoBehaviour:
   meleeKey: 102
   pistolIdleKey: 105
   pistolAimKey: 97
+  mouseAiming: {fileID: 1269917048}
   debugRigWeights: 0
 --- !u!4 &5901452233930080709
 Transform:
