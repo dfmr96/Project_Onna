@@ -11,9 +11,13 @@ public class UI_Mutation : MonoBehaviour
     [SerializeField] private Transform systemPanelParent;
     [SerializeField] private Transform radiationPanelParent;
     [SerializeField] private GameObject radiationButtonPrefab;
+    [SerializeField] private Button majorSlotButton;
+    [SerializeField] private Button minorSlotButton;
 
-    [Header("Images")]
+    [Header("Images && Sprites")]
     [SerializeField] private Image targetImage;
+    [SerializeField] private Sprite emptyMajorSlotSprite;
+    [SerializeField] private Sprite emptyMinorSlotSprite;
 
     [Header("Animators")]
     [SerializeField] private Animator mutationAnimator;
@@ -77,6 +81,29 @@ public class UI_Mutation : MonoBehaviour
         }
     }
 
+    public void OnRadiationSelected(NewRadiationData radData) => ShowSlotSelection(radData);
+
+    private void ShowSlotSelection(NewRadiationData radData)
+    {
+        majorSlotButton.onClick.RemoveAllListeners();
+        majorSlotButton.onClick.AddListener(() =>
+        {
+            TryEquip(radData, SlotType.Major);
+        });
+
+        minorSlotButton.onClick.RemoveAllListeners();
+        minorSlotButton.onClick.AddListener(() =>
+        {
+            TryEquip(radData, SlotType.Minor);
+        });
+    }
+
+    private void TryEquip(NewRadiationData radData, SlotType slot)
+    {
+        bool equipped = mController.EquipRadiation(radData.Type, activeSystem, slot);
+        if (equipped) UpdateSystemUI();
+    }
+
     private IEnumerator RotateAndSetSystem()
     {
         yield return RotateSequence();
@@ -85,21 +112,30 @@ public class UI_Mutation : MonoBehaviour
 
     private void UpdateSystemUI()
     {
-        NewMutationSystem systemData = mController.GetSystem(activeSystem);
-        Debug.Log($"Active system: {activeSystem}");
+        var majorRad = mController.GetEquippedRadiationData(activeSystem, SlotType.Major);
+        if (majorRad != null)
+            majorSlotButton.GetComponent<Image>().sprite = majorRad.Icon;
+        else
+            majorSlotButton.GetComponent<Image>().sprite = emptyMajorSlotSprite;
 
-        // Mostrar slots mayor y menor
+        var minorRad = mController.GetEquippedRadiationData(activeSystem, SlotType.Minor);
+        if (minorRad != null)
+            minorSlotButton.GetComponent<Image>().sprite = minorRad.Icon;
+        else
+            minorSlotButton.GetComponent<Image>().sprite = emptyMinorSlotSprite;
     }
 
     private void UpdateRadiationUI()
     {
+        foreach (Transform child in radiationPanelParent)
+            Destroy(child.gameObject);
 
         foreach (var radData in currentRolledRadiations)
         {
             GameObject btnObj = Instantiate(radiationButtonPrefab, radiationPanelParent);
             NewRadiationButton radButton = btnObj.GetComponent<NewRadiationButton>();
 
-            radButton.SetupButton(radData, SlotType.Major, mController, this);
+            radButton.SetupButton(radData, mController, this);
         }
     }
 

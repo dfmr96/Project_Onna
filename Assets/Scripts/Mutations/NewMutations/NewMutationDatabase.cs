@@ -59,4 +59,9 @@ public class NewMutationDatabase : ScriptableObject
                 return null;
         }
     }
+    public NewRadiationData GetRadiationData(MutationType type)
+    {
+        if (allRadiations == null) return null;
+        return allRadiations.Find(r => r.Type == type);
+    }
 }

@@ -17,12 +17,12 @@ public class NewRadiationButton : MonoBehaviour
     /// <summary>
     /// Initialice button
     /// </summary>
-    public void SetupButton(NewRadiationData data, SlotType slot, NewMutationController mutationController, UI_Mutation uiMutation)
+    public void SetupButton(NewRadiationData data, NewMutationController mutationController, UI_Mutation uiMutation)
     {
         currentData = data;
-        currentSlot = slot;
         controller = mutationController;
         ui = uiMutation;
+        Debug.Log("Button setted");
 
         if (iconImage != null && currentData != null)
             iconImage.sprite = currentData.Icon;
@@ -36,19 +36,18 @@ public class NewRadiationButton : MonoBehaviour
     /// </summary>
     private void OnButtonClicked()
     {
-        if (controller == null || currentData == null) 
+        if (ui == null || currentData == null)
         {
-            Debug.LogError("Something is our of reference");
+            Debug.LogError("Something is out of reference");
             return;
         }
 
-        bool success = controller.EquipRadiation(currentData.Type, ui.ActiveSystem, currentSlot);
-
-        if (success) button.interactable = false;
+        Debug.Log("Button clicked");
+        ui.OnRadiationSelected(currentData);
     }
 
     /// <summary>
     /// Update radiation
     /// </summary>
-    public void UpdateRadiation(NewRadiationData data, SystemType system, SlotType slot, UI_Mutation uiMutation) => SetupButton(data, slot, controller, uiMutation);
+    public void UpdateRadiation(NewRadiationData data, SystemType system, SlotType slot, UI_Mutation uiMutation) => SetupButton(data, controller, uiMutation);
 }
