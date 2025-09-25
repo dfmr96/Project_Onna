@@ -21,7 +21,6 @@ namespace Player
         private Vector3 _dashDirection;
         private const float DashDurationSeconds = 0.025f;
         private float _dashSpeed;
-        [SerializeField] private ParticleSystem particleDash;
 
         private Rigidbody _rb;
 
@@ -38,6 +37,7 @@ namespace Player
         private Vector3 _rawInputDirection = Vector3.zero;
         private Vector2 _rawAimInput = Vector2.zero;
         private Vector3 _mouseWorldPos;
+        private Vector3 _dashStartPos;
 
         private bool _isReady = false;
 
@@ -87,14 +87,6 @@ namespace Player
             _playerInputHandler.ReloadPerformed += HandleReload;
         }
 
-        private void Start()
-        {
-            if (particleDash != null)
-            {
-                particleDash.Stop();
-            }
-        }
-
         void Update()
         {
             if (!_isReady)
@@ -119,19 +111,20 @@ namespace Player
                 if (Time.time > _dashEndTime)
                 {
                     _isDashing = false;
+
+                    // Al terminar el dash
+                    Vector3 dashEndPos = transform.position;
+                    _playerView.effectsView.PlayDashEnd(dashEndPos);
                 }
                 else
                 {
-                    particleDash.Play();
                     Move(_dashDirection, _dashSpeed);
                     return;
                 }
             }
-            else particleDash.Stop();
 
             Move(_inputDirection, _playerModel.Speed);
         }
-
 
         //OLD MOVE2.0 METHOD WITH COLLISION DETECTION
         private void Move(Vector3 direction, float speed)
@@ -239,8 +232,11 @@ namespace Player
             _dashEndTime = Time.time + DashDurationSeconds;
             _dashDirection = _inputDirection.normalized;
             _lastDashTime = Time.time;
-
             _dashSpeed = _playerModel.DashDistance / DashDurationSeconds;
+
+            // Guardamos inicio y lanzamos efectos
+            _dashStartPos = transform.position;
+            _playerView.effectsView.PlayDashStart(_dashStartPos, transform);
         }
 
         // MVC Methods - Lógica de negocio pura

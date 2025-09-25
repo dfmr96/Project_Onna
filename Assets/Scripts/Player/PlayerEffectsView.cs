@@ -5,14 +5,20 @@ namespace Player
 {
     public class PlayerEffectsView : MonoBehaviour
     {
-        [Header("Visual Effects")] 
-        [SerializeField] private Color flashColor = Color.white;
+        [Header("Material Flash")]
+        [SerializeField] private Material damageMaterial;  
         [SerializeField] private float flashDuration = 0.1f;
 
-        // Efecto Visual de Daño - cached components
         private Renderer[] _renderers;
-        private Color[][] _originalColors;
-        private readonly string[] _colorPropertyNames = { "_BaseColor", "_Color", "_MainColor" };
+        private Material[][] _originalMaterials;
+        private Coroutine flashCoroutine;
+
+        [Header("Dash Effects")]
+        [SerializeField] private ParticleSystem dashStartParticlesPrefab;
+        [SerializeField] private GameObject dashTrailPrefab;
+
+        private GameObject activeTrail;
+
 
         public void Initialize()
         {
@@ -22,80 +28,96 @@ namespace Player
         private void CacheRenderers()
         {
             _renderers = GetComponentsInChildren<Renderer>();
-            _originalColors = new Color[_renderers.Length][];
+            _originalMaterials = new Material[_renderers.Length][];
 
             for (int i = 0; i < _renderers.Length; i++)
             {
                 var mats = _renderers[i].materials;
-                _originalColors[i] = new Color[mats.Length];
-
+                _originalMaterials[i] = new Material[mats.Length];
                 for (int j = 0; j < mats.Length; j++)
                 {
-                    var mat = mats[j];
-                    string property = GetColorProperty(mat);
-
-                    if (!string.IsNullOrEmpty(property))
-                        _originalColors[i][j] = mat.GetColor(property);
+                    _originalMaterials[i][j] = mats[j];
                 }
             }
         }
 
         public void PlayDamageFlash()
         {
-            StartCoroutine(FlashCoroutine());
+            if (flashCoroutine != null)
+            {
+                StopCoroutine(flashCoroutine);
+                RestoreOriginalMaterials();
+            }
+            flashCoroutine = StartCoroutine(FlashCoroutine());
+        }
+
+        public void PlayDashStart(Vector3 position, Transform parent)
+        {
+            if (dashStartParticlesPrefab != null)
+            {
+                ParticleSystem ps = Instantiate(dashStartParticlesPrefab, position, Quaternion.identity);
+                ps.Play();
+                Destroy(ps.gameObject, 2f);
+            }
+
+            // instanciamos el trail y lo parentamos al player
+            if (dashTrailPrefab != null)
+            {
+                activeTrail = Instantiate(dashTrailPrefab, position, Quaternion.identity, parent);
+            }
+        }
+
+        public void PlayDashEnd(Vector3 position)
+        {
+            if (activeTrail != null)
+            {
+                activeTrail.transform.parent = null;
+                Destroy(activeTrail, 1f); // tiempo suficiente para que se desvanezca
+                activeTrail = null;
+            }
+        }
+
+        public void PlayDashTrail(Vector3 startPos, Vector3 endPos)
+        {
+            if (dashTrailPrefab == null) return;
+
+            GameObject trail = Instantiate(dashTrailPrefab);
+            LineRenderer lr = trail.GetComponent<LineRenderer>();
+            if (lr != null)
+            {
+                lr.positionCount = 2;
+                lr.SetPosition(0, startPos);
+                lr.SetPosition(1, endPos);
+            }
+
+            Destroy(trail, 1.5f); // lo limpiamos después
         }
 
         private IEnumerator FlashCoroutine()
         {
-            // Cambia el color
-            foreach (var renderer in _renderers)
+            // Aplicar el mismo material de daño a todos los slots
+            for (int i = 0; i < _renderers.Length; i++)
             {
-                foreach (var mat in renderer.materials)
+                var mats = _renderers[i].materials;
+                for (int j = 0; j < mats.Length; j++)
                 {
-                    string property = GetColorProperty(mat);
-
-                    if (!string.IsNullOrEmpty(property))
-                        mat.SetColor(property, flashColor);
+                    mats[j] = damageMaterial;
                 }
+                _renderers[i].materials = mats;
             }
 
             yield return new WaitForSeconds(flashDuration);
 
-            // Restaura colores
+            RestoreOriginalMaterials();
+            flashCoroutine = null;
+        }
+
+        private void RestoreOriginalMaterials()
+        {
             for (int i = 0; i < _renderers.Length; i++)
             {
-                var mats = _renderers[i].materials;
-
-                for (int j = 0; j < mats.Length; j++)
-                {
-                    var mat = mats[j];
-                    string property = GetColorProperty(mat);
-
-                    if (!string.IsNullOrEmpty(property))
-                        mat.SetColor(property, _originalColors[i][j]);
-                }
+                _renderers[i].materials = _originalMaterials[i];
             }
-        }
-
-        private string GetColorProperty(Material mat)
-        {
-            foreach (var prop in _colorPropertyNames)
-            {
-                if (mat.HasProperty(prop))
-                    return prop;
-            }
-
-            return null;
-        }
-
-        public void SetFlashColor(Color color)
-        {
-            flashColor = color;
-        }
-
-        public void SetFlashDuration(float duration)
-        {
-            flashDuration = duration;
         }
     }
 }
