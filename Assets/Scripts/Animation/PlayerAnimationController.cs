@@ -101,7 +101,8 @@ public class PlayerAnimationController : MonoBehaviour
     }
 
     // Public getters for debugging or other scripts
-    public Vector2 GetCameraRelativeInput() => inputVisualizer?.cameraRelativeInput ?? Vector2.zero;
+    public Vector2 GetCameraRelativeInput() => inputVisualizer?.GetCurrentInput() ?? Vector2.zero;
+    public Vector3 GetCameraRelativeInput3D() => inputVisualizer?.cameraRelativeInput ?? Vector3.zero;
     public Vector2 GetMouseRelativeMovement() => mouseRelativeMovement;
     public Vector3 GetMouseDirection()
     {

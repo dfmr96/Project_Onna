@@ -29,6 +29,9 @@ public class InputVisualizerGizmos : MonoBehaviour
     private Vector2 currentInput;
     public Vector3 cameraRelativeInput { get; private set; }
 
+    // Public getters for other scripts
+    public Vector2 GetCurrentInput() => currentInput;
+
     void Update()
     {
         // Auto-assign camera if not set
