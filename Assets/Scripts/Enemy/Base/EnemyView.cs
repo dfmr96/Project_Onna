@@ -39,6 +39,7 @@ public class EnemyView : MonoBehaviour
     [SerializeField] private Material[] deathMaterials;
     private Material[] originalMaterials;// material temporal de daño
     [SerializeField] private int[] materialIndexesToFlash = { 0 };
+    [SerializeField] private ParticleSystem damageParticlesPrefab;
 
 
     private float deadAngle = 40f;
@@ -287,6 +288,23 @@ public class EnemyView : MonoBehaviour
     {
         animator.SetTrigger("IsDamaged");
         audioSource?.PlayOneShot(damagedAudioClip);
+
+        // Instanciar partículas de daño si existen
+        if (damageParticlesPrefab != null)
+        {
+            // Crear como hijo del enemy
+            ParticleSystem damageParticlesInstance = Instantiate(
+                damageParticlesPrefab,
+                transform.position + Vector3.up * 1f, 
+                Quaternion.identity,
+                transform 
+            );
+
+            damageParticlesInstance.Play();
+
+            // Destruir después de que termine
+            Destroy(damageParticlesInstance.gameObject, 2f);
+        }
     }
 
     //public void PlayDamageAnimation()

@@ -6,10 +6,10 @@ public class DefeatUIController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private ArrangeLetters arrangeLetters; // referencia al otro script
     [Header("Shake Effect")]
-    [SerializeField] private float shakeDuration = 2f;
-    [SerializeField] private float shakeMagnitude = 5f; // intensidad del temblor en píxeles
+    [SerializeField] private float shakeDuration = 10f;
+    [SerializeField] private float shakeMagnitude = 2f; // intensidad del temblor en píxeles
 
-    private RectTransform rectTransform;
+    public RectTransform rectTransform;
 
     private void Awake()
     {
@@ -17,8 +17,6 @@ public class DefeatUIController : MonoBehaviour
         {
             animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         }
-
-        rectTransform = GetComponent<RectTransform>();
     }
 
     private void OnEnable()
