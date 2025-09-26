@@ -26,6 +26,11 @@ public class InputVisualizerGizmos : MonoBehaviour
     [SerializeField] private Transform moveTarget;
     [SerializeField] private bool updateMoveTarget = true;
 
+    [Header("NavMesh Integration")]
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private bool showNavMeshTarget = true;
+    [SerializeField] private Color navMeshTargetColor = Color.red;
+
     private Vector2 currentInput;
     public Vector3 cameraRelativeInput { get; private set; }
 
@@ -45,6 +50,10 @@ public class InputVisualizerGizmos : MonoBehaviour
             if (mouseAiming != null)
                 aimTarget = mouseAiming.aimTarget;
         }
+
+        // Auto-assign player movement if not set
+        if (playerMovement == null)
+            playerMovement = GetComponent<PlayerMovement>();
 
         // Get input from keyboard
         currentInput = Vector2.zero;
@@ -178,6 +187,9 @@ public class InputVisualizerGizmos : MonoBehaviour
 
         // Draw move target indicator
         DrawMoveTargetGizmo(playerPosition, gizmosOffset);
+
+        // Draw NavMesh target if using NavMesh
+        //DrawNavMeshTargetGizmo(playerPosition, gizmosOffset);
     }
 
     private void DrawAngleBetweenInputAndAim(Vector3 playerPosition, Vector3 gizmosOffset)
@@ -280,6 +292,63 @@ public class InputVisualizerGizmos : MonoBehaviour
         #if UNITY_EDITOR
         UnityEditor.Handles.Label(position + Vector3.up * 0.3f, keyLabel);
         #endif
+    }
+
+    private void DrawNavMeshTargetGizmo(Vector3 playerPosition, Vector3 gizmosOffset)
+    {
+        if (!showNavMeshTarget || playerMovement == null || !playerMovement.IsUsingNavMesh()) return;
+
+        Vector3 navMeshTarget = playerMovement.GetTargetPosition();
+
+        // Get feet position for NavMesh gizmos
+        Vector3 feetPosition = GetFeetPosition();
+
+        // Adjust NavMesh target to feet level
+        Vector3 navMeshTargetAtFeet = new Vector3(navMeshTarget.x, feetPosition.y, navMeshTarget.z);
+
+        // Draw connection line from player feet to NavMesh target at feet level
+        Gizmos.color = navMeshTargetColor;
+        Gizmos.DrawLine(feetPosition, navMeshTargetAtFeet);
+
+        // Draw NavMesh target indicator at feet level
+        Gizmos.color = navMeshTargetColor;
+        Gizmos.DrawWireCube(navMeshTargetAtFeet, Vector3.one * 0.4f);
+
+        // Draw filled cube if there's active input
+        if (currentInput.magnitude > 0.1f)
+        {
+            Gizmos.color = Color.Lerp(navMeshTargetColor, Color.white, 0.5f);
+            Gizmos.DrawCube(navMeshTargetAtFeet, Vector3.one * 0.2f);
+        }
+
+        // Draw label
+        #if UNITY_EDITOR
+        UnityEditor.Handles.Label(navMeshTargetAtFeet + Vector3.up * 0.7f, "NavMesh Target");
+        #endif
+    }
+
+    private Vector3 GetFeetPosition()
+    {
+        // Use PlayerMovement's GetFeetPosition if available
+        if (playerMovement != null)
+        {
+            // Access the feet position calculation from PlayerMovement
+            Collider col = GetComponent<Collider>();
+            if (col != null)
+            {
+                return new Vector3(transform.position.x, col.bounds.min.y, transform.position.z);
+            }
+
+            Renderer renderer = GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                return new Vector3(transform.position.x, renderer.bounds.min.y, transform.position.z);
+            }
+
+            return transform.position + Vector3.down * 1f;
+        }
+
+        return transform.position;
     }
 
     private void DrawWireCircle(Vector3 center, float radius, Vector3 normal)
