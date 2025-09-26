@@ -66,11 +66,11 @@ public class EnemyProjectile : MonoBehaviour
         }
     }
 
-    private void PlayImpactParticles()
+    private void PlayImpactParticles(Vector3 position, Vector3 normal)
     {
         if (impactEffectParticlesPrefab != null)
         {
-            var impact = Instantiate(impactEffectParticlesPrefab, transform.position, Quaternion.identity);
+            var impact = Instantiate(impactEffectParticlesPrefab, position, Quaternion.LookRotation(normal));
             impact.Play();
             Destroy(impact.gameObject, impact.main.duration);
         }
@@ -78,51 +78,34 @@ public class EnemyProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
         if (hasHit) return;
 
-
-        //if (((1 << collision.gameObject.layer) & obstacleLayers) != 0)
-        //{
-        //    PlayImpactParticles();
-        //    onRelease?.Invoke();
-
-        //}
-
-        // Ignoramos colisiones con capas de ignoreLayers
+        // ignorar capas
         if (((1 << collision.gameObject.layer) & ignoreLayers) != 0) return;
 
+        hasHit = true;
 
-        if ((collision.transform.root == playerTransform) && (collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable)))
+        // punto de contacto principal
+        ContactPoint contact = collision.contacts[0];
+
+        if ((collision.transform.root == playerTransform) && 
+            collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
         {
-            hasHit = true;
-
             damageable.TakeDamage(damage);
 
-            //Debuff veneno
+            // aplicar veneno si corresponde
             if (ownerModel != null && ownerModel.variantSO.variantType == EnemyVariantType.Green)
             {
                 damageable.ApplyDebuffDoT(ownerModel.variantSO.dotDuration, ownerModel.variantSO.dotDamage);
             }
-
-            PlayImpactParticles();
-
-
-            onRelease?.Invoke();
-
-
-        }
-        else
-        {
-            hasHit = true;
-
-            PlayImpactParticles();
-
-            onRelease?.Invoke();
-
         }
 
+        // siempre instanciamos partículas en el punto de impacto
+        PlayImpactParticles(contact.point, contact.normal);
+
+        onRelease?.Invoke();
     }
+
  
 }
 
