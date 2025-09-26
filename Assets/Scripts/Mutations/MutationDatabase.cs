@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mutations
 {
-    [CreateAssetMenu(fileName = "New Mutation Database", menuName = "Mutations/Database", order = 0)]
+    //[CreateAssetMenu(fileName = "New Mutation Database", menuName = "Mutations/Database", order = 0)]
     public class MutationDatabase : ScriptableObject
     {
         [SerializeField] private List<MutationData> allMutations;

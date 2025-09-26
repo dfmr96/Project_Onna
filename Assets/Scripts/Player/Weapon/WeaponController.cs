@@ -235,7 +235,6 @@ namespace Player.Weapon
                 nextShotDoubleDamage = true;
                 currentAmmo = (int)ammoSettings.MaxAmmo;
                 OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
-                Debug.Log("✅ Recarga rápida exitosa!");
             }
             else
             {
@@ -247,7 +246,6 @@ namespace Player.Weapon
                     currentAmmo++;
                     OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
                 }
-                Debug.Log("❌ Fallaste -> Recarga lenta");
             }
         }
 

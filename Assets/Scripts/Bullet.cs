@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour
     private float _damage;
     private float _maxDistance;
 
+    [SerializeField] private GameObject hitParticlePrefab;
+
     [SerializeField] private LayerMask ignoreLayers;
 
     private void Start()
@@ -28,19 +30,18 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.TryGetComponent<IDamageable>(out var damageable))
-        //    damageable.TakeDamage(_damage);
-        //Destroy(gameObject);
-
-        // si la capa está en las capas a ignorar => no hacer nada
         if ((ignoreLayers.value & (1 << other.gameObject.layer)) != 0)
             return;
 
-        // aplicar daño si corresponde
+        // instanciar partículas siempre al colisionar
+        if (hitParticlePrefab != null)
+        {
+            Instantiate(hitParticlePrefab, transform.position, Quaternion.identity);
+        }
+
         if (other.TryGetComponent<IDamageable>(out var damageable))
             damageable.TakeDamage(_damage);
 
-        // destruir siempre (menos en las capas ignoradas)
         Destroy(gameObject);
     }
 
