@@ -37,6 +37,11 @@ namespace Player
         [SerializeField] private float heightTextSpawn = 1.5f;
         [SerializeField] private GameObject floatingTextPrefab;
 
+        [Header("Healing Effect")]
+        [SerializeField] private GameObject healEffectPrefab;
+        [SerializeField] private Transform healAnchor;
+        [SerializeField] private Vector3 healOffset;
+
 
         public StatReferences StatRefs => statRefs;
         public float Speed => StatContext.Source.Get(statRefs.movementSpeed);
@@ -65,6 +70,8 @@ namespace Player
         private float _currentTime;
         private PlayerStatContext _statContext;
         private PlayerView _playerView;
+
+        
 
         private void Start()
         {
@@ -217,7 +224,6 @@ namespace Player
                 Die();
         }
 
-
         public void RecoverTime(float timeRecovered)
         {
             _currentTime = Mathf.Min(_currentTime + timeRecovered, StatContext.Source.Get(statRefs.maxVitalTime));
@@ -225,8 +231,23 @@ namespace Player
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             _playerView?.PlayHealthEffect();
-        }
 
+            // Instanciar partículas de curación
+            if (healEffectPrefab != null)
+            {
+                Vector3 spawnPos = healAnchor != null 
+                    ? healAnchor.position + healOffset 
+                    : transform.position;
+
+                GameObject effect = Instantiate(healEffectPrefab, spawnPos, Quaternion.identity, healAnchor != null ? healAnchor : transform);
+                var ps = effect.GetComponent<ParticleSystem>();
+                if (ps != null)
+                    Destroy(effect, ps.main.duration);
+                else
+                    Destroy(effect, 2f); // fallback
+            }
+        }
+        
         private void ClampEnergy()
         {
             if (StatContext.Runtime != null)

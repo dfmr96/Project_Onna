@@ -55,17 +55,25 @@ public class GameManager : MonoBehaviour
         playerHUD.SetActive(false);
         Time.timeScale = 0f;
 
-        // Instanciar partículas sobre el player (y mantenerlas en escena)
+        StartCoroutine(HandleDefeatSequence());
+    }
+
+    private IEnumerator HandleDefeatSequence()
+    {
+        // Partículas primero
         if (deathParticlesPrefab != null && player != null)
         {
             Instantiate(
                 deathParticlesPrefab,
-                player.transform.position,
+                player.transform.position - new Vector3(0,1.5f,0),
                 Quaternion.identity
             );
         }
 
-        // Instanciar transición visual sobre el player
+        // Esperar 0.5 segundos
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // Luego transición
         if (deathScreenTransitionPrefab != null && player != null)
         {
             GameObject transition = Instantiate(
@@ -85,6 +93,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError("No se encontró el prefab de transición o el player.");
         }
     }
+
 
     
     public void ReturnToHub()

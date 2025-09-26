@@ -1378,6 +1378,9 @@ MonoBehaviour:
   poisonOffset: {x: 0, y: -1, z: 0}
   heightTextSpawn: 1.5
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
+  healEffectPrefab: {fileID: 339158821923109191, guid: 108ca465382c11742bd2c91fe4fdb13f, type: 3}
+  healAnchor: {fileID: 5232816373119301103}
+  healOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &4339932572223991893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1612,7 +1615,6 @@ MonoBehaviour:
   damageMaterial: {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
   flashDuration: 0.2
   dashStartParticlesPrefab: {fileID: 265630465996528251, guid: 4efa21a884f4b0b49a155daaeed2bd84, type: 3}
-  dashEndParticlesPrefab: {fileID: 265630465996528251, guid: 4efa21a884f4b0b49a155daaeed2bd84, type: 3}
   dashTrailPrefab: {fileID: 9021060462591098066, guid: 58c1eca89071bec41badf09a03942896, type: 3}
 --- !u!1 &3904564356098327126
 GameObject:
