@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool useNavMeshValidation = true;
     [SerializeField] private float navMeshSampleDistance = 1f;
     [SerializeField] private float maxNavMeshDistance = 2f;
+    [SerializeField] private float playerHeightOffset = 1f;
 
     [Header("Debug Visualization")]
     [SerializeField] private float gizmoLookAheadTime = 0.5f;
@@ -36,13 +37,19 @@ public class PlayerMovement : MonoBehaviour
         if (useNavMeshValidation)
         {
             NavMeshHit hit;
-            if (!NavMesh.SamplePosition(transform.position, out hit, navMeshSampleDistance, NavMesh.AllAreas))
+            Vector3 checkPosition = new Vector3(transform.position.x, transform.position.y - playerHeightOffset, transform.position.z);
+
+            if (NavMesh.SamplePosition(checkPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
             {
-                Debug.LogWarning("PlayerMovement: Starting position is not on NavMesh! Make sure there's a baked NavMesh in the scene or disable NavMesh validation.");
+                // Position player at correct height above NavMesh
+                Vector3 correctedPosition = new Vector3(hit.position.x, hit.position.y + playerHeightOffset, hit.position.z);
+                transform.position = correctedPosition;
+                lastValidPosition = correctedPosition;
             }
             else
             {
-                lastValidPosition = hit.position;
+                Debug.LogWarning("PlayerMovement: Starting position is not on NavMesh! Make sure there's a baked NavMesh in the scene or disable NavMesh validation.");
+                lastValidPosition = transform.position;
             }
         }
     }
@@ -114,14 +121,21 @@ public class PlayerMovement : MonoBehaviour
     {
         NavMeshHit hit;
 
+        // Create a position on the NavMesh plane (without the height offset)
+        Vector3 navMeshCheckPosition = new Vector3(desiredPosition.x, desiredPosition.y - playerHeightOffset, desiredPosition.z);
+
         // Simple validation: check if desired position is on NavMesh
-        if (NavMesh.SamplePosition(desiredPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(navMeshCheckPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
         {
-            // Check if it's not too far from where we want to go
-            float distance = Vector3.Distance(desiredPosition, hit.position);
+            // Check if it's not too far from where we want to go (in XZ plane)
+            Vector3 desiredXZ = new Vector3(desiredPosition.x, 0, desiredPosition.z);
+            Vector3 hitXZ = new Vector3(hit.position.x, 0, hit.position.z);
+            float distance = Vector3.Distance(desiredXZ, hitXZ);
+
             if (distance <= 0.5f) // Conservative threshold
             {
-                return hit.position;
+                // Return the hit position with the player height offset applied
+                return new Vector3(hit.position.x, hit.position.y + playerHeightOffset, hit.position.z);
             }
         }
 
@@ -135,6 +149,23 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 GetLastInputDirection() => lastInputDirection;
     public Vector3 GetLastValidPosition() => lastValidPosition;
     public bool IsUsingNavMeshValidation() => useNavMeshValidation;
+    public float GetPlayerHeightOffset() => playerHeightOffset;
+
+    // Public method to adjust player to NavMesh surface height
+    public void SnapToNavMeshSurface()
+    {
+        if (!useNavMeshValidation) return;
+
+        NavMeshHit hit;
+        Vector3 checkPosition = new Vector3(transform.position.x, transform.position.y - playerHeightOffset, transform.position.z);
+
+        if (NavMesh.SamplePosition(checkPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
+        {
+            Vector3 correctedPosition = new Vector3(hit.position.x, hit.position.y + playerHeightOffset, hit.position.z);
+            transform.position = correctedPosition;
+            lastValidPosition = correctedPosition;
+        }
+    }
 
     private void OnDrawGizmosSelected()
     {
