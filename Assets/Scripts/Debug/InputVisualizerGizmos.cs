@@ -189,7 +189,8 @@ public class InputVisualizerGizmos : MonoBehaviour
         DrawMoveTargetGizmo(playerPosition, gizmosOffset);
 
         // Draw NavMesh target if using NavMesh
-        //DrawNavMeshTargetGizmo(playerPosition, gizmosOffset);
+        // NOTE: Disabled to avoid duplicate with PlayerMovement gizmos
+        // DrawNavMeshTargetGizmo(playerPosition, gizmosOffset);
     }
 
     private void DrawAngleBetweenInputAndAim(Vector3 playerPosition, Vector3 gizmosOffset)
@@ -296,34 +297,34 @@ public class InputVisualizerGizmos : MonoBehaviour
 
     private void DrawNavMeshTargetGizmo(Vector3 playerPosition, Vector3 gizmosOffset)
     {
-        if (!showNavMeshTarget || playerMovement == null || !playerMovement.IsUsingNavMesh()) return;
+        if (!showNavMeshTarget || playerMovement == null || !playerMovement.IsUsingNavMeshValidation()) return;
 
-        Vector3 navMeshTarget = playerMovement.GetTargetPosition();
+        Vector3 lastValidPosition = playerMovement.GetLastValidPosition();
 
         // Get feet position for NavMesh gizmos
         Vector3 feetPosition = GetFeetPosition();
 
-        // Adjust NavMesh target to feet level
-        Vector3 navMeshTargetAtFeet = new Vector3(navMeshTarget.x, feetPosition.y, navMeshTarget.z);
+        // Adjust last valid position to feet level
+        Vector3 validPositionAtFeet = new Vector3(lastValidPosition.x, feetPosition.y, lastValidPosition.z);
 
-        // Draw connection line from player feet to NavMesh target at feet level
+        // Draw connection line from player feet to last valid position
         Gizmos.color = navMeshTargetColor;
-        Gizmos.DrawLine(feetPosition, navMeshTargetAtFeet);
+        Gizmos.DrawLine(feetPosition, validPositionAtFeet);
 
-        // Draw NavMesh target indicator at feet level
+        // Draw last valid position indicator at feet level
         Gizmos.color = navMeshTargetColor;
-        Gizmos.DrawWireCube(navMeshTargetAtFeet, Vector3.one * 0.4f);
+        Gizmos.DrawWireCube(validPositionAtFeet, Vector3.one * 0.4f);
 
         // Draw filled cube if there's active input
         if (currentInput.magnitude > 0.1f)
         {
             Gizmos.color = Color.Lerp(navMeshTargetColor, Color.white, 0.5f);
-            Gizmos.DrawCube(navMeshTargetAtFeet, Vector3.one * 0.2f);
+            Gizmos.DrawCube(validPositionAtFeet, Vector3.one * 0.2f);
         }
 
         // Draw label
         #if UNITY_EDITOR
-        UnityEditor.Handles.Label(navMeshTargetAtFeet + Vector3.up * 0.7f, "NavMesh Target");
+        UnityEditor.Handles.Label(validPositionAtFeet + Vector3.up * 0.7f, "Last Valid Position");
         #endif
     }
 

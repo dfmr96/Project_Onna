@@ -7,62 +7,50 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private float deceleration = 15f;
-    [SerializeField] private float stoppingDistance = 0.1f;
 
-    [Header("NavMesh Settings")]
-    [SerializeField] private bool useNavMesh = true;
+    [Header("NavMesh Validation Settings")]
+    [SerializeField] private bool useNavMeshValidation = true;
     [SerializeField] private float navMeshSampleDistance = 1f;
-    [SerializeField] private float lookAheadDistance = 2f;
+    [SerializeField] private float maxNavMeshDistance = 2f;
+
+    [Header("Debug Visualization")]
+    [SerializeField] private float gizmoLookAheadTime = 0.5f;
 
     [Header("References")]
     [SerializeField] private InputVisualizerGizmos inputVisualizer;
-    [SerializeField] private NavMeshAgent navMeshAgent;
 
     private Vector3 currentMoveInput;
     private Vector3 smoothedMovement;
     private Vector3 lastInputDirection;
-    private Vector3 targetPosition;
+    private Vector3 lastValidPosition;
 
     private void Start()
     {
         if (inputVisualizer == null)
             inputVisualizer = FindObjectOfType<InputVisualizerGizmos>();
 
-        // Initialize NavMeshAgent
-        if (navMeshAgent == null)
-            navMeshAgent = GetComponent<NavMeshAgent>();
+        // Initialize last valid position
+        lastValidPosition = transform.position;
 
-        if (navMeshAgent != null && useNavMesh)
+        // Validate initial position if using NavMesh validation
+        if (useNavMeshValidation)
         {
-            navMeshAgent.speed = moveSpeed;
-            navMeshAgent.acceleration = acceleration;
-            navMeshAgent.stoppingDistance = stoppingDistance;
-            navMeshAgent.updateRotation = false; // We'll handle rotation separately if needed
-
-            // Ensure the agent is enabled and on the NavMesh
-            navMeshAgent.enabled = true;
-
-            if (!navMeshAgent.isOnNavMesh)
+            NavMeshHit hit;
+            if (!NavMesh.SamplePosition(transform.position, out hit, navMeshSampleDistance, NavMesh.AllAreas))
             {
-                Debug.LogWarning("PlayerMovement: NavMeshAgent is not on NavMesh! Make sure there's a baked NavMesh in the scene.");
+                Debug.LogWarning("PlayerMovement: Starting position is not on NavMesh! Make sure there's a baked NavMesh in the scene or disable NavMesh validation.");
+            }
+            else
+            {
+                lastValidPosition = hit.position;
             }
         }
-
-        targetPosition = transform.position;
     }
 
     private void Update()
     {
         HandleMovement();
-
-        if (useNavMesh && navMeshAgent != null)
-        {
-            MoveCharacterNavMesh();
-        }
-        else
-        {
-            MoveCharacter();
-        }
+        MoveCharacter();
     }
 
 
@@ -81,107 +69,72 @@ public class PlayerMovement : MonoBehaviour
             // Use current input and save it as last direction
             moveDirection = cameraRelativeInput;
             lastInputDirection = cameraRelativeInput.normalized;
-
-            // For NavMesh, calculate target position based on input direction
-            if (useNavMesh && navMeshAgent != null)
-            {
-                // Calculate target position further ahead for better NavMesh movement
-                Vector3 desiredPosition = transform.position + moveDirection.normalized * lookAheadDistance;
-
-                // Sample the NavMesh to find a valid position
-                NavMeshHit hit;
-                if (NavMesh.SamplePosition(desiredPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
-                {
-                    targetPosition = hit.position;
-                }
-                else
-                {
-                    // Fallback: try closer position if far position fails
-                    desiredPosition = transform.position + moveDirection.normalized * 0.5f;
-                    if (NavMesh.SamplePosition(desiredPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
-                    {
-                        targetPosition = hit.position;
-                    }
-                }
-            }
         }
         else
         {
             // No input, don't move but keep the last direction for reference
             moveDirection = Vector3.zero;
-
-            if (useNavMesh && navMeshAgent != null)
-            {
-                targetPosition = transform.position; // Stop at current position
-            }
         }
 
-        // For non-NavMesh movement, keep the original smooth movement calculation
-        if (!useNavMesh || navMeshAgent == null)
-        {
-            // Apply movement speed
-            Vector3 targetVelocity = moveDirection * moveSpeed;
+        // Apply movement speed
+        Vector3 targetVelocity = moveDirection * moveSpeed;
 
-            // Smooth the movement for better feel
-            float smoothTime = targetVelocity.magnitude > 0.1f ? 1f / acceleration : 1f / deceleration;
-            smoothedMovement = Vector3.Lerp(smoothedMovement, targetVelocity, Time.deltaTime / smoothTime);
+        // Smooth the movement for better feel
+        float smoothTime = targetVelocity.magnitude > 0.1f ? 1f / acceleration : 1f / deceleration;
+        smoothedMovement = Vector3.Lerp(smoothedMovement, targetVelocity, Time.deltaTime / smoothTime);
 
-            currentMoveInput = smoothedMovement;
-        }
-        else
-        {
-            // For NavMesh, update currentMoveInput based on actual movement
-            currentMoveInput = moveDirection * moveSpeed;
-        }
+        currentMoveInput = smoothedMovement;
     }
 
 
     private void MoveCharacter()
     {
-        // Move only on horizontal plane using Transform
-        transform.position += currentMoveInput * Time.deltaTime;
+        if (currentMoveInput.magnitude < 0.01f) return;
+
+        // Calculate desired position
+        Vector3 desiredPosition = transform.position + currentMoveInput * Time.deltaTime;
+
+        // Validate position with NavMesh if enabled
+        if (useNavMeshValidation)
+        {
+            Vector3 validatedPosition = ValidatePositionWithNavMesh(desiredPosition);
+            transform.position = validatedPosition;
+        }
+        else
+        {
+            // Move directly without validation
+            transform.position = desiredPosition;
+        }
+
+        // Update last valid position
+        lastValidPosition = transform.position;
     }
 
-    private void MoveCharacterNavMesh()
+    private Vector3 ValidatePositionWithNavMesh(Vector3 desiredPosition)
     {
-        if (navMeshAgent == null) return;
+        NavMeshHit hit;
 
-        // Update speed settings in case they changed
-        navMeshAgent.speed = moveSpeed;
-        navMeshAgent.acceleration = acceleration;
-
-        // Check if we have input to move
-        if (inputVisualizer != null && inputVisualizer.cameraRelativeInput.magnitude > 0.1f)
+        // Simple validation: check if desired position is on NavMesh
+        if (NavMesh.SamplePosition(desiredPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
         {
-            // Set the destination for the NavMeshAgent
-            if (Vector3.Distance(targetPosition, transform.position) > stoppingDistance)
+            // Check if it's not too far from where we want to go
+            float distance = Vector3.Distance(desiredPosition, hit.position);
+            if (distance <= 0.5f) // Conservative threshold
             {
-                navMeshAgent.SetDestination(targetPosition);
+                return hit.position;
             }
         }
-        else
-        {
-            // No input, stop the agent
-            navMeshAgent.ResetPath();
-        }
 
-        // Update currentMoveInput for debug visualization
-        if (navMeshAgent.hasPath && navMeshAgent.velocity.magnitude > 0.1f)
-        {
-            currentMoveInput = navMeshAgent.velocity;
-        }
-        else
-        {
-            currentMoveInput = Vector3.zero;
-        }
+        // If position is invalid, stay at current position
+        return transform.position;
     }
 
     // Public getters for debugging
     public Vector3 GetCurrentVelocity() => currentMoveInput;
     public Vector3 GetSmoothedMovement() => smoothedMovement;
     public Vector3 GetLastInputDirection() => lastInputDirection;
-    public Vector3 GetTargetPosition() => targetPosition;
-    public bool IsUsingNavMesh() => useNavMesh && navMeshAgent != null;
+    public Vector3 GetLastValidPosition() => lastValidPosition;
+    public bool IsUsingNavMeshValidation() => useNavMeshValidation;
 
     private void OnDrawGizmosSelected()
     {
@@ -191,41 +144,97 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.color = Color.blue;
             Gizmos.DrawRay(transform.position + Vector3.up, currentMoveInput);
 
-            if (!useNavMesh || navMeshAgent == null)
-            {
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawRay(transform.position + Vector3.up * 1.2f, smoothedMovement);
-            }
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(transform.position + Vector3.up * 1.2f, smoothedMovement);
 
             // Draw last input direction
             Gizmos.color = Color.yellow;
             Gizmos.DrawRay(transform.position + Vector3.up * 1.4f, lastInputDirection * 2f);
 
-            // Draw NavMesh specific gizmos
-            if (useNavMesh && navMeshAgent != null)
+            // Draw NavMesh validation gizmos
+            if (useNavMeshValidation)
             {
-                // Get feet position for NavMesh gizmos only
+                // Get feet position for NavMesh gizmos
                 Vector3 feetPosition = GetFeetPosition();
 
-                // Draw target position at ground level
-                Vector3 targetFeet = new Vector3(targetPosition.x, feetPosition.y, targetPosition.z);
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(targetFeet, 0.3f);
-
-                // Draw line to target from feet
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawLine(feetPosition, targetFeet);
-
-                // Draw NavMesh path if available
-                if (navMeshAgent.hasPath)
+                // Only draw last valid position if it's different from current position
+                float distanceToLastValid = Vector3.Distance(transform.position, lastValidPosition);
+                if (distanceToLastValid > 0.5f)
                 {
+                    // Draw last valid position (bright green)
                     Gizmos.color = Color.green;
-                    Vector3[] path = navMeshAgent.path.corners;
-                    for (int i = 0; i < path.Length - 1; i++)
+                    Gizmos.DrawWireSphere(new Vector3(lastValidPosition.x, feetPosition.y, lastValidPosition.z), 0.3f);
+
+                    // Draw a filled sphere to make it more visible
+                    Gizmos.color = new Color(0f, 1f, 0f, 0.3f); // Green with transparency
+                    Gizmos.DrawSphere(new Vector3(lastValidPosition.x, feetPosition.y, lastValidPosition.z), 0.2f);
+
+                    // Draw label only when sphere is visible
+                    #if UNITY_EDITOR
+                    UnityEditor.Handles.Label(new Vector3(lastValidPosition.x, feetPosition.y + 0.7f, lastValidPosition.z), "Last Valid Position");
+                    #endif
+                }
+
+                // Draw line from current position to last valid position (if different)
+                if (Vector3.Distance(transform.position, lastValidPosition) > 0.3f)
+                {
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawLine(feetPosition, new Vector3(lastValidPosition.x, feetPosition.y, lastValidPosition.z));
+                }
+
+                // Draw projected movement validation
+                if (currentMoveInput.magnitude > 0.1f)
+                {
+                    // Use input direction for better visualization (not the smoothed movement)
+                    if (inputVisualizer != null && inputVisualizer.cameraRelativeInput.magnitude > 0.1f)
                     {
-                        Vector3 pathPoint1 = new Vector3(path[i].x, feetPosition.y, path[i].z);
-                        Vector3 pathPoint2 = new Vector3(path[i + 1].x, feetPosition.y, path[i + 1].z);
-                        Gizmos.DrawLine(pathPoint1, pathPoint2);
+                        Vector3 inputDirection = inputVisualizer.cameraRelativeInput.normalized;
+                        Vector3 desiredPos = transform.position + inputDirection * gizmoLookAheadTime * moveSpeed;
+
+                        NavMeshHit hit;
+                        bool isValidPosition = NavMesh.SamplePosition(desiredPos, out hit, navMeshSampleDistance, NavMesh.AllAreas);
+
+                        // Use same height as input cubes (playerPosition + 0.1f up)
+                        float cubeHeight = transform.position.y + 0.1f;
+
+                        if (isValidPosition)
+                        {
+                            // Check if the hit position is close enough to desired position
+                            float distance = Vector3.Distance(desiredPos, hit.position);
+                            if (distance <= 1f) // Reasonable threshold
+                            {
+                                // GREEN CUBE: Valid NavMesh position
+                                Gizmos.color = Color.green;
+                                Gizmos.DrawWireCube(new Vector3(hit.position.x, cubeHeight, hit.position.z), Vector3.one * 0.3f);
+
+                                // Draw line to show the projection
+                                Gizmos.color = Color.green;
+                                Gizmos.DrawLine(new Vector3(transform.position.x, cubeHeight, transform.position.z),
+                                              new Vector3(hit.position.x, cubeHeight, hit.position.z));
+                            }
+                            else
+                            {
+                                // RED CUBE: NavMesh found but too far from desired direction
+                                Gizmos.color = Color.red;
+                                Gizmos.DrawWireCube(new Vector3(desiredPos.x, cubeHeight, desiredPos.z), Vector3.one * 0.3f);
+
+                                // Draw line to show the invalid projection
+                                Gizmos.color = Color.red;
+                                Gizmos.DrawLine(new Vector3(transform.position.x, cubeHeight, transform.position.z),
+                                              new Vector3(desiredPos.x, cubeHeight, desiredPos.z));
+                            }
+                        }
+                        else
+                        {
+                            // RED CUBE: No NavMesh found at all
+                            Gizmos.color = Color.red;
+                            Gizmos.DrawWireCube(new Vector3(desiredPos.x, cubeHeight, desiredPos.z), Vector3.one * 0.3f);
+
+                            // Draw line to show the invalid projection
+                            Gizmos.color = Color.red;
+                            Gizmos.DrawLine(new Vector3(transform.position.x, cubeHeight, transform.position.z),
+                                          new Vector3(desiredPos.x, cubeHeight, desiredPos.z));
+                        }
                     }
                 }
             }
