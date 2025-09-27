@@ -1,4 +1,7 @@
+using System;
+using Player;
 using UnityEngine;
+using VContainer;
 
 public class InputVisualizerGizmos : MonoBehaviour
 {
@@ -8,14 +11,8 @@ public class InputVisualizerGizmos : MonoBehaviour
     [SerializeField] private Color inputColor = Color.green;
     [SerializeField] private Color noInputColor = Color.gray;
 
-    [Header("Input Keys")]
-    [SerializeField] private KeyCode forwardKey = KeyCode.W;
-    [SerializeField] private KeyCode backwardKey = KeyCode.S;
-    [SerializeField] private KeyCode leftKey = KeyCode.A;
-    [SerializeField] private KeyCode rightKey = KeyCode.D;
-
-    [Header("Camera Reference")]
-    [SerializeField] private Camera cameraReference;
+    [Header("Input Service Reference")]
+    private Services.IInputService inputService;
 
     [Header("Aim Target Reference")]
     [SerializeField] private Transform aimTarget;
@@ -31,17 +28,22 @@ public class InputVisualizerGizmos : MonoBehaviour
     [SerializeField] private bool showNavMeshTarget = true;
     [SerializeField] private Color navMeshTargetColor = Color.red;
 
-    private Vector2 currentInput;
-    public Vector3 cameraRelativeInput { get; private set; }
+    // Public getters for other scripts (delegating to input service)
+    public Vector2 GetCurrentInput() => inputService?.GetCurrentInput() ?? Vector2.zero;
+    public Vector3 cameraRelativeInput => inputService?.GetCameraRelativeInput() ?? Vector3.zero;
 
-    // Public getters for other scripts
-    public Vector2 GetCurrentInput() => currentInput;
-
-    void Update()
+    private void Start()
     {
-        // Auto-assign camera if not set
-        if (cameraReference == null)
-            cameraReference = Camera.main;
+        // Get input service from VContainer
+        var lifetimeScope = GetComponentInParent<VContainer.Unity.LifetimeScope>();
+        if (lifetimeScope != null)
+        {
+            inputService = lifetimeScope.Container.Resolve<Services.IInputService>();
+        }
+        else
+        {
+            Debug.LogWarning("InputVisualizerGizmos: No LifetimeScope found! Gizmos will not work properly.");
+        }
 
         // Auto-assign aim target if not set
         if (aimTarget == null)
@@ -54,72 +56,12 @@ public class InputVisualizerGizmos : MonoBehaviour
         // Auto-assign player movement if not set
         if (playerMovement == null)
             playerMovement = GetComponent<PlayerMovement>();
-
-        // Get input from keyboard
-        currentInput = Vector2.zero;
-
-        if (Input.GetKey(forwardKey))
-            currentInput.y += 1f;
-        if (Input.GetKey(backwardKey))
-            currentInput.y -= 1f;
-        if (Input.GetKey(leftKey))
-            currentInput.x -= 1f;
-        if (Input.GetKey(rightKey))
-            currentInput.x += 1f;
-
-        // Normalize diagonal movement
-        if (currentInput.magnitude > 1f)
-            currentInput.Normalize();
-
-        // Convert input to camera-relative direction
-        CalculateCameraRelativeInput();
-
-        // Update move target position
-        //UpdateMoveTarget();
     }
 
-    private void CalculateCameraRelativeInput()
+    void Update()
     {
-        if (cameraReference == null)
-        {
-            cameraRelativeInput = new Vector3(currentInput.x, 0, currentInput.y);
-            return;
-        }
-
-        // Get camera forward and right vectors (projected on XZ plane)
-        Vector3 cameraForward = cameraReference.transform.forward;
-        Vector3 cameraRight = cameraReference.transform.right;
-
-        // Project camera vectors onto horizontal plane (remove Y component)
-        cameraForward.y = 0;
-        cameraRight.y = 0;
-        cameraForward.Normalize();
-        cameraRight.Normalize();
-
-        // Calculate camera-relative movement direction
-        cameraRelativeInput = (cameraForward * currentInput.y + cameraRight * currentInput.x);
-    }
-
-    private void UpdateMoveTarget()
-    {
-        if (!updateMoveTarget || moveTarget == null) return;
-
-        Vector3 playerPosition = transform.position;
-        Vector3 gizmosOffset = Vector3.up * 0.1f;
-
-        if (currentInput.magnitude > 0.1f)
-        {
-            // Position move target at the tip of the input vector
-            Vector3 inputDirection = cameraRelativeInput * gizmosScale;
-            Vector3 targetPosition = playerPosition + gizmosOffset + inputDirection;
-
-            moveTarget.position = targetPosition;
-        }
-        else
-        {
-            // When no input, position move target at player position
-            moveTarget.position = playerPosition + gizmosOffset;
-        }
+        // Input processing is now handled by CameraRelativeInputProcessor
+        // This class only handles visualization
     }
 
     void OnDrawGizmos()
@@ -128,6 +70,9 @@ public class InputVisualizerGizmos : MonoBehaviour
 
         Vector3 playerPosition = transform.position;
         Vector3 gizmosOffset = Vector3.up * 0.1f; // Slightly above ground
+
+        Vector2 currentInput = GetCurrentInput();
+        Vector3 cameraRelativeInputVector = cameraRelativeInput;
 
         // Draw input direction arrow
         if (currentInput.magnitude > 0.1f)
@@ -158,28 +103,10 @@ public class InputVisualizerGizmos : MonoBehaviour
             DrawWireCircle(playerPosition + gizmosOffset, 0.5f, Vector3.up);
         }
 
-        // Draw individual key indicators relative to camera
-        if (cameraReference != null)
+        // Draw input indicators based on current input
+        if (inputService != null)
         {
-            Vector3 cameraForward = cameraReference.transform.forward;
-            Vector3 cameraRight = cameraReference.transform.right;
-            cameraForward.y = 0;
-            cameraRight.y = 0;
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            DrawKeyIndicator(playerPosition + gizmosOffset + cameraForward * 1.5f, Input.GetKey(forwardKey), "W");
-            DrawKeyIndicator(playerPosition + gizmosOffset + -cameraForward * 1.5f, Input.GetKey(backwardKey), "S");
-            DrawKeyIndicator(playerPosition + gizmosOffset + -cameraRight * 1.5f, Input.GetKey(leftKey), "A");
-            DrawKeyIndicator(playerPosition + gizmosOffset + cameraRight * 1.5f, Input.GetKey(rightKey), "D");
-        }
-        else
-        {
-            // Fallback to world directions if no camera
-            DrawKeyIndicator(playerPosition + gizmosOffset + Vector3.forward * 1.5f, Input.GetKey(forwardKey), "W");
-            DrawKeyIndicator(playerPosition + gizmosOffset + Vector3.back * 1.5f, Input.GetKey(backwardKey), "S");
-            DrawKeyIndicator(playerPosition + gizmosOffset + Vector3.left * 1.5f, Input.GetKey(leftKey), "A");
-            DrawKeyIndicator(playerPosition + gizmosOffset + Vector3.right * 1.5f, Input.GetKey(rightKey), "D");
+            DrawInputIndicators(playerPosition, gizmosOffset, currentInput);
         }
 
         // Draw angle between aim target and input direction
@@ -195,7 +122,7 @@ public class InputVisualizerGizmos : MonoBehaviour
 
     private void DrawAngleBetweenInputAndAim(Vector3 playerPosition, Vector3 gizmosOffset)
     {
-        if (!showAngleGizmos || aimTarget == null || currentInput.magnitude < 0.1f) return;
+        if (!showAngleGizmos || aimTarget == null || GetCurrentInput().magnitude < 0.1f) return;
 
         Vector3 playerPos = playerPosition + gizmosOffset;
         Vector3 aimDirection = (aimTarget.position - playerPos);
@@ -266,7 +193,7 @@ public class InputVisualizerGizmos : MonoBehaviour
         Gizmos.DrawWireSphere(moveTarget.position, 0.3f);
 
         // Draw filled sphere if there's active input
-        if (currentInput.magnitude > 0.1f)
+        if (GetCurrentInput().magnitude > 0.1f)
         {
             Gizmos.color = Color.magenta;
             Gizmos.DrawSphere(moveTarget.position, 0.15f);
@@ -276,6 +203,28 @@ public class InputVisualizerGizmos : MonoBehaviour
         #if UNITY_EDITOR
         UnityEditor.Handles.Label(moveTarget.position + Vector3.up * 0.5f, "Move Target");
         #endif
+    }
+
+    private void DrawInputIndicators(Vector3 playerPosition, Vector3 gizmosOffset, Vector2 currentInput)
+    {
+        // Draw directional input indicators
+        Vector3 forward = cameraRelativeInput.normalized;
+        Vector3 right = Vector3.Cross(Vector3.up, forward);
+
+        if (forward.magnitude > 0.1f)
+        {
+            // Forward/Back
+            bool movingForward = currentInput.y > 0.1f;
+            bool movingBack = currentInput.y < -0.1f;
+            DrawKeyIndicator(playerPosition + gizmosOffset + forward * 1.5f, movingForward, "W");
+            DrawKeyIndicator(playerPosition + gizmosOffset + -forward * 1.5f, movingBack, "S");
+
+            // Left/Right
+            bool movingLeft = currentInput.x < -0.1f;
+            bool movingRight = currentInput.x > 0.1f;
+            DrawKeyIndicator(playerPosition + gizmosOffset + -right * 1.5f, movingLeft, "A");
+            DrawKeyIndicator(playerPosition + gizmosOffset + right * 1.5f, movingRight, "D");
+        }
     }
 
     private void DrawKeyIndicator(Vector3 position, bool isPressed, string keyLabel)
@@ -316,7 +265,7 @@ public class InputVisualizerGizmos : MonoBehaviour
         Gizmos.DrawWireCube(validPositionAtFeet, Vector3.one * 0.4f);
 
         // Draw filled cube if there's active input
-        if (currentInput.magnitude > 0.1f)
+        if (GetCurrentInput().magnitude > 0.1f)
         {
             Gizmos.color = Color.Lerp(navMeshTargetColor, Color.white, 0.5f);
             Gizmos.DrawCube(validPositionAtFeet, Vector3.one * 0.2f);

@@ -122,11 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &162443180 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6807065676767552169, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-  m_PrefabInstance: {fileID: 4187995092462674123}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &317730303
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,24 +317,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2255e373f05942c47accabf774a111ef, type: 3}
---- !u!1 &1626691685 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3863611926642077226, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-  m_PrefabInstance: {fileID: 4187995092462674123}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1626691700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1626691685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f4f33e0890ebbd48a0fc8db0b15d553, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponInstance: {fileID: 162443180}
 --- !u!1 &1628825775
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,45 +580,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2494025336405102893, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2494025336405102893, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2494025336405102893, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2494025336405102893, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 1703353111641731782, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2127776051}
     - target: {fileID: 3863611926642077226, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4493175352023558290, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: currentStrategyType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4493175352023558290, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: hubStrategy.weaponView
-      value: 
-      objectReference: {fileID: 1626691700}
-    - target: {fileID: 4493175352023558290, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: combatStrategy.weaponView
-      value: 
-      objectReference: {fileID: 1626691700}
-    - target: {fileID: 4493175352023558290, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: hubStrategy.lowerLayerName
-      value: LowerBody
-      objectReference: {fileID: 0}
-    - target: {fileID: 4493175352023558290, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      propertyPath: hubStrategy.upperLayerName
-      value: UpperBody
       objectReference: {fileID: 0}
     - target: {fileID: 5232816373119301103, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
       propertyPath: m_LocalPosition.x
@@ -686,10 +631,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3863611926642077226, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1626691700}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

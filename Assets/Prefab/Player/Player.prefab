@@ -1396,6 +1396,7 @@ GameObject:
   - component: {fileID: 436210931102856640}
   - component: {fileID: 4493175352023558290}
   - component: {fileID: 7397906880122127667}
+  - component: {fileID: 1703353111641731782}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1896,11 +1897,6 @@ MonoBehaviour:
   gizmosScale: 2
   inputColor: {r: 0, g: 1, b: 0, a: 1}
   noInputColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  forwardKey: 119
-  backwardKey: 115
-  leftKey: 97
-  rightKey: 100
-  cameraReference: {fileID: 0}
   aimTarget: {fileID: 8574959225850286872}
   showAngleGizmos: 1
   angleColor: {r: 0, g: 1, b: 1, a: 1}
@@ -1921,7 +1917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31001a2099aaf64f934f3309bbe88fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStrategyType: 0
+  currentStrategyType: 1
   combatStrategy:
     moveSpeed: 5
     acceleration: 10
@@ -1957,7 +1953,6 @@ MonoBehaviour:
     hideWeaponInHub: 1
     upperLayerName: UpperBody
     lowerLayerName: LowerBody
-  inputVisualizer: {fileID: 436210931102856640}
 --- !u!114 &7397906880122127667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1971,6 +1966,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponInstance: {fileID: 6807065676767552169}
+--- !u!114 &1703353111641731782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcea18077a58ec6479772cf22aa70b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects:
+  - {fileID: 3863611926642077226}
+  playerInputHandler: {fileID: 4339932572223991893}
+  mainCamera: {fileID: 0}
+  playerModel: {fileID: 2024501622075525127}
 --- !u!1 &3996204525015037447
 GameObject:
   m_ObjectHideFlags: 0

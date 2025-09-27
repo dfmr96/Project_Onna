@@ -1,19 +1,45 @@
+using Player;
+using Services;
 using UnityEngine;
 
 [System.Serializable]
 public class CombatMovementStrategy : BaseMovementStrategy
 {
+
     [Header("Combat Settings")]
     [SerializeField] private bool enableAiming = true;
     [SerializeField] private bool enableMouseDetection = true;
     [SerializeField] private bool useUpperLayerAnimator = true;
     [SerializeField] private bool useLowerLayerAnimator = true;
 
+    [Header("Animator Layer Settings")]
+    [SerializeField] private string upperLayerName = "UpperBody";
+    [SerializeField] private string lowerLayerName = "LowerBody";
+
     [SerializeField] private PlayerRigController rigController;
 
-    public override void Initialize(Transform playerTransform, InputVisualizerGizmos inputVisualizer)
+    private int upperLayerIndex = -1;
+    private int lowerLayerIndex = -1;
+
+    public override void Initialize(Transform playerTransform, CameraRelativeInputProcessor inputProcessor)
     {
-        base.Initialize(playerTransform, inputVisualizer);
+        base.Initialize(playerTransform, inputProcessor);
+
+        // Get layer indices for animator layer control
+        if (animator != null)
+        {
+            upperLayerIndex = animator.GetLayerIndex(upperLayerName);
+            lowerLayerIndex = animator.GetLayerIndex(lowerLayerName);
+
+            if (upperLayerIndex == -1)
+                Debug.LogWarning($"CombatMovementStrategy: UpperLayer '{upperLayerName}' not found in Animator!");
+
+            if (lowerLayerIndex == -1)
+                Debug.LogWarning($"CombatMovementStrategy: LowerLayer '{lowerLayerName}' not found in Animator!");
+
+            // Set layer weights for Combat mode (all layers active)
+            SetCombatLayerWeights();
+        }
 
         if (rigController == null)
         {
@@ -37,15 +63,36 @@ public class CombatMovementStrategy : BaseMovementStrategy
         HandleAiming();
         HandleMouseDetection();
         HandleAnimatorLayers();
+        // Ensure layer weights stay correct in Combat mode
+        SetCombatLayerWeights();
+    }
+
+    private void SetCombatLayerWeights()
+    {
+        if (animator == null) return;
+
+        // Set UpperLayer and LowerLayer weights to 1 (all layers active in combat)
+        if (upperLayerIndex != -1)
+        {
+            animator.SetLayerWeight(upperLayerIndex, 1f);
+        }
+
+        if (lowerLayerIndex != -1)
+        {
+            animator.SetLayerWeight(lowerLayerIndex, 1f);
+        }
+
+        // Base Layer (index 0) stays at weight 1
+        animator.SetLayerWeight(0, 1f);
     }
 
     protected override void HandleMovement()
     {
         Vector3 cameraRelativeInput;
 
-        if (inputVisualizer != null)
+        if (inputService != null)
         {
-            cameraRelativeInput = inputVisualizer.cameraRelativeInput;
+            cameraRelativeInput = inputService.CameraRelativeInput;
         }
         else
         {
@@ -93,7 +140,7 @@ public class CombatMovementStrategy : BaseMovementStrategy
 
     protected override void CalculateAnimationInput()
     {
-        if (inputVisualizer == null)
+        if (inputService == null)
         {
             animationMovementInput = Vector2.zero;
             return;
@@ -107,8 +154,8 @@ public class CombatMovementStrategy : BaseMovementStrategy
             return;
         }
 
-        // Get camera-relative input from InputVisualizerGizmos
-        Vector3 cameraRelativeWorldInput = inputVisualizer.cameraRelativeInput;
+        // Get camera-relative input from InputService
+        Vector3 cameraRelativeWorldInput = inputService.CameraRelativeInput;
 
         // If no input, return zero
         if (cameraRelativeWorldInput.magnitude < 0.1f)
@@ -150,7 +197,7 @@ public class CombatMovementStrategy : BaseMovementStrategy
     private void CalculateCameraRelativeInput()
     {
         // Simple camera-relative mapping as fallback
-        Vector3 cameraRelativeWorldInput = inputVisualizer.cameraRelativeInput;
+        Vector3 cameraRelativeWorldInput = inputService.CameraRelativeInput;
         animationMovementInput = new Vector2(cameraRelativeWorldInput.x, cameraRelativeWorldInput.z);
     }
 

@@ -12,7 +12,7 @@ namespace Player
         {
             if (weaponInstance != null)
             {
-                Debug.Log($"🔫 Setting weaponInstance.SetActive({visible})");
+                //Debug.Log($"🔫 Setting weaponInstance.SetActive({visible})");
                 weaponInstance.SetActive(visible);
             }
             else

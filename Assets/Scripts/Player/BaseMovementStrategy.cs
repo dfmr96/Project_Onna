@@ -1,6 +1,9 @@
+using Services;
 using UnityEngine;
 using UnityEngine.AI;
 using Player;
+using VContainer;
+using VContainer.Unity;
 
 public abstract class BaseMovementStrategy : IMovementStrategy
 {
@@ -19,7 +22,7 @@ public abstract class BaseMovementStrategy : IMovementStrategy
     [SerializeField] protected float gizmoLookAheadTime = 0.5f;
 
     protected Transform playerTransform;
-    protected InputVisualizerGizmos inputVisualizer;
+    protected IInputService inputService;
 
     protected Vector3 currentMoveInput;
     protected Vector3 smoothedMovement;
@@ -37,13 +40,20 @@ public abstract class BaseMovementStrategy : IMovementStrategy
     [Header("Debug Animation")]
     [SerializeField] protected bool showAnimationDebugInfo = false;
 
-    public virtual void Initialize(Transform playerTransform, InputVisualizerGizmos inputVisualizer)
+    public virtual void Initialize(Transform playerTransform, CameraRelativeInputProcessor inputProcessor)
     {
         this.playerTransform = playerTransform;
-        this.inputVisualizer = inputVisualizer;
-        
-        if (this.inputVisualizer == null)
-            this.inputVisualizer = Object.FindObjectOfType<InputVisualizerGizmos>();
+
+        // Get input service from VContainer
+        var lifetimeScope = playerTransform.GetComponentInParent<LifetimeScope>();
+        if (lifetimeScope != null)
+        {
+            this.inputService = lifetimeScope.Container.Resolve<IInputService>();
+        }
+        else
+        {
+            Debug.LogError("BaseMovementStrategy: No LifetimeScope found! Make sure PlayerLifetimeScope is configured on player or parent GameObject.");
+        }
 
         // Initialize animation components
         if (animator == null)
@@ -181,9 +191,9 @@ public abstract class BaseMovementStrategy : IMovementStrategy
             if (currentMoveInput.magnitude > 0.1f)
             {
                 Vector3 currentInputDirection = Vector3.zero;
-                if (inputVisualizer != null)
+                if (inputService != null)
                 {
-                    currentInputDirection = inputVisualizer.cameraRelativeInput;
+                    currentInputDirection = inputService.CameraRelativeInput;
                 }
 
                 if (currentInputDirection.magnitude > 0.1f)

@@ -55,7 +55,7 @@ public class PlayerRigController : MonoBehaviour
         if (mouseAiming != null)
             mouseAiming.EndMeleeMode();
 
-        Debug.Log("SetPistolAimState called - Starting coroutine to force rig weights...");
+        //Debug.Log("SetPistolAimState called - Starting coroutine to force rig weights...");
         StartCoroutine(ForceRigWeights(1f, 0f, 1f, 0f, 1f, "Pistol Aim"));
     }
 

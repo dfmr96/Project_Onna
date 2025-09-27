@@ -1,8 +1,9 @@
 using UnityEngine;
+using Player;
 
 public interface IMovementStrategy
 {
-    void Initialize(Transform playerTransform, InputVisualizerGizmos inputVisualizer);
+    void Initialize(Transform playerTransform, CameraRelativeInputProcessor inputProcessor);
     void Update();
     void OnDrawGizmosSelected();
     

@@ -1,8 +1,11 @@
+using Player;
+using Services;
 using UnityEngine;
 
 [System.Serializable]
 public class HubMovementStrategy : BaseMovementStrategy
 {
+
     [Header("Hub Settings")]
     [SerializeField] private bool useLowerLayerAnimator = true;
 
@@ -20,9 +23,9 @@ public class HubMovementStrategy : BaseMovementStrategy
     private int upperLayerIndex = -1;
     private int lowerLayerIndex = -1;
 
-    public override void Initialize(Transform playerTransform, InputVisualizerGizmos inputVisualizer)
+    public override void Initialize(Transform playerTransform, CameraRelativeInputProcessor inputProcessor)
     {
-        base.Initialize(playerTransform, inputVisualizer);
+        base.Initialize(playerTransform, inputProcessor);
 
         // Get layer indices for animator layer control
         if (animator != null)
@@ -94,9 +97,9 @@ public class HubMovementStrategy : BaseMovementStrategy
         // Use the movement input direction for rotation (not the smoothed movement)
         Vector3 movementDirection = Vector3.zero;
 
-        if (inputVisualizer != null)
+        if (inputService != null)
         {
-            Vector3 cameraRelativeInput = inputVisualizer.cameraRelativeInput;
+            Vector3 cameraRelativeInput = inputService.CameraRelativeInput;
 
             if (cameraRelativeInput.magnitude > 0.1f)
             {
@@ -124,9 +127,9 @@ public class HubMovementStrategy : BaseMovementStrategy
     {
         Vector3 cameraRelativeInput;
 
-        if (inputVisualizer != null)
+        if (inputService != null)
         {
-            cameraRelativeInput = inputVisualizer.cameraRelativeInput;
+            cameraRelativeInput = inputService.CameraRelativeInput;
         }
         else
         {
@@ -175,14 +178,14 @@ public class HubMovementStrategy : BaseMovementStrategy
 
     protected override void CalculateAnimationInput()
     {
-        if (inputVisualizer == null)
+        if (inputService == null)
         {
             animationMovementInput = Vector2.zero;
             return;
         }
 
         // Hub mode: Use simple camera-relative movement (no mouse relative calculation)
-        Vector3 cameraRelativeWorldInput = inputVisualizer.cameraRelativeInput;
+        Vector3 cameraRelativeWorldInput = inputService.CameraRelativeInput;
 
         if (cameraRelativeWorldInput.magnitude < 0.1f)
         {

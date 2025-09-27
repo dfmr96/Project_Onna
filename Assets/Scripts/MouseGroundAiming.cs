@@ -90,7 +90,7 @@ public class MouseGroundAiming : MonoBehaviour
     public void EndMeleeMode()
     {
         isInMeleeMode = false;
-        Debug.Log("Melee mode ended - Returning to mouse aiming");
+        //Debug.Log("Melee mode ended - Returning to mouse aiming");
     }
 
     private void OnDrawGizmos()
