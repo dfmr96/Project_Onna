@@ -15,9 +15,6 @@ namespace Player
         public static Action OnPlayerDie;
         public static Action<float> OnUpdateTime;
         public event Action<GameMode> OnGameModeChanged;
-        public event Action<Vector3> OnMovementDirectionChanged;
-        public event Action<Vector3> OnRawMovementDirectionChanged;
-        public event Action<Vector3> OnAimDirectionChanged;
         public event Action<bool> OnCanShootChanged;
         public event Action<bool> OnCanMeleeChanged;
         
@@ -79,6 +76,12 @@ namespace Player
 
             // Inicializar el modo de juego basado en la escena
             InitializeGameMode();
+
+            // Auto-enviar PlayerSpawnedSignal si no se ha inicializado el StatContext
+            if (_statContext == null)
+            {
+                EventBus.Publish(new PlayerSpawnedSignal { PlayerGO = gameObject });
+            }
         }
 
         public void InjectStatContext(PlayerStatContext context)
@@ -267,34 +270,7 @@ namespace Player
                 OnGameModeChanged?.Invoke(newMode);
             }
         }
-
-        public void SetPosition(Vector3 newPosition) => _currentPosition = newPosition;
-
-        public void SetMovementDirection(Vector3 direction)
-        {
-            if (_movementDirection != direction)
-            {
-                _movementDirection = direction;
-                OnMovementDirectionChanged?.Invoke(direction);
-
-                bool wasMoving = _isMoving;
-                _isMoving = direction.sqrMagnitude > 0.01f;
-            }
-        }
-
-        public void SetRawMovementDirection(Vector3 rawDirection)
-        {
-            OnRawMovementDirectionChanged?.Invoke(rawDirection);
-        }
-
-        public void SetAimDirection(Vector3 direction)
-        {
-            if (_aimDirection != direction)
-            {
-                _aimDirection = direction;
-                OnAimDirectionChanged?.Invoke(direction);
-            }
-        }
+        
 
         public void SetCanShoot(bool canShoot)
         {

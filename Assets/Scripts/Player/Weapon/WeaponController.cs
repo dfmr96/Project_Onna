@@ -35,7 +35,7 @@ namespace Player.Weapon
         private float laserLength;
         private ParticleSystem impactParticlesInstance;
         private ParticleSystem muzzleFlashInstance;
-        private LineRenderer lineRenderer;
+        [SerializeField] LineRenderer lineRenderer;
 
         private bool isSkillCheckActive = false;
         private bool skillCheckSuccess = false;
@@ -75,7 +75,6 @@ namespace Player.Weapon
 
         private void Start()
         {
-            InitializeVisuals();
             audioSource = GetComponent<AudioSource>();
         }
 
@@ -117,6 +116,8 @@ namespace Player.Weapon
             bulletSetting.Init(stats, refs);
             ammoSettings.Init(stats, refs);
             currentAmmo = (int)ammoSettings.MaxAmmo;
+
+            InitializeVisuals();
         }
 
         private void OnReloadInput()

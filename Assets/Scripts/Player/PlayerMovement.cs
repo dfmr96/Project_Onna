@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] private InputVisualizerGizmos inputVisualizer;
 
+
     private Vector3 currentMoveInput;
     private Vector3 smoothedMovement;
     private Vector3 lastInputDirection;
@@ -63,10 +64,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (inputVisualizer == null) return;
+        Vector3 cameraRelativeInput;
 
-        // Get camera-relative input (already processed by InputVisualizerGizmos)
-        Vector3 cameraRelativeInput = inputVisualizer.cameraRelativeInput;
+        // Use InputVisualizer for input
+        if (inputVisualizer != null)
+        {
+            cameraRelativeInput = inputVisualizer.cameraRelativeInput;
+        }
+        else
+        {
+            cameraRelativeInput = Vector3.zero;
+        }
 
         Vector3 moveDirection;
 
@@ -87,8 +95,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 targetVelocity = moveDirection * moveSpeed;
 
         // Smooth the movement for better feel
-        float smoothTime = targetVelocity.magnitude > 0.1f ? 1f / acceleration : 1f / deceleration;
-        smoothedMovement = Vector3.Lerp(smoothedMovement, targetVelocity, Time.deltaTime / smoothTime);
+        float smoothSpeed = targetVelocity.magnitude > 0.1f ? acceleration : deceleration;
+        smoothedMovement = Vector3.MoveTowards(smoothedMovement, targetVelocity, smoothSpeed * Time.deltaTime);
 
         currentMoveInput = smoothedMovement;
     }
@@ -167,6 +175,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
     private void OnDrawGizmosSelected()
     {
         // Draw movement vectors
@@ -217,9 +226,15 @@ public class PlayerMovement : MonoBehaviour
                 if (currentMoveInput.magnitude > 0.1f)
                 {
                     // Use input direction for better visualization (not the smoothed movement)
-                    if (inputVisualizer != null && inputVisualizer.cameraRelativeInput.magnitude > 0.1f)
+                    Vector3 currentInputDirection = Vector3.zero;
+                    if (inputVisualizer != null)
                     {
-                        Vector3 inputDirection = inputVisualizer.cameraRelativeInput.normalized;
+                        currentInputDirection = inputVisualizer.cameraRelativeInput;
+                    }
+
+                    if (currentInputDirection.magnitude > 0.1f)
+                    {
+                        Vector3 inputDirection = currentInputDirection.normalized;
                         Vector3 desiredPos = transform.position + inputDirection * gizmoLookAheadTime * moveSpeed;
 
                         NavMeshHit hit;
