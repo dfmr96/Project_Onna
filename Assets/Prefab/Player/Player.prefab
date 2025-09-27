@@ -860,8 +860,7 @@ GameObject:
   - component: {fileID: 2494025336405102893}
   - component: {fileID: 1967356077867525595}
   - component: {fileID: 2437359849114667440}
-  - component: {fileID: 893207849779114660}
-  - component: {fileID: 3182162720491525662}
+  - component: {fileID: 5169373276702204606}
   m_Layer: 6
   m_Name: Root
   m_TagString: Untagged
@@ -877,7 +876,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2980805481202117396}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.25, y: 1.1111112, z: 1.25}
   m_ConstrainProportionsScale: 0
@@ -933,7 +932,7 @@ MonoBehaviour:
   - m_Rig: {fileID: 415590375049712117}
     m_Active: 1
   m_Effectors: []
---- !u!114 &893207849779114660
+--- !u!114 &5169373276702204606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -942,23 +941,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2980805481202117396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb2fc3988553c8f4eb6085ad44ed01cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 1967356077867525595}
-  inputVisualizer: {fileID: 436210931102856640}
-  mouseAiming: {fileID: 1023958109057668883}
-  showDebugInfo: 0
---- !u!114 &3182162720491525662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2980805481202117396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac41ce046316a6c4bbf22a8075966e3a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ecfb5dd567dc5f48b151771c04dac54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodyAimRig: {fileID: 7529755153809059015}
@@ -967,9 +950,6 @@ MonoBehaviour:
   weaponMeleeRig: {fileID: 415590375049712117}
   handsIKRig: {fileID: 6357520718014790884}
   animator: {fileID: 1967356077867525595}
-  meleeKey: 102
-  pistolIdleKey: 105
-  pistolAimKey: 97
   mouseAiming: {fileID: 1023958109057668883}
   debugRigWeights: 0
 --- !u!1 &3115691216462136299
@@ -1415,6 +1395,7 @@ GameObject:
   - component: {fileID: 5225306903837380426}
   - component: {fileID: 436210931102856640}
   - component: {fileID: 4493175352023558290}
+  - component: {fileID: 7397906880122127667}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1940,15 +1921,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31001a2099aaf64f934f3309bbe88fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
-  acceleration: 25
-  deceleration: 75
-  useNavMeshValidation: 1
-  navMeshSampleDistance: 1
-  maxNavMeshDistance: 2
-  playerHeightOffset: -0.15
-  gizmoLookAheadTime: 0.5
+  currentStrategyType: 0
+  combatStrategy:
+    moveSpeed: 5
+    acceleration: 10
+    deceleration: 15
+    useNavMeshValidation: 1
+    navMeshSampleDistance: 1
+    maxNavMeshDistance: 2
+    playerHeightOffset: -0.15
+    gizmoLookAheadTime: 0.5
+    animator: {fileID: 1967356077867525595}
+    weaponView: {fileID: 7397906880122127667}
+    showAnimationDebugInfo: 0
+    enableAiming: 1
+    enableMouseDetection: 1
+    useUpperLayerAnimator: 1
+    useLowerLayerAnimator: 1
+    rigController: {fileID: 5169373276702204606}
+  hubStrategy:
+    moveSpeed: 5
+    acceleration: 10
+    deceleration: 15
+    useNavMeshValidation: 1
+    navMeshSampleDistance: 1
+    maxNavMeshDistance: 2
+    playerHeightOffset: -0.15
+    gizmoLookAheadTime: 0.5
+    animator: {fileID: 1967356077867525595}
+    weaponView: {fileID: 7397906880122127667}
+    showAnimationDebugInfo: 0
+    useLowerLayerAnimator: 1
+    rotationSpeed: 720
+    enableRotation: 1
+    hideWeaponInHub: 1
+    upperLayerName: UpperBody
+    lowerLayerName: LowerBody
   inputVisualizer: {fileID: 436210931102856640}
+--- !u!114 &7397906880122127667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f4f33e0890ebbd48a0fc8db0b15d553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponInstance: {fileID: 6807065676767552169}
 --- !u!1 &3996204525015037447
 GameObject:
   m_ObjectHideFlags: 0

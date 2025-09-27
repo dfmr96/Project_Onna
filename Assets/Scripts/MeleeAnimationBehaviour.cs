@@ -6,7 +6,7 @@ public class MeleeAnimationBehaviour : StateMachineBehaviour
     {
         Debug.Log("MeleeAnimationBehaviour: OnStateExit called");
 
-        RigLayerTestScript rigController = animator.GetComponent<RigLayerTestScript>();
+        PlayerRigController rigController = animator.GetComponent<PlayerRigController>();
         if (rigController != null)
         {
             Debug.Log("MeleeAnimationBehaviour: Found RigLayerTestScript, calling SetPistolAimState");

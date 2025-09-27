@@ -75,7 +75,7 @@ public class InputVisualizerGizmos : MonoBehaviour
         CalculateCameraRelativeInput();
 
         // Update move target position
-        UpdateMoveTarget();
+        //UpdateMoveTarget();
     }
 
     private void CalculateCameraRelativeInput()

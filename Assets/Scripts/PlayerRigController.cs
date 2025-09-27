@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using System.Collections;
 
-public class RigLayerTestScript : MonoBehaviour
+public class PlayerRigController : MonoBehaviour
 {
     [Header("Rig Layers")]
     public Rig bodyAimRig;
@@ -14,10 +14,6 @@ public class RigLayerTestScript : MonoBehaviour
     [Header("Animation")]
     public Animator animator;
 
-    [Header("Input")]
-    public KeyCode meleeKey = KeyCode.F;
-    public KeyCode pistolIdleKey = KeyCode.I;
-    public KeyCode pistolAimKey = KeyCode.A;
 
     private void Start()
     {
@@ -25,23 +21,6 @@ public class RigLayerTestScript : MonoBehaviour
             animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(meleeKey))
-        {
-            TriggerMeleeAnimation();
-        }
-
-        if (Input.GetKeyDown(pistolIdleKey))
-        {
-            SetPistolIdleState();
-        }
-
-        if (Input.GetKeyDown(pistolAimKey))
-        {
-            SetPistolAimState();
-        }
-    }
 
     private void TriggerMeleeAnimation()
     {
@@ -80,7 +59,8 @@ public class RigLayerTestScript : MonoBehaviour
         StartCoroutine(ForceRigWeights(1f, 0f, 1f, 0f, 1f, "Pistol Aim"));
     }
 
-    private IEnumerator ForceRigWeights(float bodyAim, float weaponPose, float weaponAiming, float weaponMelee, float handsIK, string stateName)
+    private IEnumerator ForceRigWeights(float bodyAim, float weaponPose, float weaponAiming, float weaponMelee,
+        float handsIK, string stateName)
     {
         for (int i = 0; i < 10; i++)
         {
@@ -94,12 +74,13 @@ public class RigLayerTestScript : MonoBehaviour
         }
 
         currentState = stateName;
-        Debug.Log($"{stateName} state forced - Final weights:");
+        /*Debug.Log($"{stateName} state forced - Final weights:");
         if (bodyAimRig != null) Debug.Log($"Body Aim: {bodyAimRig.weight}");
         if (weaponPoseRig != null) Debug.Log($"Weapon Pose: {weaponPoseRig.weight}");
         if (weaponAimingRig != null) Debug.Log($"Weapon Aiming: {weaponAimingRig.weight}");
         if (weaponMeleeRig != null) Debug.Log($"Weapon Melee: {weaponMeleeRig.weight}");
         if (handsIKRig != null) Debug.Log($"Hands IK: {handsIKRig.weight}");
+        */
     }
 
     [Header("Mouse Aiming")]
@@ -132,9 +113,7 @@ public class RigLayerTestScript : MonoBehaviour
             GUILayout.Label($"Hands IK: {handsIKRig.weight:F2}");
 
         GUILayout.Space(10);
-        GUILayout.Label($"Press [{meleeKey}] for melee");
-        GUILayout.Label($"Press [{pistolIdleKey}] for pistol idle");
-        GUILayout.Label($"Press [{pistolAimKey}] for pistol aim");
+        GUILayout.Label("Control via PlayerRigController methods:");
 
         GUILayout.EndArea();
     }
