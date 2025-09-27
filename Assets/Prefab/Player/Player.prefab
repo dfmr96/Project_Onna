@@ -1934,6 +1934,8 @@ MonoBehaviour:
     enableMouseDetection: 1
     useUpperLayerAnimator: 1
     useLowerLayerAnimator: 1
+    upperLayerName: UpperBody
+    lowerLayerName: LowerBody
     rigController: {fileID: 5169373276702204606}
   hubStrategy:
     moveSpeed: 5
@@ -1981,8 +1983,7 @@ MonoBehaviour:
   parentReference:
     TypeName: 
   autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 3863611926642077226}
+  autoInjectGameObjects: []
   playerInputHandler: {fileID: 4339932572223991893}
   mainCamera: {fileID: 0}
   playerModel: {fileID: 2024501622075525127}

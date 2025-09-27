@@ -80,7 +80,7 @@ namespace Player
             // Auto-enviar PlayerSpawnedSignal si no se ha inicializado el StatContext
             if (_statContext == null)
             {
-                EventBus.Publish(new PlayerSpawnedSignal { PlayerGO = gameObject });
+                //EventBus.Publish(new PlayerSpawnedSignal { PlayerGO = gameObject });
             }
         }
 

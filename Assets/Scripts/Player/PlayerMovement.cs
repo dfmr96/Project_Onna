@@ -12,47 +12,16 @@ public class PlayerMovement : MonoBehaviour
 
     private IMovementStrategy currentStrategy;
 
-    private PlayerModel playerModel;
-
     public enum MovementStrategyType
     {
         Combat,
         Hub
     }
 
-    [Inject]
-    public void Construct(PlayerModel playerModel)
+    private void Start()
     {
-        this.playerModel = playerModel;
-        // Inicializar inmediatamente después de injection
-        Initialize();
+        OnGameModeChanged(GameModeSelector.SelectedMode);
     }
-
-    private void Initialize()
-    {
-        if (playerModel != null)
-        {
-            playerModel.OnGameModeChanged += OnGameModeChanged;
-            // Forzar el evento manualmente
-            OnGameModeChanged(playerModel.CurrentGameMode);
-            //Debug.Log("Subscribed and forced current mode: " + playerModel.CurrentGameMode);
-        }
-        else
-        {
-            SetMovementStrategy(currentStrategyType);
-            Debug.Log("PlayerModel not found, using default strategy: " + currentStrategyType);
-        }
-    }
-
-    /*private void Start()
-    {
-        // Fallback if injection didn't happen (shouldn't occur with proper VContainer setup)
-        if (playerModel == null)
-        {
-            SetMovementStrategy(currentStrategyType);
-            Debug.LogWarning("Fallback: PlayerModel not injected, using default strategy: " + currentStrategyType);
-        }
-    }*/
 
     private void OnGameModeChanged(GameMode gameMode)
     {
@@ -116,12 +85,5 @@ public class PlayerMovement : MonoBehaviour
     {
         currentStrategy?.OnDrawGizmosSelected();
     }
-
-    private void OnDestroy()
-    {
-        if (playerModel != null)
-        {
-            playerModel.OnGameModeChanged -= OnGameModeChanged;
-        }
-    }
+    
 }
