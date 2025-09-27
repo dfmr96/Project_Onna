@@ -37,6 +37,11 @@ namespace Player
         [SerializeField] private float heightTextSpawn = 1.5f;
         [SerializeField] private GameObject floatingTextPrefab;
 
+        [Header("Healing Effect")]
+        [SerializeField] private GameObject healEffectPrefab;
+        [SerializeField] private Transform healAnchor;
+        [SerializeField] private Vector3 healOffset;
+
 
         public StatReferences StatRefs => statRefs;
         public float Speed => StatContext.Source.Get(statRefs.movementSpeed);
@@ -65,6 +70,8 @@ namespace Player
         private float _currentTime;
         private PlayerStatContext _statContext;
         private PlayerView _playerView;
+
+        
 
         private void Start()
         {
@@ -102,6 +109,23 @@ namespace Player
         {
             //if (!_isInitialized) return;
             if (Input.GetKeyDown(KeyCode.F2)) devMode = !DevMode;
+
+            //Agrega Vida
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                _currentTime = 9999999f;
+            }
+
+            //Vuelve Player al suelo
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                //_currentPosition = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
+
+                Vector3 pos = transform.position;
+                pos.y = 0f; 
+                transform.position = pos;
+
+            }
 
             if (!DevMode && GameModeSelector.SelectedMode != GameMode.Hub && passiveDrainEnabled)
                 ApplyPassiveDrain();
@@ -200,7 +224,6 @@ namespace Player
                 Die();
         }
 
-
         public void RecoverTime(float timeRecovered)
         {
             _currentTime = Mathf.Min(_currentTime + timeRecovered, StatContext.Source.Get(statRefs.maxVitalTime));
@@ -208,8 +231,23 @@ namespace Player
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             _playerView?.PlayHealthEffect();
-        }
 
+            // Instanciar partículas de curación
+            if (healEffectPrefab != null)
+            {
+                Vector3 spawnPos = healAnchor != null 
+                    ? healAnchor.position + healOffset 
+                    : transform.position;
+
+                GameObject effect = Instantiate(healEffectPrefab, spawnPos, Quaternion.identity, healAnchor != null ? healAnchor : transform);
+                var ps = effect.GetComponent<ParticleSystem>();
+                if (ps != null)
+                    Destroy(effect, ps.main.duration);
+                else
+                    Destroy(effect, 2f); // fallback
+            }
+        }
+        
         private void ClampEnergy()
         {
             if (StatContext.Runtime != null)

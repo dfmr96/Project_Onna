@@ -105,8 +105,8 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
     public EnemyHurtState HurtState => throw new System.NotImplementedException();
     public EnemyDefendState DefendState => throw new System.NotImplementedException();
 
-    public override float MaxHealth => throw new System.NotImplementedException();
-    public override float CurrentHealth => throw new System.NotImplementedException();
+    public override float MaxHealth => model.statsSO.MaxHealth;
+    public override float CurrentHealth => model.CurrentHealth;
 
     #endregion
 
@@ -131,14 +131,20 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         AttackState = new EnemyAttackState(this, fsm);
 
         shieldCollider = shield.GetComponent<Collider>();
-    }
 
-    private void Start()
-    {
+
         foreach (var pillar in pillars)
             pillar.OnPillarDestroyed += HandlePillarDestroyed;
 
         ActivatePillars();
+    }
+
+    private void Start()
+    {
+        //foreach (var pillar in pillars)
+        //    pillar.OnPillarDestroyed += HandlePillarDestroyed;
+
+        //ActivatePillars();
         ActivateShield();
 
         foreach (var atk in attackPhases)
@@ -182,13 +188,16 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
         }
 
         audioSource = GetComponent<AudioSource>();
+
+
+
     }
 
     private void Update()
     {
         fsm.CurrentState?.FrameUpdate();
         view.PlayMovingAnimation(_navMeshAgent.speed);
-        Debug.Log(fsm.CurrentState);
+        //Debug.Log(fsm.CurrentState);
 
     }
 

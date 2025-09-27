@@ -9,6 +9,7 @@ public class Billboard : MonoBehaviour
         if (Camera.main != null)
         {
             transform.forward = Camera.main.transform.forward;
+
         }
     }
 }

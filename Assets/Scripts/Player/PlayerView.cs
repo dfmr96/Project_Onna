@@ -12,9 +12,8 @@ namespace Player
         [SerializeField] private PlayerWeaponView weaponView;
         [SerializeField] private MeleeView meleeView;
         [SerializeField] private PlayerAudioView audioView;
-        
 
-        [SerializeField] private PlayerEffectsView effectsView;
+        [SerializeField] public PlayerEffectsView effectsView;
         [SerializeField] private PlayerController _playerController;
         [SerializeField] private PlayerModel _playerModel;
 
@@ -29,6 +28,9 @@ namespace Player
         {
             InitializeSubViews();
             SubscribeToModelEvents();
+
+            //Cursor Mouse
+            Cursor.visible = false;
         }
 
         private void OnDestroy()

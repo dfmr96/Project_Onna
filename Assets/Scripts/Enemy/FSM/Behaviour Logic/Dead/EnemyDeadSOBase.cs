@@ -49,10 +49,14 @@ public class EnemyDeadSOBase : ScriptableObject
         ResetValues();
 
         //Si tiene el buff de explotar 
-        if(_enemyModel.variantSO.explodesOnDeath)
+        if(_enemyModel != null)
         {
-            DeathManager.Instance.InstantiateMutantDeath(transform, _enemyModel.variantSO.explosionLifetime);
+            if (_enemyModel.variantSO.explodesOnDeath)
+            {
+                DeathManager.Instance.InstantiateMutantDeath(transform, _enemyModel.variantSO.explosionLifetime);
+            }
         }
+       
 
         DeathManager.Instance.DestroyObject(enemy.gameObject);
 

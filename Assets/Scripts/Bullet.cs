@@ -7,6 +7,10 @@ public class Bullet : MonoBehaviour
     private float _damage;
     private float _maxDistance;
 
+    [SerializeField] private GameObject hitParticlePrefab;
+
+    [SerializeField] private LayerMask ignoreLayers;
+
     private void Start()
     {
         float destroyTime = _maxDistance / _bulletSpeed;
@@ -26,8 +30,18 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if ((ignoreLayers.value & (1 << other.gameObject.layer)) != 0)
+            return;
+
+        // instanciar partículas siempre al colisionar
+        if (hitParticlePrefab != null)
+        {
+            Instantiate(hitParticlePrefab, transform.position, Quaternion.identity);
+        }
+
         if (other.TryGetComponent<IDamageable>(out var damageable))
             damageable.TakeDamage(_damage);
+
         Destroy(gameObject);
     }
 

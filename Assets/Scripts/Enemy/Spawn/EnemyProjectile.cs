@@ -13,7 +13,7 @@ public class EnemyProjectile : MonoBehaviour
     [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
     protected Transform playerTransform;
     [SerializeField] float bulletSpeed;
-    [SerializeField] private LayerMask obstacleLayers;
+    [SerializeField] private LayerMask ignoreLayers;
     private bool hasHit = false;
     private Action onRelease;
     private Rigidbody rb;
@@ -66,11 +66,11 @@ public class EnemyProjectile : MonoBehaviour
         }
     }
 
-    private void PlayImpactParticles()
+    private void PlayImpactParticles(Vector3 position, Vector3 normal)
     {
         if (impactEffectParticlesPrefab != null)
         {
-            var impact = Instantiate(impactEffectParticlesPrefab, transform.position, Quaternion.identity);
+            var impact = Instantiate(impactEffectParticlesPrefab, position, Quaternion.LookRotation(normal));
             impact.Play();
             Destroy(impact.gameObject, impact.main.duration);
         }
@@ -78,38 +78,34 @@ public class EnemyProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
         if (hasHit) return;
 
-        if (((1 << collision.gameObject.layer) & obstacleLayers) != 0)
+        // ignorar capas
+        if (((1 << collision.gameObject.layer) & ignoreLayers) != 0) return;
+
+        hasHit = true;
+
+        // punto de contacto principal
+        ContactPoint contact = collision.contacts[0];
+
+        if ((collision.transform.root == playerTransform) && 
+            collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
         {
-            PlayImpactParticles();
-            onRelease?.Invoke();
-
-        }
-
-
-        if ((collision.transform.root == playerTransform) && (collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable)))
-        {
-            hasHit = true;
-
             damageable.TakeDamage(damage);
 
-            //Debuff veneno
+            // aplicar veneno si corresponde
             if (ownerModel != null && ownerModel.variantSO.variantType == EnemyVariantType.Green)
             {
                 damageable.ApplyDebuffDoT(ownerModel.variantSO.dotDuration, ownerModel.variantSO.dotDamage);
             }
-
-            PlayImpactParticles();
-
-
-            onRelease?.Invoke();
-
-
         }
 
+        // siempre instanciamos partículas en el punto de impacto
+        PlayImpactParticles(contact.point, contact.normal);
+
+        onRelease?.Invoke();
     }
+
  
 }
 

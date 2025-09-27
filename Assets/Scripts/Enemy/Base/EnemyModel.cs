@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemy.Spawn;
 using Player.Stats.Runtime;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -33,6 +34,10 @@ public class EnemyModel : MonoBehaviour, IDamageable
     [SerializeField] private float heightBarSpawn = 2.5f;
     private Transform healthBar;
     private Transform healthFill;
+    private Animator healthBarAnimator;
+    private Vector3 originalBarLocalPos;
+    private Coroutine shakeRoutine;
+
 
     [Header("Buff Stats Info:")]
     public float currentHealth;
@@ -50,17 +55,17 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
     private void Start()
     {
-       
+
 
         ////////////   Buffs/Debuffs   //////////////
         if (variantSO != null)
         {
-             healthMultiplier = variantSO.healthMultiplier;
-             damageMultiplier = variantSO.damageMultiplier;
-             speedMultiplier = variantSO.speedMultiplier;
-             attackTimeRateMultiplier = variantSO.attackChargeTimeMultiplier;
-             damageReductionDuringAttackMultiplier = variantSO.damageReductionDuringAttack;
-             orbsMultiplier = variantSO.extraOrbsOnDeath;
+            healthMultiplier = variantSO.healthMultiplier;
+            damageMultiplier = variantSO.damageMultiplier;
+            speedMultiplier = variantSO.speedMultiplier;
+            attackTimeRateMultiplier = variantSO.attackChargeTimeMultiplier;
+            damageReductionDuringAttackMultiplier = variantSO.damageReductionDuringAttack;
+            orbsMultiplier = variantSO.extraOrbsOnDeath;
         }
 
 
@@ -77,7 +82,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
         currentDamage = statsSO.AttackDamage * damageMultiplier;
 
         //Tiempo entre ataques
-        currentAttackTimeRate = statsSO.AttackTimeRate * attackTimeRateMultiplier;  
+        currentAttackTimeRate = statsSO.AttackTimeRate * attackTimeRateMultiplier;
 
 
         view = GetComponent<EnemyView>();
@@ -88,11 +93,17 @@ public class EnemyModel : MonoBehaviour, IDamageable
         if (healthBarPrefab != null)
         {
             GameObject barInstance = Instantiate(healthBarPrefab, transform);
-            barInstance.transform.localPosition = new Vector3(0, heightBarSpawn, 0);
+            barInstance.transform.localPosition = new Vector3(0, heightBarSpawn, 0.05f);
+
             healthBar = barInstance.transform;
             healthFill = healthBar.Find("Fill");
+
+            healthBarAnimator = barInstance.GetComponentInChildren<Animator>();
         }
 
+        if (healthBar != null)
+            originalBarLocalPos = healthBar.localPosition;
+            
         //if (variantSO != null && variantSO.variantType == EnemyVariantType.Yellow)
         //{
         //    Debug.Log("Soy un enemigo amarillo fortificado");
@@ -156,7 +167,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
         UpdateHealthBar();
 
-        //Mostrar texto flotante Daño
+        //Mostrar texto flotante Daï¿½o
         if (floatingTextPrefab != null)
         {
             Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
@@ -179,35 +190,67 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
         if (healthBar != null)
         {
+            if (shakeRoutine != null)
+            {
+                StopCoroutine(shakeRoutine);
+                shakeRoutine = null;
+            }
             Destroy(healthBar.gameObject);
         }
-
 
         if (RunData.CurrentCurrency != null)
         {
             RunData.CurrentCurrency.AddCoins(statsSO.CoinsToDrop);
 
-            //Mostrar texto flotante Coins
             if (jumpingCoinsTextPrefab != null)
             {
                 Vector3 spawnPos = transform.position + Vector3.up * heightCoinsTextSpawn;
                 GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
                 textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
             }
-
         }
+
         OnDeath?.Invoke(this);
     }
 
+
     private void UpdateHealthBar()
     {
-        if (healthFill == null) return;
-
         float normalizedHealth = Mathf.Clamp01(CurrentHealth / MaxHealth);
-        healthFill.localScale = new Vector3(normalizedHealth, 1f, 1f);
 
-        // Mover la barra hacia la izquierda para que "se vacíe" desde ahí
-        healthFill.localPosition = new Vector3((normalizedHealth - 1f) / 2f, 0f, 0f);
+        if (healthFill != null)
+        {
+            healthFill.localScale = new Vector3(normalizedHealth, 2f, 1f);
+            healthFill.localPosition = new Vector3((normalizedHealth - 1f) / 2f, 0f, 0f);
+        }
+        if (healthBarAnimator != null)
+        {
+            healthBarAnimator.SetFloat("Health", normalizedHealth);
+        }
+        
+        if (shakeRoutine != null) StopCoroutine(shakeRoutine);
+            shakeRoutine = StartCoroutine(ShakeBar(0.15f, 0.1f));
+    }
+
+    private IEnumerator ShakeBar(float duration, float magnitude)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            if (healthBar == null) yield break;
+
+            float offsetX = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+            float offsetY = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+
+            healthBar.localPosition = originalBarLocalPos + new Vector3(offsetX, offsetY, 0f);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (healthBar != null)
+            healthBar.localPosition = originalBarLocalPos;
     }
 
 
