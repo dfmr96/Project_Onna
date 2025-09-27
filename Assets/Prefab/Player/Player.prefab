@@ -1919,9 +1919,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStrategyType: 1
   combatStrategy:
-    moveSpeed: 5
-    acceleration: 10
-    deceleration: 15
+    moveSpeed: 7
+    acceleration: 30
+    deceleration: 75
     useNavMeshValidation: 1
     navMeshSampleDistance: 1
     maxNavMeshDistance: 2
@@ -1938,9 +1938,9 @@ MonoBehaviour:
     lowerLayerName: LowerBody
     rigController: {fileID: 5169373276702204606}
   hubStrategy:
-    moveSpeed: 5
-    acceleration: 10
-    deceleration: 15
+    moveSpeed: 7
+    acceleration: 30
+    deceleration: 75
     useNavMeshValidation: 1
     navMeshSampleDistance: 1
     maxNavMeshDistance: 2
