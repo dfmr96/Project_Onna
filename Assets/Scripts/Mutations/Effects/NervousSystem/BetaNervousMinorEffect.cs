@@ -16,7 +16,7 @@ namespace Mutations.Effects.NervousSystem
 
         private void Awake()
         {
-            radiationType = MutationType.Gamma;
+            radiationType = MutationType.Beta;
             systemType = SystemType.Nerve;
             slotType = SlotType.Minor;
             effectName = "Velocidad Beta Neural";

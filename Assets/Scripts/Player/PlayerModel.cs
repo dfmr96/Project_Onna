@@ -22,7 +22,7 @@ namespace Player
         [SerializeField] private bool devMode;
         [SerializeField] private StatReferences statRefs;
 
-        [Header("Enemy DoT Effect")]
+        [Header("Debuff: Enemy DoT Effect")]
         [SerializeField] private GameObject poisonEffectPrefab;
         [SerializeField] private Transform poisonAnchor;
         [SerializeField] private Vector3 poisonOffset;
