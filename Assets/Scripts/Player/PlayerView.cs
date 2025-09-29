@@ -1,3 +1,4 @@
+using Player.Melee;
 using UnityEngine;
 
 namespace Player
@@ -33,7 +34,6 @@ namespace Player
         private void InitializeSubViews()
         {
             // Inicializar todas las sub-views
-            meleeView?.Initialize();
             audioView?.Initialize();
             effectsView?.Initialize();
         }

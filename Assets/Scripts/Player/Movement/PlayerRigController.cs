@@ -4,6 +4,13 @@ using System.Collections;
 
 public class PlayerRigController : MonoBehaviour
 {
+    public enum RigState
+    {
+        PistolAim,
+        PistolIdle,
+        Melee
+    }
+
     [Header("Rig Layers")]
     public Rig bodyAimRig;
     public Rig weaponPoseRig;
@@ -13,6 +20,8 @@ public class PlayerRigController : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
+
+    private Coroutine weightRoutine;
 
 
     private void Start()
@@ -37,50 +46,62 @@ public class PlayerRigController : MonoBehaviour
         }
     }
 
-    private void SetMeleeRigWeights()
+    public void SetRigState(RigState state)
     {
-        if (mouseAiming != null)
-            mouseAiming.StartMeleeMode();
+        switch (state)
+        {
+            case RigState.Melee:
+                if (mouseAiming != null)
+                    mouseAiming.StartMeleeMode();
+                SetRigWeights(1f, 0f, 0f, 1f, 0f, "Melee");
+                break;
+            case RigState.PistolAim:
+                if (mouseAiming != null)
+                    mouseAiming.EndMeleeMode();
+                SetRigWeights(1f, 0f, 1f, 0f, 1f, "Pistol Aim");
+                break;
+            case RigState.PistolIdle:
+                SetRigWeights(1f, 1f, 0f, 1f, 1f, "Pistol Idle");
+                break;
+        }
+    }
 
-        StartCoroutine(ForceRigWeights(1f, 0f, 0f, 1f, 0f, "Melee"));
+    public void SetMeleeRigWeights()
+    {
+        SetRigState(RigState.Melee);
     }
 
     private void SetPistolIdleState()
     {
-        StartCoroutine(ForceRigWeights(1f, 1f, 0f, 1f, 1f, "Pistol Idle"));
+        SetRigState(RigState.PistolIdle);
     }
 
     public void SetPistolAimState()
     {
-        if (mouseAiming != null)
-            mouseAiming.EndMeleeMode();
-
-        //Debug.Log("SetPistolAimState called - Starting coroutine to force rig weights...");
-        StartCoroutine(ForceRigWeights(1f, 0f, 1f, 0f, 1f, "Pistol Aim"));
+        SetRigState(RigState.PistolAim);
     }
 
-    private IEnumerator ForceRigWeights(float bodyAim, float weaponPose, float weaponAiming, float weaponMelee,
-        float handsIK, string stateName)
+    private void SetRigWeights(float bodyAim, float weaponPose, float weaponAiming, float weaponMelee, float handsIK, string stateName)
     {
-        for (int i = 0; i < 10; i++)
+        if (weightRoutine != null)
         {
-            if (bodyAimRig != null) bodyAimRig.weight = bodyAim;
-            if (weaponPoseRig != null) weaponPoseRig.weight = weaponPose;
-            if (weaponAimingRig != null) weaponAimingRig.weight = weaponAiming;
-            if (weaponMeleeRig != null) weaponMeleeRig.weight = weaponMelee;
-            if (handsIKRig != null) handsIKRig.weight = handsIK;
-
-            yield return new WaitForEndOfFrame();
+            StopCoroutine(weightRoutine);
         }
+        weightRoutine = StartCoroutine(ApplyRigWeights(bodyAim, weaponPose, weaponAiming, weaponMelee, handsIK, stateName));
+    }
+
+    private IEnumerator ApplyRigWeights(float bodyAim, float weaponPose, float weaponAiming, float weaponMelee, float handsIK, string stateName)
+    {
+        yield return null; // Wait one frame to let Animator finish
+
+        if (bodyAimRig != null) bodyAimRig.weight = bodyAim;
+        if (weaponPoseRig != null) weaponPoseRig.weight = weaponPose;
+        if (weaponAimingRig != null) weaponAimingRig.weight = weaponAiming;
+        if (weaponMeleeRig != null) weaponMeleeRig.weight = weaponMelee;
+        if (handsIKRig != null) handsIKRig.weight = handsIK;
 
         currentState = stateName;
-        /*Debug.Log($"{stateName} state forced - Final weights:");
-        if (bodyAimRig != null) Debug.Log($"Body Aim: {bodyAimRig.weight}");
-        if (weaponPoseRig != null) Debug.Log($"Weapon Pose: {weaponPoseRig.weight}");
-        if (weaponAimingRig != null) Debug.Log($"Weapon Aiming: {weaponAimingRig.weight}");
-        if (weaponMeleeRig != null) Debug.Log($"Weapon Melee: {weaponMeleeRig.weight}");
-        if (handsIKRig != null) Debug.Log($"Hands IK: {handsIKRig.weight}");
-        */
+        weightRoutine = null;
     }
 
     [Header("Mouse Aiming")]

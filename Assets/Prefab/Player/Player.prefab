@@ -861,6 +861,7 @@ GameObject:
   - component: {fileID: 1967356077867525595}
   - component: {fileID: 2437359849114667440}
   - component: {fileID: 5169373276702204606}
+  - component: {fileID: 4208861676171617452}
   m_Layer: 6
   m_Name: Root
   m_TagString: Untagged
@@ -952,6 +953,19 @@ MonoBehaviour:
   animator: {fileID: 1967356077867525595}
   mouseAiming: {fileID: 1023958109057668883}
   debugRigWeights: 0
+--- !u!114 &4208861676171617452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2980805481202117396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06456ce919b94e99a9be12a9028f23df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeController: {fileID: 6668341717595924518}
 --- !u!1 &3115691216462136299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,7 +1254,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 200dff04412ec234abc0d2af9b9bc9f3, type: 2}
-  attackPoint: {fileID: 0}
+  attackPoint: {fileID: 5049842418954775171}
+  showComboDebug: 0
+  animator: {fileID: 1967356077867525595}
+  rigController: {fileID: 5169373276702204606}
 --- !u!114 &5461076056659542388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1253,7 +1270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968231202597de34ea8846b71b108d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 1967356077867525595}
   meleeController: {fileID: 6668341717595924518}
 --- !u!1 &3850822261168716241
 GameObject:
