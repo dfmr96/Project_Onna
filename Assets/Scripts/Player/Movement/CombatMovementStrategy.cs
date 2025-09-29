@@ -19,9 +19,9 @@ namespace Player.Movement
         private int upperLayerIndex = -1;
         private int lowerLayerIndex = -1;
 
-        public override void Initialize(Transform playerTransform)
+        public override void Initialize(Transform playerTransform, PlayerModel playerModel)
         {
-            base.Initialize(playerTransform);
+            base.Initialize(playerTransform, playerModel);
 
             // Get layer indices for animator layer control
             if (animator != null)
@@ -102,6 +102,7 @@ namespace Player.Movement
         protected override void MoveCharacter()
         {
             if (currentMoveInput.magnitude < 0.01f) return;
+            //if (playerMovement.IsDashing) return;
 
             Vector3 desiredPosition = playerTransform.position + currentMoveInput * Time.deltaTime;
 

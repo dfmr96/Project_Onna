@@ -1,5 +1,6 @@
 using Core;
 using Player.Melee;
+using Player.Movement;
 using Player.Weapon;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +11,7 @@ namespace Player
     {
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private MeleeController meleeController = null;
+        [SerializeField] private DashController dashController = null;
         
         private PlayerInputHandler _playerInputHandler;
         private PlayerModel _playerModel;
@@ -26,6 +28,15 @@ namespace Player
         private void OnDisable()
         {
             EventBus.Unsubscribe<PlayerInitializedSignal>(OnPlayerInitialized);
+            
+            if (_playerInputHandler != null)
+            {
+                _playerInputHandler.InteractionPerformed -= HandleInteraction;
+                _playerInputHandler.FirePerformed -= HandleFire;
+                _playerInputHandler.MeleeAtackPerformed -= HandleMelee;
+                _playerInputHandler.ReloadPerformed -= HandleReload;
+                _playerInputHandler.DashPerformed -= HandleDash;
+            }
         }
 
         private void OnPlayerInitialized(PlayerInitializedSignal signal)
@@ -48,6 +59,7 @@ namespace Player
             _playerInputHandler.FirePerformed += HandleFire;
             _playerInputHandler.MeleeAtackPerformed += HandleMelee;
             _playerInputHandler.ReloadPerformed += HandleReload;
+            _playerInputHandler.DashPerformed += HandleDash;
 
         }
         private void HandleFire()
@@ -66,6 +78,15 @@ namespace Player
             if (_playerModel != null && _playerModel.CanShoot)
             {
                 weaponController.Reloading();
+            }
+        }
+        
+        private void HandleDash()
+        {
+            if (dashController != null)
+            {
+                dashController.TryDash();
+                Debug.Log("HandleDash executed");
             }
         }
         private void HandleInteraction()

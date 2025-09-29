@@ -4,7 +4,7 @@ using Player.Movement;
 
 public interface IMovementStrategy
 {
-    void Initialize(Transform playerTransform);
+    void Initialize(Transform playerTransform, PlayerModel playerModel);
     void Update();
     void OnDrawGizmosSelected();
     

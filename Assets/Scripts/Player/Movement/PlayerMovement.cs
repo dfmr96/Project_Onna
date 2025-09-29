@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private MovementStrategyType currentStrategyType = MovementStrategyType.Combat;
     [SerializeField] private CombatMovementStrategy combatStrategy = new CombatMovementStrategy();
     [SerializeField] private HubMovementStrategy hubStrategy = new HubMovementStrategy();
+    [SerializeField] private PlayerModel playerModel;
 
 
     private IMovementStrategy currentStrategy;
@@ -63,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
 
-        currentStrategy?.Initialize(transform);
+        currentStrategy?.Initialize(transform, playerModel);
     }
 
     public void SwitchToCombatMode() => SetMovementStrategy(MovementStrategyType.Combat);

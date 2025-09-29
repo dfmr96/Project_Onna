@@ -24,9 +24,9 @@ public class HubMovementStrategy : BaseMovementStrategy
     private int upperLayerIndex = -1;
     private int lowerLayerIndex = -1;
 
-    public override void Initialize(Transform playerTransform)
+    public override void Initialize(Transform playerTransform, PlayerModel playerModel)
     {
-        base.Initialize(playerTransform);
+        base.Initialize(playerTransform, playerModel);
 
         // Get layer indices for animator layer control
         if (animator != null)
