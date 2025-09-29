@@ -1,4 +1,5 @@
 using Player;
+using Player.Movement;
 using Services;
 using UnityEngine;
 
@@ -23,9 +24,9 @@ public class HubMovementStrategy : BaseMovementStrategy
     private int upperLayerIndex = -1;
     private int lowerLayerIndex = -1;
 
-    public override void Initialize(Transform playerTransform, CameraRelativeInputProcessor inputProcessor)
+    public override void Initialize(Transform playerTransform)
     {
-        base.Initialize(playerTransform, inputProcessor);
+        base.Initialize(playerTransform);
 
         // Get layer indices for animator layer control
         if (animator != null)
@@ -50,10 +51,7 @@ public class HubMovementStrategy : BaseMovementStrategy
 
     protected override void HandleStrategySpecificLogic()
     {
-        HandleAnimatorLayers();
         HandlePlayerRotation();
-        // Ensure layer weights stay correct in Hub mode
-        SetHubLayerWeights();
     }
 
     private void SetHubLayerWeights()
@@ -201,34 +199,4 @@ public class HubMovementStrategy : BaseMovementStrategy
             Debug.Log($"[HUB] Camera Input: {cameraRelativeWorldInput} | Animation Input: {animationMovementInput}");
         }
     }
-
-    private void HandleAnimatorLayers()
-    {
-        if (animator == null) return;
-
-        // Handle Lower Layer (legs/movement) - only this layer is used in Hub
-        if (useLowerLayerAnimator)
-        {
-            HandleLowerLayerAnimation();
-        }
-    }
-
-    private void HandleLowerLayerAnimation()
-    {
-        // TODO: Set movement parameters for lower body
-        // Examples:
-        // animator.SetFloat("Speed", currentMoveInput.magnitude);
-        // animator.SetFloat("VelocityX", currentMoveInput.x);
-        // animator.SetFloat("VelocityZ", currentMoveInput.z);
-        // animator.SetBool("IsMoving", currentMoveInput.magnitude > 0.1f);
-        
-        // In Hub mode, we only care about walking animation
-        // No aiming, no upper body animation
-    }
-
-    // Public setter for external systems to configure hub behavior
-    public void SetLowerLayerEnabled(bool enabled) => useLowerLayerAnimator = enabled;
-
-    // Getter for debugging/external systems
-    public bool IsLowerLayerEnabled() => useLowerLayerAnimator;
 }

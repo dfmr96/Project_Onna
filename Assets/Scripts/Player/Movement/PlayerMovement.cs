@@ -1,4 +1,5 @@
 using Player;
+using Player.Movement;
 using UnityEngine;
 using VContainer;
 
@@ -62,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
 
-        currentStrategy?.Initialize(transform, null);
+        currentStrategy?.Initialize(transform);
     }
 
     public void SwitchToCombatMode() => SetMovementStrategy(MovementStrategyType.Combat);

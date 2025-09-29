@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Player
 {
@@ -14,7 +15,20 @@ namespace Player
             {
                 rigController = animator.GetComponent<PlayerRigController>();
             }
-            rigController.SetRigState(PlayerRigController.RigState.PistolAim);
+
+            switch (GameModeSelector.SelectedMode)
+            {
+                case GameMode.Hub:
+                    rigController.SetRigState(PlayerRigController.RigState.HUB);
+                    break;
+                case GameMode.Run:
+                    rigController.SetRigState(PlayerRigController.RigState.PistolAim);
+                    break;
+                case GameMode.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo,

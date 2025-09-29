@@ -8,7 +8,8 @@ public class PlayerRigController : MonoBehaviour
     {
         PistolAim,
         PistolIdle,
-        Melee
+        Melee,
+        HUB
     }
 
     [Header("Rig Layers")]
@@ -62,6 +63,9 @@ public class PlayerRigController : MonoBehaviour
                 break;
             case RigState.PistolIdle:
                 SetRigWeights(1f, 1f, 0f, 1f, 1f, "Pistol Idle");
+                break;
+            case RigState.HUB:
+                SetRigWeights(0,0,0,0,0,"HUB");
                 break;
         }
     }

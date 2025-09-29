@@ -2,7 +2,7 @@ using Services;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace Player
+namespace Player.Movement
 {
     public class CameraRelativeInputProcessor : IInputService, ITickable
     {
@@ -12,7 +12,7 @@ namespace Player
         public Vector3 CameraRelativeInput { get; private set; }
         public Vector2 RawInput { get; private set; }
 
-        public CameraRelativeInputProcessor(Camera camera, PlayerInputHandler inputHandler)
+        protected CameraRelativeInputProcessor(Camera camera, PlayerInputHandler inputHandler)
         {
             this.cameraReference = camera;
             this.inputHandler = inputHandler;

@@ -2,6 +2,7 @@ using Services;
 using UnityEngine;
 using UnityEngine.AI;
 using Player;
+using Player.Movement;
 using VContainer;
 using VContainer.Unity;
 
@@ -40,7 +41,7 @@ public abstract class BaseMovementStrategy : IMovementStrategy
     [Header("Debug Animation")]
     [SerializeField] protected bool showAnimationDebugInfo = false;
 
-    public virtual void Initialize(Transform playerTransform, CameraRelativeInputProcessor inputProcessor)
+    public virtual void Initialize(Transform playerTransform)
     {
         this.playerTransform = playerTransform;
 
@@ -93,6 +94,7 @@ public abstract class BaseMovementStrategy : IMovementStrategy
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     public virtual void Update()
     {
         HandleMovement();
