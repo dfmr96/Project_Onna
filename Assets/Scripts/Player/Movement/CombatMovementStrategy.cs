@@ -92,7 +92,7 @@ namespace Player.Movement
             if (moveDirection.sqrMagnitude > 0)
                 lastInputDirection = moveDirection.normalized;
 
-            Vector3 targetVelocity = moveDirection * moveSpeed;
+            Vector3 targetVelocity = moveDirection * playerModel.Speed;
             float smoothSpeed = targetVelocity.magnitude > 0.1f ? acceleration : deceleration;
 
             smoothedMovement = Vector3.MoveTowards(smoothedMovement, targetVelocity, smoothSpeed * Time.deltaTime);

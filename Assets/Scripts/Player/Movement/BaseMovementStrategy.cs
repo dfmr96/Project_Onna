@@ -9,8 +9,7 @@ namespace Player.Movement
     public abstract class BaseMovementStrategy : IMovementStrategy
     {
         [Header("Movement Settings")]
-
-        [SerializeField] protected float moveSpeed;
+        [SerializeField] protected PlayerModel playerModel;
         [SerializeField] protected float acceleration = 10f;
         [SerializeField] protected float deceleration = 15f;
 
@@ -46,7 +45,7 @@ namespace Player.Movement
         public virtual void Initialize(Transform playerTransform, PlayerModel playerModel)
         {
             this.playerTransform = playerTransform;
-            moveSpeed = playerModel.Speed;
+            this.playerModel = playerModel;
             // Get input service from VContainer
             var lifetimeScope = playerTransform.GetComponentInParent<LifetimeScope>();
             if (lifetimeScope != null)
@@ -203,7 +202,7 @@ namespace Player.Movement
                     if (currentInputDirection.magnitude > 0.1f)
                     {
                         Vector3 inputDirection = currentInputDirection.normalized;
-                        Vector3 desiredPos = playerTransform.position + inputDirection * gizmoLookAheadTime * moveSpeed;
+                        Vector3 desiredPos = playerTransform.position + inputDirection * gizmoLookAheadTime * playerModel.Speed;
 
                         NavMeshHit hit;
                         bool isValidPosition = NavMesh.SamplePosition(desiredPos, out hit, navMeshSampleDistance, NavMesh.AllAreas);
