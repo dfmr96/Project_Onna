@@ -1970,6 +1970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cacf3d103eef36447aae53af656a7b7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashController: {fileID: 4087316956468912953}
   damageMaterial: {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
   flashDuration: 0.2
   dashStartParticlesPrefab: {fileID: 265630465996528251, guid: 4efa21a884f4b0b49a155daaeed2bd84, type: 3}
@@ -2013,6 +2014,7 @@ MonoBehaviour:
   currentStrategyType: 1
   combatStrategy:
     playerModel: {fileID: 0}
+    speed: 0
     acceleration: 30
     deceleration: 75
     useNavMeshValidation: 1
@@ -2031,6 +2033,7 @@ MonoBehaviour:
     rigController: {fileID: 5169373276702204606}
   hubStrategy:
     playerModel: {fileID: 0}
+    speed: 0
     acceleration: 30
     deceleration: 75
     useNavMeshValidation: 1

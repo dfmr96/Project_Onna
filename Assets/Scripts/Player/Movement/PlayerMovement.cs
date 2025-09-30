@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
 
-        currentStrategy?.Initialize(transform, playerModel);
+        currentStrategy?.Initialize(transform, playerModel); //playerModel.Speed);
     }
 
     public void SwitchToCombatMode() => SetMovementStrategy(MovementStrategyType.Combat);

@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
+using Player.Movement;
 using UnityEngine;
 
 namespace Player
 {
     public class PlayerEffectsView : MonoBehaviour
     {
+        [SerializeField] private DashController dashController;
+         
         [Header("Material Flash")]
         [SerializeField] private Material damageMaterial;  
         [SerializeField] private float flashDuration = 0.1f;
@@ -18,6 +22,18 @@ namespace Player
         [SerializeField] private GameObject dashTrailPrefab;
 
         private GameObject activeTrail;
+
+        private void OnEnable()
+        {
+            dashController.OnDashStarted += PlayDashStart;
+            dashController.OnDashEnded += PlayDashEnd;
+        }
+
+        private void OnDisable()
+        {
+            dashController.OnDashStarted -= PlayDashStart;
+            dashController.OnDashEnded -= PlayDashEnd;
+        }
 
 
         public void Initialize()

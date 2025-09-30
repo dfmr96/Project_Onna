@@ -15,8 +15,8 @@ namespace Player.Movement
         [SerializeField] private float dashCooldown = 1f;
         [SerializeField] private AnimationCurve dashCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-        public event Action OnDashStarted;
-        public event Action OnDashEnded;
+        public event Action<Vector3,Transform> OnDashStarted;
+        public event Action<Vector3> OnDashEnded;
 
         private bool isDashing;
         private float lastDashTime;
@@ -71,10 +71,10 @@ namespace Player.Movement
             Debug.Log("Dash started");
             isDashing = true;
             lastDashTime = Time.time;
-            OnDashStarted?.Invoke();
 
             Vector3 start = playerTransform.position;
             Vector3 targetEnd = start + dashDirection * dashDistance;
+            OnDashStarted?.Invoke(start, playerTransform);
 
             float t = 0f;
             while (t < dashDuration)
@@ -100,7 +100,7 @@ namespace Player.Movement
 
             isDashing = false;
             Debug.Log("Dash ended");
-            OnDashEnded?.Invoke();
+            OnDashEnded?.Invoke(playerTransform.position);
         }
 
         private Vector3 ValidatePositionProgressive(Vector3 desiredPosition)

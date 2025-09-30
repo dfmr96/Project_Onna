@@ -1,6 +1,7 @@
 using Services;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
 
@@ -10,6 +11,18 @@ namespace Player.Movement
     {
         [Header("Movement Settings")]
         [SerializeField] protected PlayerModel playerModel;
+
+        protected float Speed
+        {
+            get
+            {
+                var value = playerModel?.Speed ?? 0;
+                speed = value;
+                return value;
+            }
+        }
+
+        [SerializeField] protected float speed = 0;
         [SerializeField] protected float acceleration = 10f;
         [SerializeField] protected float deceleration = 15f;
 
@@ -41,11 +54,13 @@ namespace Player.Movement
         [Header("Debug Animation")]
         [SerializeField] protected bool showAnimationDebugInfo = false;
         
+        
 
         public virtual void Initialize(Transform playerTransform, PlayerModel playerModel)
         {
             this.playerTransform = playerTransform;
             this.playerModel = playerModel;
+            //this.speed = speed;
             // Get input service from VContainer
             var lifetimeScope = playerTransform.GetComponentInParent<LifetimeScope>();
             if (lifetimeScope != null)
@@ -202,7 +217,7 @@ namespace Player.Movement
                     if (currentInputDirection.magnitude > 0.1f)
                     {
                         Vector3 inputDirection = currentInputDirection.normalized;
-                        Vector3 desiredPos = playerTransform.position + inputDirection * gizmoLookAheadTime * playerModel.Speed;
+                        Vector3 desiredPos = playerTransform.position + inputDirection * gizmoLookAheadTime * Speed;
 
                         NavMeshHit hit;
                         bool isValidPosition = NavMesh.SamplePosition(desiredPos, out hit, navMeshSampleDistance, NavMesh.AllAreas);
