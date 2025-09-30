@@ -36,6 +36,7 @@ namespace Player.Movement
         [SerializeField] protected float gizmoLookAheadTime = 0.5f;
 
         protected Transform playerTransform;
+        protected Rigidbody playerRigidbody;
         protected IInputService inputService;
 
         protected Vector3 currentMoveInput;
@@ -60,6 +61,13 @@ namespace Player.Movement
         {
             this.playerTransform = playerTransform;
             this.playerModel = playerModel;
+            this.playerRigidbody = playerTransform.GetComponent<Rigidbody>();
+
+            if (playerRigidbody == null)
+            {
+                Debug.LogError("BaseMovementStrategy: No Rigidbody component found on player!");
+            }
+
             //this.speed = speed;
             // Get input service from VContainer
             var lifetimeScope = playerTransform.GetComponentInParent<LifetimeScope>();

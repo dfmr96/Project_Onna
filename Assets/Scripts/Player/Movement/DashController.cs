@@ -24,6 +24,7 @@ namespace Player.Movement
         private IInputService inputService;
         [SerializeField] PlayerMovement playerMovement;
         [SerializeField] Transform playerTransform;
+        private Rigidbody playerRigidbody;
 
         public bool CanDash => !isDashing &&
                               Time.time - lastDashTime >= dashCooldown &&
@@ -31,6 +32,13 @@ namespace Player.Movement
 
         private void Start()
         {
+            // Get Rigidbody component
+            playerRigidbody = GetComponent<Rigidbody>();
+            if (playerRigidbody == null)
+            {
+                Debug.LogError("DashController: No Rigidbody component found on player!");
+            }
+
             // Get input service from VContainer
             var lifetimeScope = GetComponentInParent<LifetimeScope>();
             if (lifetimeScope != null)
@@ -68,11 +76,13 @@ namespace Player.Movement
 
         private System.Collections.IEnumerator DashRoutine()
         {
+            if (playerRigidbody == null) yield break;
+
             Debug.Log("Dash started");
             isDashing = true;
             lastDashTime = Time.time;
 
-            Vector3 start = playerTransform.position;
+            Vector3 start = playerRigidbody.position;
             Vector3 targetEnd = start + dashDirection * dashDistance;
             OnDashStarted?.Invoke(start, playerTransform);
 
@@ -87,24 +97,26 @@ namespace Player.Movement
                 Vector3 validatedPosition = ValidatePositionProgressive(desiredPosition);
 
                 // If validation failed (returned current position), stop the dash
-                if (validatedPosition == playerTransform.position &&
-                    Vector3.Distance(desiredPosition, playerTransform.position) > 0.1f)
+                if (validatedPosition == playerRigidbody.position &&
+                    Vector3.Distance(desiredPosition, playerRigidbody.position) > 0.1f)
                 {
                     Debug.Log("Dash stopped due to NavMesh obstruction");
                     break;
                 }
 
-                playerTransform.position = validatedPosition;
+                playerRigidbody.MovePosition(validatedPosition);
                 yield return null;
             }
 
             isDashing = false;
             Debug.Log("Dash ended");
-            OnDashEnded?.Invoke(playerTransform.position);
+            OnDashEnded?.Invoke(playerRigidbody.position);
         }
 
         private Vector3 ValidatePositionProgressive(Vector3 desiredPosition)
         {
+            if (playerRigidbody == null) return desiredPosition;
+
             NavMeshHit hit;
 
             // Try to find a valid position near the desired position
@@ -116,14 +128,14 @@ namespace Player.Movement
                 // If the valid position is too far from desired, it means we hit an obstacle
                 if (distance > 1f)
                 {
-                    return playerTransform.position; // Stop movement
+                    return playerRigidbody.position; // Stop movement
                 }
 
                 return hit.position; // Valid position found
             }
 
             // No valid position found - stop the dash
-            return playerTransform.position;
+            return playerRigidbody.position;
         }
     }
 }
