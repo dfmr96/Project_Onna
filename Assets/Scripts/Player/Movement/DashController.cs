@@ -22,9 +22,9 @@ namespace Player.Movement
         private float lastDashTime;
         private Vector3 dashDirection;
         private IInputService inputService;
-        [SerializeField] PlayerMovement playerMovement;
-        [SerializeField] Transform playerTransform;
-        private Rigidbody playerRigidbody;
+        [SerializeField] private PlayerMovement playerMovement;
+        [SerializeField] private Transform playerTransform;
+        [SerializeField] private Rigidbody playerRigidbody;
 
         public bool CanDash => !isDashing &&
                               Time.time - lastDashTime >= dashCooldown &&
