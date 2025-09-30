@@ -262,6 +262,10 @@ public class UI_Mutation : MonoBehaviour
 
         yield return new WaitForSeconds(GetAnimationLength(mutationAnimator, "Close"));
         PlayerHelper.EnableInput();
+
+        //Evento para activar portal tras seleccion de mutacion
+        GameManager.RaiseMutationUIClosed();
+
         Destroy(gameObject);
     }
 
