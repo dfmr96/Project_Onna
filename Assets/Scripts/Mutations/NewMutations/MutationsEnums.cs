@@ -16,7 +16,7 @@ namespace Mutations
     public enum MutationType
     {
         Gamma,
-        Alfa,
+        Alpha,
         Beta,
         Neutrones,
         Microondas,

@@ -12,6 +12,9 @@ namespace Player.Stats
         public StatDefinition enemyHitPenalty;
         public StatDefinition healingMultiplier;
 
+        [Header("Status Flags")]
+        public StatDefinition isInvulnerable;
+
         [Header("Combat Stats")]
         public StatDefinition damage;
         public StatDefinition bulletSpeed;
@@ -50,6 +53,7 @@ namespace Player.Stats
             TryAssign(ref passiveDrainRate, "PassiveDrainRate", registry);
             TryAssign(ref enemyHitPenalty, "EnemyHitPenalty", registry);
             TryAssign(ref healingMultiplier, "HealingMultiplier", registry);
+            TryAssign(ref isInvulnerable, "IsInvulnerable", registry);
             TryAssign(ref damage, "Damage", registry);
             TryAssign(ref attackRange, "AttackRange", registry);
             TryAssign(ref fireRate, "FireRate", registry);

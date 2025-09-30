@@ -70,6 +70,18 @@ namespace Enemy.Spawn
             HealPlayer();
             OnOrbCollected?.Invoke(healingAmount);
             _onCollected?.Invoke();
+
+
+            var effectController = other.GetComponent<PlayerControllerEffect>();
+            if (effectController != null)
+            {
+                //aplica efecto Alpha Major si está activa
+                effectController.ApplyAlphaMajorEffect();
+                effectController.ApplyAlphaMinorEffect();
+
+            }
+
+
             DeactivateOrb();
         }
     

@@ -1487,6 +1487,7 @@ GameObject:
   - component: {fileID: 4493175352023558290}
   - component: {fileID: 7397906880122127667}
   - component: {fileID: 1703353111641731782}
+  - component: {fileID: 6164256081686966416}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2011,7 +2012,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStrategyType: 1
   combatStrategy:
-    moveSpeed: 7
+    playerModel: {fileID: 0}
     acceleration: 30
     deceleration: 75
     useNavMeshValidation: 1
@@ -2029,7 +2030,7 @@ MonoBehaviour:
     lowerLayerName: LowerBody
     rigController: {fileID: 5169373276702204606}
   hubStrategy:
-    moveSpeed: 7
+    playerModel: {fileID: 0}
     acceleration: 30
     deceleration: 75
     useNavMeshValidation: 1
@@ -2079,6 +2080,18 @@ MonoBehaviour:
   playerInputHandler: {fileID: 4339932572223991893}
   mainCamera: {fileID: 0}
   playerModel: {fileID: 2024501622075525127}
+--- !u!114 &6164256081686966416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863611926642077226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28bb4c452ebeae44085ab89cd828214e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3996204525015037447
 GameObject:
   m_ObjectHideFlags: 0

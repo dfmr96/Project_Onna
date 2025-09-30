@@ -9,20 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6ef70d99c1fa1b43a49b175da73387d, type: 3}
-  m_Name: Beta Nervous Minor
+  m_Script: {fileID: 11500000, guid: 803c27b01de8b0b479eb798310cf3bc7, type: 3}
+  m_Name: Alpha Major
   m_EditorClassIdentifier: 
-  radiationType: 2
+  radiationType: 1
   systemType: 0
-  slotType: 1
-  effectName: Velocidad Beta Neural
-  description: Incrementa ligeramente la velocidad de movimiento en +{percent}%
+  slotType: 0
+  effectName: Alpha Invulnerabilidad
+  description: Cada orbe recogido otorga invulnerabilidad durante 2 segundos
   icon: {fileID: 0}
-  baseValue: 0.5
-  upgradeMultiplier: 2
+  baseValue: 0
+  upgradeMultiplier: 1.2
   maxLevel: 4
-  statType: 0
+  statType: 4
   isMultiplier: 1
-  isTemporary: 0
+  isTemporary: 1
   temporaryDuration: 5
-  baseSpeedBonus: 0.2
+  invulnerabilityDuration: 2

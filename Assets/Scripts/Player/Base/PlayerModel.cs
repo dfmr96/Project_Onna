@@ -55,6 +55,7 @@ namespace Player
         public bool CanMelee => _canMelee;
         public PlayerInventory Inventory => _playerInventory;
 
+        public bool IsInvulnerable => _isInvulnerable;
 
         private bool passiveDrainEnabled = true;
         private GameMode _currentGameMode;
@@ -68,7 +69,8 @@ namespace Player
         private PlayerStatContext _statContext;
         private PlayerView _playerView;
 
-        
+        private bool _isInvulnerable = false;
+
 
         private void Start()
         {
@@ -145,18 +147,24 @@ namespace Player
 
         private void ApplyPassiveDrain()
         {
+            if (_isInvulnerable) return;
+
             float damagePerFrame = DrainRate * Time.deltaTime;
             ApplyDamage(damagePerFrame, false, false);
         }
 
         public void TakeDamage(float timeTaken)
         {
+            if (_isInvulnerable) return;
+
             ApplyDamage(timeTaken, true, true);
             _playerView?.PlayDamageEffect();
         }
 
         public void ApplyDebuffDoT(float dotDuration, float dps)
         {
+            if (_isInvulnerable) return;
+
             if (poisonEffectPrefab != null && poisonEffectInstance == null)
             {
                 GameObject go = Instantiate(poisonEffectPrefab, poisonAnchor.position + poisonOffset, Quaternion.identity, poisonAnchor);
@@ -196,6 +204,8 @@ namespace Player
 
         public void ApplyDamage(float timeTaken, bool applyResistance, bool isDirectDamage = false)
         {
+            if (_isInvulnerable) return;
+
             float resistance = applyResistance ? Mathf.Clamp01(StatContext.Source.Get(statRefs.damageResistance)) : 0f;
             float effectiveDamage = timeTaken * (1f - resistance);
 
@@ -278,6 +288,14 @@ namespace Player
             {
                 _canShoot = canShoot;
                 OnCanShootChanged?.Invoke(canShoot);
+            }
+        }
+
+        public void SetInvulnerable(bool isGod)
+        {
+            if (_isInvulnerable != isGod)
+            {
+                _isInvulnerable = isGod;
             }
         }
 
