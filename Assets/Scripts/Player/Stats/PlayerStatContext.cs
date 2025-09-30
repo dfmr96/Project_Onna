@@ -34,7 +34,7 @@ namespace Player.Stats
         {
             this.runtimeStats = runtimeStats;
             this.metaStats = metaStats;
-
+            
             source = runtimeStats;
             target = runtimeStats;
         }

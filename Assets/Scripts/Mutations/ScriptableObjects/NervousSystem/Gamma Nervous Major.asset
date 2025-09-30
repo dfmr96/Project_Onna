@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 439e27f723177c343a7786fa99c17eea, type: 3}
+  m_Name: Gamma Nervous Major
+  m_EditorClassIdentifier: 
+  radiationType: 0
+  systemType: 0
+  slotType: 0
+  effectName: "Radiaci\xF3n Gamma Neural"
+  description: "Aumenta curaci\xF3n de orbes x{value} pero incrementa drenaje de
+    vida +{drain}/s"
+  icon: {fileID: 0}
+  baseValue: 1.5
+  upgradeMultiplier: 1.3
+  maxLevel: 4
+  statType: 2
+  isMultiplier: 1
+  isTemporary: 0
+  temporaryDuration: 5
+  healingMultiplierBase: 1.5
+  healthDrainIncrease: 0.5
