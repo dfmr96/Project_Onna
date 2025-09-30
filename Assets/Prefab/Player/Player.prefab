@@ -1249,7 +1249,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   playerMovement: {fileID: 4493175352023558290}
   playerTransform: {fileID: 5232816373119301103}
-  playerRigidbody: {fileID: 5174314178262618433}
 --- !u!1 &3805469492105985741
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,7 +1811,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3863611926642077226}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 50
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1827,7 +1826,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
@@ -2017,7 +2016,7 @@ MonoBehaviour:
     playerModel: {fileID: 0}
     speed: 0
     acceleration: 30
-    deceleration: 75
+    deceleration: 70
     useNavMeshValidation: 1
     navMeshSampleDistance: 1
     maxNavMeshDistance: 2
@@ -2036,7 +2035,7 @@ MonoBehaviour:
     playerModel: {fileID: 0}
     speed: 0
     acceleration: 30
-    deceleration: 75
+    deceleration: 70
     useNavMeshValidation: 1
     navMeshSampleDistance: 1
     maxNavMeshDistance: 2

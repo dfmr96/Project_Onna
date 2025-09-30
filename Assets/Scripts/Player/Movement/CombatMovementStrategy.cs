@@ -102,22 +102,15 @@ namespace Player.Movement
         protected override void MoveCharacter()
         {
             if (currentMoveInput.magnitude < 0.01f) return;
-            if (playerRigidbody == null) return;
             //if (playerMovement.IsDashing) return;
 
-            Vector3 desiredPosition = playerRigidbody.position + currentMoveInput * Time.deltaTime;
+            Vector3 desiredPosition = playerTransform.position + currentMoveInput * Time.deltaTime;
 
-            if (useNavMeshValidation)
-            {
-                Vector3 validatedPosition = ValidatePositionWithNavMesh(desiredPosition);
-                playerRigidbody.MovePosition(validatedPosition);
-                lastValidPosition = validatedPosition;
-            }
-            else
-            {
-                playerRigidbody.MovePosition(desiredPosition);
-                lastValidPosition = desiredPosition;
-            }
+            playerTransform.position = useNavMeshValidation
+                ? ValidatePositionWithNavMesh(desiredPosition)
+                : desiredPosition;
+
+            lastValidPosition = playerTransform.position;
         }
 
         protected override void CalculateAnimationInput()

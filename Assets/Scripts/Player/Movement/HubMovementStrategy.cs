@@ -157,22 +157,21 @@ public class HubMovementStrategy : BaseMovementStrategy
     protected override void MoveCharacter()
     {
         if (currentMoveInput.magnitude < 0.01f) return;
-        if (playerRigidbody == null) return;
 
-        Vector3 desiredPosition = playerRigidbody.position + currentMoveInput * Time.deltaTime;
+        Vector3 desiredPosition = playerTransform.position + currentMoveInput * Time.deltaTime;
 
         // Hub mode: Simpler movement, less strict NavMesh validation
         if (useNavMeshValidation)
         {
             Vector3 validatedPosition = ValidatePositionWithNavMesh(desiredPosition);
-            playerRigidbody.MovePosition(validatedPosition);
-            lastValidPosition = validatedPosition;
+            playerTransform.position = validatedPosition;
         }
         else
         {
-            playerRigidbody.MovePosition(desiredPosition);
-            lastValidPosition = desiredPosition;
+            playerTransform.position = desiredPosition;
         }
+
+        lastValidPosition = playerTransform.position;
     }
 
     protected override void CalculateAnimationInput()
