@@ -18,8 +18,8 @@ namespace Mutations
         Gamma,
         Alpha,
         Beta,
-        Neutrones,
-        Microondas,
+        Neutrons,
+        Microwaves,
         Cherenkov
     }
 }

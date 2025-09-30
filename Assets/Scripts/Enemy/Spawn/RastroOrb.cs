@@ -71,14 +71,11 @@ namespace Enemy.Spawn
             OnOrbCollected?.Invoke(healingAmount);
             _onCollected?.Invoke();
 
-
-            var effectController = other.GetComponent<PlayerControllerEffect>();
-            if (effectController != null)
+            //Interfaz para Mutaciones
+            var collector = other.GetComponent<IOrbCollectable>();
+            if (collector != null)
             {
-                //aplica efecto Alpha Major si está activa
-                effectController.ApplyAlphaMajorEffect();
-                effectController.ApplyAlphaMinorEffect();
-
+                collector.OnOrbCollected();
             }
 
 
