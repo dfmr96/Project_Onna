@@ -39,6 +39,22 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
             Debug.LogError("PlayerControllerEffect requiere PlayerModel en el mismo GameObject.");
     }
 
+    public List<RadiationEffect> GetActiveMutations()
+    {
+        List<RadiationEffect> active = new List<RadiationEffect>();
+
+        foreach (var system in MutationManager.Instance.Systems)
+        {
+            if (system.MajorSlot.ActiveEffect != null)
+                active.Add(system.MajorSlot.ActiveEffect);
+
+            if (system.MinorSlot.ActiveEffect != null)
+                active.Add(system.MinorSlot.ActiveEffect);
+        }
+
+        return active;
+    }
+
     #region INTERFACES
     public void OnOrbCollected()
     {
@@ -120,19 +136,6 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     }
 
     #endregion
-
-    public List<RadiationEffect> GetActiveMutations()
-    {
-        List<RadiationEffect> active = new List<RadiationEffect>();
-
-        // Retorna las mutaciones activas para iterar en EnemyStatusHandler
-        if (MicrowavesMajorActive)
-            active.Add(null); // Solo placeholder si querés, el DoT se maneja con flags
-        if (MicrowavesMinorActive)
-            active.Add(null);
-
-        return active;
-    }
 
 
     #region MUTACION MICROWAVES
