@@ -70,6 +70,15 @@ namespace Enemy.Spawn
             HealPlayer();
             OnOrbCollected?.Invoke(healingAmount);
             _onCollected?.Invoke();
+
+            //Interfaz para Mutaciones
+            var collector = other.GetComponent<IOrbCollectable>();
+            if (collector != null)
+            {
+                collector.OnOrbCollected();
+            }
+
+
             DeactivateOrb();
         }
     
