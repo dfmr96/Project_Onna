@@ -129,7 +129,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         if (_statusHandler == null)
         {
             _statusHandler = gameObject.AddComponent<EnemyStatusHandler>();
-            Debug.Log("[EnemyController] EnemyStatusHandler agregado automáticamente.");
+            //Debug.Log("[EnemyController] EnemyStatusHandler agregado automáticamente.");
         }
     }
 

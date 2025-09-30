@@ -128,7 +128,7 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     #endregion
 
 
-    #region MUTACION NERVOUS
+    #region MUTACION NEUTRONS
     public void SetNeutronsEffect(bool active, float extraTime = 0f)
     {
         neutronsActive = active;

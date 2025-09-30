@@ -104,36 +104,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
         if (healthBar != null)
             originalBarLocalPos = healthBar.localPosition;
             
-        //if (variantSO != null && variantSO.variantType == EnemyVariantType.Yellow)
-        //{
-        //    Debug.Log("Soy un enemigo amarillo fortificado");
-        //}
-
-        //if (variantSO != null)
-        //{
-        //    switch (variantSO.variantType)
-        //    {
-        //        case EnemyVariantType.Green:
-        //            // Aplica DoT al jugador
-        //            //player.ApplyDot(variantSO.dotDamage, variantSO.dotDuration);
-        //            break;
-
-        //        case EnemyVariantType.Purple:
-        //            //if (CurrentHealth <= 0 && !hasExploded)
-        //            //{
-        //            //    Explode(variantSO.explosionRadius, variantSO.explosionDamage);
-        //            //    hasExploded = true;
-        //            //}
-        //            break;
-
-        //        case EnemyVariantType.Dark:
-        //            if (enemy.IsChargingAttack())
-        //            {
-        //                damageAmount *= (1f - variantSO.damageReductionDuringAttack);
-        //            }
-        //            break;
-        //    }
-        //}
+       
     }
 
 
@@ -141,7 +112,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
     {
         if (enemy.GetShield()) return;
 
-        Debug.Log($"[EnemyModel] Recibi daño: {damageAmount}");
+        //Debug.Log($"[EnemyModel] Recibi daño: {damageAmount}");
 
         //Debug.Log("Damagen received: " + damageAmount);
         if (statsSO.RastroOrbOnHit && orbSpawner != null)
