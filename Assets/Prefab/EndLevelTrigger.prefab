@@ -13,12 +13,13 @@ GameObject:
   - component: {fileID: 4057348306094105487}
   - component: {fileID: 1726443006709919230}
   - component: {fileID: 5740563148966045424}
+  - component: {fileID: 7983673206257869322}
   m_Layer: 0
   m_Name: EndLevelTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &136066616595983858
 Transform:
@@ -122,3 +123,30 @@ MonoBehaviour:
   loadCanvasPrefab: {fileID: 1822515629045912885, guid: c214e4a145d9467458f42cd11ed1b19d, type: 3}
   portalPrefab: {fileID: 4009900104414549993, guid: cd6bfda9d56cce447aeb03942a03ae25, type: 3}
   spawnOffset: {x: 0, y: 2, z: 0}
+--- !u!54 &7983673206257869322
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6597899693275548709}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

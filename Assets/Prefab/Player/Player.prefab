@@ -1478,7 +1478,6 @@ GameObject:
   - component: {fileID: 2024501622075525127}
   - component: {fileID: 4339932572223991893}
   - component: {fileID: 2260689123518874433}
-  - component: {fileID: 5174314178262618433}
   - component: {fileID: -2364824535458516691}
   - component: {fileID: 5206305562450521121}
   - component: {fileID: 879461727823975973}
@@ -1803,33 +1802,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statRefs: {fileID: 11400000, guid: 32dafbba4d335714c8c998c91f07c1d4, type: 2}
---- !u!54 &5174314178262618433
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3863611926642077226}
-  serializedVersion: 4
-  m_Mass: 50
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 1
+  showDebugger: 0
 --- !u!82 &-2364824535458516691
 AudioSource:
   m_ObjectHideFlags: 0

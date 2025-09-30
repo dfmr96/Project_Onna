@@ -7,7 +7,7 @@ namespace Player.Stats
     {
         [SerializeField] private StatReferences statRefs;
         private PlayerModel player;
-        private bool showDebugger = true;
+        [SerializeField] private bool showDebugger = true;
         private GUIStyle emptyStyle;
 
         private void Start()
