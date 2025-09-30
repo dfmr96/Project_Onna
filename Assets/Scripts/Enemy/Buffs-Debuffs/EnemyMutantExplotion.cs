@@ -34,7 +34,7 @@ public class EnemyMutantExplotion : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
 
-        if (hasHit) return;
+        //if (hasHit) return;
 
         if ((collision.transform.root == playerTransform) && (collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable)))
         {
