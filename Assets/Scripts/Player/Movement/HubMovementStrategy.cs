@@ -146,7 +146,7 @@ public class HubMovementStrategy : BaseMovementStrategy
             moveDirection = Vector3.zero;
         }
 
-        Vector3 targetVelocity = moveDirection * speed;
+        Vector3 targetVelocity = moveDirection * Speed;
 
         float smoothSpeed = targetVelocity.magnitude > 0.1f ? acceleration : deceleration;
         smoothedMovement = Vector3.MoveTowards(smoothedMovement, targetVelocity, smoothSpeed * Time.deltaTime);
