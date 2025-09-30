@@ -36,6 +36,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
     public EnemyHurtState HurtState { get; set; }
     public EnemyDefendState DefendState { get; set; }
 
+
     public enum InitialState
     {
         Patrol, Chase, Attack, Search, Idle, Stunned, Dead, Escape, Defend
@@ -79,6 +80,9 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
     private List<EnemyAttackSOBase> attackPhaseInstances = new();
 
+    //Status de DoTs por Mutaciones
+    private EnemyStatusHandler _statusHandler;
+
     void Awake()
     {
         // Instanciar behaviors
@@ -119,6 +123,14 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         // El AttackState se construye con el currentAttackSO dinámico
         currentAttackSO = attackPhaseInstances[0];
         AttackState = new EnemyAttackState(this, fsm);
+
+        //Para manejar estados de daño DoT en mutaciones
+        _statusHandler = GetComponent<EnemyStatusHandler>();
+        if (_statusHandler == null)
+        {
+            _statusHandler = gameObject.AddComponent<EnemyStatusHandler>();
+            Debug.Log("[EnemyController] EnemyStatusHandler agregado automáticamente.");
+        }
     }
 
     void Start()

@@ -6,6 +6,7 @@ using Player;
 using Enemy.Spawn;
 using Mutations.Core.Categories;
 using Mutations;
+using Mutations.Core;
 
 public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 {
@@ -21,6 +22,15 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     //Mutaciones Neutrons Nervous
     private bool neutronsActive;
     private float extraVitalTime;
+
+    //Mutaciones Microwaves
+    public bool MicrowavesMajorActive { get; private set; }
+    public float MicrowavesMajorBurnDuration { get; private set; }
+    public float MicrowavesMajorDamagePerTick { get; private set; }
+    public float MicrowavesMajorBonusDamage { get; private set; }
+    public bool MicrowavesMinorActive { get; private set; }
+    public float MicrowavesMinorBurnDuration { get; private set; }
+    public float MicrowavesMinorDamagePerTick { get; private set; }
 
     private void Awake()
     {
@@ -54,12 +64,14 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
         }
 
     }
-    #endregion
 
     public void RecoverTime(float timeRecovered)
     {
         playerModel.RecoverTime(timeRecovered);
     }
+
+    #endregion
+
 
     #region MUTACION ALPHA
     public void SetAlphaMajor(bool active, float duration = 0f)
@@ -109,6 +121,41 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 
     #endregion
 
+    public List<RadiationEffect> GetActiveMutations()
+    {
+        List<RadiationEffect> active = new List<RadiationEffect>();
 
+        // Retorna las mutaciones activas para iterar en EnemyStatusHandler
+        if (MicrowavesMajorActive)
+            active.Add(null); // Solo placeholder si querés, el DoT se maneja con flags
+        if (MicrowavesMinorActive)
+            active.Add(null);
+
+        return active;
+    }
+
+
+    #region MUTACION MICROWAVES
+    public void SetMicrowavesMajor(bool active, float burnDuration = 3f, float damagePerTick = 2f, float bonus = 5f)
+    {
+        MicrowavesMajorActive = active;
+        if (active)
+        {
+            MicrowavesMajorBurnDuration = burnDuration;
+            MicrowavesMajorDamagePerTick = damagePerTick;
+            MicrowavesMajorBonusDamage = bonus;
+        }
+    }
+
+    public void SetMicrowavesMinor(bool active, float burnDuration = 1f, float damagePerTick = 1f)
+    {
+        MicrowavesMinorActive = active;
+        if (active)
+        {
+            MicrowavesMinorBurnDuration = burnDuration;
+            MicrowavesMinorDamagePerTick = damagePerTick;
+        }
+    }
+    #endregion
 
 }

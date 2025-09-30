@@ -10,7 +10,8 @@ namespace Mutations.Core.Categories
         HealingMultiplier,
         HealthDrain,
         InvulnerabilityDuration,
-        OrbAttractRange
+        OrbAttractRange,
+        EnemyDoT
     }
 
     public abstract class StatModifierEffect : RadiationEffect

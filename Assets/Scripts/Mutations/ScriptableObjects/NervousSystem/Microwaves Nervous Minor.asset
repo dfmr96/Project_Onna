@@ -9,20 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29582643866cbc4ab94c38c0ff05820, type: 3}
-  m_Name: Neutrons Nervous Minor
+  m_Script: {fileID: 11500000, guid: 1fefa9fda671ba34182ef21eef5a1f09, type: 3}
+  m_Name: Microwaves Nervous Minor
   m_EditorClassIdentifier: 
-  radiationType: 3
+  radiationType: 4
   systemType: 0
   slotType: 1
-  effectName: Neutrons Minor
-  description: "Cada orbe vital recogido a\xF1ade +2 segundos de tiempo vital."
+  effectName: Microwaves Minor
+  description: Cada Disparos aplican quemadura leve de +1-+2 segundos.
   icon: {fileID: 0}
   baseValue: 0
   upgradeMultiplier: 1.2
   maxLevel: 4
-  statType: 2
+  statType: 0
   isMultiplier: 1
   isTemporary: 1
   temporaryDuration: 5
-  extraTime: 2
+  minBurnDuration: 1
+  maxBurnDuration: 2
+  damagePerTick: 1

@@ -4,7 +4,7 @@ using Mutations.Core.Categories;
 
 namespace Mutations.Effects.NervousSystem
 {
-    [CreateAssetMenu(fileName = "Alpha Major", menuName = "Mutations/Effects/Nervous System/Alpha Major")]
+    [CreateAssetMenu(fileName = "Alpha Nervous Major", menuName = "Mutations/Effects/Nervous System/Alpha Major")]
     public class AlphaNervousMajorEffect : StatModifierEffect
     {
         [Header("Alpha Major Settings")]

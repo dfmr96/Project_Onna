@@ -16,13 +16,13 @@ namespace Player.Stats
             emptyStyle = new GUIStyle();
             emptyStyle.normal.background = Texture2D.whiteTexture; // Necesitamos un fondo sólido para aplicar el color
             
-            Debug.Log("🧪 StatsDebugger initialized.");
-            if (player != null)
-                Debug.Log("🧪 PlayerModel found: " + player.name);
-            if (player?.StatContext != null)
-                Debug.Log("🧪 StatContext present.");
-            if (player?.StatContext?.Meta == null)
-                Debug.LogWarning("⚠️ Meta stats not loaded at Start.");
+            //Debug.Log("🧪 StatsDebugger initialized.");
+            //if (player != null)
+            //    //Debug.Log("🧪 PlayerModel found: " + player.name);
+            //if (player?.StatContext != null)
+            //    //Debug.Log("🧪 StatContext present.");
+            //if (player?.StatContext?.Meta == null)
+                //Debug.LogWarning("⚠️ Meta stats not loaded at Start.");
         }
 
         private void OnGUI()

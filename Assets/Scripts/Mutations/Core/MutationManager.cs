@@ -123,5 +123,23 @@ namespace Mutations.Core
         {
             ClearAllMutations();
         }
+
+        public bool TryGetMutation(MutationType type, out SystemType system, out SlotType slot)
+        {
+            foreach (var sys in systems)
+            {
+                if (sys.TryGetSlot(type, out var foundSlot))
+                {
+                    system = sys.SystemType;
+                    slot = foundSlot.SlotType;
+                    return true;
+                }
+            }
+
+            system = default;
+            slot = default;
+            return false;
+        }
+
     }
 }

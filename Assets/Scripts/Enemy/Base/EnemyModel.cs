@@ -141,6 +141,8 @@ public class EnemyModel : MonoBehaviour, IDamageable
     {
         if (enemy.GetShield()) return;
 
+        Debug.Log($"[EnemyModel] Recibi daño: {damageAmount}");
+
         //Debug.Log("Damagen received: " + damageAmount);
         if (statsSO.RastroOrbOnHit && orbSpawner != null)
         {

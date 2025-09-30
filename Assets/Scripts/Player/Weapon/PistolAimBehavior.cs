@@ -9,7 +9,7 @@ namespace Player
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo,
             int layerIndex)
         {
-            Debug.Log($"{GetType().Name}: OnStateEnter called - returning to pistol aim");
+            //Debug.Log($"{GetType().Name}: OnStateEnter called - returning to pistol aim");
 
             if (rigController == null)
             {

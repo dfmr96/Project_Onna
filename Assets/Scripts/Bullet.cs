@@ -1,11 +1,16 @@
-﻿using System;
+﻿using Mutations;
+using Mutations.Core;
+using System;
 using UnityEngine;
+using Player;
 
 public class Bullet : MonoBehaviour
 {
     private float _bulletSpeed;
     private float _damage;
     private float _maxDistance;
+
+    private GameObject playerGO;
 
     [SerializeField] private GameObject hitParticlePrefab;
 
@@ -15,6 +20,8 @@ public class Bullet : MonoBehaviour
     {
         float destroyTime = _maxDistance / _bulletSpeed;
         Destroy(gameObject, destroyTime);
+        playerGO = PlayerHelper.GetPlayer();
+
     }
 
     private void Update() { Move(); }
@@ -41,6 +48,14 @@ public class Bullet : MonoBehaviour
 
         if (other.TryGetComponent<IDamageable>(out var damageable))
             damageable.TakeDamage(_damage);
+
+        //MUTACION
+           var collectable = other.GetComponent<IProjectileCollectable>();
+        if (collectable != null)
+        {
+            var playerEffect = playerGO.GetComponent<PlayerControllerEffect>();
+            collectable.OnHitByProjectile(playerEffect);
+        }
 
         Destroy(gameObject);
     }

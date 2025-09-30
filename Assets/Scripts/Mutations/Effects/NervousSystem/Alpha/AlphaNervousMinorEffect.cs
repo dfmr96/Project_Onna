@@ -7,7 +7,7 @@ using Mutations.Core.Categories;
 namespace Mutations.Effects.NervousSystem
 {
 
-    [CreateAssetMenu(fileName = "Alpha Minor", menuName = "Mutations/Effects/Nervous System/Alpha Minor")]
+    [CreateAssetMenu(fileName = "Alpha Nervous Minor", menuName = "Mutations/Effects/Nervous System/Alpha Minor")]
     public class AlphaNervousMinorEffect : StatModifierEffect
     {
         [Header("Alpha Minor Settings")]

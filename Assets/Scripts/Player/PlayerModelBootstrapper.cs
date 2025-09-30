@@ -74,9 +74,9 @@ namespace Player
                 return;
             }
 
-            Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
+            //Debug.Log("🧠 Bootstrapper: Recibida señal de jugador spawneado");
             var playerGO = signal.PlayerGO;
-            Debug.Log($"📦 Recibido PlayerSpawnedSignal. GO = {playerGO?.name}");
+            //Debug.Log($"📦 Recibido PlayerSpawnedSignal. GO = {playerGO?.name}");
             var playerModel = playerGO.GetComponent<PlayerModel>();
             if (playerModel == null)
             {
@@ -96,7 +96,7 @@ namespace Player
                     var runtimeStats = RunData.CurrentStats ?? new RuntimeStats(baseStats, metaStats, statRefs);
                     RunData.SetStats(runtimeStats);
                     _statContext.SetupFromExistingRuntime(runtimeStats, metaStats);
-                    Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando RuntimeStats en PlayerModel.");
+                    //Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando RuntimeStats en PlayerModel.");
                     break;
 
                 case GameMode.Hub:
