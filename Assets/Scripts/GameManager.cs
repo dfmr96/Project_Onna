@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public static void RaiseMutationUIClosed()
+    public void RaiseMutationUIClosed()
     {
         OnMutationUIClosed?.Invoke();
     }

@@ -264,7 +264,7 @@ public class UI_Mutation : MonoBehaviour
         PlayerHelper.EnableInput();
 
         //Evento para activar portal tras seleccion de mutacion
-        GameManager.RaiseMutationUIClosed();
+        GameManager.Instance?.RaiseMutationUIClosed();
 
         Destroy(gameObject);
     }
