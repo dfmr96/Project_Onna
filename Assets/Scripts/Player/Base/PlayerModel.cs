@@ -1,8 +1,9 @@
-using System;
 using Core;
 using NaughtyAttributes;
-using System.Collections;
 using Player.Stats;
+using Player.Stats.Runtime;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Player
@@ -90,7 +91,7 @@ namespace Player
         {
             _statContext = context;
             _currentTime = StatContext.Runtime?.CurrentEnergyTime ?? float.PositiveInfinity;
-
+            RunData.NewMutationController.ApplyEffects(gameObject);
             EventBus.Publish(new PlayerInitializedSignal(this));
         }
 

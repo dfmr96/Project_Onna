@@ -104,7 +104,7 @@ namespace Mutations
             gameObject.SetActive(false);
 
             //Evento para activar portal tras seleccion de mutacion
-            GameManager.RaiseMutationUIClosed();
+            GameManager.Instance?.RaiseMutationUIClosed();
 
             //Cursor Mouse
             Cursor.visible = false;

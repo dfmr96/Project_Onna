@@ -1,5 +1,6 @@
 using AYellowpaper.SerializedCollections;
 using Mutations;
+using Mutations.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ public class NewMutationDatabase : ScriptableObject
     [Header("Database Mutations")]
     [SerializeField] private SerializedDictionary<SystemType, RadiationInfo> radiationLookup;
 
-    public NewMutations GetMutation(MutationType radiation, SystemType system, SlotType slot)
+    public RadiationEffect GetMutation(MutationType radiation, SystemType system, SlotType slot)
     {
         if (!radiationLookup.TryGetValue(system, out RadiationInfo radInfo)) return null;
 
@@ -52,9 +53,9 @@ public class NewMutationDatabase : ScriptableObject
         switch (slot)
         {
             case SlotType.Major:
-                return slots.MajorSO as NewMutations;
+                return slots.MajorSO as RadiationEffect;
             case SlotType.Minor:
-                return slots.MinorSO as NewMutations;
+                return slots.MinorSO as RadiationEffect;
             default:
                 return null;
         }
