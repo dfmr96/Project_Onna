@@ -15,6 +15,10 @@ public class EnemyView : MonoBehaviour
 
     private float _distanceToCountExit = 3f;
 
+    [SerializeField] private Material[] spawnMaterials; // materiales temporales de spawn
+    [SerializeField] private float spawnEffectDuration = 2f; // segundos que dura
+
+
     private Renderer targetRenderer;
     private Color flashColor = Color.white;
     private float flashDuration = .3f;
@@ -58,8 +62,15 @@ public class EnemyView : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-
+        targetRenderer = GetComponentInChildren<Renderer>();
+        if (targetRenderer != null)
+        {
+            material = targetRenderer.material;
+            originalColor = material.color;
+            originalMaterials = targetRenderer.materials;
+        }
     }
+
     public Animator Animator => animator;
 
     private void Start()
@@ -68,14 +79,6 @@ public class EnemyView : MonoBehaviour
         projectileSpawner = GameManager.Instance.projectileSpawner;
         _enemyController = GetComponent<EnemyController>();
         _enemyModel = GetComponent<EnemyModel>();
-        targetRenderer = GetComponentInChildren<Renderer>();
-
-        material = targetRenderer.material;
-        //originalColor = material.GetColor("_Color");
-        originalColor = material.color;
-
-        originalMaterials = targetRenderer.materials;
-        //torret
         if (turretHead != null)
         {
             initialRotation = turretHead.localRotation;
@@ -235,6 +238,30 @@ public class EnemyView : MonoBehaviour
         }
     }
 
+
+    public void PlaySpawnEffect()
+    {
+        if (isDead) return;
+
+        if (flashCoroutine != null)
+            StopCoroutine(flashCoroutine);
+
+        flashCoroutine = StartCoroutine(SpawnEffectCoroutine());
+    }
+
+    private IEnumerator SpawnEffectCoroutine()
+    {
+        // Cambiamos a materiales de spawn
+        targetRenderer.materials = GetFittedMaterials(spawnMaterials);
+
+        yield return new WaitForSeconds(spawnEffectDuration);
+
+        // Restauramos materiales originales (solo si sigue vivo)
+        if (!isDead)
+            targetRenderer.materials = originalMaterials;
+
+        flashCoroutine = null;
+    }
 
 
 
