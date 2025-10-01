@@ -75,7 +75,7 @@ public class PlayerItemsHolder
     public void RestoreFromSave()
     {
         upgradesBoughtDictionary.Clear();
-        var database = Resources.Load<UpgradeDatabase>("UpgradeDB");
+        var database = Resources.Load<UpgradeDB>("UpgradeDB");
 
         if (database == null)
         {

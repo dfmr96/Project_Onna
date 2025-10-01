@@ -8,15 +8,14 @@ public class NewMutationController
 {
     private Dictionary<SystemType, NewMutationSystem> systems = new();
     private List<RadiationEffect> effects = new();
-    private NewMutationDatabase _database;
+    private MutationDB _db;
 
     //TODO
     ///NECESITO NIVEL DE MUTACIONES
 
-    public NewMutationController(NewMutationDatabase database)
+    public NewMutationController()
     {
-        ResetRun();
-        _database = database;
+        _db = Resources.Load<MutationDB>("MutationDB");
 
         systems[SystemType.Nerve] = new NewMutationSystem { systemType = SystemType.Nerve };
         systems[SystemType.Integumentary] = new NewMutationSystem { systemType = SystemType.Integumentary };
@@ -40,7 +39,7 @@ public class NewMutationController
     /// </summary>
     public List<NewRadiationData> RollRadiations(int count = 3)
     {
-        List<NewRadiationData> pool = new List<NewRadiationData>(_database.AllRadiations);
+        List<NewRadiationData> pool = new List<NewRadiationData>(_db.AllRadiations);
         List<NewRadiationData> result = new List<NewRadiationData>();
         var rng = new System.Random();
 
@@ -63,7 +62,7 @@ public class NewMutationController
 
         if (!targetSlot.IsEmpty) return false;
 
-        RadiationEffect mutation = _database.GetMutation(radiation, system, slot);
+        RadiationEffect mutation = _db.GetMutation(radiation, system, slot);
 
         if (mutation == null) 
         {
@@ -99,7 +98,7 @@ public class NewMutationController
         var mutation = GetEquippedMutation(system, slot);
         if (mutation == null) return null;
 
-        return _database?.GetRadiationData(mutation.RadiationType);
+        return _db?.GetRadiationData(mutation.RadiationType);
     }
 
     /// <summary>
@@ -107,7 +106,7 @@ public class NewMutationController
     /// </summary>
     public RadiationEffect GetMutationForSlot(MutationType radiation, SystemType system, SlotType slot)
     {
-        return _database.GetMutation(radiation, system, slot);
+        return _db.GetMutation(radiation, system, slot);
     }
 
     /// <summary>

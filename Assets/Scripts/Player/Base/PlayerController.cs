@@ -18,7 +18,6 @@ namespace Player
         private PlayerView _playerView;
         private IInteractable currentInteractable;
         private bool canInteract = true;
-        private bool _isReady = false;
 
         private void OnEnable()
         {
@@ -45,7 +44,6 @@ namespace Player
 
             _playerModel = signal.Model;
             _playerModel.InitializeGameMode();
-            _isReady = true;
         }
 
         void Awake()

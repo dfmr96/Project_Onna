@@ -33,7 +33,7 @@ public class PlayerLifetimeScope : LifetimeScope
 
     private void Start()
     {
-        Debug.Log("PlayerLifetimeScope.Start() - Container ready");
+        //Debug.Log("PlayerLifetimeScope.Start() - Container ready");
 
         // Force VContainer to instantiate the InputService
         Container.Resolve<IInputService>();
