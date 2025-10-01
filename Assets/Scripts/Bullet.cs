@@ -36,8 +36,10 @@ public class Bullet : MonoBehaviour
         // instanciar partículas siempre al colisionar
         if (hitParticlePrefab != null)
         {
-            Instantiate(hitParticlePrefab, transform.position, Quaternion.identity);
+            GameObject hitVFX = Instantiate(hitParticlePrefab, transform.position, Quaternion.identity);
+            Destroy(hitVFX, 2f); // se destruye a los 2 segundos
         }
+
 
         if (other.TryGetComponent<IDamageable>(out var damageable))
             damageable.TakeDamage(_damage);

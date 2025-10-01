@@ -14,14 +14,16 @@ namespace Player.Melee
         [SerializeField] private Transform attackPoint;
         private MeleeModel Model { get; set; }
 
+
+
         [Header("Combo")] 
         private Coroutine _comboTimer;
         private int _comboStep = 0;
 
-        private int ComboStep
+        public int ComboStep
         {
             get => _comboStep;
-            set
+            private set
             {
                 if (_comboStep == value) return;
                 _comboStep = value;
