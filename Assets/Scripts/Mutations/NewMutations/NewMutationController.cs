@@ -1,11 +1,17 @@
 using Mutations;
+using Mutations.Core;
+using Player;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class NewMutationController
 {
     private Dictionary<SystemType, NewMutationSystem> systems = new();
+    private List<RadiationEffect> effects = new();
     private NewMutationDatabase _database;
+
+    //TODO
+    ///NECESITO NIVEL DE MUTACIONES
 
     public NewMutationController(NewMutationDatabase database)
     {
@@ -57,7 +63,7 @@ public class NewMutationController
 
         if (!targetSlot.IsEmpty) return false;
 
-        NewMutations mutation = _database.GetMutation(radiation, system, slot);
+        RadiationEffect mutation = _database.GetMutation(radiation, system, slot);
 
         if (mutation == null) 
         {
@@ -66,6 +72,8 @@ public class NewMutationController
         }
 
         systems[system].AssignMutation(mutation, slot);
+        effects.Add(mutation);
+        mutation.ApplyEffect(PlayerHelper.GetPlayer(), 1);
         return true;
     }
 
@@ -77,7 +85,7 @@ public class NewMutationController
     /// <summary>
     /// Returns mutation equiped in a system and slot
     /// </summary>
-    public NewMutations GetEquippedMutation(SystemType system, SlotType slot)
+    public RadiationEffect GetEquippedMutation(SystemType system, SlotType slot)
     {
         if (!systems.TryGetValue(system, out var sys)) return null;
         return slot == SlotType.Major ? sys.mayorSlot.Mutation : sys.menorSlot.Mutation;
@@ -91,15 +99,24 @@ public class NewMutationController
         var mutation = GetEquippedMutation(system, slot);
         if (mutation == null) return null;
 
-        return _database?.GetRadiationData(mutation.Type);
+        return _database?.GetRadiationData(mutation.RadiationType);
     }
 
     /// <summary>
     /// Returns a mutation
     /// </summary>
-    public NewMutations GetMutationForSlot(MutationType radiation, SystemType system, SlotType slot)
+    public RadiationEffect GetMutationForSlot(MutationType radiation, SystemType system, SlotType slot)
     {
         return _database.GetMutation(radiation, system, slot);
     }
 
+    /// <summary>
+    /// Apply an effect
+    /// </summary>
+    public void ApplyEffects(GameObject player)
+    {
+        Debug.Log("Applying effects");
+        foreach (RadiationEffect effect in effects)
+            effect.ApplyEffect(player, 1);
+    }
 }

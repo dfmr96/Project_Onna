@@ -1,4 +1,5 @@
 using Mutations;
+using Mutations.Core;
 using Player;
 using Player.Stats.Runtime;
 using System.Collections;
@@ -68,6 +69,7 @@ public class UI_Mutation : MonoBehaviour
         Initialize();
     }
 
+    [ContextMenu("Re Roll")]
     private void Initialize()
     {
         PlayerHelper.DisableInput();
@@ -120,13 +122,13 @@ public class UI_Mutation : MonoBehaviour
     private void ShowSlotDescriptions(NewRadiationData data)
     {
         if (isRotating) return;
-        NewMutations majorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Major);
-        NewMutations minorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Minor);
+        RadiationEffect minorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Minor);
+        RadiationEffect majorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Major);
 
-        majorSlotDescription.text = majorMutation != null ? majorMutation.MajorEffectDescription : "";
+        majorSlotDescription.text = majorMutation != null ? majorMutation.Description : "";
         majorSlotDescription.color = normalTextColor;
 
-        minorSlotDescription.text = minorMutation != null ? minorMutation.MinorEffectDescription : "";
+        minorSlotDescription.text = minorMutation != null ? minorMutation.Description : "";
         minorSlotDescription.color = normalTextColor;
     }
 
@@ -140,7 +142,7 @@ public class UI_Mutation : MonoBehaviour
                 activeSystem,
                 SlotType.Major
             );
-            majorSlotDescription.text = equippedMajorMutation != null ? equippedMajorMutation.MajorEffectDescription : "";
+            majorSlotDescription.text = equippedMajorMutation != null ? equippedMajorMutation.Description : "";
             majorSlotDescription.color = equippedTextColor;
         }
         else majorSlotDescription.text = "";
@@ -153,7 +155,7 @@ public class UI_Mutation : MonoBehaviour
                 activeSystem,
                 SlotType.Minor
             );
-            minorSlotDescription.text = equippedMinorMutation != null ? equippedMinorMutation.MinorEffectDescription : "";
+            minorSlotDescription.text = equippedMinorMutation != null ? equippedMinorMutation.Description : "";
             minorSlotDescription.color = equippedTextColor;
         }
         else minorSlotDescription.text = "";

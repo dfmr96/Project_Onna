@@ -11,5 +11,4 @@ public class NewRadiationData : ScriptableObject
     public MutationType Type => type;
     public Sprite Icon => icon;
     public Sprite SmallIcon => smallIcon;
-
 }
