@@ -6,10 +6,6 @@ using UnityEngine;
 [System.Serializable]
 public class HubMovementStrategy : BaseMovementStrategy
 {
-
-    [Header("Hub Settings")]
-    [SerializeField] private bool useLowerLayerAnimator = true;
-
     [Header("Rotation Settings")]
     [SerializeField] private float rotationSpeed = 720f; // degrees per second
     [SerializeField] private bool enableRotation = true;

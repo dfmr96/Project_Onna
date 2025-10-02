@@ -33,7 +33,7 @@ public struct MutationSlots
 }
 
 [CreateAssetMenu(fileName = "New Mutation Database", menuName = "Mutations/Databases")]
-public class NewMutationDatabase : ScriptableObject
+public class MutationDB : ScriptableObject
 {
     [Header("Radiation Data")]
     [SerializeField] private List<NewRadiationData> allRadiations;

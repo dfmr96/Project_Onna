@@ -91,7 +91,6 @@ namespace Player
         {
             _statContext = context;
             _currentTime = StatContext.Runtime?.CurrentEnergyTime ?? float.PositiveInfinity;
-            RunData.NewMutationController.ApplyEffects(gameObject);
             EventBus.Publish(new PlayerInitializedSignal(this));
         }
 

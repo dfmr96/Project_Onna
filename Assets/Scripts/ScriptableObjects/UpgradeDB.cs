@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "UpgradeDatabase", menuName = "Databases/UpgradeDatabase")]
-    public class UpgradeDatabase : ScriptableObject
+    public class UpgradeDB : ScriptableObject
     {
         [SerializeField] private List<StoreUpgradeData> allUpgrades = new List<StoreUpgradeData>();
         [SerializeField] private SerializedDictionary<string, StoreUpgradeData> lookup;
