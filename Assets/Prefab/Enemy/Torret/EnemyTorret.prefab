@@ -385,9 +385,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15090d3ae99f0744785b069fb322afa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnMaterials: []
+  spawnEffectDuration: 2
   firePoint2: {fileID: 3283853659466723465}
   turretHead: {fileID: 4480628916664112943}
-  deathParticlesPrefab: {fileID: 5246763172288597999}
+  deathParticlesPrefab: {fileID: 4033287822461114141, guid: a164e676dbbd6e54587237e619372c98, type: 3}
   damageMaterials:
   - {fileID: -876546973899608171, guid: a6732fc98472db644a184cea3f5172b1, type: 3}
   deathMaterials:
@@ -505,11 +507,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 855feb4cb5961514da5e74af777ef29a, type: 3}
---- !u!198 &5246763172288597999 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198000012942003240, guid: 855feb4cb5961514da5e74af777ef29a, type: 3}
-  m_PrefabInstance: {fileID: 5363594436522755015}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5359676381938084319 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000011428506136, guid: 855feb4cb5961514da5e74af777ef29a, type: 3}

@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using System;
 
-
 public class BossView : MonoBehaviour
 {
     private Animator animator;
@@ -17,20 +16,17 @@ public class BossView : MonoBehaviour
     [SerializeField] private AudioClip laserShootAudioClip;
     [SerializeField] private AudioClip shootAudioClip;
 
-    // ======================
-    // 🎨 EFECTOS VISUALES
-    // ======================
     [Header("Visual Effects")]
-    [SerializeField] private ParticleSystem deathParticlesPrefab;   // NUEVO
-    [SerializeField] private ParticleSystem damageParticlesPrefab;  // NUEVO
-    [SerializeField] private Material[] damageMaterials;            // NUEVO
-    [SerializeField] private Material[] deathMaterials;             // NUEVO
+    [SerializeField] private ParticleSystem deathParticlesPrefab;
+    [SerializeField] private ParticleSystem damageParticlesPrefab;
+    [SerializeField] private Material[] damageMaterials;
+    [SerializeField] private Material[] deathMaterials;
 
-    private Renderer targetRenderer;                                // NUEVO
-    private Material[] originalMaterials;                           // NUEVO
-    private Coroutine flashCoroutine = null;                        // NUEVO
-    private float flashDuration = .3f;                              // NUEVO
-    private bool isDead = false;                                    // NUEVO
+    private Renderer[] targetRenderers;         // 🔹 Todos los renderers del boss
+    private Material[][] originalMaterials;     // 🔹 Materiales originales de cada renderer
+    private Coroutine flashCoroutine = null;
+    private float flashDuration = .3f;
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -47,21 +43,23 @@ public class BossView : MonoBehaviour
         projectileSpawner = GameManager.Instance.projectileSpawner;
         audioSource = GetComponent<AudioSource>();
 
-        // Guardamos renderer y materiales originales
-        targetRenderer = GetComponentInChildren<Renderer>();
-        if (targetRenderer != null)
-            originalMaterials = targetRenderer.materials;
+        // 🔹 Guardamos TODOS los renderers y sus materiales originales
+        targetRenderers = GetComponentsInChildren<Renderer>();
+        originalMaterials = new Material[targetRenderers.Length][];
+
+        for (int i = 0; i < targetRenderers.Length; i++)
+        {
+            originalMaterials[i] = targetRenderers[i].materials;
+        }
     }
 
     // ===========================================================
-    // 📌 EFECTOS VISUALES
+    // 💥 EFECTOS DE DAÑO
     // ===========================================================
-
-    public void HandleDamage()   // similar a EnemyView
+    public void HandleDamage()
     {
         animator.SetTrigger("IsDamaged");
 
-        // Partículas de daño
         if (damageParticlesPrefab != null)
         {
             ParticleSystem damageParticlesInstance = Instantiate(
@@ -78,16 +76,54 @@ public class BossView : MonoBehaviour
         PlayDamageEffect();
     }
 
+    public void PlayDamageEffect()
+    {
+        if (isDead || targetRenderers == null) return;
+
+        if (flashCoroutine != null)
+            StopCoroutine(flashCoroutine);
+
+        flashCoroutine = StartCoroutine(FlashDamageMaterialsCoroutine());
+    }
+
+    private IEnumerator FlashDamageMaterialsCoroutine()
+    {
+        // 🔹 Aplicamos el material de daño a todos los renderers
+        foreach (Renderer rend in targetRenderers)
+        {
+            Material[] glitchedMaterials = new Material[rend.materials.Length];
+            for (int i = 0; i < glitchedMaterials.Length; i++)
+                glitchedMaterials[i] = damageMaterials[0];
+
+            rend.materials = glitchedMaterials;
+        }
+
+        yield return new WaitForSeconds(flashDuration);
+
+        // 🔹 Restauramos materiales originales
+        if (!isDead)
+        {
+            for (int i = 0; i < targetRenderers.Length; i++)
+            {
+                targetRenderers[i].materials = originalMaterials[i];
+            }
+        }
+
+        flashCoroutine = null;
+    }
+
+    // ===========================================================
+    // ☠️ EFECTOS DE MUERTE
+    // ===========================================================
     public void PlayDeathAnimation()
     {
         animator.SetTrigger("IsDead");
         isDead = true;
 
-        // Aplicamos materiales de muerte
-        if (targetRenderer != null && deathMaterials.Length > 0)
-            targetRenderer.materials = GetFittedMaterials(deathMaterials);
+        // 🔹 Aplicamos materiales de muerte en todas las partes
+        for (int i = 0; i < targetRenderers.Length; i++)
+            targetRenderers[i].materials = GetFittedMaterials(deathMaterials, originalMaterials[i].Length);
 
-        // Cancelamos cualquier flash en curso
         if (flashCoroutine != null)
         {
             StopCoroutine(flashCoroutine);
@@ -112,48 +148,23 @@ public class BossView : MonoBehaviour
         }
     }
 
-    public void PlayDamageEffect()
+    private Material[] GetFittedMaterials(Material[] source, int slots)
     {
-        if (isDead || targetRenderer == null) return;
-
-        if (flashCoroutine != null)
-            StopCoroutine(flashCoroutine);
-
-        flashCoroutine = StartCoroutine(FlashDamageMaterialsCoroutine());
-    }
-
-    private IEnumerator FlashDamageMaterialsCoroutine()
-    {
-        targetRenderer.materials = GetFittedMaterials(damageMaterials);
-
-        yield return new WaitForSeconds(flashDuration);
-
-        if (!isDead)
-            targetRenderer.materials = originalMaterials;
-
-        flashCoroutine = null;
-    }
-
-    private Material[] GetFittedMaterials(Material[] source)
-    {
-        Material[] newMaterials = new Material[originalMaterials.Length];
-
-        for (int i = 0; i < originalMaterials.Length; i++)
+        Material[] newMaterials = new Material[slots];
+        for (int i = 0; i < slots; i++)
         {
             if (i < source.Length)
                 newMaterials[i] = source[i];
             else
                 newMaterials[i] = source[source.Length - 1];
         }
-
         return newMaterials;
     }
 
     // ===========================================================
-    // 🔫 DISPAROS (como ya tenías)
+    // 🔫 DISPAROS
     // ===========================================================
     private Coroutine _shootCoroutine;
-
     [SerializeField] private int burstCount = 3;
     [SerializeField] private float burstInterval = 0.2f;
     [SerializeField] private int pelletsPerShot = 5;
@@ -201,7 +212,7 @@ public class BossView : MonoBehaviour
     }
 
     // ===========================================================
-    // 🎬 ANIMACIONES
+    // 🎭 ANIMACIONES
     // ===========================================================
     public void PlayAttackAnimation(bool isAttacking) => animator.SetBool("IsAttacking", isAttacking);
     public void PlayProjectilesAttackAnimation() => animator.SetTrigger("IsProjectilesAttacking");
@@ -230,9 +241,6 @@ public class BossView : MonoBehaviour
 
     public void ShootShotgun() => audioSource.PlayOneShot(shootAudioClip);
 
-    // ===========================================================
-    // ❤️ VIDA
-    // ===========================================================
     public void UpdateHealthBar(float healthPercentage)
     {
         // lógica UI barra de vida
