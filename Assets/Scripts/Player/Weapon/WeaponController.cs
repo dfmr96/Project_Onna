@@ -202,8 +202,10 @@ namespace Player.Weapon
             foreach (var mod in activeModifiers)
             {
                 bulletObj.RegisterModifier(mod, _playerEffect);
-                //Debug.Log($"[WeaponController] Registrado modificador {mod.name} en bala");
             }
+
+            // Aplicar materiales después de registrar todos
+            bulletObj.ApplyTrailMaterials();
 
             audioSource.PlayOneShot(shootFx);
         }

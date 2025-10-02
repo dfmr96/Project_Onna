@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class BulletModifierSO : ScriptableObject
 {
+    public Material trailMaterial;
+
     //se llama al instanciar la bala
     public virtual void OnSetup(Bullet bullet, PlayerControllerEffect player) { }
 
@@ -13,4 +15,10 @@ public abstract class BulletModifierSO : ScriptableObject
 
     //se puede usar si alguna mutación altera stats del arma directamente (penetración, cadencia, daño base, etc.).
     public virtual void ModifyWeapon(WeaponController weapon) { }
+
+    // Método para que cada mod devuelva su material
+    public virtual Material GetTrailMaterial()
+    {
+        return trailMaterial;
+    }
 }

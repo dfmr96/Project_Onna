@@ -13,11 +13,21 @@ public class BurnBulletModifierSO : BulletModifierSO
     public float bonusDamageIfAlreadyBurned = 10f;
     public bool IsMajor = true;
 
+    [Header("Trail Settings")]
+    public Material burnTrailMaterial;
+
+    public override Material GetTrailMaterial()
+    {
+        // Aquí puedes devolver dinámicamente un material distinto
+        return burnTrailMaterial != null ? burnTrailMaterial : base.GetTrailMaterial();
+    }
+
     // Se llama cuando la bala se instancia
     public override void OnSetup(Bullet bullet, PlayerControllerEffect player)
     {
         // La bala no necesita añadirlo, solo se asegura que lo conozca
         bullet.RegisterModifier(this, player);
+
     }
 
     // Se llama cuando la bala impacta

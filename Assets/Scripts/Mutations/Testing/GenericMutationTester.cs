@@ -13,6 +13,7 @@ namespace Mutations.Testing
         [SerializeField] private StatModifierEffect mutationEffect; 
         [SerializeField] private int mutationLevel = 1;
         [SerializeField] private bool showGUI = true;
+        [SerializeField] private float yOffset = 50;
 
         private PlayerModel playerModel;
         private bool effectApplied = false;
@@ -33,10 +34,15 @@ namespace Mutations.Testing
             // Hotkeys para testing rápido
             if (Input.GetKeyDown(KeyCode.M))
             {
-                if (effectApplied)
-                    RemoveMutation();
-                else
+                //if (effectApplied)
+                //    RemoveMutation();
+                //else
                     ApplyMutation();
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                RemoveMutation();
             }
 
             if (Input.GetKeyDown(KeyCode.B))
@@ -51,7 +57,7 @@ namespace Mutations.Testing
 
             string effectName = mutationEffect ? mutationEffect.name : "None";
 
-            GUILayout.BeginArea(new Rect(Screen.width - 300, 50, 280, 200), " Generic Mutation Tester", GUI.skin.window);
+            GUILayout.BeginArea(new Rect(Screen.width - 300, yOffset, 280, 200), " Generic Mutation Tester", GUI.skin.window);
 
             GUILayout.Label($"Player: {(playerModel ? "Ok" : "Cancel")}");
             GUILayout.Label($"Effect: {effectName}");
@@ -69,33 +75,35 @@ namespace Mutations.Testing
             GUILayout.Space(5);
 
             // Botones
-            if (GUILayout.Button(effectApplied ? "Remove Mutation (M)" : "Apply Mutation (M)"))
-            {
-                if (effectApplied)
-                    RemoveMutation();
-                else
-                    ApplyMutation();
-            }
+            //if (GUILayout.Button(effectApplied ? "Remove Mutation (M)" : "Apply Mutation (M)"))
+            //{
+            //    if (effectApplied)
+            //        RemoveMutation();
+            //    else
+            //        ApplyMutation();
+            //}
+            if (GUILayout.Button("Apply Mutation (M)")) ApplyMutation();
+            if (GUILayout.Button("Remove Mutation (N)")) RemoveMutation();
 
             GUILayout.Space(5);
 
             // Info actual
-            if (playerModel?.StatContext != null)
-            {
-                float moveSpeed = playerModel.StatContext.Source.Get(playerModel.StatRefs.movementSpeed);
-                float drainRate = playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate);
+            //if (playerModel?.StatContext != null)
+            //{
+            //    float moveSpeed = playerModel.StatContext.Source.Get(playerModel.StatRefs.movementSpeed);
+            //    float drainRate = playerModel.StatContext.Source.Get(playerModel.StatRefs.passiveDrainRate);
 
-                GUILayout.Label($"Move Speed: {moveSpeed:F2}");
-                GUILayout.Label($"Drain Rate: {drainRate:F2}");
-            }
+            //    GUILayout.Label($"Move Speed: {moveSpeed:F2}");
+            //    GUILayout.Label($"Drain Rate: {drainRate:F2}");
+            //}
 
             GUILayout.EndArea();
 
             // Instrucciones
-            GUI.Label(new Rect(Screen.width - 300, 260, 280, 80),
-                "Controls:\n" +
-                "M - Toggle Mutation\n" +
-                "B - Toggle GUI");
+            //GUI.Label(new Rect(Screen.width - 300, 260, 280, 80),
+            //    "Controls:\n" +
+            //    "M - Toggle Mutation\n" +
+            //    "B - Toggle GUI");
         }
 
         [ContextMenu("Apply Mutation")]

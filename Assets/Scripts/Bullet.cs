@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
     private float _bulletSpeed;
     private float _damage;
     private float _maxDistance;
+    private Material[] defaultTrailMaterials;
 
     private GameObject playerGO;
 
@@ -29,6 +30,10 @@ public class Bullet : MonoBehaviour
         //// Llamar OnSetup de cada modificador
         //foreach (var mod in _modifiers)
         //    mod.OnSetup(this, playerGO.GetComponent<PlayerControllerEffect>());
+
+        var trail = GetComponentInChildren<TrailRenderer>();
+        if (trail != null)
+            defaultTrailMaterials = trail.materials;
     }
 
     public void RegisterModifier(BulletModifierSO modifier, PlayerControllerEffect player)
@@ -67,19 +72,45 @@ public class Bullet : MonoBehaviour
         if (other.TryGetComponent<IDamageable>(out var damageable))
             damageable.TakeDamage(_damage);
 
-        //MUTACION
-        //   var collectable = other.GetComponent<IProjectileCollectable>();
-        //if (collectable != null)
-        //{
-        //    var playerEffect = playerGO.GetComponent<PlayerControllerEffect>();
-        //    collectable.OnHitByProjectile(playerEffect);
-        //}
+   
 
-        // Aplicar todos los modificadores
+        //MUTACIONES DE BALAS
         foreach (var mod in _modifiers)
             mod.OnHit(this, other.gameObject, _playerEffect);
 
         Destroy(gameObject);
     }
+
+    public void ApplyTrailMaterials()
+    {
+        var trail = GetComponentInChildren<TrailRenderer>();
+        if (trail == null) return;
+
+        List<Material> materials = new List<Material>();
+
+        foreach (var mod in _modifiers)
+        {
+            Material mat = mod.GetTrailMaterial();
+            if (mat != null)
+                materials.Add(mat);
+        }
+
+        if (materials.Count == 0)
+        {
+            // Si no hay mods, usar el material por defecto
+            if (defaultTrailMaterials != null)
+                trail.materials = defaultTrailMaterials;
+            else
+                Debug.LogWarning("[Bullet] No hay materiales para aplicar ni predeterminados.");
+        }
+        else
+        {
+            trail.materials = materials.ToArray();
+        }
+    }
+
+
+
+
 
 }

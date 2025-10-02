@@ -27,14 +27,7 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     private bool neutronsActive;
     private float extraVitalTime;
 
-    //Mutaciones Microwaves
-    //public bool MicrowavesMajorActive { get; private set; }
-    //public float MicrowavesMajorBurnDuration { get; private set; }
-    //public float MicrowavesMajorDamagePerTick { get; private set; }
-    //public float MicrowavesMajorBonusDamage { get; private set; }
-    //public bool MicrowavesMinorActive { get; private set; }
-    //public float MicrowavesMinorBurnDuration { get; private set; }
-    //public float MicrowavesMinorDamagePerTick { get; private set; }
+
 
     private void Awake()
     {
@@ -93,6 +86,10 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 
     #endregion
 
+
+
+
+
     #region BALUBIS
 
     public void AddBulletModifier(BulletModifierSO modifier)
@@ -112,6 +109,11 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     }
 
     #endregion
+
+
+
+
+
 
     #region MUTACION ALPHA
     public void SetAlphaMajor(bool active, float duration = 0f)
@@ -150,6 +152,9 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     }
 
     #endregion
+
+
+
 
 
     #region MUTACION NEUTRONS
