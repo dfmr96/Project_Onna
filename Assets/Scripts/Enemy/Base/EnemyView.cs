@@ -16,7 +16,7 @@ public class EnemyView : MonoBehaviour
     private float _distanceToCountExit = 3f;
 
     [SerializeField] private Material[] spawnMaterials; // materiales temporales de spawn
-    [SerializeField] private float spawnEffectDuration = 2f; // segundos que dura
+    [SerializeField] private float spawnEffectDuration = 1f; // segundos que dura
 
 
     private Renderer targetRenderer;
@@ -246,24 +246,67 @@ public class EnemyView : MonoBehaviour
         if (flashCoroutine != null)
             StopCoroutine(flashCoroutine);
 
-        flashCoroutine = StartCoroutine(SpawnEffectCoroutine());
+        // 🔹 Lanzamos la corutina del spawn dissolve
+        flashCoroutine = StartCoroutine(SpawnDissolveCoroutine(1f, 0f, spawnEffectDuration));
     }
 
-    private IEnumerator SpawnEffectCoroutine()
+
+    private IEnumerator SpawnDissolveCoroutine(float startValue, float endValue, float duration)
     {
-        // Cambiamos a materiales de spawn
+        // 🔹 Aplicamos el material de spawn
         targetRenderer.materials = GetFittedMaterials(spawnMaterials);
 
-        yield return new WaitForSeconds(spawnEffectDuration);
+        float elapsed = 0f;
 
-        // Restauramos materiales originales (solo si sigue vivo)
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            float dissolveValue = Mathf.Lerp(startValue, endValue, t);
+
+            foreach (Material mat in targetRenderer.materials)
+            {
+                if (mat.HasProperty("_DissolveAmount"))
+                    mat.SetFloat("_DissolveAmount", dissolveValue);
+            }
+
+            yield return null;
+        }
+
+        // 🔹 Restauramos materiales originales
         if (!isDead)
             targetRenderer.materials = originalMaterials;
 
         flashCoroutine = null;
     }
 
+    private IEnumerator DissolveCoroutine(float targetValue, float duration)
+    {
+        float elapsed = 0f;
 
+        // 🔹 Asumimos que todos los materiales de muerte tienen la propiedad DissolveAmount
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            foreach (Material mat in targetRenderer.materials)
+            {
+                if (mat.HasProperty("_DissolveAmount"))
+                    mat.SetFloat("_DissolveAmount", Mathf.Lerp(0f, targetValue, t));
+            }
+
+            yield return null;
+        }
+
+        // 🔹 Aseguramos valor final
+        foreach (Material mat in targetRenderer.materials)
+        {
+            if (mat.HasProperty("_DissolveAmount"))
+                mat.SetFloat("_DissolveAmount", targetValue);
+        }
+    }
 
 
 
@@ -344,15 +387,18 @@ public class EnemyView : MonoBehaviour
         animator.SetTrigger("IsDead");
         isDead = true;
 
-        // activamos los materiales de muerte permanentemente
+        // 🔹 Asignamos materiales de muerte
         targetRenderer.materials = GetFittedMaterials(deathMaterials);
 
-        // cancelamos cualquier flash en curso
+        // 🔹 Cancelamos cualquier flash en curso
         if (flashCoroutine != null)
         {
             StopCoroutine(flashCoroutine);
             flashCoroutine = null;
         }
+
+        // 🔹 Lanzamos efecto de disolver
+        StartCoroutine(DissolveCoroutine(1f, 2f)); // (valor final, duración en segundos)
 
         PlayDeathParticles();
     }

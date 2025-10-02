@@ -2,6 +2,7 @@ using Player;
 using System.Collections;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class BossView : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class BossView : MonoBehaviour
     [SerializeField] private AudioClip shootAudioClip;
 
     [Header("Visual Effects")]
+    [SerializeField] private GameObject[] excludedObjects;
+    
     [SerializeField] private ParticleSystem deathParticlesPrefab;
     [SerializeField] private ParticleSystem damageParticlesPrefab;
     [SerializeField] private Material[] damageMaterials;
@@ -43,19 +46,38 @@ public class BossView : MonoBehaviour
         projectileSpawner = GameManager.Instance.projectileSpawner;
         audioSource = GetComponent<AudioSource>();
 
-        // 🔹 Guardamos TODOS los renderers y sus materiales originales
-        targetRenderers = GetComponentsInChildren<Renderer>();
-        originalMaterials = new Material[targetRenderers.Length][];
+        // 🔹 Obtenemos todos los renderers hijos
+        Renderer[] allRenderers = GetComponentsInChildren<Renderer>();
+        List<Renderer> filtered = new List<Renderer>();
 
+        foreach (Renderer rend in allRenderers)
+        {
+            bool isExcluded = false;
+
+            // Revisamos si este renderer está en un GO excluido o es hijo de uno
+            foreach (GameObject go in excludedObjects)
+            {
+                if (rend.gameObject == go || rend.transform.IsChildOf(go.transform))
+                {
+                    isExcluded = true;
+                    break;
+                }
+            }
+
+            if (!isExcluded)
+                filtered.Add(rend);
+        }
+
+        targetRenderers = filtered.ToArray();
+
+        // 🔹 Guardamos materiales originales de los que SÍ se pueden modificar
+        originalMaterials = new Material[targetRenderers.Length][];
         for (int i = 0; i < targetRenderers.Length; i++)
         {
             originalMaterials[i] = targetRenderers[i].materials;
         }
     }
 
-    // ===========================================================
-    // 💥 EFECTOS DE DAÑO
-    // ===========================================================
     public void HandleDamage()
     {
         animator.SetTrigger("IsDamaged");
