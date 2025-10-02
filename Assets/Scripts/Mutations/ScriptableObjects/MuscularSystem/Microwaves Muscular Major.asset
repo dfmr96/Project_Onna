@@ -10,22 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ed9643e47a67a349b4265b4885bbd6b, type: 3}
-  m_Name: Microwaves Nervous Major
+  m_Name: Microwaves Muscular Major
   m_EditorClassIdentifier: 
   radiationType: 4
-  systemType: 0
+  systemType: 2
   slotType: 0
   effectName: Microwaves Major
-  description: "Cada Disparos aplican quemadura aguda de +3. Si el enemigo ya esta
-    quemado el disparo hace mas da\xF1o inicial de +5 de da\xF1o"
+  description: "Cada Disparos aplican quemadura aguda. Si el enemigo ya esta quemado
+    el disparo hace mas da\xF1o inicial"
   icon: {fileID: 0}
   baseValue: 0
   upgradeMultiplier: 1.2
   maxLevel: 4
-  statType: 6
+  statType: 0
   isMultiplier: 1
   isTemporary: 1
   temporaryDuration: 5
-  burnDuration: 3
-  damagePerTick: 2
-  bonusDamageIfAlreadyBurned: 5
+  burnModifierSO: {fileID: 0}

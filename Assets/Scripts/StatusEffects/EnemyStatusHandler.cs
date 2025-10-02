@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable, IProjectileCollectable
+public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
 {
     private List<StatusEffect> _activeEffects = new List<StatusEffect>();
     private IDamageable _damageable;
@@ -50,37 +50,37 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable, IProjectileC
     }
 
 
-    public void OnHitByProjectile(PlayerControllerEffect playerEffect)
-    {
-        if (playerEffect == null) return;
+    //public void OnHitByProjectile(PlayerControllerEffect playerEffect)
+    //{
+    //    if (playerEffect == null) return;
 
-        // Major
-        if (playerEffect.MicrowavesMajorActive)
-        {
-            bool alreadyBurned = HasStatusEffect<BurnEffect>(source: "Major");
+    //    // Major
+    //    if (playerEffect.MicrowavesMajorActive)
+    //    {
+    //        bool alreadyBurned = HasStatusEffect<BurnEffect>(source: "Major");
 
-            ApplyStatusEffect(new BurnEffect(
-                playerEffect.MicrowavesMajorBurnDuration,
-                playerEffect.MicrowavesMajorDamagePerTick,
-                source: "Major"
-            ));
+    //        ApplyStatusEffect(new BurnEffect(
+    //            playerEffect.MicrowavesMajorBurnDuration,
+    //            playerEffect.MicrowavesMajorDamagePerTick,
+    //            source: "Major"
+    //        ));
 
-            if (alreadyBurned)
-            {
-                GetComponent<IDamageable>()?.TakeDamage(playerEffect.MicrowavesMajorBonusDamage);
-            }
-        }
+    //        if (alreadyBurned)
+    //        {
+    //            GetComponent<IDamageable>()?.TakeDamage(playerEffect.MicrowavesMajorBonusDamage);
+    //        }
+    //    }
 
-        // Minor
-        if (playerEffect.MicrowavesMinorActive)
-        {
-            ApplyStatusEffect(new BurnEffect(
-                playerEffect.MicrowavesMinorBurnDuration,
-                playerEffect.MicrowavesMinorDamagePerTick,
-                source: "Minor"
-            ));
-        }
-    }
+    //    // Minor
+    //    if (playerEffect.MicrowavesMinorActive)
+    //    {
+    //        ApplyStatusEffect(new BurnEffect(
+    //            playerEffect.MicrowavesMinorBurnDuration,
+    //            playerEffect.MicrowavesMinorDamagePerTick,
+    //            source: "Minor"
+    //        ));
+    //    }
+    //}
 
     // Método helper para HasStatusEffect con fuente específica
     public bool HasStatusEffect<T>(string source = null) where T : StatusEffect

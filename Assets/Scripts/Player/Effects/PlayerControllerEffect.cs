@@ -11,7 +11,11 @@ using Mutations.Core;
 public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 {
     private PlayerModel playerModel;
+
     private Dictionary<string, Coroutine> activeCoroutines = new();
+
+    private List<BulletModifierSO> activeBulletModifiers = new List<BulletModifierSO>();
+
 
     //Mutacion Alpha Nervous
     public bool AlphaMajorActive { get; private set; }
@@ -24,13 +28,13 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     private float extraVitalTime;
 
     //Mutaciones Microwaves
-    public bool MicrowavesMajorActive { get; private set; }
-    public float MicrowavesMajorBurnDuration { get; private set; }
-    public float MicrowavesMajorDamagePerTick { get; private set; }
-    public float MicrowavesMajorBonusDamage { get; private set; }
-    public bool MicrowavesMinorActive { get; private set; }
-    public float MicrowavesMinorBurnDuration { get; private set; }
-    public float MicrowavesMinorDamagePerTick { get; private set; }
+    //public bool MicrowavesMajorActive { get; private set; }
+    //public float MicrowavesMajorBurnDuration { get; private set; }
+    //public float MicrowavesMajorDamagePerTick { get; private set; }
+    //public float MicrowavesMajorBonusDamage { get; private set; }
+    //public bool MicrowavesMinorActive { get; private set; }
+    //public float MicrowavesMinorBurnDuration { get; private set; }
+    //public float MicrowavesMinorDamagePerTick { get; private set; }
 
     private void Awake()
     {
@@ -81,6 +85,7 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 
     }
 
+
     public void RecoverTime(float timeRecovered)
     {
         playerModel.RecoverTime(timeRecovered);
@@ -88,6 +93,25 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 
     #endregion
 
+    #region BALUBIS
+
+    public void AddBulletModifier(BulletModifierSO modifier)
+    {
+        if (!activeBulletModifiers.Contains(modifier))
+            activeBulletModifiers.Add(modifier);
+    }
+
+    public void RemoveBulletModifier(BulletModifierSO modifier)
+    {
+        activeBulletModifiers.Remove(modifier);
+    }
+
+    public List<BulletModifierSO> GetActiveBulletModifiers()
+    {
+        return activeBulletModifiers;
+    }
+
+    #endregion
 
     #region MUTACION ALPHA
     public void SetAlphaMajor(bool active, float duration = 0f)
@@ -138,27 +162,6 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     #endregion
 
 
-    #region MUTACION MICROWAVES
-    public void SetMicrowavesMajor(bool active, float burnDuration = 3f, float damagePerTick = 2f, float bonus = 5f)
-    {
-        MicrowavesMajorActive = active;
-        if (active)
-        {
-            MicrowavesMajorBurnDuration = burnDuration;
-            MicrowavesMajorDamagePerTick = damagePerTick;
-            MicrowavesMajorBonusDamage = bonus;
-        }
-    }
-
-    public void SetMicrowavesMinor(bool active, float burnDuration = 1f, float damagePerTick = 1f)
-    {
-        MicrowavesMinorActive = active;
-        if (active)
-        {
-            MicrowavesMinorBurnDuration = burnDuration;
-            MicrowavesMinorDamagePerTick = damagePerTick;
-        }
-    }
-    #endregion
+  
 
 }

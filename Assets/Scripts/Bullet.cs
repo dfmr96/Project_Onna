@@ -3,6 +3,7 @@ using Mutations.Core;
 using System;
 using UnityEngine;
 using Player;
+using System.Collections.Generic;
 
 public class Bullet : MonoBehaviour
 {
@@ -16,12 +17,29 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] private LayerMask ignoreLayers;
 
+    private List<BulletModifierSO> _modifiers = new List<BulletModifierSO>();
+    private PlayerControllerEffect _playerEffect;
+
     private void Start()
     {
         float destroyTime = _maxDistance / _bulletSpeed;
         Destroy(gameObject, destroyTime);
         playerGO = PlayerHelper.GetPlayer();
 
+        //// Llamar OnSetup de cada modificador
+        //foreach (var mod in _modifiers)
+        //    mod.OnSetup(this, playerGO.GetComponent<PlayerControllerEffect>());
+    }
+
+    public void RegisterModifier(BulletModifierSO modifier, PlayerControllerEffect player)
+    {
+        if (!_modifiers.Contains(modifier))
+        {
+            _modifiers.Add(modifier);
+            Debug.Log("[Bullet] Modifier registrado: " + modifier.name);
+
+        }
+        _playerEffect = player;
     }
 
     private void Update() { Move(); }
@@ -50,12 +68,16 @@ public class Bullet : MonoBehaviour
             damageable.TakeDamage(_damage);
 
         //MUTACION
-           var collectable = other.GetComponent<IProjectileCollectable>();
-        if (collectable != null)
-        {
-            var playerEffect = playerGO.GetComponent<PlayerControllerEffect>();
-            collectable.OnHitByProjectile(playerEffect);
-        }
+        //   var collectable = other.GetComponent<IProjectileCollectable>();
+        //if (collectable != null)
+        //{
+        //    var playerEffect = playerGO.GetComponent<PlayerControllerEffect>();
+        //    collectable.OnHitByProjectile(playerEffect);
+        //}
+
+        // Aplicar todos los modificadores
+        foreach (var mod in _modifiers)
+            mod.OnHit(this, other.gameObject, _playerEffect);
 
         Destroy(gameObject);
     }

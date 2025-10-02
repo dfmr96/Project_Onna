@@ -1,0 +1,16 @@
+using Player.Weapon;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class BulletModifierSO : ScriptableObject
+{
+    //se llama al instanciar la bala
+    public virtual void OnSetup(Bullet bullet, PlayerControllerEffect player) { }
+
+    //se llama al impactar
+    public virtual void OnHit(Bullet bullet, GameObject target, PlayerControllerEffect player) { }
+
+    //se puede usar si alguna mutación altera stats del arma directamente (penetración, cadencia, daño base, etc.).
+    public virtual void ModifyWeapon(WeaponController weapon) { }
+}

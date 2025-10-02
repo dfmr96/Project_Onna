@@ -71,6 +71,13 @@ namespace Player
 
         private bool _isInvulnerable = false;
 
+        private PlayerControllerEffect _playerControllerEffect;
+
+        private void Awake()
+        {
+            if (_playerControllerEffect == null)
+                _playerControllerEffect = GetComponent<PlayerControllerEffect>();
+        }
 
         private void Start()
         {
@@ -91,7 +98,9 @@ namespace Player
             _statContext = context;
             _currentTime = StatContext.Runtime?.CurrentEnergyTime ?? float.PositiveInfinity;
 
-            EventBus.Publish(new PlayerInitializedSignal(this));
+            //EventBus.Publish(new PlayerInitializedSignal(this));
+            EventBus.Publish(new PlayerInitializedSignal(this, _playerControllerEffect));
+
         }
 
         public void ForceReinitStats()

@@ -6,23 +6,20 @@ using Player;
 
 namespace Mutations.Effects.NervousSystem
 {
-    [CreateAssetMenu(fileName = "Microwaves Nervous Minor", menuName = "Mutations/Effects/Nervous System/Microwaves Minor")]
-    public class MicrowavesNervousMinorEffect : StatModifierEffect
+    [CreateAssetMenu(fileName = "Microwaves Muscular Minor", menuName = "Mutations/Effects/Muscular System/Microwaves Minor")]
+    public class MicrowavesMuscularMinorEffect : StatModifierEffect
     {
-        [Header("Microwaves Minor Settings")]
+        [Header("Bullet Modifier")]
+        [SerializeField] private BurnBulletModifierSO burnModifierSO; // Scriptable del modificador
 
-        [SerializeField] private float minBurnDuration = 1f;
-        [SerializeField] private float maxBurnDuration = 2f;
-        [SerializeField] private float damagePerTick = 1f;
 
-  
         private void Awake()
         {
             radiationType = MutationType.Microwaves;
-            systemType = SystemType.Nerve;
+            systemType = SystemType.Muscular;
             slotType = SlotType.Minor;
             effectName = "Microwaves Minor";
-            description = $"Cada Disparos aplican quemadura leve de +{minBurnDuration}-+{maxBurnDuration} segundos.";
+            description = $"Cada Disparos aplican quemadura leve.";
             isTemporary = true;
         }
 
@@ -31,9 +28,8 @@ namespace Mutations.Effects.NervousSystem
             var controller = player.GetComponent<PlayerControllerEffect>();
             if (controller != null)
             {
-                float duration = Random.Range(minBurnDuration, maxBurnDuration);
-                controller.SetMicrowavesMinor(true, duration, damagePerTick);
-                Debug.Log("[MinorEffect] Microwaves Minor activada en Player");
+                controller.AddBulletModifier(burnModifierSO); // burnModifierSO es un campo serializado
+                Debug.Log("[MajorEffect] Microwaves Minor activada");
             }
         }
 
@@ -42,8 +38,8 @@ namespace Mutations.Effects.NervousSystem
             var controller = player.GetComponent<PlayerControllerEffect>();
             if (controller != null)
             {
-                controller.SetMicrowavesMinor(false);
-                Debug.Log("[MinorEffect] Microwaves Minor desactivada en Player");
+                controller.RemoveBulletModifier(burnModifierSO);
+                Debug.Log("[MajorEffect] Microwaves Minor desactivada");
             }
         }
 

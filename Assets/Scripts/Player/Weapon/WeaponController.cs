@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core;
 using NaughtyAttributes;
 using UnityEngine;
@@ -55,6 +56,10 @@ namespace Player.Weapon
         // Hardcodeado
         private float fireRate = 0.15f;
 
+        private List<BulletModifierSO> activeBulletModifiers = new List<BulletModifierSO>();
+        private PlayerControllerEffect _playerEffect;
+
+
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerInitializedSignal>(OnPlayerReady);
@@ -62,6 +67,10 @@ namespace Player.Weapon
             var inputHandler = FindObjectOfType<PlayerInputHandler>();
             if (inputHandler != null)
                 inputHandler.ReloadPerformed += OnReloadInput;
+
+            var playerEffect = FindObjectOfType<PlayerControllerEffect>();
+            if (playerEffect != null)
+                _playerEffect = playerEffect;
         }
 
         private void OnDisable()
@@ -109,6 +118,7 @@ namespace Player.Weapon
         private void OnPlayerReady(PlayerInitializedSignal signal)
         {
             _playerModel = signal.Model;
+            _playerEffect = signal.PlayerEffect;
 
             var stats = _playerModel.StatContext.Source;
             var refs = _playerModel.StatRefs;
@@ -158,6 +168,13 @@ namespace Player.Weapon
             }
         }
 
+        public void SetActiveBulletModifiers(List<BulletModifierSO> modifiers)
+        {
+            activeBulletModifiers = modifiers;
+        }
+
+     
+
         private void FireBullet()
         {
             if (muzzleFlashInstance != null)
@@ -174,11 +191,25 @@ namespace Player.Weapon
                 nextShotDoubleDamage = false;
             }
 
-            var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
-            bullet.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, damage);
+            //var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
+            //bullet.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, damage);
+
+            var bulletObj = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
+            bulletObj.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, bulletSetting.Damage);
+
+            // Registrarle todos los modificadores activos
+            var activeModifiers = _playerEffect.GetActiveBulletModifiers();
+            foreach (var mod in activeModifiers)
+            {
+                bulletObj.RegisterModifier(mod, _playerEffect);
+                //Debug.Log($"[WeaponController] Registrado modificador {mod.name} en bala");
+            }
 
             audioSource.PlayOneShot(shootFx);
         }
+
+
+
 
         private IEnumerator FireRateCooldown()
         {
