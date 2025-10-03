@@ -54,7 +54,6 @@ namespace Player
             if (context.performed)
             {
                 DashPerformed?.Invoke();
-                Debug.Log("Dash input received");
             }
         }
 

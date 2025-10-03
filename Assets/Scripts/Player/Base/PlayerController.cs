@@ -84,7 +84,6 @@ namespace Player
             if (dashController != null)
             {
                 dashController.TryDash();
-                Debug.Log("HandleDash executed");
             }
         }
         private void HandleInteraction()
