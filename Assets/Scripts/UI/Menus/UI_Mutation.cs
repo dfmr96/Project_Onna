@@ -66,6 +66,8 @@ public class UI_Mutation : MonoBehaviour
         mutationAnimator.SetTrigger("Open");
         yield return new WaitForSeconds(GetAnimationLength(mutationAnimator, "Open"));
 
+        Cursor.visible = true;
+
         Initialize();
     }
 
@@ -264,6 +266,7 @@ public class UI_Mutation : MonoBehaviour
 
         yield return new WaitForSeconds(GetAnimationLength(mutationAnimator, "Close"));
         PlayerHelper.EnableInput();
+        Cursor.visible = false;
 
         //Evento para activar portal tras seleccion de mutacion
         GameManager.Instance?.RaiseMutationUIClosed();
