@@ -13,7 +13,8 @@ public class SlowEffect : StatusEffect
     public SlowEffect(float duration, float slowAmount, string source = null)
         : base(duration)
     {
-        _slowAmount = Mathf.Clamp01(slowAmount); // asegurar que esté entre 0-1
+        // Nunca permitir un slow del 100% (congela al enemigo)
+        _slowAmount = Mathf.Clamp(slowAmount, 0f, 0.9f);
         Source = source;
     }
 
@@ -27,9 +28,10 @@ public class SlowEffect : StatusEffect
             _agent = comp.GetComponent<NavMeshAgent>();
             if (_agent != null)
             {
+         
                 _originalSpeed = _agent.speed;
-                _agent.speed *= (1f - _slowAmount); // aplica reducción
-                Debug.Log($"[SlowEffect] Aplicado: {_agent.gameObject.name} ahora va a {_agent.speed:F2}");
+                _agent.speed = _originalSpeed * (1f - _slowAmount);
+                Debug.Log($"[SlowEffect] Aplicado: {_agent.gameObject.name} ahora va a {_agent.speed:F2} (antes {_originalSpeed:F2})");
             }
         }
     }
