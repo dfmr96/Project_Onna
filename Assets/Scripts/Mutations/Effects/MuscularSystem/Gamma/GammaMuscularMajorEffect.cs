@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Player;
 using Mutations.Core.Categories;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 namespace Mutations.Effects
 {
-    [CreateAssetMenu(fileName = "Alpha Muscular Minor", menuName = "Mutations/Effects/Muscular System/Alpha Minor")]
-    public class AlphaMuscularMinorEffect : StatModifierEffect
+    [CreateAssetMenu(fileName = "Gamma Muscular Major", menuName = "Mutations/Effects/Muscular System/Gamma Major")]
+    public class GammaMuscularMajorEffect : StatModifierEffect
     {
-        [Header("Alpha Muscular Minor Settings")]
-        [SerializeField] private float damageBonus = 0.5f; // 50% daño
-        [SerializeField] private int maxPenetration = 2;
+        [Header("Gamma Muscular Major Settings")]
+        [SerializeField] private int maxPenetration = 5;
         private int bonusToApply;
 
         [Header("Bullet Modifier")]
@@ -20,11 +18,11 @@ namespace Mutations.Effects
 
         private void Awake()
         {
-            radiationType = MutationType.Alpha;
+            radiationType = MutationType.Gamma;
             systemType = SystemType.Muscular;
-            slotType = SlotType.Minor;
-            effectName = "Alpha Muscular Minor";
-            description = "Aumenta el daño, pero limita la penetración a 2 objetivos.";
+            slotType = SlotType.Major;
+            effectName = "Gamma Muscular Major";
+            description = "Disparos con gran penetración que atraviesan múltiples enemigos";
             statType = StatModifierType.ShootingBuff;
 
         }
@@ -63,11 +61,6 @@ namespace Mutations.Effects
             {
                 if (playerModel == null) return;
 
-                // aumentar daño
-                stats.AddMultiplierBonus(playerModel.StatRefs.damage, damageBonus);
-
-                //stats.AddFlatBonus(playerModel.StatRefs.bulletMaxPenetration, maxPenetration);
-
                 int basePenetrationValue = playerModel.BulletMaxPenetration;
                 bonusToApply = maxPenetration - basePenetrationValue;
                 stats.AddFlatBonus(playerModel.StatRefs.bulletMaxPenetration, bonusToApply);
@@ -83,13 +76,12 @@ namespace Mutations.Effects
             {
                 if (playerModel == null) return;
 
-                // aumentar daño
-                stats.AddMultiplierBonus(playerModel.StatRefs.damage, 1f / damageBonus);
-
                 stats.AddFlatBonus(playerModel.StatRefs.bulletMaxPenetration, -bonusToApply);
 
             }
         }
     }
+
 }
+
 

@@ -21,4 +21,11 @@ public abstract class BulletModifierSO : ScriptableObject
     {
         return trailMaterial;
     }
+
+    // Se llama antes de disparar (Setup inicial de la bala)
+    public virtual void ApplyBeforeShoot(Bullet bullet, PlayerControllerEffect player)
+    {
+        // Por defecto hace lo mismo que OnSetup
+        OnSetup(bullet, player);
+    }
 }

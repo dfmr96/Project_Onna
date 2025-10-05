@@ -195,6 +195,7 @@ namespace Player.Weapon
             //bullet.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, damage);
 
             var bulletObj = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
+
             bulletObj.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, bulletSetting.Damage, _playerModel);
 
             // Registrarle todos los modificadores activos
@@ -202,6 +203,9 @@ namespace Player.Weapon
             foreach (var mod in activeModifiers)
             {
                 bulletObj.RegisterModifier(mod, _playerEffect);
+
+                mod.ApplyBeforeShoot(bulletObj, _playerEffect);
+
             }
 
             // Aplicar materiales después de registrar todos

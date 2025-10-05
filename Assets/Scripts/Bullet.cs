@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using Player;
 using System.Collections.Generic;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Bullet : MonoBehaviour
 {
@@ -12,11 +13,14 @@ public class Bullet : MonoBehaviour
     private float _maxDistance;
     private Material[] defaultTrailMaterials;
 
+
     private GameObject playerGO;
 
     [SerializeField] private GameObject hitParticlePrefab;
 
     [SerializeField] private LayerMask ignoreLayers;
+    [SerializeField] private LayerMask obstacleLayers; // Lo que normalmente impacta
+    private bool ignoreObstacles = false; // Activado por Gamma Minor Muscular
 
     private List<BulletModifierSO> _modifiers = new List<BulletModifierSO>();
     private PlayerControllerEffect _playerEffect;
@@ -53,6 +57,11 @@ public class Bullet : MonoBehaviour
         _playerEffect = player;
     }
 
+    public void SetIgnoreObstacles(bool value)
+    {
+        ignoreObstacles = value;
+    }
+
     private void Update() { Move(); }
 
     private void Move() { transform.Translate(Vector3.forward * (_bulletSpeed * Time.deltaTime)); }
@@ -70,7 +79,15 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        int layer = 1 << other.gameObject.layer;
+        Debug.Log($"Bullet collided with {other.name} layer {other.gameObject.layer} | ignoreObstacles={ignoreObstacles}");
+
+
         if ((ignoreLayers.value & (1 << other.gameObject.layer)) != 0)
+            return;
+
+        // Ignorar obstáculos si la mutación dice que sí
+        if (ignoreObstacles && (obstacleLayers.value & layer) != 0)
             return;
 
         // instanciar partículas siempre al colisionar
