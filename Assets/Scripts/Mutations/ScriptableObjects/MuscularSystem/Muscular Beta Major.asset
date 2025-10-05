@@ -9,21 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ed9643e47a67a349b4265b4885bbd6b, type: 3}
-  m_Name: Microwaves Muscular Major
+  m_Script: {fileID: 11500000, guid: 1a31053cf38d3c54b83e3c09625f1c7e, type: 3}
+  m_Name: Muscular Beta Major
   m_EditorClassIdentifier: 
-  radiationType: 4
+  radiationType: 2
   systemType: 2
   slotType: 0
-  effectName: Microwaves Major
-  description: "Cada Disparos aplican quemadura aguda. Si el enemigo ya esta quemado
-    el disparo hace mas da\xF1o inicial"
+  effectName: Muscular Beta Major
+  description: "Disparos r\xE1pidos que aplican ralentizaci\xF3n."
   icon: {fileID: 0}
   baseValue: 0
   upgradeMultiplier: 1.2
   maxLevel: 4
-  statType: 6
+  statType: 0
   isMultiplier: 1
   isTemporary: 1
   temporaryDuration: 5
-  burnModifierSO: {fileID: 11400000, guid: 9387d778c896cc545a7a91657e6c0eb5, type: 2}
+  slowModifierSO: {fileID: 11400000, guid: 6d48d026b229bf04eb562134aaae5f81, type: 2}
+  fireRateMultiplier: 2

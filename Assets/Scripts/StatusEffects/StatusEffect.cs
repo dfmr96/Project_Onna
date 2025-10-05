@@ -15,14 +15,14 @@ public abstract class StatusEffect
         Elapsed = 0f;
     }
 
-    public void Initialize(IDamageable damageable)
+    public virtual void Initialize(IDamageable damageable)
     {
         _damageable = damageable;
         Debug.Log($"[StatusEffect] Inicializado con {damageable}");
 
     }
 
-    public bool Update(float deltaTime)
+    public virtual bool Update(float deltaTime)
     {
         Elapsed += deltaTime;
 

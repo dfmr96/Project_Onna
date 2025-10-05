@@ -9,13 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91a3a6e9f04a5a84986bd83970dd9da8, type: 3}
-  m_Name: BurnBulletMicrowavesMuscularMinorModifier
+  m_Script: {fileID: 11500000, guid: 2e5d7ef8063152e45a57a3a1fb898ea2, type: 3}
+  m_Name: SlowBulletBetaMuscularMajorModifier
   m_EditorClassIdentifier: 
   trailMaterial: {fileID: 0}
-  burnDurationMin: 3
-  burnDurationMax: 3
-  damagePerTick: 2
-  bonusDamageIfAlreadyBurned: 5
-  IsMajor: 1
-  burnTrailMaterial: {fileID: 2100000, guid: 21e72851f95f7e840861ec4c0f043d0a, type: 2}
+  slowDuration: 3
+  slowAmount: 5
+  slowTrailMaterial: {fileID: 2100000, guid: c9eca4c3440730243a85c16e66165675, type: 2}

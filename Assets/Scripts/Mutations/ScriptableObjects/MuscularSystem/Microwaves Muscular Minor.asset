@@ -16,15 +16,13 @@ MonoBehaviour:
   systemType: 2
   slotType: 1
   effectName: Microwaves Minor
-  description: Cada Disparos aplican quemadura leve de +1-+2 segundos.
+  description: Cada Disparos aplican quemadura leve.
   icon: {fileID: 0}
   baseValue: 0
   upgradeMultiplier: 1.2
   maxLevel: 4
-  statType: 0
+  statType: 6
   isMultiplier: 1
   isTemporary: 1
   temporaryDuration: 5
-  minBurnDuration: 1
-  maxBurnDuration: 2
-  damagePerTick: 1
+  burnModifierSO: {fileID: 11400000, guid: 4ca03f40ce0aa8b41bb1467bdb3ade6a, type: 2}

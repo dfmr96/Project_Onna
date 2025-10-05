@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a3a6e9f04a5a84986bd83970dd9da8, type: 3}
   m_Name: BurnBulletMicrowavesMuscularMajorModifier
   m_EditorClassIdentifier: 
-  burnDuration: 3
+  trailMaterial: {fileID: 0}
+  burnDurationMin: 3
+  burnDurationMax: 3
   damagePerTick: 2
   bonusDamageIfAlreadyBurned: 5
+  IsMajor: 1
+  burnTrailMaterial: {fileID: 2100000, guid: 5353d9044fd23d44ea11e14b08393236, type: 2}
