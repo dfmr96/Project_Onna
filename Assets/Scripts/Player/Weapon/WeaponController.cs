@@ -54,7 +54,7 @@ namespace Player.Weapon
         private PlayerModel _playerModel;
 
         // Hardcodeado
-        private float fireRate = 0.15f;
+        //private float fireRate = 0.15f;
 
         private List<BulletModifierSO> activeBulletModifiers = new List<BulletModifierSO>();
         private PlayerControllerEffect _playerEffect;
@@ -195,7 +195,7 @@ namespace Player.Weapon
             //bullet.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, damage);
 
             var bulletObj = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
-            bulletObj.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, bulletSetting.Damage);
+            bulletObj.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, bulletSetting.Damage, _playerModel);
 
             // Registrarle todos los modificadores activos
             var activeModifiers = _playerEffect.GetActiveBulletModifiers();
@@ -216,7 +216,10 @@ namespace Player.Weapon
         private IEnumerator FireRateCooldown()
         {
             canFire = false;
-            yield return new WaitForSeconds(fireRate);
+
+            //float fireRateCooldown = 0.15f; // valor fallback por si no hay stats
+            
+            yield return new WaitForSeconds(_playerModel.FireRate);
             canFire = true;
         }
 

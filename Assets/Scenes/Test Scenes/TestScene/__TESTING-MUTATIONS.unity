@@ -219,7 +219,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1051534949}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4553003352122691734, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -247,15 +247,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7520276946578091184, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.5252266
+      value: 25.74
       objectReference: {fileID: 0}
     - target: {fileID: 7520276946578091184, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.259977
+      value: 1.52
       objectReference: {fileID: 0}
     - target: {fileID: 7520276946578091184, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.255442
+      value: 21.81
       objectReference: {fileID: 0}
     - target: {fileID: 7520276946578091184, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -291,7 +291,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8908907774308724926, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba53932f3336d049aaf3d555ff0490d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mutationEffect: {fileID: 11400000, guid: 961eb819a578b6e4ea9cbd27f81e2989, type: 2}
+  mutationEffect: {fileID: 11400000, guid: 0ef7c66228d5caa4baa07ee34093ee19, type: 2}
   mutationLevel: 1
   showGUI: 1
   yOffset: 50
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba53932f3336d049aaf3d555ff0490d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mutationEffect: {fileID: 11400000, guid: f33f125307f7744418c32ee05d888999, type: 2}
+  mutationEffect: {fileID: 11400000, guid: 8b316e42d88a0a74385f556dbe2a9236, type: 2}
   mutationLevel: 1
   showGUI: 1
   yOffset: 250
@@ -969,14 +969,8 @@ Transform:
   - {fileID: 1991383788}
   - {fileID: 1816041884}
   - {fileID: 349655848}
-  - {fileID: 1180232384}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1180232384 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7520276946578091184, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
-  m_PrefabInstance: {fileID: 446418906}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1180232385 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
@@ -1781,3 +1775,4 @@ SceneRoots:
   - {fileID: 537403802}
   - {fileID: 1051534949}
   - {fileID: 593686499}
+  - {fileID: 446418906}

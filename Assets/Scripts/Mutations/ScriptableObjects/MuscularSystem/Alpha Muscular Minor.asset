@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e5fc96574a4cbb4bba60bf749873094, type: 3}
+  m_Name: Alpha Muscular Minor
+  m_EditorClassIdentifier: 
+  radiationType: 1
+  systemType: 2
+  slotType: 1
+  effectName: Alpha Muscular Minor
+  description: "Aumenta el da\xF1o, pero limita la penetraci\xF3n a 2 objetivos."
+  icon: {fileID: 0}
+  baseValue: 0
+  upgradeMultiplier: 1.2
+  maxLevel: 4
+  statType: 7
+  isMultiplier: 1
+  isTemporary: 0
+  temporaryDuration: 5
+  damageBonus: 0.5
+  maxPenetration: 2
+  trailEffectModifierSO: {fileID: 11400000, guid: 14804b59e2ada2849b97fb33dcbd15cc, type: 2}

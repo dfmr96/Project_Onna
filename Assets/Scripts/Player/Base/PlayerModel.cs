@@ -44,6 +44,9 @@ namespace Player
         public float Speed => StatContext.Source.Get(statRefs.movementSpeed);
         private float DrainRate => StatContext.Source.Get(statRefs.passiveDrainRate);
         public float MaxHealth => StatContext.Source.Get(statRefs.maxVitalTime);
+        public int BulletMaxPenetration => (int)StatContext.Source.Get(statRefs.bulletMaxPenetration);
+
+        public float FireRate => StatContext.Source.Get(statRefs.fireRate);
         public float CurrentHealth => _currentTime;
         public float DashCooldown => StatContext.Source.Get(statRefs.dashCooldown);
         public float DashDistance => StatContext.Source.Get(statRefs.dashDistance);
@@ -91,6 +94,7 @@ namespace Player
             {
                 //EventBus.Publish(new PlayerSpawnedSignal { PlayerGO = gameObject });
             }
+
         }
 
         public void InjectStatContext(PlayerStatContext context)

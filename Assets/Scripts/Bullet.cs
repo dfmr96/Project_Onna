@@ -21,6 +21,10 @@ public class Bullet : MonoBehaviour
     private List<BulletModifierSO> _modifiers = new List<BulletModifierSO>();
     private PlayerControllerEffect _playerEffect;
 
+
+    private int _maxPenetration = 1;  // por defecto 1 (impacta y se destruye)
+    private int _currentPenetration = 0;
+
     private void Start()
     {
         float destroyTime = _maxDistance / _bulletSpeed;
@@ -34,6 +38,8 @@ public class Bullet : MonoBehaviour
         var trail = GetComponentInChildren<TrailRenderer>();
         if (trail != null)
             defaultTrailMaterials = trail.materials;
+
+        
     }
 
     public void RegisterModifier(BulletModifierSO modifier, PlayerControllerEffect player)
@@ -51,11 +57,15 @@ public class Bullet : MonoBehaviour
 
     private void Move() { transform.Translate(Vector3.forward * (_bulletSpeed * Time.deltaTime)); }
 
-    public void Setup(float speed, float distance, float damage)
+    public void Setup(float speed, float distance, float damage, PlayerModel _playerModel)
     {
         _bulletSpeed = speed;
         _maxDistance = distance;
         this._damage = damage;
+        _maxPenetration = _playerModel.BulletMaxPenetration;
+
+        Debug.Log("Cantidad de Penetracion: " + _maxPenetration);
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -78,7 +88,10 @@ public class Bullet : MonoBehaviour
         foreach (var mod in _modifiers)
             mod.OnHit(this, other.gameObject, _playerEffect);
 
-        Destroy(gameObject);
+        //Penetracion
+        _currentPenetration++;
+        if (_currentPenetration >= _maxPenetration)
+            Destroy(gameObject);
     }
 
     public void ApplyTrailMaterials()

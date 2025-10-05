@@ -11,7 +11,8 @@ namespace Mutations.Core.Categories
         HealthDrain,
         InvulnerabilityDuration,
         OrbAttractRange,
-        EnemyDoT
+        EnemyDoT,
+        ShootingBuff
     }
 
     public abstract class StatModifierEffect : RadiationEffect
