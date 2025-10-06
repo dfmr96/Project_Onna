@@ -153,6 +153,7 @@ public class EnemyAttackSOBase : ScriptableObject
         //_colorChangeTimer = 0f;
         _timer = 0f;
 
+        _enemyView.RestoreOriginalColorsAndPosition();
     }
 
    

@@ -7,6 +7,18 @@ using static UnityEngine.ParticleSystem;
 
 public class EnemyView : MonoBehaviour
 {
+    [Header("Pre-Attack Settings")]
+    [SerializeField] private float slowAnimationFactor = 0.1f;
+    [SerializeField] private float preAttackDuration = 0.6f;
+    [SerializeField] private float shakeAmount = 0.09f;
+    [SerializeField] private Color shakeColor = Color.white;
+    [SerializeField] private float shakeColorAtenuation = 0.2f;
+
+    private Vector3 originalPos;
+    private List<Color[]> originalMaterialColors;
+    Renderer[] childRenderers;
+    Color[] originalColors;
+
     private Animator animator;
     private Transform _playerTransform;
     private EnemyController _enemyController;
@@ -15,6 +27,7 @@ public class EnemyView : MonoBehaviour
 
     private float _distanceToCountExit = 3f;
 
+    [Header("Sapwning Settings")]
     [SerializeField] private Material[] spawnMaterials; // materiales temporales de spawn
     [SerializeField] private float spawnEffectDuration = 1f; // segundos que dura
 
@@ -38,6 +51,8 @@ public class EnemyView : MonoBehaviour
     private float recoilAngle = 5f;
     private float recoilDistance = 2f;
     private float recoilSpeed = 5f;
+
+    [Header("Damage Settings")]
     [SerializeField] private ParticleSystem deathParticlesPrefab;
     [SerializeField] private Material[] damageMaterials;
     [SerializeField] private Material[] deathMaterials;
@@ -49,6 +64,7 @@ public class EnemyView : MonoBehaviour
     private float deadAngle = 40f;
     private AudioSource audioSource;
 
+    [Header("Audio Settings")]
     [SerializeField] private AudioClip shootAudioClip;
     [SerializeField] private AudioClip damagedAudioClip;
     private bool isDead = false;
@@ -56,6 +72,7 @@ public class EnemyView : MonoBehaviour
     private Coroutine flashCoroutine = null;
     private Coroutine recoilCoroutine;
 
+   
 
     private void Awake()
     {
@@ -69,6 +86,49 @@ public class EnemyView : MonoBehaviour
             originalColor = material.color;
             originalMaterials = targetRenderer.materials;
         }
+
+        childRenderers = GetComponentsInChildren<Renderer>();
+
+        if (childRenderers.Length > 0)
+        {
+            originalColors = new Color[childRenderers.Length];
+            for (int i = 0; i < childRenderers.Length; i++)
+            {
+                if (childRenderers[i].material.HasProperty("_Color"))
+                    originalColors[i] = childRenderers[i].material.color;
+            }
+        }
+
+        // Guardar posición y colores originales
+        originalPos = transform.localPosition;
+
+        originalMaterialColors = new List<Color[]>();
+
+        foreach (var renderer in childRenderers)
+        {
+            if (renderer == null)
+            {
+                originalMaterialColors.Add(null);
+                continue;
+            }
+
+            Material[] mats = renderer.materials;
+            Color[] matColors = new Color[mats.Length];
+
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (mats[j].HasProperty("_BaseColor"))
+                    matColors[j] = mats[j].GetColor("_BaseColor");
+                else if (mats[j].HasProperty("_Color"))
+                    matColors[j] = mats[j].GetColor("_Color");
+                else
+                    matColors[j] = Color.white;
+            }
+
+            originalMaterialColors.Add(matColors);
+        }
+
+     
     }
 
     public Animator Animator => animator;
@@ -112,6 +172,14 @@ public class EnemyView : MonoBehaviour
 
             }
         }
+    }
+
+    public void AnimationAttackPrepare()
+    {
+        if (isDead) return;
+
+        //Efecto visual de advertencia
+        StartCoroutine(AttackPreparationEffect());
     }
 
     //Evento para ataques tipo charge
@@ -246,14 +314,14 @@ public class EnemyView : MonoBehaviour
         if (flashCoroutine != null)
             StopCoroutine(flashCoroutine);
 
-        // 🔹 Lanzamos la corutina del spawn dissolve
+        // Lanzamos la corutina del spawn dissolve
         flashCoroutine = StartCoroutine(SpawnDissolveCoroutine(1f, 0f, spawnEffectDuration));
     }
 
 
     private IEnumerator SpawnDissolveCoroutine(float startValue, float endValue, float duration)
     {
-        // 🔹 Aplicamos el material de spawn
+        // Aplicamos el material de spawn
         targetRenderer.materials = GetFittedMaterials(spawnMaterials);
 
         float elapsed = 0f;
@@ -274,7 +342,7 @@ public class EnemyView : MonoBehaviour
             yield return null;
         }
 
-        // 🔹 Restauramos materiales originales
+        // Restauramos materiales originales
         if (!isDead)
             targetRenderer.materials = originalMaterials;
 
@@ -285,7 +353,7 @@ public class EnemyView : MonoBehaviour
     {
         float elapsed = 0f;
 
-        // 🔹 Asumimos que todos los materiales de muerte tienen la propiedad DissolveAmount
+        // Asumimos que todos los materiales de muerte tienen la propiedad DissolveAmount
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
@@ -300,7 +368,7 @@ public class EnemyView : MonoBehaviour
             yield return null;
         }
 
-        // 🔹 Aseguramos valor final
+        // Aseguramos valor final
         foreach (Material mat in targetRenderer.materials)
         {
             if (mat.HasProperty("_DissolveAmount"))
@@ -387,42 +455,42 @@ public class EnemyView : MonoBehaviour
         animator.SetTrigger("IsDead");
         isDead = true;
 
-        // 🔹 Asignamos materiales de muerte
+        // Asignamos materiales de muerte
         targetRenderer.materials = GetFittedMaterials(deathMaterials);
 
-        // 🔹 Cancelamos cualquier flash en curso
+        // Cancelamos cualquier flash en curso
         if (flashCoroutine != null)
         {
             StopCoroutine(flashCoroutine);
             flashCoroutine = null;
         }
 
-        // 🔹 Lanzamos efecto de disolver
+        // Lanzamos efecto de disolver
         StartCoroutine(DissolveCoroutine(1f, 2f)); // (valor final, duración en segundos)
 
         PlayDeathParticles();
     }
 
-    private void ActivateDamageMaterials()
-    {
-        Material[] newMaterials = new Material[originalMaterials.Length];
+    //private void ActivateDamageMaterials()
+    //{
+    //    Material[] newMaterials = new Material[originalMaterials.Length];
 
-        for (int i = 0; i < originalMaterials.Length; i++)
-        {
-            if (i < damageMaterials.Length)
-                newMaterials[i] = damageMaterials[i];
-            else
-                newMaterials[i] = damageMaterials[damageMaterials.Length - 1];
-        }
+    //    for (int i = 0; i < originalMaterials.Length; i++)
+    //    {
+    //        if (i < damageMaterials.Length)
+    //            newMaterials[i] = damageMaterials[i];
+    //        else
+    //            newMaterials[i] = damageMaterials[damageMaterials.Length - 1];
+    //    }
 
-        targetRenderer.materials = newMaterials;
-    }
+    //    targetRenderer.materials = newMaterials;
+    //}
 
 
-    public void UpdateHealthBar(float healthPercentage)
-    {
-        //health bar logic
-    }
+    //public void UpdateHealthBar(float healthPercentage)
+    //{
+    //    //health bar logic
+    //}
 
     public void PlayDamageEffect()
     {
@@ -431,37 +499,69 @@ public class EnemyView : MonoBehaviour
         if (flashCoroutine != null)
             StopCoroutine(flashCoroutine);
 
-        flashCoroutine = StartCoroutine(FlashDamageMaterialsCoroutine());
+        flashCoroutine = StartCoroutine(FlashDamageColorsCoroutine());
     }
 
-    private IEnumerator FlashDamageMaterialsCoroutine()
+    private IEnumerator FlashDamageColorsCoroutine()
     {
-        // ⚡ aplicamos materiales de daño temporalmente
-        targetRenderer.materials = GetFittedMaterials(damageMaterials);
+        // Guardar los colores originales de los materiales actuales
+        Color[] originalColors = new Color[targetRenderer.materials.Length];
+        for (int i = 0; i < targetRenderer.materials.Length; i++)
+        {
+            Material mat = targetRenderer.materials[i];
+            if (mat.HasProperty("_BaseColor"))
+                originalColors[i] = mat.GetColor("_BaseColor");
+            else if (mat.HasProperty("_Color"))
+                originalColors[i] = mat.GetColor("_Color");
+        }
+
+        // Aplicar el color de daño (flash)
+        for (int i = 0; i < targetRenderer.materials.Length; i++)
+        {
+            Material mat = targetRenderer.materials[i];
+            if (mat.HasProperty("_BaseColor"))
+                mat.SetColor("_BaseColor", Color.white); // ejemplo de flash
+            else if (mat.HasProperty("_Color"))
+                mat.SetColor("_Color", Color.white);
+        }
 
         yield return new WaitForSeconds(flashDuration);
 
-        // 🌀 restauramos materiales originales solo si sigue vivo
-        if (!isDead)
-            targetRenderer.materials = originalMaterials;
+        // Restaurar colores originales de forma segura
+        for (int i = 0; i < targetRenderer.materials.Length; i++)
+        {
+            Material mat = targetRenderer.materials[i];
+            if (mat.HasProperty("_BaseColor"))
+                mat.SetColor("_BaseColor", originalColors[i]);
+            else if (mat.HasProperty("_Color"))
+                mat.SetColor("_Color", originalColors[i]);
+        }
 
         flashCoroutine = null;
     }
 
-    private IEnumerator FlashCoroutine()
-    {
-        //material.SetColor("_Color", flashColor);
+    //private IEnumerator FlashCoroutine()
+    //{
+    //    //material.SetColor("_Color", flashColor);
 
-        //yield return new WaitForSeconds(flashDuration);
+    //    //yield return new WaitForSeconds(flashDuration);
 
-        //material.SetColor("_Color", originalColor);
+    //    //material.SetColor("_Color", originalColor);
 
-        //material.color = flashColor;
-        yield return new WaitForSeconds(flashDuration);
-        // material.color = originalColor;
-        //flashCoroutine = null;
-    }
-    
+    //    //material.color = flashColor;
+    //    yield return new WaitForSeconds(flashDuration);
+    //    // material.color = originalColor;
+    //    //flashCoroutine = null;
+    //}
+
+    //StartCoroutine(FlashDamageMaterialsCoroutine());}
+//private IEnumerator FlashDamageMaterialsCoroutine(){
+   // aplicamos materiales de daño temporalmente
+  // targetRenderer.materials = GetFittedMaterials(damageMaterials);
+  // yield return new WaitForSeconds(flashDuration); 
+  // restauramos materiales originales solo si sigue vivo if (!isDead) targetRenderer.materials = originalMaterials;
+  // flashCoroutine = null; }
+
     private Material[] GetFittedMaterials(Material[] source)
     {
         Material[] newMaterials = new Material[originalMaterials.Length];
@@ -475,6 +575,144 @@ public class EnemyView : MonoBehaviour
         }
 
         return newMaterials;
+    }
+
+    private IEnumerator AttackPreparationEffect()
+    {
+        float originalSpeed = animator.speed;
+        animator.speed = slowAnimationFactor;
+
+        // Guardar posición y colores originales de cada material
+        Vector3 originalPos = transform.localPosition;
+        List<Color[]> originalMaterialColors = new List<Color[]>();
+
+        foreach (var renderer in childRenderers)
+        {
+            if (renderer == null)
+            {
+                originalMaterialColors.Add(null);
+                continue;
+            }
+
+            Material[] mats = renderer.materials;
+            Color[] matColors = new Color[mats.Length];
+
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (mats[j].HasProperty("_BaseColor"))
+                    matColors[j] = mats[j].GetColor("_BaseColor");
+                else if (mats[j].HasProperty("_Color"))
+                    matColors[j] = mats[j].GetColor("_Color");
+                else
+                    matColors[j] = Color.white; // fallback
+            }
+
+            originalMaterialColors.Add(matColors);
+        }
+
+        float elapsed = 0f;
+
+        try
+        {
+            //Bloque principal del efecto
+            while (elapsed < preAttackDuration)
+            {
+                elapsed += Time.deltaTime;
+
+                // Vibración
+                transform.localPosition = originalPos + UnityEngine.Random.insideUnitSphere * shakeAmount;
+
+                float normalizedTime = elapsed / preAttackDuration;
+
+                // Ciclo de titileo asimétrico
+                float cycleDuration = Mathf.Lerp(5f, 1f, normalizedTime); // ciclos más rápidos al final
+                float normalizedTimeOsc = (elapsed % cycleDuration) / cycleDuration;
+                float intensity = 1f - Mathf.Pow(1f - normalizedTimeOsc, 2f);
+
+                // Flash final más fuerte
+                if (normalizedTime > 0.9f)
+                    intensity = Mathf.Lerp(intensity, 1f, (normalizedTime - 0.9f) * 10f);
+
+                // Aplicar a todos los materiales
+                for (int i = 0; i < childRenderers.Length; i++)
+                {
+                    Renderer r = childRenderers[i];
+                    if (r == null) continue;
+
+                    Material[] mats = r.materials;
+                    Color[] originalColors = originalMaterialColors[i];
+                    if (originalColors == null) continue;
+
+                    for (int j = 0; j < mats.Length; j++)
+                    {
+                        if (mats[j] == null) continue;
+                        Color baseColor = originalColors[j];
+
+                        Color targetColor = Color.Lerp(baseColor, shakeColor, intensity * shakeColorAtenuation);
+
+                        if (mats[j].HasProperty("_BaseColor"))
+                            mats[j].SetColor("_BaseColor", targetColor);
+                        else if (mats[j].HasProperty("_Color"))
+                            mats[j].SetColor("_Color", targetColor);
+
+                        if (mats[j].HasProperty("_EmissionColor"))
+                        {
+                            Color emission = Color.Lerp(Color.black, shakeColor, intensity * shakeColorAtenuation);
+                            mats[j].SetColor("_EmissionColor", emission);
+                            mats[j].EnableKeyword("_EMISSION");
+                        }
+                    }
+                }
+
+                yield return null;
+            }
+        }
+        finally
+        {
+             animator.speed = originalSpeed;
+             RestoreOriginalColorsAndPosition(); 
+        }
+    }
+
+    public void RestoreOriginalColorsAndPosition(bool restorePosition = false)
+    {
+   
+        
+        // Restaurar posición
+        if (restorePosition)
+            transform.localPosition = originalPos;
+
+        if (childRenderers == null || originalMaterialColors == null)
+            return;
+
+        for (int i = 0; i < childRenderers.Length; i++)
+        {
+            Renderer r = childRenderers[i];
+            if (r == null) continue;
+
+            Material[] mats = r.materials;
+            Color[] originalColors = originalMaterialColors[i];
+            if (originalColors == null) continue;
+
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (mats[j] == null) continue;
+                Color c = originalColors[j];
+
+                // Restaurar color base
+                if (mats[j].HasProperty("_BaseColor"))
+                    mats[j].SetColor("_BaseColor", c);
+                else if (mats[j].HasProperty("_Color"))
+                    mats[j].SetColor("_Color", c);
+
+                // Restaurar emisión
+                if (mats[j].HasProperty("_EmissionColor"))
+                {
+                    mats[j].SetColor("_EmissionColor", Color.black);
+                    mats[j].DisableKeyword("_EMISSION");
+                }
+            }
+        }
     }
 }
 
