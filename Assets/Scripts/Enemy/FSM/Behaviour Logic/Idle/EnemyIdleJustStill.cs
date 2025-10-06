@@ -8,6 +8,8 @@ using UnityEngine.AI;
 public class EnemyIdleJustStill : EnemyIdleSOBase
 {
     [SerializeField] private float duration = 2f;
+    [SerializeField] private bool onlyWaiting = true;
+
     private float timer = 0f;
 
     public override void DoEnterLogic()
@@ -30,7 +32,7 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
 
         timer += Time.deltaTime;
 
-        if (timer > duration)
+        if (timer > duration && onlyWaiting)
         {
             //float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
@@ -46,11 +48,15 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
             //}
 
         }
+        else
+        {
+            if (enemy.isWhitinCombatRadius)
+            {
+                enemy.fsm.ChangeState(enemy.AttackState);
+            }
+        }
 
-        //if (enemy.isWhitinCombatRadius)
-        //{
-        //    enemy.fsm.ChangeState(enemy.AttackState);
-        //}
+
 
     }
 
