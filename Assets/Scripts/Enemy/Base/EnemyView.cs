@@ -27,7 +27,7 @@ public class EnemyView : MonoBehaviour
 
     private float _distanceToCountExit = 3f;
 
-    [Header("Sapwning Settings")]
+    [Header("Spawning Settings")]
     [SerializeField] private Material[] spawnMaterials; // materiales temporales de spawn
     [SerializeField] private float spawnEffectDuration = 1f; // segundos que dura
 
