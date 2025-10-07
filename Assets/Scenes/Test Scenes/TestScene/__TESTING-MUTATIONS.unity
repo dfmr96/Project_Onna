@@ -547,12 +547,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 593686497}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ba53932f3336d049aaf3d555ff0490d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mutationEffect: {fileID: 11400000, guid: 787ce68eb568cd14d8ac48b3c9d4bc3b, type: 2}
+  mutationEffect: {fileID: 11400000, guid: f33f125307f7744418c32ee05d888999, type: 2}
   mutationLevel: 1
   showGUI: 1
   yOffset: 50
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba53932f3336d049aaf3d555ff0490d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mutationEffect: {fileID: 11400000, guid: 24b500a7598bc2f46b4f91206064af73, type: 2}
+  mutationEffect: {fileID: 11400000, guid: 961eb819a578b6e4ea9cbd27f81e2989, type: 2}
   mutationLevel: 1
   showGUI: 1
   yOffset: 250
@@ -718,7 +718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 88900b0a1ee93a74cb7fdfa350fcd022, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1056,7 +1056,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.33333334
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: b9e7ef78d9e28d546bde37cef9d38ed9, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 9b07f8e9e0cb55341b8938e9173d93d0, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &1051534948
 GameObject:
@@ -1501,7 +1501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b6c5e5bbd10ca484189cdaca7a49b7d9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
