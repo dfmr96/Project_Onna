@@ -27,6 +27,9 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     private bool neutronsActive;
     private float extraVitalTime;
 
+    //Mutaciones Nentrons Muscular
+    private float enemyKilled = 0;
+
 
 
     private void Awake()
@@ -167,6 +170,21 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     #endregion
 
 
-  
+    #region MUTACION MUSCULAR
+    public void SetMuscularNeutronsMajor() => DeathManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMajor;
+    public void SetMuscularNeutronsMinor() => DeathManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMinor;
+
+    public void ApplyMuscularNeutronsMajor()
+    {
+        enemyKilled++;
+        if (enemyKilled >= 9)
+            playerModel.RecoverTime(10);
+    }
+    public void ApplyMuscularNeutronsMinor()
+    {
+        
+    }
+
+    #endregion
 
 }
