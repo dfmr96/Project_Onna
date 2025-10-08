@@ -28,7 +28,15 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     private float extraVitalTime;
 
     //Mutaciones Nentrons Muscular
-    private float enemyKilled = 0;
+        //Major
+    private int enemiesToKill = 9;
+    private float majorTimeToRecover = 10f;
+    private int enemyKilled = 0;
+        //Minor
+    private int enemiesToHit = 8;
+    private float minorTimeToRecover = 3f;
+    private int enemyHit = 0;
+    private bool hitCount = false;
 
 
 
@@ -171,19 +179,59 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 
 
     #region MUTACION MUSCULAR
-    public void SetMuscularNeutronsMajor() => DeathManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMajor;
-    public void SetMuscularNeutronsMinor() => DeathManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMinor;
+    public void SetMuscularNeutronsMajor(int kills, float time) 
+    {
+        enemiesToKill = kills;
+        majorTimeToRecover = time;
+        enemyKilled = 0;
+        DeathManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMajor;
+        Debug.LogWarning($"Muscular Neutrons Major Setted");
+    }
+    public void UnSetMuscularNeutronsMajor() 
+    {
+        enemyKilled = 0;
+        DeathManager.Instance.OnEnemyDeath -= ApplyMuscularNeutronsMajor;
+        Debug.LogWarning($"Muscular Neutrons Major Unsetted");
+    }
+    public void SetMuscularNeutronsMinor(int hits, float time) 
+    {
+        enemiesToHit = hits;
+        minorTimeToRecover = time;
+        enemyHit = 0;
+        hitCount = true;
+        Debug.LogWarning($"Muscular Neutrons Minor Setted");
+    }
+    public void UnSetMuscularNeutronsMinor() 
+    {
+        enemyHit = 0;
+        hitCount = false;
+        Debug.LogWarning($"Muscular Neutrons Minor Unsetted");
+    }
 
     public void ApplyMuscularNeutronsMajor()
     {
         enemyKilled++;
-        if (enemyKilled >= 9)
-            playerModel.RecoverTime(10);
+        if (enemyKilled >= enemiesToKill) 
+        {
+            playerModel.RecoverTime(majorTimeToRecover);
+            enemyKilled = 0;
+            Debug.LogWarning($"Time recovered: {majorTimeToRecover} by Muscular Neutrons Major");
+        }
     }
-    public void ApplyMuscularNeutronsMinor()
+    public void CheckBulletHit()
     {
-        
+        if (!hitCount) return;
+
+        enemyHit++;
+        if (enemyHit >= enemiesToHit)
+        {
+            playerModel.RecoverTime(minorTimeToRecover);
+            enemyHit = 0;
+            Debug.LogWarning($"Time recovered: {minorTimeToRecover} by Muscular Neutrons Minor");
+        }
     }
+
+    public void RestartBulletHit() => enemyHit = 0;
 
     #endregion
 
