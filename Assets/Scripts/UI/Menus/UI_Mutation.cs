@@ -102,6 +102,7 @@ public class UI_Mutation : MonoBehaviour
 
     public void OnRadiationSelected(NewRadiationData radData)
     {
+        if (isRotating) return;
         ShowSlotSelection(radData);
         ShowSlotDescriptions(radData);
     }
@@ -248,6 +249,7 @@ public class UI_Mutation : MonoBehaviour
 
     public void OnRadiationEquipped()
     {
+        isRotating = true;
         DestroySlotDescriptions();
         foreach (Transform child in radiationPanelParent)
         {
