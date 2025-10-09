@@ -7,12 +7,25 @@ using static UnityEngine.ParticleSystem;
 
 public class EnemyView : MonoBehaviour
 {
+
+    [Header("Enemy Melee Settings")]
+    [SerializeField] private Transform punchPoint;
+    public Transform PunchPoint => punchPoint;
+    public event Action OnAttackStarted;
+    public event Action OnAttackImpact;
+    public event Action OnAttackCanStun;
+    public event Action OnAttackFinished;
+
+
+
     [Header("Pre-Attack Settings")]
     [SerializeField] private float slowAnimationFactor = 0.1f;
     [SerializeField] private float preAttackDuration = 0.6f;
     [SerializeField] private float shakeAmount = 0.09f;
     [SerializeField] private Color shakeColor = Color.white;
     [SerializeField] private float shakeColorAtenuation = 0.2f;
+    [SerializeField] private float minFlashFrequency = 0.05f;   // titileo inicial (veces por segundo)
+    [SerializeField] private float maxFlashFrequency = 15f;  // titileo final (veces por segundo)
 
     private Vector3 originalPos;
     private List<Color[]> originalMaterialColors;
@@ -38,9 +51,9 @@ public class EnemyView : MonoBehaviour
     private Material material;
     private Color originalColor;
 
-    public event Action OnAttackStarted;
-    public event Action OnAttackImpact;
 
+
+    [Header("Torret Settings")]
     //for enemy torret
     private bool useFirstFirePoint = true;
     //Cambiar mas adelante
@@ -160,18 +173,37 @@ public class EnemyView : MonoBehaviour
     {
         OnAttackImpact?.Invoke();
 
-        if (_playerTransform != null)
-        {
-            float distanceToPlayer = Vector3.Distance(_playerTransform.position, transform.position);
+        //if (_playerTransform != null)
+        //{
+        //    float distanceToPlayer = Vector3.Distance(_playerTransform.position, transform.position);
 
-            //doble comprobacion por si se aleja
-            if (distanceToPlayer <= _distanceToCountExit)
-            {
-                IDamageable damageablePlayer = _playerTransform.GetComponent<IDamageable>();
-                _enemyController.ExecuteAttack(damageablePlayer);
+        //    //doble comprobacion por si se aleja
+        //    if (distanceToPlayer <= _distanceToCountExit)
+        //    {
+        //        IDamageable damageablePlayer = _playerTransform.GetComponent<IDamageable>();
+        //        _enemyController.ExecuteAttack(damageablePlayer);
 
-            }
-        }
+        //    }
+        //}
+    }
+
+    public void CanStunStarted()
+    {
+        OnAttackCanStun?.Invoke();
+
+    }
+
+    public void AnimationAttackFinished()
+    {
+        OnAttackFinished?.Invoke();
+    }
+
+    private void OnDrawGizmos()
+    {
+        //if (punchPoint == null) return;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(punchPoint.position, 3f);
     }
 
     public void AnimationAttackPrepare()
@@ -614,24 +646,19 @@ public class EnemyView : MonoBehaviour
 
         try
         {
-            //Bloque principal del efecto
+           
             while (elapsed < preAttackDuration)
             {
                 elapsed += Time.deltaTime;
-
-                // Vibración
                 transform.localPosition = originalPos + UnityEngine.Random.insideUnitSphere * shakeAmount;
 
                 float normalizedTime = elapsed / preAttackDuration;
 
-                // Ciclo de titileo asimétrico
-                float cycleDuration = Mathf.Lerp(5f, 1f, normalizedTime); // ciclos más rápidos al final
-                float normalizedTimeOsc = (elapsed % cycleDuration) / cycleDuration;
-                float intensity = 1f - Mathf.Pow(1f - normalizedTimeOsc, 2f);
+                // Frecuencia de titileo: de lenta a rápida
+                float frequency = Mathf.Lerp(minFlashFrequency, maxFlashFrequency, normalizedTime);
 
-                // Flash final más fuerte
-                if (normalizedTime > 0.9f)
-                    intensity = Mathf.Lerp(intensity, 1f, (normalizedTime - 0.9f) * 10f);
+                // Determinar si se muestra el color de flash o el original
+                bool showFlash = Mathf.FloorToInt(elapsed * frequency) % 2 == 0;
 
                 // Aplicar a todos los materiales
                 for (int i = 0; i < childRenderers.Length; i++)
@@ -647,25 +674,39 @@ public class EnemyView : MonoBehaviour
                     {
                         if (mats[j] == null) continue;
                         Color baseColor = originalColors[j];
+                        Color targetColor = showFlash
+                            ? Color.Lerp(baseColor, shakeColor, shakeColorAtenuation)
+                            : baseColor;
 
-                        Color targetColor = Color.Lerp(baseColor, shakeColor, intensity * shakeColorAtenuation);
+
 
                         if (mats[j].HasProperty("_BaseColor"))
                             mats[j].SetColor("_BaseColor", targetColor);
                         else if (mats[j].HasProperty("_Color"))
                             mats[j].SetColor("_Color", targetColor);
 
+
+
                         if (mats[j].HasProperty("_EmissionColor"))
                         {
-                            Color emission = Color.Lerp(Color.black, shakeColor, intensity * shakeColorAtenuation);
+                            Color emission = showFlash
+                                ? Color.Lerp(Color.black, shakeColor, shakeColorAtenuation)
+                                : Color.black;
+
                             mats[j].SetColor("_EmissionColor", emission);
-                            mats[j].EnableKeyword("_EMISSION");
+
+                            if (emission.maxColorComponent > 0f)
+                                mats[j].EnableKeyword("_EMISSION");
+                            else
+                                mats[j].DisableKeyword("_EMISSION");
                         }
+
                     }
                 }
 
                 yield return null;
             }
+
         }
         finally
         {

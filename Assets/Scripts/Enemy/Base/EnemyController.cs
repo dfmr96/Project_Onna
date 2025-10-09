@@ -149,7 +149,11 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
 void Update()
     {
-        view.PlayMovingAnimation(_navMeshAgent.speed);
+        // Solo reproducir animación de movimiento si NO está atacando
+        if (fsm.CurrentState != AttackState)
+        {
+            view.PlayMovingAnimation(_navMeshAgent.speed);
+        }
         fsm.CurrentState?.FrameUpdate();
 
         //Debug.Log("ESTADO: " + fsm.CurrentState);

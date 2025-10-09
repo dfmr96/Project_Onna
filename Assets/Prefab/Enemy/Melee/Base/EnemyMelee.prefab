@@ -297,6 +297,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.001731813, y: -0.3254089, z: -0.058450013}
     m_Extent: {x: 1.8644462, y: 1.1472657, z: 0.3982538}
   m_DirtyAABB: 0
+--- !u!1 &1154914445016818214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2492802627215243818}
+  m_Layer: 0
+  m_Name: punchPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2492802627215243818
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154914445016818214}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2714031177358215269}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1166253275082394708
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,6 +902,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5140070781573930251}
+  - {fileID: 2492802627215243818}
   m_Father: {fileID: 2976644028888273336}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3310921441096042631
@@ -1703,11 +1735,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15090d3ae99f0744785b069fb322afa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  punchPoint: {fileID: 2492802627215243818}
   slowAnimationFactor: 0.1
   preAttackDuration: 0.4
-  shakeAmount: 0.09
-  shakeColor: {r: 1, g: 1, b: 1, a: 1}
-  shakeColorAtenuation: 0.2
+  shakeAmount: 0.1
+  shakeColor: {r: 1, g: 1, b: 1, a: 0.21568628}
+  shakeColorAtenuation: 0.1
+  minFlashFrequency: 0.05
+  maxFlashFrequency: 15
   spawnMaterials:
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}

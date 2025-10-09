@@ -56,12 +56,14 @@ public class EnemyAttackSOBase : ScriptableObject
         _bossModel = gameObject.GetComponent<BossModel>();
         _bossView = gameObject.GetComponent<BossView>();
         _projectileSpawner = GameManager.Instance.projectileSpawner;
-        _rb = gameObject.GetComponent<Rigidbody>(); 
+        _rb = gameObject.GetComponent<Rigidbody>();
 
         //_enemyRenderer = gameObject.GetComponentInChildren<Renderer>();
         //_originalColor = _enemyRenderer.material.color;
 
         //Debug.Log("Cambio de ataque");
+
+
     }
 
     public virtual void DoEnterLogic()
