@@ -1739,10 +1739,10 @@ MonoBehaviour:
   slowAnimationFactor: 0.1
   preAttackDuration: 0.4
   shakeAmount: 0.1
-  shakeColor: {r: 1, g: 1, b: 1, a: 0.21568628}
-  shakeColorAtenuation: 0.1
   minFlashFrequency: 0.05
   maxFlashFrequency: 15
+  preAttackMaterials:
+  - {fileID: 2100000, guid: 783135275ffc40444aadaf226ed384d2, type: 2}
   spawnMaterials:
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}

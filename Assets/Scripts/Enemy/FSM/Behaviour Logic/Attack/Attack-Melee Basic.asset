@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5738b46c50ec4d2438174130d58d3e93, type: 3}
   m_Name: Attack-Melee Basic
   m_EditorClassIdentifier: 
-  _distanceToCountExit: 3
+  _distanceToCountExit: 10
   AttackingMovingSpeed: 9
-  isMovingSpeedChangesOnAttack: 1
-  _timeBetweenAttacks: 1.2
-  _initialAttackDelay: 0
+  isMovingSpeedChangesOnAttack: 0
   isLookingPlayer: 1
   rotationSpeed: 5
-  attackColor: {r: 0.663808, g: 0, b: 0, a: 1}
-  fadeDuration: 0.3
+  punchRadius: 3
+  maxChaseDistance: 10
+  dashDistance: 0.5

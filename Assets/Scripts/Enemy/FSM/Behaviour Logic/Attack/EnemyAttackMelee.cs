@@ -9,12 +9,10 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     private bool _hasAttackedOnce = false;
     private float attackRange;
     private bool _canBeStunned = false;
-    private bool _attackFinished = false;
+    private bool _attackFinished = true;
 
     [Header("Melee Settings")]
-
     [SerializeField] private float punchRadius = 0.5f;
-    [SerializeField] private float maxChaseDistance = 10f;
     [SerializeField] private float dashDistance = 1f;
 
     public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
@@ -68,6 +66,8 @@ public class EnemyAttackMelee : EnemyAttackSOBase
 
         _navMeshAgent.speed = _enemyModel.currentSpeed;
         _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
+
+        _navMeshAgent.isStopped = false;
     }
 
     public override void DoFrameUpdateLogic()
@@ -76,15 +76,18 @@ public class EnemyAttackMelee : EnemyAttackSOBase
 
         distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
 
-        if (_attackFinished && distanceToPlayer > maxChaseDistance)
+        // Solo después de terminar el ataque evaluamos cambios de estado
+        if (_attackFinished)
         {
-            //ResetColor();
-            _enemyView.PlayAttackAnimation(false);
-            enemy.fsm.ChangeState(enemy.SearchState);
-            return;
+            if (distanceToPlayer > attackRange)
+            {
+                _enemyView.PlayAttackAnimation(false);
+                enemy.fsm.ChangeState(enemy.SearchState);
+                return;
+            }
         }
 
-      
+
         // === Lógica de ataques ===
         if (!_hasAttackedOnce)
         {
@@ -100,6 +103,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
             Attack();
             _timer = 0f;
         }
+
 
         // Rotación manual hacia el jugador
         Vector3 directionToPlayer = playerTransform.position - transform.position;
@@ -117,17 +121,17 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     {
         if (playerTransform == null) return;
 
-        distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
+           distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
 
         if (distanceToPlayer <= attackRange)
         {
             _enemyView.PlayAttackAnimation(true);
         }
-        else
-        {
-            enemy.fsm.ChangeState(enemy.ChaseState);
+        //else if (_attackFinished && distanceToPlayer >= attackRange) 
+        //{
+        //    enemy.fsm.ChangeState(enemy.ChaseState);
 
-        }
+        //}
     }
 
     private void OnAttackStarted()
@@ -139,17 +143,18 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     {
         _attackFinished = true;
 
-        // Retroceder un poco para respetar el attackRange
-        Vector3 directionFromPlayer = (transform.position - playerTransform.position).normalized;
-        float safeDistance = attackRange * 0.8f; // Ajusta si querés un poquito más lejos del jugador
+    
+        //// Retroceder un poco para respetar el attackRange
+        //Vector3 directionFromPlayer = (transform.position - playerTransform.position).normalized;
+        //float safeDistance = attackRange * 0.8f; // Ajusta si querés un poquito más lejos del jugador
 
-        Vector3 targetPos = playerTransform.position + directionFromPlayer * safeDistance;
+        //Vector3 targetPos = playerTransform.position + directionFromPlayer * safeDistance;
 
-        // Asegurarse que esté sobre el NavMesh
-        if (NavMesh.SamplePosition(targetPos, out NavMeshHit hit, 1f, NavMesh.AllAreas))
-        {
-            _navMeshAgent.Warp(hit.position);
-        }
+        //// Asegurarse que esté sobre el NavMesh
+        //if (NavMesh.SamplePosition(targetPos, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+        //{
+        //    _navMeshAgent.Warp(hit.position);
+        //}
     }
 
     private void OnAttackCanStun()

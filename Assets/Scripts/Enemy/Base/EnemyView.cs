@@ -22,10 +22,10 @@ public class EnemyView : MonoBehaviour
     [SerializeField] private float slowAnimationFactor = 0.1f;
     [SerializeField] private float preAttackDuration = 0.6f;
     [SerializeField] private float shakeAmount = 0.09f;
-    [SerializeField] private Color shakeColor = Color.white;
-    [SerializeField] private float shakeColorAtenuation = 0.2f;
     [SerializeField] private float minFlashFrequency = 0.05f;   // titileo inicial (veces por segundo)
     [SerializeField] private float maxFlashFrequency = 15f;  // titileo final (veces por segundo)
+    [SerializeField] private Material[] preAttackMaterials;
+
 
     private Vector3 originalPos;
     private List<Color[]> originalMaterialColors;
@@ -614,39 +614,17 @@ public class EnemyView : MonoBehaviour
         float originalSpeed = animator.speed;
         animator.speed = slowAnimationFactor;
 
-        // Guardar posición y colores originales de cada material
         Vector3 originalPos = transform.localPosition;
-        List<Color[]> originalMaterialColors = new List<Color[]>();
 
-        foreach (var renderer in childRenderers)
-        {
-            if (renderer == null)
-            {
-                originalMaterialColors.Add(null);
-                continue;
-            }
-
-            Material[] mats = renderer.materials;
-            Color[] matColors = new Color[mats.Length];
-
-            for (int j = 0; j < mats.Length; j++)
-            {
-                if (mats[j].HasProperty("_BaseColor"))
-                    matColors[j] = mats[j].GetColor("_BaseColor");
-                else if (mats[j].HasProperty("_Color"))
-                    matColors[j] = mats[j].GetColor("_Color");
-                else
-                    matColors[j] = Color.white; // fallback
-            }
-
-            originalMaterialColors.Add(matColors);
-        }
+        // Guardamos materiales originales por renderer
+        List<Material[]> originalMaterialsPerRenderer = new List<Material[]>();
+        foreach (var r in childRenderers)
+            originalMaterialsPerRenderer.Add(r != null ? r.materials : null);
 
         float elapsed = 0f;
 
         try
         {
-           
             while (elapsed < preAttackDuration)
             {
                 elapsed += Time.deltaTime;
@@ -656,64 +634,52 @@ public class EnemyView : MonoBehaviour
 
                 // Frecuencia de titileo: de lenta a rápida
                 float frequency = Mathf.Lerp(minFlashFrequency, maxFlashFrequency, normalizedTime);
-
-                // Determinar si se muestra el color de flash o el original
                 bool showFlash = Mathf.FloorToInt(elapsed * frequency) % 2 == 0;
 
-                // Aplicar a todos los materiales
                 for (int i = 0; i < childRenderers.Length; i++)
                 {
                     Renderer r = childRenderers[i];
                     if (r == null) continue;
 
-                    Material[] mats = r.materials;
-                    Color[] originalColors = originalMaterialColors[i];
-                    if (originalColors == null) continue;
-
-                    for (int j = 0; j < mats.Length; j++)
-                    {
-                        if (mats[j] == null) continue;
-                        Color baseColor = originalColors[j];
-                        Color targetColor = showFlash
-                            ? Color.Lerp(baseColor, shakeColor, shakeColorAtenuation)
-                            : baseColor;
-
-
-
-                        if (mats[j].HasProperty("_BaseColor"))
-                            mats[j].SetColor("_BaseColor", targetColor);
-                        else if (mats[j].HasProperty("_Color"))
-                            mats[j].SetColor("_Color", targetColor);
-
-
-
-                        if (mats[j].HasProperty("_EmissionColor"))
-                        {
-                            Color emission = showFlash
-                                ? Color.Lerp(Color.black, shakeColor, shakeColorAtenuation)
-                                : Color.black;
-
-                            mats[j].SetColor("_EmissionColor", emission);
-
-                            if (emission.maxColorComponent > 0f)
-                                mats[j].EnableKeyword("_EMISSION");
-                            else
-                                mats[j].DisableKeyword("_EMISSION");
-                        }
-
-                    }
+                    if (showFlash)
+                        r.materials = GetFittedMaterials(preAttackMaterials, r.materials.Length);
+                    else
+                        r.materials = originalMaterialsPerRenderer[i];
                 }
 
                 yield return null;
             }
-
         }
         finally
         {
-             animator.speed = originalSpeed;
-             RestoreOriginalColorsAndPosition(); 
+            animator.speed = originalSpeed;
+            transform.localPosition = originalPos;
+
+            // Restauramos materiales originales
+            for (int i = 0; i < childRenderers.Length; i++)
+            {
+                Renderer r = childRenderers[i];
+                if (r == null) continue;
+                r.materials = originalMaterialsPerRenderer[i];
+            }
         }
     }
+
+    // Helper para ajustar tamaño de array de materiales
+    private Material[] GetFittedMaterials(Material[] source, int targetLength)
+    {
+        Material[] newMaterials = new Material[targetLength];
+        for (int i = 0; i < targetLength; i++)
+        {
+            if (i < source.Length)
+                newMaterials[i] = source[i];
+            else
+                newMaterials[i] = source[source.Length - 1]; // repetir último
+        }
+        return newMaterials;
+    }
+
+
 
     public void RestoreOriginalColorsAndPosition(bool restorePosition = false)
     {

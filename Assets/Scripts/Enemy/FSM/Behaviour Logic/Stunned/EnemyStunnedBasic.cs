@@ -24,16 +24,19 @@ using static UnityEngine.ParticleSystem;
             _enemyView.PlayStunnedAnimation();
 
             _enemyModel.OnDeath += HandleDeathState;
+            _enemyModel.OnHealthChanged += HandleHealthChanged;
+
     }
 
-        public override void DoExitLogic()
+    public override void DoExitLogic()
         {
             base.DoExitLogic();
 
             _timer = 0f;
             _enemyModel.OnDeath -= HandleDeathState;
+            _enemyModel.OnHealthChanged -= HandleHealthChanged;
 
-            Destroy(particles);
+        Destroy(particles);
     }
 
     public override void DoFrameUpdateLogic()
@@ -66,6 +69,13 @@ using static UnityEngine.ParticleSystem;
         {
             DoExitLogic();
             //_enemyView.PlayDeathAnimation();
+        }
+
+        private void HandleHealthChanged(float currentHealth)
+        {
+        
+           enemy.fsm.ChangeState(enemy.SearchState);
+         
         }
 }
 
