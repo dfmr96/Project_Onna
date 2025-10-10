@@ -29,12 +29,15 @@ public class EnemyEscapeSOBase : ScriptableObject
 
         playerTransform = PlayerHelper.GetPlayer().transform;
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
 
     }
 
     public virtual void DoEnterLogic()
     {
         _enemyView = gameObject.GetComponent<EnemyView>();
+        _enemyModel = gameObject.GetComponent<EnemyModel>();
+
 
     }
     public virtual void DoExitLogic() { ResetValues(); }
