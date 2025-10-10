@@ -30,7 +30,6 @@ namespace Mutations.Effects
             {
                 controller.AddBulletModifier(counterModifierSO);
                 controller.SetMuscularNeutronsMinor(enemiesToHit, timeToRecover);
-                Debug.Log("[MinorEffect] Neutrons Minor activada");
             }
         }
 
@@ -41,7 +40,6 @@ namespace Mutations.Effects
             {
                 controller.RemoveBulletModifier(counterModifierSO);
                 controller.UnSetMuscularNeutronsMinor();
-                Debug.Log("[MinorEffect] Neutrons Minor desactivada");
             }
         }
 

@@ -1,37 +1,37 @@
-using UnityEngine;
 using Mutations.Core.Categories;
 using Player;
+using UnityEngine;
 
 namespace Mutations.Effects 
 {
-    [CreateAssetMenu(fileName = "Neutrons Muscular Major", menuName = "Mutations/Effects/Muscular System/Neutrons Major")]
-    public class NeutronsMuscularMajorEffect : StatModifierEffect
+    [CreateAssetMenu(fileName = "Cherenkov Muscular Major", menuName = "Mutations/Effects/Muscular System/Cherenkov Major")]
+    public class CherenkovMuscularMajorEffect : StatModifierEffect
     {
-        [SerializeField] private int enemiesToKill = 9;
-        [SerializeField] private float timeToRecover = 10f;
+        [Header("Bullet Modifier")]
+        [SerializeField] private MarkerBulletModifierSO markerModifierSO;
+
         private void Awake()
         {
-            radiationType = MutationType.Neutrons;
+            radiationType = MutationType.Cherenkov;
             systemType = SystemType.Muscular;
             slotType = SlotType.Major;
-            effectName = "Neutrons Major";
-            description = $"Cada 9 enemigos eliminados otorgan +10s de tiempo vital (máx. 120s)";
+            effectName = "Cherenkov Major";
+            description = $"Disparos que marcan a los enemigos, aumentando el daño que reciben de todas las fuentes";
             isTemporary = false;
         }
-
 
         public override void ApplyEffect(GameObject player, int level = 1)
         {
             var controller = player.GetComponent<PlayerControllerEffect>();
             if (controller != null)
-                controller.SetMuscularNeutronsMajor(enemiesToKill, timeToRecover);
+                controller.AddBulletModifier(markerModifierSO);
         }
 
         public override void RemoveEffect(GameObject player)
         {
             var controller = player.GetComponent<PlayerControllerEffect>();
             if (controller != null)
-                controller.UnSetMuscularNeutronsMajor();
+                controller.RemoveBulletModifier(markerModifierSO);
         }
 
         protected override void ApplyStatModification(PlayerModel playerModel, int level) { }
