@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Attack-Melee Basic
   m_EditorClassIdentifier: 
   _distanceToCountExit: 10
-  AttackingMovingSpeed: 9
+  AttackingMovingSpeed: 1
   isMovingSpeedChangesOnAttack: 0
   isLookingPlayer: 1
   rotationSpeed: 5
   punchRadius: 3
-  maxChaseDistance: 10
-  dashDistance: 0.5
+  dashDistance: 1
+  particlePunchAttack: {fileID: 322485791207682088, guid: df9374346b76e444dbbb2b019de4da25, type: 3}

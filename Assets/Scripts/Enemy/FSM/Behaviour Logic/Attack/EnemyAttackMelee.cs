@@ -14,11 +14,12 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     [Header("Melee Settings")]
     [SerializeField] private float punchRadius = 0.5f;
     [SerializeField] private float dashDistance = 1f;
+    [SerializeField] private ParticleSystem particlePunchAttack;
+    private ParticleSystem damageParticlesInstance;
 
     public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
-
 
 
     }
@@ -45,6 +46,15 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _navMeshAgent.isStopped = true;
         _navMeshAgent.velocity = Vector3.zero;
         _navMeshAgent.ResetPath();
+
+
+        damageParticlesInstance = Instantiate(
+                       particlePunchAttack,
+                       _enemyView.PunchPoint.position,
+                       Quaternion.identity
+                   );
+
+        damageParticlesInstance.Stop();
     }
 
     public override void DoExitLogic()
@@ -68,6 +78,9 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
 
         _navMeshAgent.isStopped = false;
+
+        Destroy(damageParticlesInstance.gameObject);
+
     }
 
     public override void DoFrameUpdateLogic()
@@ -127,7 +140,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         {
             _enemyView.PlayAttackAnimation(true);
         }
-        //else if (_attackFinished && distanceToPlayer >= attackRange) 
+        //else if (_attackFinished && distanceToPlayer >= _distanceToCountExit)
         //{
         //    enemy.fsm.ChangeState(enemy.ChaseState);
 
@@ -166,8 +179,23 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     {
         _canBeStunned = false;
 
-        // Avanzar un poquito hacia el jugador
-        Vector3 direction = (playerTransform.position - transform.position).normalized;
+        // Tomar solo la rotación en Y (horizontal) ponemos *-1 porque esta en backwards
+        Vector3 forward = _enemyView.PunchPoint.forward * -1;
+        forward.y = 0f; // aplastamos la componente vertical
+
+        Quaternion flatRotation = Quaternion.LookRotation(forward, Vector3.up);
+
+        damageParticlesInstance.transform.SetPositionAndRotation(
+            _enemyView.PunchPoint.position,
+            flatRotation
+        );
+
+        damageParticlesInstance.Clear();
+        damageParticlesInstance.Play();
+    
+
+    // Avanzar un poquito hacia el jugador
+    Vector3 direction = (playerTransform.position - transform.position).normalized;
 
         // Calcular nuevo destino dentro del NavMesh
         Vector3 targetPos = transform.position + direction * dashDistance;
@@ -193,7 +221,6 @@ public class EnemyAttackMelee : EnemyAttackSOBase
             }
         }
 
-       
     }
 
   

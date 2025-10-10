@@ -22,6 +22,7 @@ public class EnemyView : MonoBehaviour
     [SerializeField] private float slowAnimationFactor = 0.1f;
     [SerializeField] private float preAttackDuration = 0.6f;
     [SerializeField] private float shakeAmount = 0.09f;
+    [SerializeField] private float shakeColorAtenuation = 0.2f;
     [SerializeField] private float minFlashFrequency = 0.05f;   // titileo inicial (veces por segundo)
     [SerializeField] private float maxFlashFrequency = 15f;  // titileo final (veces por segundo)
     [SerializeField] private Material[] preAttackMaterials;
@@ -630,21 +631,39 @@ public class EnemyView : MonoBehaviour
                 elapsed += Time.deltaTime;
                 transform.localPosition = originalPos + UnityEngine.Random.insideUnitSphere * shakeAmount;
 
-                float normalizedTime = elapsed / preAttackDuration;
+                float normalizedTime = Mathf.Clamp01(elapsed / preAttackDuration);
 
-                // Frecuencia de titileo: de lenta a rápida
-                float frequency = Mathf.Lerp(minFlashFrequency, maxFlashFrequency, normalizedTime);
-                bool showFlash = Mathf.FloorToInt(elapsed * frequency) % 2 == 0;
+                // Crescendo lineal: 0 al inicio, 1 al final
+                float crescendo = normalizedTime * shakeColorAtenuation; 
 
+                // Aplicamos interpolación de colores
                 for (int i = 0; i < childRenderers.Length; i++)
                 {
                     Renderer r = childRenderers[i];
                     if (r == null) continue;
 
-                    if (showFlash)
-                        r.materials = GetFittedMaterials(preAttackMaterials, r.materials.Length);
-                    else
-                        r.materials = originalMaterialsPerRenderer[i];
+                    Material[] mats = r.materials;
+                    Color[] baseColors = originalMaterialColors[i];
+
+                    for (int j = 0; j < mats.Length; j++)
+                    {
+                        if (mats[j] == null) continue;
+
+                        Color baseColor = baseColors[j];
+                        Color targetColor = Color.Lerp(baseColor, Color.white, crescendo); // blanco como "prendido"
+
+                        if (mats[j].HasProperty("_BaseColor"))
+                            mats[j].SetColor("_BaseColor", targetColor);
+                        else if (mats[j].HasProperty("_Color"))
+                            mats[j].SetColor("_Color", targetColor);
+
+                        if (mats[j].HasProperty("_EmissionColor"))
+                        {
+                            Color emission = Color.Lerp(Color.black, Color.white, crescendo);
+                            mats[j].SetColor("_EmissionColor", emission);
+                            mats[j].EnableKeyword("_EMISSION");
+                        }
+                    }
                 }
 
                 yield return null;
@@ -653,30 +672,16 @@ public class EnemyView : MonoBehaviour
         finally
         {
             animator.speed = originalSpeed;
-            transform.localPosition = originalPos;
-
+            //transform.localPosition = originalPos;
+            RestoreOriginalColorsAndPosition();
             // Restauramos materiales originales
-            for (int i = 0; i < childRenderers.Length; i++)
-            {
-                Renderer r = childRenderers[i];
-                if (r == null) continue;
-                r.materials = originalMaterialsPerRenderer[i];
-            }
+            //for (int i = 0; i < childRenderers.Length; i++)
+            //{
+            //    Renderer r = childRenderers[i];
+            //    if (r == null) continue;
+            //    r.materials = originalMaterialsPerRenderer[i];
+            //}
         }
-    }
-
-    // Helper para ajustar tamaño de array de materiales
-    private Material[] GetFittedMaterials(Material[] source, int targetLength)
-    {
-        Material[] newMaterials = new Material[targetLength];
-        for (int i = 0; i < targetLength; i++)
-        {
-            if (i < source.Length)
-                newMaterials[i] = source[i];
-            else
-                newMaterials[i] = source[source.Length - 1]; // repetir último
-        }
-        return newMaterials;
     }
 
 

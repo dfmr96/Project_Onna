@@ -32,6 +32,37 @@ Transform:
   - {fileID: 9220046760232497173}
   m_Father: {fileID: 385111163881613298}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &575262514094442007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7191442694801013189}
+  m_Layer: 0
+  m_Name: ParticlePunchInstantiate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7191442694801013189
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575262514094442007}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.295, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 453708039228818419}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &638226159943289695
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,12 +1766,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15090d3ae99f0744785b069fb322afa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  punchPoint: {fileID: 2492802627215243818}
+  punchPoint: {fileID: 7191442694801013189}
   slowAnimationFactor: 0.1
   preAttackDuration: 0.4
   shakeAmount: 0.1
-  minFlashFrequency: 0.05
-  maxFlashFrequency: 15
+  shakeColorAtenuation: 0.2
+  minFlashFrequency: 1
+  maxFlashFrequency: 10
   preAttackMaterials:
   - {fileID: 2100000, guid: 783135275ffc40444aadaf226ed384d2, type: 2}
   spawnMaterials:
@@ -2405,6 +2437,7 @@ Transform:
   - {fileID: 8092839265416662533}
   - {fileID: 6498633104909508797}
   - {fileID: 385111163881613298}
+  - {fileID: 7191442694801013189}
   m_Father: {fileID: 444889520022804283}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7646821456420582804
