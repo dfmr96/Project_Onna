@@ -98,6 +98,11 @@ public class EnemyAttackMelee : EnemyAttackSOBase
                 enemy.fsm.ChangeState(enemy.SearchState);
                 return;
             }
+            else if (distanceToPlayer >= _distanceToCountExit)
+            {
+                enemy.fsm.ChangeState(enemy.ChaseState);
+
+            }
         }
 
 
