@@ -196,19 +196,13 @@ public class StoreHandler : MonoBehaviour
             playerInventory.PlayerItemsHolder.PrepareForSave(); 
             SaveSystem.SaveInventory(playerInventory);
 
-            playerInventory = SaveSystem.LoadInventory();
+            playerInventory = SaveSystem.Load().inventory;
             playerInventory.PlayerItemsHolder.RestoreFromSave();
 
             player.StatContext.Meta.Clear(); 
             playerInventory.PlayerItemsHolder.ApplyAllUpgradesTo(player.StatContext.Meta); 
 
-            Debug.Log("Mejoras borradas del inventario y guardadas.");
             CheckAvailableUpgrades();
-        }
-
-        if (GUI.Button(new Rect(panelX, panelY + 4 * (buttonHeight + spacing), panelWidth, buttonHeight), "📄 Print JSON", buttonStyle))
-        {
-            SaveSystem.DebugInventoryJson();
         }
     }
 }
