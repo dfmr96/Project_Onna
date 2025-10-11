@@ -14,10 +14,13 @@ public class EnemyAttackCharge : EnemyAttackSOBase
     [SerializeField] private float stopDistanceFromPlayer = 1.5f;
 
     [Header("Particle Settings")]
-    [SerializeField] private ParticleSystem particlePunchAttack;
+    [SerializeField] private ParticleSystem particleChargeAttack;
     [SerializeField] private float forwardOffset = 1f;
     [SerializeField] private float downOffset = 1f;
-    private ParticleSystem damageParticlesInstance;
+    [SerializeField] private ParticleSystem particleMeleeAttack;
+    private ParticleSystem chargeParticlesInstance;
+    private ParticleSystem meleeParticlesInstance;
+
 
     private bool isPreparingCharge = false;
     private bool isChargeActive = false;
@@ -42,13 +45,20 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         _enemyView.OnAttackImpact += OnAttackImpact;
         _enemyView.OnAttackStarted += OnMeleeAttack;
 
-        damageParticlesInstance = Instantiate(
-                   particlePunchAttack,
+        chargeParticlesInstance = Instantiate(
+                   particleChargeAttack,
                    _enemyView.PunchPoint.position,
                    Quaternion.identity
                );
 
-        damageParticlesInstance.Stop();
+        meleeParticlesInstance = Instantiate(
+               particleMeleeAttack,
+               _enemyView.PunchPoint.position,
+               Quaternion.identity
+           );
+
+        chargeParticlesInstance.Stop();
+        meleeParticlesInstance.Stop();
     }
 
     public override void DoExitLogic()
@@ -57,7 +67,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         _enemyView.OnAttackImpact -= OnAttackImpact;
         _enemyView.OnAttackStarted -= OnMeleeAttack;
 
-        Destroy(damageParticlesInstance.gameObject);
+        Destroy(chargeParticlesInstance.gameObject);
 
         ResetValues();
     }
@@ -228,13 +238,13 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         Vector3 spawnPos = _enemyView.PunchPoint.position
                          + forward * forwardOffset
                          + Vector3.down * downOffset;
-        damageParticlesInstance.transform.SetPositionAndRotation(
+        chargeParticlesInstance.transform.SetPositionAndRotation(
             spawnPos,
             flatRotation
         );
 
-        damageParticlesInstance.Clear();
-        damageParticlesInstance.Play();
+        chargeParticlesInstance.Clear();
+        chargeParticlesInstance.Play();
     }
 
     private void EndCharge()
@@ -279,13 +289,13 @@ public class EnemyAttackCharge : EnemyAttackSOBase
 
         Vector3 spawnPos = _enemyView.PunchPoint.position + Vector3.down * downOffset;
 
-        damageParticlesInstance.transform.SetPositionAndRotation(
+        meleeParticlesInstance.transform.SetPositionAndRotation(
             spawnPos,
             flatRotation
         );
 
-        damageParticlesInstance.Clear();
-        damageParticlesInstance.Play();
+        meleeParticlesInstance.Clear();
+        meleeParticlesInstance.Play();
     }
 
     private void EndAttackAnimations()
