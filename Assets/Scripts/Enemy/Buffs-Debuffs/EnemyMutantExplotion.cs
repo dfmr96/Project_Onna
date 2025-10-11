@@ -13,7 +13,7 @@ public class EnemyMutantExplotion : MonoBehaviour
     private float damageMultiplier;
     private float radiusMultiplier;
 
-    private bool hasHit = false;
+    //private bool hasHit = false;
 
 
 
@@ -38,7 +38,7 @@ public class EnemyMutantExplotion : MonoBehaviour
 
         if ((collision.transform.root == playerTransform) && (collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable)))
         {
-            hasHit = true;
+            //hasHit = true;
 
             damageable.TakeDamage(damageMultiplier);
 

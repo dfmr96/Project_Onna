@@ -145,11 +145,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         {
             _enemyView.PlayAttackAnimation(true);
         }
-        //else if (_attackFinished && distanceToPlayer >= _distanceToCountExit)
-        //{
-        //    enemy.fsm.ChangeState(enemy.ChaseState);
-
-        //}
+      
     }
 
     private void OnAttackStarted()
@@ -160,19 +156,6 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     private void OnAttackFinished()
     {
         _attackFinished = true;
-
-    
-        //// Retroceder un poco para respetar el attackRange
-        //Vector3 directionFromPlayer = (transform.position - playerTransform.position).normalized;
-        //float safeDistance = attackRange * 0.8f; // Ajusta si querés un poquito más lejos del jugador
-
-        //Vector3 targetPos = playerTransform.position + directionFromPlayer * safeDistance;
-
-        //// Asegurarse que esté sobre el NavMesh
-        //if (NavMesh.SamplePosition(targetPos, out NavMeshHit hit, 1f, NavMesh.AllAreas))
-        //{
-        //    _navMeshAgent.Warp(hit.position);
-        //}
     }
 
     private void OnAttackCanStun()

@@ -23,8 +23,6 @@ public class EnemyView : MonoBehaviour
     [SerializeField] private float preAttackDuration = 0.6f;
     [SerializeField] private float shakeAmount = 0.09f;
     [SerializeField] private float shakeColorAtenuation = 0.2f;
-    [SerializeField] private float minFlashFrequency = 0.05f;   // titileo inicial (veces por segundo)
-    [SerializeField] private float maxFlashFrequency = 15f;  // titileo final (veces por segundo)
     [SerializeField] private Material[] preAttackMaterials;
 
 
@@ -39,7 +37,7 @@ public class EnemyView : MonoBehaviour
     private EnemyModel _enemyModel;
     private ProjectileSpawner projectileSpawner;
 
-    private float _distanceToCountExit = 3f;
+    //private float _distanceToCountExit = 3f;
 
     [Header("Spawning Settings")]
     [SerializeField] private Material[] spawnMaterials; // materiales temporales de spawn
@@ -175,18 +173,16 @@ public class EnemyView : MonoBehaviour
     {
         OnAttackImpact?.Invoke();
 
-        //if (_playerTransform != null)
-        //{
-        //    float distanceToPlayer = Vector3.Distance(_playerTransform.position, transform.position);
+    }
 
-        //    //doble comprobacion por si se aleja
-        //    if (distanceToPlayer <= _distanceToCountExit)
-        //    {
-        //        IDamageable damageablePlayer = _playerTransform.GetComponent<IDamageable>();
-        //        _enemyController.ExecuteAttack(damageablePlayer);
+    public void AnimationAttackTankFunc()
+    {
+        OnAttackImpact?.Invoke();
+    }
 
-        //    }
-        //}
+    public void AnimationAttackTankMeleeFunc()
+    {
+        OnAttackStarted?.Invoke();
     }
 
     public void CanStunStarted()
@@ -205,7 +201,7 @@ public class EnemyView : MonoBehaviour
         //if (punchPoint == null) return;
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(punchPoint.position, 3f);
+        Gizmos.DrawWireSphere(punchPoint.position, 1f);
     }
 
     public void AnimationAttackPrepare()
@@ -220,21 +216,7 @@ public class EnemyView : MonoBehaviour
     public void AnimationChargeAttackFunc()
     {
         OnAttackImpact?.Invoke();
-
-        if (_playerTransform != null)
-        {
-            float hitRadius = _enemyModel.statsSO.AttackRange;
-            Vector3 hitCenter = transform.position + transform.forward * 1f; //Fix para asegurar que le pegue 
-
-            float distanceToPlayer = Vector3.Distance(_playerTransform.position, hitCenter);
-
-            if (distanceToPlayer <= hitRadius)
-            {
-                IDamageable damageablePlayer = _playerTransform.GetComponent<IDamageable>();
-                if (damageablePlayer != null)
-                    _enemyController.ExecuteAttack(damageablePlayer);
-            }
-        }
+       
     }
 
 

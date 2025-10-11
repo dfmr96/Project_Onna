@@ -9,32 +9,12 @@ using UnityEngine.UIElements;
 
 public class EnemyAttackRanged : EnemyAttackSOBase
 {
-        /*
-        #Ataque
-        7 attackStartDistance: a qué distancia empieza a atacar.
-        9 attackExitDistance: si el jugador se aleja más de esto, deja de atacar.
-        3.5 tooCloseDistance: si el jugador está más cerca que esto, el enemigo se pone nervioso y escapa.
-
-        #Chase
-        6 chaseMinDistance: cuando llega a esta distancia, deja de perseguir y se prepara para atacar.
-
-        #Strafe
-        3 strafeMoveDistance: cuánto se mueve lateralmente.
-        0.2 strafeStopThreshold: cuando está lo suficientemente cerca del punto lateral, para.
-
-        #Escape
-        6 escapeSafeDistance: si el player está dentro de esta distancia, huye.
-        8 escapeRetreatDistance: cuán lejos intenta alejarse del player.
-        */
-
-    private bool _hasAttackedOnce;
+     
 
     [Header("Ranged Settings")]
     [SerializeField] private float personalDistance;
-    [SerializeField] private float strafeDistance = 3f;
-    [SerializeField] private float strafeCooldown = 2f;
-    [SerializeField] private float strafeStopDistance = 0.2f;
     [SerializeField] private float rayRadius = 0.3f; // grosor del raycast
+    private bool _hasAttackedOnce;
 
 
     public override void DoEnterLogic()
@@ -146,26 +126,6 @@ public class EnemyAttackRanged : EnemyAttackSOBase
         }
     }
 
-
-    //private bool HasLineOfSightToPlayer(out Vector3 direction)
-    //{
-    //    direction = (playerTransform.position - transform.position).normalized;
-    //    float distance = Vector3.Distance(transform.position, playerTransform.position);
-    //    Vector3 origin = transform.position + Vector3.up * 1f; // levanto un poco el raycast
-
-    //    if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
-    //    {
-    //        // Si lo primero que golpea NO es el player, no hay visión
-    //        if (hit.transform != playerTransform)
-    //        {
-    //            Debug.DrawLine(origin, hit.point, Color.red);
-    //            return false;
-    //        }
-    //    }
-
-    //    Debug.DrawLine(origin, playerTransform.position, Color.green);
-    //    return true;
-    //}
 
     private bool HasLineOfSightToPlayer(out Vector3 direction)
     {
