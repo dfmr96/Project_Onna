@@ -1,58 +1,88 @@
+using System;
 using System.IO;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public static class SaveSystem
 {
-    private static string Path => Application.persistentDataPath + "/playerInventory.json";
+    private static readonly string SavePath = Application.persistentDataPath + "/saveData.save";
 
-    public static void SaveInventory(PlayerInventory inventory)
-    {
-        string json = JsonUtility.ToJson(inventory, true); 
-        File.WriteAllText(Path, json);
-    }
-    
-    public static PlayerInventory LoadInventory()
-    {
-        if (!File.Exists(Path))
-            return new PlayerInventory();
+    private static readonly string EncryptionKeyBase64 = "Ezy5BxVtShP5Q0iU+YGlBg==";
+    private static readonly string EncryptionIVBase64 = "Wb6YkR2N8mLq9FfG4tK1TQ==";
 
-        string json = File.ReadAllText(Path);
-        return JsonUtility.FromJson<PlayerInventory>(json);
+    public static SaveData Load()
+    {
+        if (!File.Exists(SavePath))
+            return new SaveData();
+
+        try
+        {
+            byte[] encryptedBytes = File.ReadAllBytes(SavePath);
+            string decryptedJson = Decrypt(encryptedBytes);
+            return JsonUtility.FromJson<SaveData>(decryptedJson);
+        }
+        catch (Exception) { return new SaveData(); }
     }
+
+    public static void Save(SaveData data)
+    {
+        try
+        {
+            string json = JsonUtility.ToJson(data, true);
+            byte[] encryptedBytes = Encrypt(json);
+            File.WriteAllBytes(SavePath, encryptedBytes);
+        }
+        catch (Exception) { }
+    }
+
+    public static void SaveInventory(PlayerInventory newInventory)
+    {
+        var data = Load();
+        data.inventory = newInventory;
+        Save(data);
+    }
+
     public static void SaveCoins(int newCoins)
     {
-        PlayerData data = LoadData();
-        data.totalCoins = newCoins;
-        WriteData(data);
-        Debug.LogWarning($"Saved: {newCoins}, total: {data.totalCoins}");
+        var data = Load();
+        data.playerData.totalCoins = newCoins;
+        Save(data);
     }
 
-    public static PlayerData LoadData()
+    public static void MarkIntroSeen()
     {
-        if (!File.Exists(Path))
-            return new PlayerData();
-
-        string json = File.ReadAllText(Path);
-        return JsonUtility.FromJson<PlayerData>(json);
+        var data = Load();
+        data.progress.hasSeenIntro = true;
+        Save(data);
     }
 
-    private static void WriteData(PlayerData data)
+    private static byte[] Encrypt(string plainText)
     {
-        string json = JsonUtility.ToJson(data);
-        File.WriteAllText(Path, json);
-    }
-    public static void DebugInventoryJson()
-    {
-        string path = Application.persistentDataPath + "/playerInventory.json";
-
-        if (File.Exists(path))
+        using (Aes aes = Aes.Create())
         {
-            string json = File.ReadAllText(path);
-            Debug.Log($"[Inventory JSON]\n{json}");
+            aes.Key = Convert.FromBase64String(EncryptionKeyBase64);
+            aes.IV = Convert.FromBase64String(EncryptionIVBase64);
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                using (StreamWriter sw = new StreamWriter(cs)) { sw.Write(plainText); }
+
+                return ms.ToArray();
+            }
         }
-        else
+    }
+
+    private static string Decrypt(byte[] cipherBytes)
+    {
+        using (Aes aes = Aes.Create())
         {
-            Debug.LogWarning("No se encontró el archivo de inventario.");
+            aes.Key = Convert.FromBase64String(EncryptionKeyBase64);
+            aes.IV = Convert.FromBase64String(EncryptionIVBase64);
+
+            using (MemoryStream ms = new MemoryStream(cipherBytes))
+            using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Read))
+            using (StreamReader sr = new StreamReader(cs)) { return sr.ReadToEnd(); }
         }
     }
 }

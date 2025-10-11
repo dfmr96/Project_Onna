@@ -84,7 +84,7 @@ namespace Player
                 return;
             }
 
-            var inventory = SaveSystem.LoadInventory();
+            var inventory = SaveSystem.Load().inventory;
             inventory.PlayerItemsHolder.RestoreFromSave();
             playerModel.InjectInventory(inventory);
 
