@@ -1536,10 +1536,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
-  m_Height: 1.0098075
+  m_Radius: 0.48
+  m_Height: 1.64
   m_Direction: 1
-  m_Center: {x: 0, y: 0.82509685, z: 0}
+  m_Center: {x: 0, y: 1.22, z: 0}
 --- !u!114 &8144839512589497895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2092,7 +2092,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
