@@ -94,9 +94,15 @@ namespace Player.Movement
             if (useNavMeshValidation)
             {
                 NavMeshHit hit;
+                NavMeshQueryFilter filter = new NavMeshQueryFilter
+                {
+                    agentTypeID = NavMesh.GetSettingsByIndex(0).agentTypeID,
+                    areaMask = NavMesh.AllAreas
+                };
+
                 Vector3 checkPosition = new Vector3(playerTransform.position.x, playerTransform.position.y - playerHeightOffset, playerTransform.position.z);
 
-                if (NavMesh.SamplePosition(checkPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(checkPosition, out hit, navMeshSampleDistance, filter))
                 {
                     Vector3 correctedPosition = new Vector3(hit.position.x, hit.position.y + playerHeightOffset, hit.position.z);
                     playerTransform.position = correctedPosition;
@@ -151,10 +157,15 @@ namespace Player.Movement
         protected Vector3 ValidatePositionWithNavMesh(Vector3 desiredPosition)
         {
             NavMeshHit hit;
+            NavMeshQueryFilter filter = new NavMeshQueryFilter
+            {
+                agentTypeID = NavMesh.GetSettingsByIndex(0).agentTypeID,
+                areaMask = NavMesh.AllAreas
+            };
 
             Vector3 navMeshCheckPosition = new Vector3(desiredPosition.x, desiredPosition.y - playerHeightOffset, desiredPosition.z);
 
-            if (NavMesh.SamplePosition(navMeshCheckPosition, out hit, navMeshSampleDistance, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(navMeshCheckPosition, out hit, navMeshSampleDistance, filter))
             {
                 Vector3 desiredXZ = new Vector3(desiredPosition.x, 0, desiredPosition.z);
                 Vector3 hitXZ = new Vector3(hit.position.x, 0, hit.position.z);
