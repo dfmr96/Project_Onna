@@ -11,6 +11,8 @@ public class EnemyProjectile : MonoBehaviour
     private float _timer = 0f;
 
     [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
+    [SerializeField] private TrailRenderer trail;
+
     protected Transform playerTransform;
     [SerializeField] float bulletSpeed;
     [SerializeField] private LayerMask ignoreLayers;
@@ -42,7 +44,10 @@ public class EnemyProjectile : MonoBehaviour
         this.ownerModel = owner;
         _timer = 0f;
         hasHit = false;
+
+    
     }
+
 
     public void LaunchBoss(Vector3 direction, float force, float damage, Action onReleaseCallback)
     {
@@ -51,6 +56,10 @@ public class EnemyProjectile : MonoBehaviour
         rb.velocity = direction * force;
         _timer = 0f;
         hasHit = false;
+
+        // Reactivar trail después de disparar
+        if (trail != null)
+            trail.emitting = true;
     }
 
     private void Update()
@@ -106,6 +115,41 @@ public class EnemyProjectile : MonoBehaviour
         onRelease?.Invoke();
     }
 
- 
+
+    public void ResetIdle(System.Action releaseAction)
+    {
+        onRelease = releaseAction;
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;  // congelamos mientras está en la mano
+
+        ResetTrail();
+
+    }
+
+    public void Fire(Vector3 direction, float force, float damage, EnemyModel owner)
+    {
+
+        this.damage = damage;
+        this.ownerModel = owner;
+        _timer = 0f;
+        hasHit = false;
+
+        rb.isKinematic = false;
+        rb.velocity = direction * force;
+
+        // Reactivar trail después de disparar
+        if (trail != null)
+            trail.emitting = true;
+    }
+
+    public void ResetTrail()
+    {
+        if (trail != null)
+        {
+            trail.Clear();       // limpia el trail viejo
+            trail.emitting = false; // desactiva temporalmente
+        }
+
+    }
 }
 

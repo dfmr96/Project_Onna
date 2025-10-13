@@ -84,7 +84,8 @@ public class EnemyView : MonoBehaviour
     private Coroutine flashCoroutine = null;
     private Coroutine recoilCoroutine;
 
-   
+
+    private EnemyProjectile _currentProjectile;
 
     private void Awake()
     {
@@ -162,6 +163,101 @@ public class EnemyView : MonoBehaviour
 
     }
 
+    #region Triggers
+    //Animaciones
+    public void PlayAttackAnimation(bool isAttacking)
+    {
+        animator.SetBool("IsAttacking", isAttacking);
+    }
+
+    public void PlayMeleeAttackAnimation(bool isAttacking)
+    {
+        animator.SetBool("IsMeleeAttacking", isAttacking);
+    }
+
+    public void PlayStrafeAnimation()
+    {
+        animator.SetTrigger("IsStrafing");
+    }
+
+    public bool GetBoolAttackAnimation()
+    {
+        return animator.GetBool("IsAttacking");
+    }
+
+    public void PlayIdleAnimation()
+    {
+        //animator.SetTrigger("Idle");
+    }
+
+    public void PlayMovingAnimation(float moveSpeed)
+    {
+        animator.SetFloat("MoveSpeed", moveSpeed);
+    }
+
+    public void PlayStunnedAnimation()
+    {
+        animator.SetTrigger("IsStunned");
+    }
+
+    public void HandleDamage()
+    {
+        animator.SetTrigger("IsDamaged");
+        audioSource?.PlayOneShot(damagedAudioClip);
+
+        // Instanciar partículas de daño si existen
+        if (damageParticlesPrefab != null)
+        {
+            // Crear como hijo del enemy
+            ParticleSystem damageParticlesInstance = Instantiate(
+                damageParticlesPrefab,
+                transform.position + Vector3.up * 1f,
+                Quaternion.identity,
+                transform
+            );
+
+            damageParticlesInstance.Play();
+
+            // Destruir después de que termine
+            Destroy(damageParticlesInstance.gameObject, 2f);
+        }
+    }
+
+    //public void PlayDamageAnimation()
+    //{
+    //    animator.SetTrigger("IsDamaged");
+    //}
+
+    public void PlayDeathAnimation()
+    {
+        animator.SetTrigger("IsDead");
+        isDead = true;
+
+        // Asignamos materiales de muerte
+        targetRenderer.materials = GetFittedMaterials(deathMaterials);
+
+        // Cancelamos cualquier flash en curso
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+
+        // Lanzamos efecto de disolver
+        StartCoroutine(DissolveCoroutine(1f, 2f)); // (valor final, duración en segundos)
+
+        PlayDeathParticles();
+    }
+
+
+    //public void UpdateHealthBar(float healthPercentage)
+    //{
+    //    //health bar logic
+    //}
+
+    #endregion
+
+    #region Animations Functions Calls
 
     public void AnimationAttackStarted()
     {
@@ -174,7 +270,6 @@ public class EnemyView : MonoBehaviour
         OnAttackImpact?.Invoke();
 
     }
-
     public void AnimationAttackTankFunc()
     {
         OnAttackImpact?.Invoke();
@@ -196,13 +291,7 @@ public class EnemyView : MonoBehaviour
         OnAttackFinished?.Invoke();
     }
 
-    private void OnDrawGizmos()
-    {
-        //if (punchPoint == null) return;
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(punchPoint.position, 1f);
-    }
 
     public void AnimationAttackPrepare()
     {
@@ -219,12 +308,29 @@ public class EnemyView : MonoBehaviour
        
     }
 
+    public void AnimationSpawnProjectileFunc()
+    {
+        Transform firePoint = _enemyController.firePoint;
 
+        Vector3 spawnPos = firePoint.position;
+        Quaternion spawnRot = firePoint.rotation;
 
+        EnemyProjectile pendingProjectile = projectileSpawner.SpawnIdleProjectile(spawnPos, spawnRot);
+
+        _currentProjectile = pendingProjectile;
+
+        // Aplicar el efecto visual de aparición
+        var fx = pendingProjectile.GetComponent<ObjectScalerFx>();
+        if (fx != null)
+        {
+            fx.enabled = true;
+            //fx.RestartScale();
+        }
+    }
 
     public void AnimationShootProjectileFunc()
     {
-        if (projectileSpawner == null) return;
+        if (_currentProjectile == null) return;
 
         Transform firePoint = _enemyController.firePoint;
 
@@ -232,10 +338,26 @@ public class EnemyView : MonoBehaviour
         targetPos.y = firePoint.position.y;
         Vector3 dir = (targetPos - firePoint.position).normalized;
 
-        projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.currentDamage, _enemyModel);
+        _currentProjectile.Fire(dir, _enemyModel.statsSO.ShootForce, _enemyModel.currentDamage, _enemyModel);
+        _currentProjectile = null;
 
         audioSource.PlayOneShot(shootAudioClip);
     }
+
+    //public void AnimationShootProjectileFunc()
+    //{
+    //    if (projectileSpawner == null) return;
+
+    //    Transform firePoint = _enemyController.firePoint;
+
+    //    Vector3 targetPos = _playerTransform.position;
+    //    targetPos.y = firePoint.position.y;
+    //    Vector3 dir = (targetPos - firePoint.position).normalized;
+
+    //    projectileSpawner.SpawnProjectile(firePoint.position, dir, _enemyModel.statsSO.ShootForce, _enemyModel.currentDamage, _enemyModel);
+
+    //    audioSource.PlayOneShot(shootAudioClip);
+    //}
 
     public void TorretShootProjectileFunc()
     {
@@ -271,6 +393,9 @@ public class EnemyView : MonoBehaviour
         useFirstFirePoint = !useFirstFirePoint;
     }
 
+    #endregion
+
+    #region Turret Visual animations
     public void DoRecoil()
     {
         if (turretHead == null) return;
@@ -307,7 +432,9 @@ public class EnemyView : MonoBehaviour
         turretHead.localRotation = initialRotation;
         turretHead.localPosition = initialPosition;
     }
+    #endregion
 
+    #region Visual Effects
     public void PlayDeathParticles()
     {
         if (deathParticlesPrefab != null)
@@ -392,122 +519,6 @@ public class EnemyView : MonoBehaviour
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-    //Animaciones
-    public void PlayAttackAnimation(bool isAttacking)
-    {
-        animator.SetBool("IsAttacking", isAttacking);
-    }
-
-    public void PlayMeleeAttackAnimation(bool isAttacking)
-    {
-        animator.SetBool("IsMeleeAttacking", isAttacking);
-    }
-
-    public void PlayStrafeAnimation()
-    {
-        animator.SetTrigger("IsStrafing");
-    }
-
-    public bool GetBoolAttackAnimation()
-    {
-        return animator.GetBool("IsAttacking");
-    }
-
-    public void PlayIdleAnimation()
-    {
-        //animator.SetTrigger("Idle");
-    }
-
-    public void PlayMovingAnimation(float moveSpeed)
-    {
-        animator.SetFloat("MoveSpeed", moveSpeed);
-    }
-
-    public void PlayStunnedAnimation()
-    {
-        animator.SetTrigger("IsStunned");
-    }
-
-    public void HandleDamage()
-    {
-        animator.SetTrigger("IsDamaged");
-        audioSource?.PlayOneShot(damagedAudioClip);
-
-        // Instanciar partículas de daño si existen
-        if (damageParticlesPrefab != null)
-        {
-            // Crear como hijo del enemy
-            ParticleSystem damageParticlesInstance = Instantiate(
-                damageParticlesPrefab,
-                transform.position + Vector3.up * 1f, 
-                Quaternion.identity,
-                transform 
-            );
-
-            damageParticlesInstance.Play();
-
-            // Destruir después de que termine
-            Destroy(damageParticlesInstance.gameObject, 2f);
-        }
-    }
-
-    //public void PlayDamageAnimation()
-    //{
-    //    animator.SetTrigger("IsDamaged");
-    //}
-
-    public void PlayDeathAnimation()
-    {
-        animator.SetTrigger("IsDead");
-        isDead = true;
-
-        // Asignamos materiales de muerte
-        targetRenderer.materials = GetFittedMaterials(deathMaterials);
-
-        // Cancelamos cualquier flash en curso
-        if (flashCoroutine != null)
-        {
-            StopCoroutine(flashCoroutine);
-            flashCoroutine = null;
-        }
-
-        // Lanzamos efecto de disolver
-        StartCoroutine(DissolveCoroutine(1f, 2f)); // (valor final, duración en segundos)
-
-        PlayDeathParticles();
-    }
-
-    //private void ActivateDamageMaterials()
-    //{
-    //    Material[] newMaterials = new Material[originalMaterials.Length];
-
-    //    for (int i = 0; i < originalMaterials.Length; i++)
-    //    {
-    //        if (i < damageMaterials.Length)
-    //            newMaterials[i] = damageMaterials[i];
-    //        else
-    //            newMaterials[i] = damageMaterials[damageMaterials.Length - 1];
-    //    }
-
-    //    targetRenderer.materials = newMaterials;
-    //}
-
-
-    //public void UpdateHealthBar(float healthPercentage)
-    //{
-    //    //health bar logic
-    //}
-
     public void PlayDamageEffect()
     {
         if (isDead) return; // si está muerto no hacemos flash
@@ -556,28 +567,7 @@ public class EnemyView : MonoBehaviour
         flashCoroutine = null;
     }
 
-    //private IEnumerator FlashCoroutine()
-    //{
-    //    //material.SetColor("_Color", flashColor);
-
-    //    //yield return new WaitForSeconds(flashDuration);
-
-    //    //material.SetColor("_Color", originalColor);
-
-    //    //material.color = flashColor;
-    //    yield return new WaitForSeconds(flashDuration);
-    //    // material.color = originalColor;
-    //    //flashCoroutine = null;
-    //}
-
-    //StartCoroutine(FlashDamageMaterialsCoroutine());}
-//private IEnumerator FlashDamageMaterialsCoroutine(){
-   // aplicamos materiales de daño temporalmente
-  // targetRenderer.materials = GetFittedMaterials(damageMaterials);
-  // yield return new WaitForSeconds(flashDuration); 
-  // restauramos materiales originales solo si sigue vivo if (!isDead) targetRenderer.materials = originalMaterials;
-  // flashCoroutine = null; }
-
+   
     private Material[] GetFittedMaterials(Material[] source)
     {
         Material[] newMaterials = new Material[originalMaterials.Length];
@@ -708,6 +698,15 @@ public class EnemyView : MonoBehaviour
                 }
             }
         }
+    }
+
+    #endregion
+
+    //Gizmos de tamano de golpe
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(punchPoint.position, 1f);
     }
 }
 

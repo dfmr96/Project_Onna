@@ -47,5 +47,23 @@ public class ProjectileSpawner : MonoBehaviour
 
         proj.LaunchBoss(direction, shootForce, damage, () => projectilePool.Release(proj));
     }
+
+    public EnemyProjectile SpawnIdleProjectile(Vector3 spawnPos, Quaternion rotation)
+    {
+        EnemyProjectile proj = projectilePool.Get();
+        if (proj == null)
+        {
+            Debug.LogWarning("[ProjectileSpawner] No projectiles available in pool.");
+            return null;
+        }
+
+        proj.transform.position = spawnPos;
+        proj.transform.rotation = rotation;
+
+        // Lo desactivamos físicamente hasta que se dispare
+        proj.ResetIdle(() => projectilePool.Release(proj));
+        return proj;
+    }
+
 }
 

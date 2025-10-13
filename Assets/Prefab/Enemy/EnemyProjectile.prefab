@@ -4900,6 +4900,7 @@ GameObject:
   - component: {fileID: 7205008923747395960}
   - component: {fileID: -4784366562710423813}
   - component: {fileID: 329693911384449480}
+  - component: {fileID: 7186390775666357086}
   m_Layer: 7
   m_Name: EnemyProjectile
   m_TagString: Untagged
@@ -4987,10 +4988,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeTime: 3
   impactEffectParticlesPrefab: {fileID: 6280281539998945384, guid: f78aaaec3b393e24ca74cd6de8194347, type: 3}
+  trail: {fileID: 8181628957013650696}
   bulletSpeed: 3
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 3200
+--- !u!114 &7186390775666357086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3163692591181349482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60cb181f506dfb84a97decc8f327b940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  targetScale: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!1001 &182212586531457072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5185,5 +5201,10 @@ PrefabInstance:
 --- !u!4 &2136425541508505088 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4559080999636468818, guid: 117d0d60951de9644b175fd167fd85d8, type: 3}
+  m_PrefabInstance: {fileID: 2513861497134717522}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &8181628957013650696 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 6010611732222195546, guid: 117d0d60951de9644b175fd167fd85d8, type: 3}
   m_PrefabInstance: {fileID: 2513861497134717522}
   m_PrefabAsset: {fileID: 0}

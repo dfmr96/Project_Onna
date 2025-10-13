@@ -186,52 +186,52 @@ public class BossView : MonoBehaviour
     // ===========================================================
     // 🔫 DISPAROS
     // ===========================================================
-    private Coroutine _shootCoroutine;
-    [SerializeField] private int burstCount = 3;
-    [SerializeField] private float burstInterval = 0.2f;
-    [SerializeField] private int pelletsPerShot = 5;
-    [SerializeField] private float spreadAngle = 15f;
+    //private Coroutine _shootCoroutine;
+    //[SerializeField] private int burstCount = 3;
+    //[SerializeField] private float burstInterval = 0.2f;
+    //[SerializeField] private int pelletsPerShot = 5;
+    //[SerializeField] private float spreadAngle = 15f;
 
-    public void AnimationShootProjectileFunc()
-    {
-        if (_shootCoroutine != null)
-            StopCoroutine(_shootCoroutine);
+    //public void AnimationShootProjectileFunc()
+    //{
+    //    if (_shootCoroutine != null)
+    //        StopCoroutine(_shootCoroutine);
 
-        _shootCoroutine = StartCoroutine(ShootBurstCoroutine());
-    }
+    //    _shootCoroutine = StartCoroutine(ShootBurstCoroutine());
+    //}
 
-    private IEnumerator ShootBurstCoroutine()
-    {
-        for (int i = 0; i < burstCount; i++)
-        {
-            ShootShotgunProjectile();
-            yield return new WaitForSeconds(burstInterval);
-        }
-    }
+    //private IEnumerator ShootBurstCoroutine()
+    //{
+    //    for (int i = 0; i < burstCount; i++)
+    //    {
+    //        ShootShotgunProjectile();
+    //        yield return new WaitForSeconds(burstInterval);
+    //    }
+    //}
 
-    private void ShootShotgunProjectile()
-    {
-        if (projectileSpawner == null || _playerTransform == null) return;
+    //private void ShootShotgunProjectile()
+    //{
+    //    if (projectileSpawner == null || _playerTransform == null) return;
 
-        Transform firePoint = _bossController.firePoint;
-        Vector3 targetPos = _playerTransform.position;
-        targetPos.y = firePoint.position.y;
+    //    Transform firePoint = _bossController.firePoint;
+    //    Vector3 targetPos = _playerTransform.position;
+    //    targetPos.y = firePoint.position.y;
 
-        Vector3 baseDir = (targetPos - firePoint.position).normalized;
+    //    Vector3 baseDir = (targetPos - firePoint.position).normalized;
 
-        for (int i = 0; i < pelletsPerShot; i++)
-        {
-            float angle = UnityEngine.Random.Range(-spreadAngle, spreadAngle);
-            Vector3 spreadDir = Quaternion.Euler(0, angle, 0) * baseDir;
+    //    for (int i = 0; i < pelletsPerShot; i++)
+    //    {
+    //        float angle = UnityEngine.Random.Range(-spreadAngle, spreadAngle);
+    //        Vector3 spreadDir = Quaternion.Euler(0, angle, 0) * baseDir;
 
-            projectileSpawner.SpawnProjectileBoss(
-                firePoint.position,
-                spreadDir,
-                _bossModel.statsSO.ShootForce,
-                _bossModel.statsSO.ProjectileDamage
-            );
-        }
-    }
+    //        projectileSpawner.SpawnProjectileBoss(
+    //            firePoint.position,
+    //            spreadDir,
+    //            _bossModel.statsSO.ShootForce,
+    //            _bossModel.statsSO.ProjectileDamage
+    //        );
+    //    }
+    //}
 
     // ===========================================================
     // 🎭 ANIMACIONES
