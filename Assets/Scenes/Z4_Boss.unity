@@ -36865,9 +36865,25 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 729421591675045008, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 729421591675045008, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 729421591675045008, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 729421591675045008, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseSpeed
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseHeight
@@ -36885,6 +36901,10 @@ PrefabInstance:
       propertyPath: pilarSpawnClip
       value: 
       objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: shakeIntensity
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 911392049325969725, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: particleExplosion
       value: 
@@ -37083,7 +37103,7 @@ PrefabInstance:
       objectReference: {fileID: 1195343639}
     - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseSpeed
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseHeight
@@ -37101,13 +37121,17 @@ PrefabInstance:
       propertyPath: pilarSpawnClip
       value: 
       objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: shakeIntensity
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: particleExplosion
       value: 
       objectReference: {fileID: 4596544553357837919, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
     - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseSpeed
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseHeight
@@ -37125,6 +37149,10 @@ PrefabInstance:
       propertyPath: pilarSpawnClip
       value: 
       objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: shakeIntensity
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4537822962926048193, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: particleExplosion
       value: 
@@ -37192,6 +37220,38 @@ PrefabInstance:
     - target: {fileID: 5013303390003784377, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -54.1785
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192617048265161164, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192617048265161164, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192617048265161164, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192617048265161164, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205879648555375284, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205879648555375284, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205879648555375284, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205879648555375284, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5375367469504600686, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -37325,9 +37385,25 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 8814563158918871856, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814563158918871856, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814563158918871856, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814563158918871856, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseSpeed
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseHeight
@@ -37345,6 +37421,10 @@ PrefabInstance:
       propertyPath: pilarSpawnClip
       value: 
       objectReference: {fileID: 8300000, guid: 2fb70538e2af0bf4984d806b66ae0692, type: 3}
+    - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: shakeIntensity
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 9000753170420379293, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: particleExplosion
       value: 
