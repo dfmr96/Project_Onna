@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 using System.Collections;
 
 public class DefeatUIController : MonoBehaviour
@@ -8,6 +9,8 @@ public class DefeatUIController : MonoBehaviour
     [Header("Shake Effect")]
     [SerializeField] private float shakeDuration = 10f;
     [SerializeField] private float shakeMagnitude = 2f; // intensidad del temblor en píxeles
+
+    [SerializeField] private TextMeshProUGUI buttonText;
 
     public RectTransform rectTransform;
 
@@ -19,10 +22,7 @@ public class DefeatUIController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        StartCoroutine(ShakeUI());
-    }
+    private void OnEnable() => StartCoroutine(ShakeUI());
 
     public void OnIntroAnimationFinished()
     {
@@ -32,17 +32,7 @@ public class DefeatUIController : MonoBehaviour
         }
     }
 
-    public void OnReturnToHubButton()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.ReturnToHub();
-        }
-        else
-        {
-            Debug.LogError("GameManager no encontrado en la escena.");
-        }
-    }
+    public void OnReturnToHubButton() => GameManager.Instance?.ReturnToHub();
 
     private IEnumerator ShakeUI()
     {
@@ -63,5 +53,6 @@ public class DefeatUIController : MonoBehaviour
         }
 
         rectTransform.anchoredPosition = originalPos; // volver a posición original
+        buttonText.color = new Color(buttonText.color.r, buttonText.color.g, buttonText.color.b, 1);
     }
 }
