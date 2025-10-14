@@ -141,7 +141,6 @@ public class EnemyView : MonoBehaviour
             originalMaterialColors.Add(matColors);
         }
 
-        _playerTransform = PlayerHelper.GetPlayer().transform;
         projectileSpawner = GameManager.Instance.projectileSpawner;
         _enemyController = GetComponent<EnemyController>();
         _enemyModel = GetComponent<EnemyModel>();
@@ -159,6 +158,7 @@ public class EnemyView : MonoBehaviour
             initialPosition = turretHead.localPosition;
         }
 
+        _playerTransform = PlayerHelper.GetPlayer().transform;
 
 
     }

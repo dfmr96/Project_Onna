@@ -6,8 +6,8 @@ using System;
 public class Pillar : MonoBehaviour, IDamageable
 {
     [Header("Movement")]
-    [SerializeField] private float riseHeight = 2f;
-    [SerializeField] private float targetHeight = 1.5f;
+    [SerializeField] private float undergroundDepth = 6f;
+    [SerializeField] private float finalHeight = 0f;
     [SerializeField] private float riseSpeed = 2f;
     [SerializeField] private float shakeIntensity = 0.1f;
     private Vector3 initialPosition;
@@ -38,6 +38,7 @@ public class Pillar : MonoBehaviour, IDamageable
     [Header("Visual Flash")]
     [SerializeField] private Material flashMaterial;
     [SerializeField] private float flashDuration = 0.1f;// opcional: si querés que algún GO no cambie de material
+    private Coroutine flashCoroutine;
 
     private List<Renderer> pillarRenderers = new List<Renderer>();
     private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
@@ -65,7 +66,7 @@ public class Pillar : MonoBehaviour, IDamageable
 
         audioSource = GetComponent<AudioSource>();
 
-        // 🔹 Guardamos los materiales originales al inicio
+        // Guardamos los materiales originales al inicio
         pillarRenderers.AddRange(GetComponentsInChildren<Renderer>());
         foreach (var rend in pillarRenderers)
         {
@@ -73,6 +74,11 @@ public class Pillar : MonoBehaviour, IDamageable
         }
 
         OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+
+        //Fuerza al pilar a empezar hundido
+        targetPosition = new Vector3(transform.position.x, finalHeight, transform.position.z);
+        initialPosition = targetPosition + Vector3.down * undergroundDepth;
+        transform.position = initialPosition;
     }
 
     void SpawnParticle(Vector3 pos)
@@ -100,7 +106,7 @@ public class Pillar : MonoBehaviour, IDamageable
         OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
         audioSource?.PlayOneShot(destroyClip);
 
-        // 🔹 Disparamos glitch/flash visual
+        // Disparamos glitch/flash visual
         if (flashMaterial != null)
         {
             StartCoroutine(FlashCoroutine());
@@ -114,10 +120,15 @@ public class Pillar : MonoBehaviour, IDamageable
 
     private IEnumerator FlashCoroutine()
     {
+        flashCoroutine = StartCoroutine(FlashRoutine());
+        yield return null;
+    }
+
+    private IEnumerator FlashRoutine()
+    {
         // cambiar a flash
         foreach (var rend in pillarRenderers)
         {
-
             var mats = new Material[rend.materials.Length];
             for (int i = 0; i < mats.Length; i++)
             {
@@ -129,9 +140,21 @@ public class Pillar : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(flashDuration);
 
         // restaurar
+        RestoreOriginalMaterials();
+    }
+
+
+    private void RestoreOriginalMaterials()
+    {
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+
         foreach (var rend in pillarRenderers)
         {
-            if (originalMaterials.ContainsKey(rend))
+            if (rend != null && originalMaterials.ContainsKey(rend))
                 rend.materials = originalMaterials[rend];
         }
     }
@@ -160,8 +183,12 @@ public class Pillar : MonoBehaviour, IDamageable
         isDestroyed = false;
         gameObject.SetActive(true);
 
-        targetPosition = new Vector3(targetTransform.position.x, targetHeight, targetTransform.position.z);
-        initialPosition = targetPosition - Vector3.up * riseHeight;
+        //restaurar materiales para que no quede “pegado” el flash
+        RestoreOriginalMaterials();
+
+        //Siempre fuerza target y posición inicial
+        targetPosition = new Vector3(transform.position.x, finalHeight, transform.position.z);
+        initialPosition = targetPosition + Vector3.down * undergroundDepth;
         transform.position = initialPosition;
 
         OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);
@@ -173,7 +200,7 @@ public class Pillar : MonoBehaviour, IDamageable
     private IEnumerator RiseUpCoroutine()
     {
         float elapsed = 0f;
-        float duration = riseHeight / riseSpeed;
+        float duration = undergroundDepth / riseSpeed;
 
         while (elapsed < duration)
         {
