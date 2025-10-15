@@ -1,77 +1,93 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Player;
 
 public class DialogueManager : MonoBehaviour
 {
-    public static DialogueManager Instance;
+    public static DialogueManager Instance { get; private set; }
 
-    [Header("UI")]
-    [SerializeField] private GameObject dialoguePrefab;
-    private GameObject dialogueInstance;
+    private DialogueUI dialogueUI;
     private DialogueNode currentNode;
+    private NPCData currentNPCData;
+    public InteractableBase CurrentTrigger { get; private set; }
+
+    [SerializeField] private DialogueUI dialogueUIPrefab; // prefab de UI
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        //DontDestroyOnLoad(gameObject); por ahora solo funciona en el hub pero
-        //cuando haya dialogos en todo el juego esto NO DEBERIA destruirse!
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    public void StartDialogue(NPCData npcData)
+    public void StartDialogue(NPCData npcData, InteractableBase trigger = null)
     {
-        //Cursor Mouse
-        Cursor.visible = true;
+        if (npcData == null || npcData.StartingDialogue == null)
+        {
+            Debug.LogError("StartDialogue: npcData o StartingDialogue es null!");
+            return;
+        }
 
-        if (dialogueInstance == null) dialogueInstance = Instantiate(dialoguePrefab);
+        CurrentTrigger = trigger;
+        currentNPCData = npcData;
+        currentNode = npcData.StartingDialogue;
 
-        dialogueInstance.gameObject.SetActive(true);
-        dialogueInstance.GetComponent<DialogueUI>().SetName(npcData.NpcName);
-        dialogueInstance.GetComponent<DialogueUI>().SetImage(npcData.NpcImage);
-        dialogueInstance.GetComponent<DialogueUI>().BindActions(npcData.StartingDialogue);
-        ShowNode(npcData.StartingDialogue);
+        // Mostrar cursor
+        CursorHelper.Show();
 
+        // Instanciar prefab si aún no existe
+        if (dialogueUI == null)
+        {
+            dialogueUI = Instantiate(dialogueUIPrefab);
+        }
+
+        dialogueUI.gameObject.SetActive(true);
+        dialogueUI.SetName(npcData.NpcName);
+        dialogueUI.SetImage(npcData.NpcImage);
+        dialogueUI.BindActions(currentNode);
+        dialogueUI.DisplayNode(currentNode, OnOptionSelected);
+
+        // Desactivar control del jugador
         PlayerHelper.DisableInput();
     }
 
-    void ShowNode(DialogueNode node)
+    private void OnOptionSelected(int index)
     {
-        currentNode = node;
-        dialogueInstance.GetComponent<DialogueUI>().DisplayNode(node, OnOptionSelected);
-    }
+        var option = currentNode.Options[index];
 
-    void OnOptionSelected(int index)
-    {
-        var selectedOption = currentNode.Options[index];
-        selectedOption.onSelectedAction?.Invoke();
+        // Ejecuta acción asociada (incluye ChangeDialogue, OpenStore, etc.)
+        option.onSelectedAction?.Invoke();
 
-        if (selectedOption.endsDialogue)
+        if (option.endsDialogue)
         {
             EndDialogue();
             return;
         }
 
-        if (selectedOption.nextNode != null)
+        if (option.nextNode != null)
         {
-            dialogueInstance.GetComponent<DialogueUI>().BindActions(selectedOption.nextNode);
-            ShowNode(selectedOption.nextNode);
+            currentNode = option.nextNode;
+            dialogueUI.BindActions(currentNode);
+            dialogueUI.DisplayNode(currentNode, OnOptionSelected);
         }
-        else EndDialogue();
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
-        dialogueInstance.gameObject.SetActive(false);
+        if (dialogueUI != null)
+            dialogueUI.gameObject.SetActive(false);
+
+        CurrentTrigger = null;
         currentNode = null;
+
+        // Reactivar input del jugador
         PlayerHelper.EnableInput();
 
-        //Cursor Mouse
-        Cursor.visible = false;
+        // Ocultar cursor solo si no hay otra UI activa (por ejemplo tienda)
+        if (!HubManager.Instance || !HubManager.Instance.IsStoreOpen)
+            CursorHelper.Hide();
+    }
+
+    public void SetCurrentNPCData(NPCData newData)
+    {
+        currentNPCData = newData;
     }
 }

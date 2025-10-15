@@ -1,11 +1,13 @@
 public enum NPCType
 {
-   Weapon,
-   Engineer,
+    Weapon,
+    Engineer,
+    Boss
 }
 
 public enum DialogueActionId
 {
     None,
     OpenStore,
+    ChangeDialogue 
 }

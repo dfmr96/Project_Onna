@@ -19,22 +19,39 @@ public class DialogueUI : MonoBehaviour
         {
             option.onSelectedAction = null;
 
-            switch (option.actionId)
+            // Iteramos sobre todas las acciones asignadas
+            foreach (var actionId in option.actionIds)
             {
-                case DialogueActionId.OpenStore:
-                    option.onSelectedAction = () =>
-                    {
-                        HubManager hub = HubManager.Instance;
-                        if (hub != null) hub.OpenStore();
-                    };
-                    break;
+                switch (actionId)
+                {
+                    case DialogueActionId.OpenStore:
+                        option.onSelectedAction += () =>
+                        {
+                            HubManager hub = HubManager.Instance;
+                            if (hub != null) hub.OpenStore();
+                        };
+                        break;
 
-                case DialogueActionId.None:
-                default:
-                    break;
+                    case DialogueActionId.ChangeDialogue:
+                        option.onSelectedAction += () =>
+                        {
+                            var trigger = DialogueManager.Instance.CurrentTrigger;
+
+                            if (trigger is Engineer engineer)
+                                engineer.SetDialogueToNext();
+                            else if (trigger is Boss_Dialogue_Trigger boss)
+                                boss.SetDialogueData(boss.GetNextDialogue());
+                        };
+                        break;
+
+                    case DialogueActionId.None:
+                    default:
+                        break;
+                }
             }
         }
     }
+
 
     public void DisplayNode(DialogueNode node, System.Action<int> onOptionSelected)
     {
