@@ -52,18 +52,18 @@ public class DialogueUI : MonoBehaviour
                                 if (nextBossDialogue != null)
                                 {
                                     bossTrigger.SetDialogueData(nextBossDialogue);
-                                    Debug.Log("Boss dialogue changed to next data.");
+                                    //Debug.Log("Boss dialogue changed to next data.");
                                 }
                             }
                             Engineer_Dialogue_Trigger engineer = FindObjectOfType<Engineer_Dialogue_Trigger>();
                             if (engineer != null)
                             {
                                 engineer.SetDialogueToNext();
-                                Debug.Log("Engineer dialogue changed after Boss conversation.");
+                                //Debug.Log("Engineer dialogue changed after Boss conversation.");
                             }
                             else
                             {
-                                Debug.LogWarning("Engineer not found in the scene to update dialogue.");
+                                //Debug.LogWarning("Engineer not found in the scene to update dialogue.");
                             }
                         };
                         break;

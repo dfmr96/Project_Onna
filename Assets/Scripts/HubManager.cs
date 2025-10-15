@@ -79,7 +79,7 @@ public class HubManager : MonoBehaviour
 
             // Oculta el cursor si no hay otra UI abierta (como un diálogo)
             if (DialogueManager.Instance == null || DialogueManager.Instance.CurrentTrigger == null)
-                CursorHelper.Hide();
+                Cursor.visible = false;
         }
     }
 

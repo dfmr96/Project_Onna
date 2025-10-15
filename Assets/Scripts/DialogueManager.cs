@@ -22,7 +22,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (npcData == null || npcData.StartingDialogue == null)
         {
-            Debug.LogError("StartDialogue: npcData o StartingDialogue es null!");
+            //Debug.LogError("StartDialogue: npcData o StartingDialogue es null!");
             return;
         }
 

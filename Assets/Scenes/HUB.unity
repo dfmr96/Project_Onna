@@ -694,6 +694,78 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &47784559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 47784560}
+  - component: {fileID: 47784562}
+  - component: {fileID: 47784561}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &47784560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47784559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8360757603519556048}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &47784561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47784559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd7d2b895a019b4db08997252648fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactPrefab: {fileID: 519957397520615639, guid: 231385c29ecdf0f40bbf993960bb0c31, type: 3}
+  promptOffset: {x: 0, y: 2, z: 0}
+  interactAudio: {fileID: 8300000, guid: bc8eb62720363cc4682e28ee3ea19392, type: 3}
+  bossDialogueData: {fileID: 11400000, guid: 7f783d3c30197024ea221f8a74f7a44d, type: 2}
+  nextDialogueData: {fileID: 0}
+  bossObject: {fileID: 0}
+--- !u!65 &47784562
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47784559}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.6098979, y: 1, z: 2.674448}
+  m_Center: {x: -0.1861043, y: 0, z: -0.30229032}
 --- !u!1001 &64231689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29768,8 +29840,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2.1714776, z: 1}
-  m_Center: {x: 0, y: 0.58573914, z: -0}
+  m_Size: {x: 1.7080902, y: 2.1714776, z: 1.787835}
+  m_Center: {x: -0.12351525, y: 0.58573914, z: 0.006280303}
 --- !u!114 &1301980854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29785,10 +29857,10 @@ MonoBehaviour:
   interactPrefab: {fileID: 519957397520615639, guid: 231385c29ecdf0f40bbf993960bb0c31, type: 3}
   promptOffset: {x: 0, y: 2, z: 0}
   interactAudio: {fileID: 8300000, guid: bc8eb62720363cc4682e28ee3ea19392, type: 3}
-  defaultDialogueData: {fileID: 0}
-  nextDialogueData: {fileID: 0}
-  loopDialogueData: {fileID: 0}
-  engineerObject: {fileID: 0}
+  defaultDialogueData: {fileID: 11400000, guid: 626fc32c2286bd340b8e5713a3fa08c6, type: 2}
+  nextDialogueData: {fileID: 11400000, guid: 626fc32c2286bd340b8e5713a3fa08c6, type: 2}
+  loopDialogueData: {fileID: 11400000, guid: 626fc32c2286bd340b8e5713a3fa08c6, type: 2}
+  engineerObject: {fileID: 179795428320081539}
   objectsToActivate: []
   objectsToDeactivate: []
 --- !u!1001 &1302966555
@@ -38980,7 +39052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fec85108a491974da8d11280dfcb957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueUIPrefab: {fileID: 0}
+  dialogueUIPrefab: {fileID: 7686880507413826667, guid: 38b32153b96fc7e4f9f6fa6e65da6535, type: 3}
 --- !u!4 &1842204993
 Transform:
   m_ObjectHideFlags: 0
@@ -46848,6 +46920,7 @@ Transform:
   - {fileID: 7924393904618025048}
   - {fileID: 4958125918062980531}
   - {fileID: 4059769058485307716}
+  - {fileID: 47784560}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90.524, z: 0}
 --- !u!1 &8421963839065833041

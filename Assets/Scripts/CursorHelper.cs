@@ -11,6 +11,5 @@ public static class CursorHelper
     public static void Hide()
     {
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 }

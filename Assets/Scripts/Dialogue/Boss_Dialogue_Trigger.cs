@@ -21,7 +21,7 @@ public class Boss_Dialogue_Trigger : InteractableBase
         }
         else
         {
-            Debug.LogWarning($"{name}: No se asignó ningún NPCData para el diálogo del Boss.");
+            //Debug.LogWarning($"{name}: No se asignó ningún NPCData para el diálogo del Boss.");
         }
 
         // if (bossObject != null)
