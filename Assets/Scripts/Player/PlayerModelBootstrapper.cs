@@ -10,6 +10,8 @@ namespace Player
 {
     public class PlayerModelBootstrapper : MonoBehaviour
     {
+        public static PlayerModelBootstrapper Instance { get; private set; }
+
         [SerializeField] private GameMode currentMode;
 
         [Header("Stats Setup")] [SerializeField]
@@ -27,6 +29,14 @@ namespace Player
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            
             DontDestroyOnLoad(gameObject);
             if (!ValidateDependencies()) return;
 

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f7f8c6018e408143aa937ebd2b6fca7, type: 3}
+  m_Name: Neutrons Muscular Minor
+  m_EditorClassIdentifier: 
+  radiationType: 3
+  systemType: 2
+  slotType: 1
+  effectName: Neutrons Minor
+  description: Cada 8 disparos acertados sin fallar devuelven +3s de tiempo vital
+  icon: {fileID: 0}
+  baseValue: 0
+  upgradeMultiplier: 1.2
+  maxLevel: 4
+  statType: 7
+  isMultiplier: 1
+  isTemporary: 0
+  temporaryDuration: 5
+  enemiesToHit: 8
+  timeToRecover: 3
+  counterModifierSO: {fileID: 11400000, guid: b64445e145b50b84a97d9268bffdb53c, type: 2}

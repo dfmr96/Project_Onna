@@ -6,7 +6,7 @@ using Player;
 
 namespace Mutations.Effects.NervousSystem
 {
-    [CreateAssetMenu(fileName = "Neutrons Minor", menuName = "Mutations/Effects/Vital System/Neutrons Minor")]
+    [CreateAssetMenu(fileName = "Neutrons Nervous Minor", menuName = "Mutations/Effects/Nervous System/Neutrons Minor")]
     public class NeutronsNervousMinorEffect : StatModifierEffect
     {
         [Header("Neutrons Minor Settings")]

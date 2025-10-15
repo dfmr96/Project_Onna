@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core;
 using NaughtyAttributes;
 using UnityEngine;
@@ -50,13 +51,14 @@ namespace Player.Weapon
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private bool nextShotDoubleDamage = false;
 
-        public bool IsSkillCheckActive() => isSkillCheckActive;
-
-
         private PlayerModel _playerModel;
 
         // Hardcodeado
-        private float fireRate = 0.15f;
+        //private float fireRate = 0.15f;
+
+        private List<BulletModifierSO> activeBulletModifiers = new List<BulletModifierSO>();
+        private PlayerControllerEffect _playerEffect;
+
 
         private void OnEnable()
         {
@@ -64,10 +66,11 @@ namespace Player.Weapon
 
             var inputHandler = FindObjectOfType<PlayerInputHandler>();
             if (inputHandler != null)
-            {
                 inputHandler.ReloadPerformed += OnReloadInput;
-                inputHandler.FirePerformed += OnFireInput; // aquí era -= accidental
-            }
+
+            var playerEffect = FindObjectOfType<PlayerControllerEffect>();
+            if (playerEffect != null)
+                _playerEffect = playerEffect;
         }
 
         private void OnDisable()
@@ -76,10 +79,7 @@ namespace Player.Weapon
 
             var inputHandler = FindObjectOfType<PlayerInputHandler>();
             if (inputHandler != null)
-            {
                 inputHandler.ReloadPerformed -= OnReloadInput;
-                inputHandler.FirePerformed -= OnFireInput;
-            }
         }
 
         private void Start()
@@ -118,6 +118,7 @@ namespace Player.Weapon
         private void OnPlayerReady(PlayerInitializedSignal signal)
         {
             _playerModel = signal.Model;
+            _playerEffect = signal.PlayerEffect;
 
             var stats = _playerModel.StatContext.Source;
             var refs = _playerModel.StatRefs;
@@ -139,14 +140,6 @@ namespace Player.Weapon
             {
                 Reloading();
             }
-        }
-
-        private void OnFireInput()
-        {
-            if (isSkillCheckActive)
-                TrySkillCheck();
-            else
-                Attack();
         }
 
         public void Reloading()
@@ -175,6 +168,13 @@ namespace Player.Weapon
             }
         }
 
+        public void SetActiveBulletModifiers(List<BulletModifierSO> modifiers)
+        {
+            activeBulletModifiers = modifiers;
+        }
+
+     
+
         private void FireBullet()
         {
             if (muzzleFlashInstance != null)
@@ -191,16 +191,39 @@ namespace Player.Weapon
                 nextShotDoubleDamage = false;
             }
 
-            var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
-            bullet.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, damage);
+            //var bullet = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
+            //bullet.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, damage);
+
+            var bulletObj = Instantiate(bulletSetting.BulletPrefab, bulletSetting.BulletSpawnPoint.position, bulletSetting.BulletSpawnPoint.rotation);
+
+            bulletObj.Setup(bulletSetting.BulletSpeed, bulletSetting.AttackRange, bulletSetting.Damage, _playerModel);
+
+            // Registrarle todos los modificadores activos
+            var activeModifiers = _playerEffect.GetActiveBulletModifiers();
+            foreach (var mod in activeModifiers)
+            {
+                bulletObj.RegisterModifier(mod, _playerEffect);
+
+                mod.ApplyBeforeShoot(bulletObj, _playerEffect);
+
+            }
+
+            // Aplicar materiales después de registrar todos
+            bulletObj.ApplyTrailMaterials();
 
             audioSource.PlayOneShot(shootFx);
         }
 
+
+
+
         private IEnumerator FireRateCooldown()
         {
             canFire = false;
-            yield return new WaitForSeconds(fireRate);
+
+            //float fireRateCooldown = 0.15f; // valor fallback por si no hay stats
+            
+            yield return new WaitForSeconds(_playerModel.FireRate);
             canFire = true;
         }
 

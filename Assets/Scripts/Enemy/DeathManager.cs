@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,10 @@ public class DeathManager : MonoBehaviour
     //Para usarlo->
     //DeathManager.Instance.DestroyObject(_gameObject, 1f);
 
+    public Action OnEnemyDeath;
+
     [SerializeField] private GameObject mutantExplotionPrefab;
+
 
     private void Awake()
     {
@@ -26,6 +30,7 @@ public class DeathManager : MonoBehaviour
 
     public void DestroyObject(GameObject obj, float delay = 0f)
     {
+        OnEnemyDeath?.Invoke();
         Destroy(obj, delay);
     }
 
@@ -34,5 +39,4 @@ public class DeathManager : MonoBehaviour
         GameObject prefab = Instantiate(mutantExplotionPrefab, explotionPosition.position, Quaternion.identity);
         Destroy(prefab, explotionLifetime);
     }
-
 }

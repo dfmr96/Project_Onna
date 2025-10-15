@@ -1,9 +1,8 @@
+using System;
 using Core;
 using NaughtyAttributes;
-using Player.Stats;
-using Player.Stats.Runtime;
-using System;
 using System.Collections;
+using Player.Stats;
 using UnityEngine;
 
 namespace Player
@@ -45,6 +44,9 @@ namespace Player
         public float Speed => StatContext.Source.Get(statRefs.movementSpeed);
         private float DrainRate => StatContext.Source.Get(statRefs.passiveDrainRate);
         public float MaxHealth => StatContext.Source.Get(statRefs.maxVitalTime);
+        public int BulletMaxPenetration => (int)StatContext.Source.Get(statRefs.bulletMaxPenetration);
+
+        public float FireRate => StatContext.Source.Get(statRefs.fireRate);
         public float CurrentHealth => _currentTime;
         public float DashCooldown => StatContext.Source.Get(statRefs.dashCooldown);
         public float DashDistance => StatContext.Source.Get(statRefs.dashDistance);
@@ -72,6 +74,13 @@ namespace Player
 
         private bool _isInvulnerable = false;
 
+        private PlayerControllerEffect _playerControllerEffect;
+
+        private void Awake()
+        {
+            if (_playerControllerEffect == null)
+                _playerControllerEffect = GetComponent<PlayerControllerEffect>();
+        }
 
         private void Start()
         {
@@ -85,13 +94,17 @@ namespace Player
             {
                 //EventBus.Publish(new PlayerSpawnedSignal { PlayerGO = gameObject });
             }
+
         }
 
         public void InjectStatContext(PlayerStatContext context)
         {
             _statContext = context;
             _currentTime = StatContext.Runtime?.CurrentEnergyTime ?? float.PositiveInfinity;
-            EventBus.Publish(new PlayerInitializedSignal(this));
+
+            //EventBus.Publish(new PlayerInitializedSignal(this));
+            EventBus.Publish(new PlayerInitializedSignal(this, _playerControllerEffect));
+
         }
 
         public void ForceReinitStats()

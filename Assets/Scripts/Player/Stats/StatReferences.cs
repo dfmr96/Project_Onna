@@ -18,6 +18,7 @@ namespace Player.Stats
         [Header("Combat Stats")]
         public StatDefinition damage;
         public StatDefinition bulletSpeed;
+        public StatDefinition bulletMaxPenetration;
         public StatDefinition maxAmmo;
         public StatDefinition attackRange;
         public StatDefinition fireRate;
@@ -69,6 +70,9 @@ namespace Player.Stats
             TryAssign(ref maxAmmo, "MaxAmmo", registry);
             TryAssign(ref orbAttractRange, "OrbAttractRange", registry);
             TryAssign(ref orbAttractSpeed, "OrbAttractSpeed", registry);
+            TryAssign(ref bulletMaxPenetration, "bulletMaxPenetration", registry);
+
+            
 
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssets();

@@ -51,5 +51,23 @@ namespace Mutations.Core
             majorSlot.Clear(player);
             minorSlot.Clear(player);
         }
+
+        public bool TryGetSlot(MutationType type, out MutationSlot slot)
+        {
+            if (majorSlot.RadiationType.HasValue && majorSlot.RadiationType.Value == type)
+            {
+                slot = majorSlot;
+                return true;
+            }
+            if (minorSlot.RadiationType.HasValue && minorSlot.RadiationType.Value == type)
+            {
+                slot = minorSlot;
+                return true;
+            }
+
+            slot = null;
+            return false;
+        }
+
     }
 }
