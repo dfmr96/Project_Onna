@@ -18,7 +18,9 @@ namespace Player
         private PlayerView _playerView;
         private IInteractable currentInteractable;
         private bool canInteract = true;
+
         
+
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerInitializedSignal>(OnPlayerInitialized);

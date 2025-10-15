@@ -52,13 +52,17 @@ namespace Player.Weapon
         [SerializeField] private bool nextShotDoubleDamage = false;
 
         private PlayerModel _playerModel;
+        public bool IsSkillCheckActive() => isSkillCheckActive;
 
         // Hardcodeado
         //private float fireRate = 0.15f;
 
         private List<BulletModifierSO> activeBulletModifiers = new List<BulletModifierSO>();
         private PlayerControllerEffect _playerEffect;
+        private PlayerModel _playerModel;
 
+        // Hardcodeado
+        private float fireRate = 0.15f;
 
         private void OnEnable()
         {
@@ -66,11 +70,14 @@ namespace Player.Weapon
 
             var inputHandler = FindObjectOfType<PlayerInputHandler>();
             if (inputHandler != null)
+            {
                 inputHandler.ReloadPerformed += OnReloadInput;
 
             var playerEffect = FindObjectOfType<PlayerControllerEffect>();
             if (playerEffect != null)
                 _playerEffect = playerEffect;
+                inputHandler.FirePerformed += OnFireInput; // aquí era -= accidental
+            }
         }
 
         private void OnDisable()
@@ -79,7 +86,10 @@ namespace Player.Weapon
 
             var inputHandler = FindObjectOfType<PlayerInputHandler>();
             if (inputHandler != null)
+            {
                 inputHandler.ReloadPerformed -= OnReloadInput;
+                inputHandler.FirePerformed -= OnFireInput;
+            }
         }
 
         private void Start()
@@ -140,6 +150,14 @@ namespace Player.Weapon
             {
                 Reloading();
             }
+        }
+
+        private void OnFireInput()
+        {
+            if (isSkillCheckActive)
+                TrySkillCheck();
+            else
+                Attack();
         }
 
         public void Reloading()
