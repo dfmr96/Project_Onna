@@ -89,11 +89,13 @@ namespace Player
                 weaponController.Reloading();
             }
         }
-                private void HandleDash()
+        
+        private void HandleDash()
         {
             if (dashController != null)
             {
                 dashController.TryDash();
+                Debug.Log("HandleDash executed");
             }
         }
         private void HandleInteraction()

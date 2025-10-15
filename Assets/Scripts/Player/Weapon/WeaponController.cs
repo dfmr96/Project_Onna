@@ -59,7 +59,6 @@ namespace Player.Weapon
 
         private List<BulletModifierSO> activeBulletModifiers = new List<BulletModifierSO>();
         private PlayerControllerEffect _playerEffect;
-        private PlayerModel _playerModel;
 
         // Hardcodeado
         private float fireRate = 0.15f;
