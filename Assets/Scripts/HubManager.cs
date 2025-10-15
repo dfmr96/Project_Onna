@@ -57,13 +57,13 @@ public class HubManager : MonoBehaviour
     public void OpenStore()
     {
         if (storeInstance != null) return;
-
+         PlayerHelper.DisableInput();
         storeInstance = Instantiate(storePrefab);
         StoreHandler handler = storeInstance.GetComponent<StoreHandler>();
         handler.SetHubManager(this);
 
         // Bloquea movimiento del jugador y muestra cursor
-        PlayerHelper.DisableInput();
+       
         CursorHelper.Show();
     }
 
