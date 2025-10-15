@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 47e6a84546f66c74ca56443e6431899d
+guid: edad146d864998440b28b3f134669891
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -93,198 +93,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HP_Bar_n_Bullets_0
+      name: Melee_Ui_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 151
-        width: 101
-        height: 101
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ed8012f48b2ac0a4da7cb8d4d8432e3f
-      internalID: -1384653630
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_1
-      rect:
-        serializedVersion: 2
-        x: 10
-        y: 68
-        width: 77
-        height: 72
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 30a56c943242b9649a08c235e1e06ecf
-      internalID: 75072743
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_2
-      rect:
-        serializedVersion: 2
-        x: 157
-        y: 144
-        width: 9
-        height: 2
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7c165b346e4ea644fadeada184a98741
-      internalID: 918815670
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_3
-      rect:
-        serializedVersion: 2
-        x: 169
-        y: 144
-        width: 9
-        height: 2
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 113bfaf5bfc377845b8b830f90221bd8
-      internalID: 196747158
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_4
-      rect:
-        serializedVersion: 2
-        x: 119
-        y: 168
-        width: 77
-        height: 72
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 670bf988ffdee1545b07a69486fd50ac
-      internalID: 306719152
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_5
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 55
-        width: 77
-        height: 72
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 301787f40e58798458acd5021aa37493
-      internalID: -1699133529
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_6
-      rect:
-        serializedVersion: 2
-        x: 177
-        y: 48
-        width: 77
-        height: 72
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4c9677d2c5684034db9e60a1c4c7a5ca
-      internalID: 1810997629
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_7
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 24
-        width: 67
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4cb874ed50d4181458fda9db0c8f61ba
-      internalID: 1870119801
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HP_Bar_n_Bullets_8
-      rect:
-        serializedVersion: 2
-        x: 74
-        y: 24
-        width: 67
-        height: 7
+        x: 0
+        y: 92
+        width: 71
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -292,8 +111,218 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 61834ec7f8bfb904493a1c48b6393110
-      internalID: -1296862987
+      spriteID: ee1af6e804d58ee4383c531c18d4f681
+      internalID: 992539704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_1
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 92
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa1a3655b9d93b947963dbd997bde6ed
+      internalID: 1498926387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_2
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 92
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e5c9ccf5841e7844bbd31f1cdfe9755
+      internalID: -1036428406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_3
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 92
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e79c1c588979ba488733731859d2e9b
+      internalID: 848338199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 46
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29a2e496c3c0abe4ba56361b24fbc18c
+      internalID: -2109088589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_5
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 46
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15ed13aebd5405a4bbdaaa0bfde64c88
+      internalID: -1448274962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_6
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 46
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18dcbe4badf3835408c4600117a2b886
+      internalID: 8471838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_7
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 46
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3c01f5d1d5559d4b903a8687b0b3bd0
+      internalID: -1698331673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 442dc26354bc1414a8eb98249573f18a
+      internalID: -1708972334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_9
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 0
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28c5def5916976d44aefa17c714c9e9d
+      internalID: 697549616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Melee_Ui_10
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 0
+        width: 71
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33f0eff329715c144a7aa328b31103fa
+      internalID: 1364130330
       vertices: []
       indices: 
       edges: []
@@ -301,7 +330,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 5087af7adf2cea346bc38a7b981e93b9
     internalID: 0
     vertices: []
     indices: 
@@ -309,15 +338,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      HP_Bar_n_Bullets_0: -1384653630
-      HP_Bar_n_Bullets_1: 75072743
-      HP_Bar_n_Bullets_2: 918815670
-      HP_Bar_n_Bullets_3: 196747158
-      HP_Bar_n_Bullets_4: 306719152
-      HP_Bar_n_Bullets_5: -1699133529
-      HP_Bar_n_Bullets_6: 1810997629
-      HP_Bar_n_Bullets_7: 1870119801
-      HP_Bar_n_Bullets_8: -1296862987
+      Melee_Ui_0: 992539704
+      Melee_Ui_1: 1498926387
+      Melee_Ui_10: 1364130330
+      Melee_Ui_2: -1036428406
+      Melee_Ui_3: 848338199
+      Melee_Ui_4: -2109088589
+      Melee_Ui_5: -1448274962
+      Melee_Ui_6: 8471838
+      Melee_Ui_7: -1698331673
+      Melee_Ui_8: -1708972334
+      Melee_Ui_9: 697549616
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

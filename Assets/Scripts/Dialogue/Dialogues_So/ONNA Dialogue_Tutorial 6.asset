@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
-  m_Name: Soldier Dialogue Noder_Pre_Tutorial 1
+  m_Name: ONNA Dialogue_Tutorial 6
   m_EditorClassIdentifier: 
-  dialogueText: "Don\u2019t just stand there staring at the floor, Runner. The Major\u2019s
-    expecting you. <sprite name=\"Keys_LClick\">"
+  dialogueText: "They didn\u2019t tell you that either? No wonder you\u2019re losing
+    the war. Just attach it to me \u2014 my core should mutate some of my systems
+    and it will help you in combat.\nCome on, move \u2014 the clock\u2019s ticking."
   options:
-  - optionText: Alright
+  - optionText: "Let\u2019s try it."
     nextNode: {fileID: 0}
     endsDialogue: 1
     actionIds: 

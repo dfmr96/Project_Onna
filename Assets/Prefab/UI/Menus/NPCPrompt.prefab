@@ -287,6 +287,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 512599748569118754}
+  - {fileID: 1126826916989604592}
   m_Father: {fileID: 1714368225824315904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -408,7 +409,6 @@ RectTransform:
   m_Children:
   - {fileID: 3634077063725665181}
   - {fileID: 280674500253919092}
-  - {fileID: 1126826916989604592}
   - {fileID: 9023684769712846479}
   m_Father: {fileID: 6896431605140958981}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1075,11 +1075,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6029486058479604871}
-  m_Father: {fileID: 1714368225824315904}
+  m_Father: {fileID: 280674500253919092}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 101.354675, y: 7.9419703}
+  m_AnchoredPosition: {x: 192.76843, y: 17.45073}
   m_SizeDelta: {x: 149, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7753265751001709045
@@ -1229,8 +1229,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+  m_text: You seem a bit dazed. Remember to move <sprite name="Keys_W"> <sprite name="Keys_A">
+    <sprite name="Keys_S"> <sprite name="Keys_D">, shoot and hit <sprite name="Keys_LClick">
+    <sprite name="Keys_RClick">, and also use my power to dash <sprite name="Keys_SPACE">.
+    And if you have skill, when emptying the clip, make sure to hit precisely <sprite
+    name="Keys_R">.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 359aac6dcd4a9a64988e5459a22829cf, type: 2}
   m_sharedMaterial: {fileID: 310558686158869268, guid: 359aac6dcd4a9a64988e5459a22829cf, type: 2}

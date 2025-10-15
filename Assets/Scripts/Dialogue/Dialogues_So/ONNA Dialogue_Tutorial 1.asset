@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
-  m_Name: Soldier Dialogue Noder_Pre_Tutorial 1
+  m_Name: ONNA Dialogue_Tutorial 1
   m_EditorClassIdentifier: 
-  dialogueText: "Don\u2019t just stand there staring at the floor, Runner. The Major\u2019s
-    expecting you. <sprite name=\"Keys_LClick\">"
+  dialogueText: "Human\u2026 Human, wake up, helloooooo."
   options:
-  - optionText: Alright
-    nextNode: {fileID: 0}
-    endsDialogue: 1
+  - optionText: "Hello? Who\u2019s there?"
+    nextNode: {fileID: 11400000, guid: 6d324be6650d193439c76cf1aac01fac, type: 2}
+    endsDialogue: 0
     actionIds: 

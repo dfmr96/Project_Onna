@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
-  m_Name: Soldier Dialogue Noder_Pre_Tutorial 1
+  m_Name: ONNA Dialogue_Tutorial 4
   m_EditorClassIdentifier: 
-  dialogueText: "Don\u2019t just stand there staring at the floor, Runner. The Major\u2019s
-    expecting you. <sprite name=\"Keys_LClick\">"
+  dialogueText: "I see you remember the basics \u2014 military training implanted
+    some muscle memory. Keep in mind your time is still running. Go slaughter some
+    ONNA and bring me food.\nIt\u2019s not like you have many options if you want
+    to stay alive."
   options:
-  - optionText: Alright
+  - optionText: "Let\u2019s go hunting."
     nextNode: {fileID: 0}
     endsDialogue: 1
     actionIds: 
