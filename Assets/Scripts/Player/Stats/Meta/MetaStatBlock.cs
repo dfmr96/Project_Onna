@@ -20,7 +20,11 @@ namespace Player.Stats.Meta
         public void AddFlatBonus(StatDefinition stat, float value)
         {
             float current = Get(stat);
-            Set(stat, current + value);
+            float debugCurrent = current;
+            float newValue = current + value;
+            Set(stat, newValue);
+
+            Debug.Log($"[MetaStatBlock] Applying +{value} to '{stat.name} | Current={debugCurrent} | Added={value} | NewValue={newValue}");
         }
 
         public void AddPercentBonus(StatDefinition stat, float percent)
@@ -33,17 +37,25 @@ namespace Player.Stats.Meta
 
             float metaValue = Get(stat);
             float baseValue = baseStatSource.Get(stat);
+            float debugBase = baseValue;
             float delta = baseValue * (percent / 100f);
-            Set(stat, metaValue + delta);
+            float newMeta = metaValue + delta;
 
-            Debug.Log($"[MetaStatBlock] Applying +{percent}% to '{stat.name}': Base={baseValue}, Bonus={delta}, NewMeta={metaValue + delta}");
+            Set(stat, newMeta);
+
+            Debug.Log($"[MetaStatBlock] Applying +{percent}% to '{stat.name} | Current ={debugBase} | Bonus={delta}, NewMeta={newMeta}");
         }
 
         public void AddMultiplierBonus(StatDefinition stat, float factor)
         {
             float current = Get(stat);
-            Set(stat, current * factor);
+            float debugCurrent = current;
+            float newValue = current * factor;
+            Set(stat, newValue);
+
+            Debug.Log($"[MetaStatBlock] Applying multiplier x{factor} to '{stat.name} | Current={debugCurrent} | NewValue={newValue}");
         }
+
         
         public void InjectBaseSource(IStatSource source)
         {
