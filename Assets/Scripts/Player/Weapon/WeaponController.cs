@@ -50,6 +50,9 @@ namespace Player.Weapon
         [BoxGroup("Runtime Debug"), ReadOnly]
         [SerializeField] private bool nextShotDoubleDamage = false;
 
+        public bool IsSkillCheckActive() => isSkillCheckActive;
+
+
         private PlayerModel _playerModel;
 
         // Hardcodeado
@@ -61,7 +64,10 @@ namespace Player.Weapon
 
             var inputHandler = FindObjectOfType<PlayerInputHandler>();
             if (inputHandler != null)
+            {
                 inputHandler.ReloadPerformed += OnReloadInput;
+                inputHandler.FirePerformed += OnFireInput; // aquí era -= accidental
+            }
         }
 
         private void OnDisable()
@@ -70,7 +76,10 @@ namespace Player.Weapon
 
             var inputHandler = FindObjectOfType<PlayerInputHandler>();
             if (inputHandler != null)
+            {
                 inputHandler.ReloadPerformed -= OnReloadInput;
+                inputHandler.FirePerformed -= OnFireInput;
+            }
         }
 
         private void Start()
@@ -130,6 +139,14 @@ namespace Player.Weapon
             {
                 Reloading();
             }
+        }
+
+        private void OnFireInput()
+        {
+            if (isSkillCheckActive)
+                TrySkillCheck();
+            else
+                Attack();
         }
 
         public void Reloading()
