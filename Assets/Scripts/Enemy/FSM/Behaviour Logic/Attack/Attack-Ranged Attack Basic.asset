@@ -15,14 +15,10 @@ MonoBehaviour:
   _distanceToCountExit: 9
   AttackingMovingSpeed: 0
   isMovingSpeedChangesOnAttack: 0
-  _timeBetweenAttacks: 1.5
-  _initialAttackDelay: 0.3
   isLookingPlayer: 1
   rotationSpeed: 5
-  personalDistance: 3.5
-  obstacleLayers:
-    serializedVersion: 2
-    m_Bits: 256
+  personalDistance: 2.5
   strafeDistance: 3
   strafeCooldown: 2
   strafeStopDistance: 0.2
+  rayRadius: 0.3

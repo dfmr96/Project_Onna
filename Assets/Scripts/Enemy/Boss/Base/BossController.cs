@@ -256,7 +256,7 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
             }
         }
 
-        view.PlayDamageAnimation();
+        view.HandleDamage();
     }
 
     private void HandleDeath(BossModel enemy)

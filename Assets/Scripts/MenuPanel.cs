@@ -6,23 +6,16 @@ public class MenuPanel : MonoBehaviour
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] GameObject loadCanvasPrefab;
     [SerializeField] private string hubLevelName;
+    [SerializeField] private string introLevelName;
     [SerializeField] private AudioClip mainMenuMusic;
 
-    private void Start()
-    {
-        AudioManager.Instance?.PlayMusic(mainMenuMusic);
-    }
+    private void Start() => AudioManager.Instance?.PlayMusic(mainMenuMusic);
 
     public void PlayButton() 
     {
         if (UI_MainMenu_ParallaxZoom.Instance != null)
-        {
             StartCoroutine(ZoomToEyeAndStartGame());
-        }
-        else
-        {
-            StartGame();
-        }
+        else StartGame();
     }
 
     private IEnumerator ZoomToEyeAndStartGame()
@@ -55,16 +48,11 @@ public class MenuPanel : MonoBehaviour
     private void StartGame()
     {
         levelProgression.ResetProgress();
-        SceneManagementUtils.AsyncLoadSceneByName(hubLevelName, loadCanvasPrefab, this);
+        if (SaveSystem.Load().progress.hasSeenIntro) SceneManagementUtils.AsyncLoadSceneByName(hubLevelName, loadCanvasPrefab, this);
+        else SceneManagementUtils.AsyncLoadSceneByName(introLevelName, loadCanvasPrefab, this);
     }
 
-    public void PlaySound(AudioClip audioClip)
-    {
-        AudioManager.Instance?.PlaySFX(audioClip);
-    }
+    public void PlaySound(AudioClip audioClip) => AudioManager.Instance?.PlaySFX(audioClip);
 
-    public void ExitButton()
-    {
-        Application.Quit();
-    }
+    public void ExitButton() => Application.Quit();
 }

@@ -37,27 +37,40 @@ public class EnemyChaseBasic : EnemyChaseSOBase
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        _navMeshAgent.SetDestination(playerTransform.position);
+        //_navMeshAgent.SetDestination(playerTransform.position);
 
         if (distanceToPlayer > _enemyModel.statsSO.AttackRange)
         {
-            _navMeshAgent.isStopped = false;
+            //_navMeshAgent.isStopped = false;
+            //_navMeshAgent.SetDestination(playerTransform.position);
+            // Persecución
+            if (_navMeshAgent.isStopped)
+                _navMeshAgent.isStopped = false;
+
             _navMeshAgent.SetDestination(playerTransform.position);
         }
         else
         {
-           
-            _navMeshAgent.isStopped = true;
-            _navMeshAgent.velocity = Vector3.zero;
-            _navMeshAgent.ResetPath(); 
+
+            //_navMeshAgent.isStopped = true;
+            //_navMeshAgent.velocity = Vector3.zero;
+            //_navMeshAgent.ResetPath(); 
+
+            // Listo para atacar frenamos de verdad
+            if (!_navMeshAgent.isStopped)
+            {
+                _navMeshAgent.isStopped = true;
+                _navMeshAgent.velocity = Vector3.zero;
+                _navMeshAgent.ResetPath();
+            }
 
             enemy.fsm.ChangeState(enemy.AttackState);
         }
 
-        if (!enemy.isAggroed)
-        {
-            enemy.fsm.ChangeState(enemy.SearchState);
-        }
+        //if (!enemy.isAggroed)
+        //{
+        //    enemy.fsm.ChangeState(enemy.SearchState);
+        //}
 
         //if (enemy.isWhitinCombatRadius)
         //{

@@ -45,7 +45,7 @@ public class EnemySpawner : MonoBehaviour
         if (spawnParticlesPrefab != null)
         {
             Vector3 spawnPos = transform.position;
-            GameObject particles = Instantiate(spawnParticlesPrefab, spawnPos, Quaternion.Euler(-90f, 0f, 0f));
+            GameObject particles = Instantiate(spawnParticlesPrefab, spawnPos, Quaternion.Euler(0f, 0f, 0f));
 
             Destroy(particles, particleLifeTime);
         }
@@ -62,11 +62,16 @@ public class EnemySpawner : MonoBehaviour
         {
             GameObject enemyPrefab = GetRandomEnemyPrefab();
             GameObject enemy = Instantiate(enemyPrefab, spawnPoints[i].position, Quaternion.identity);
+
+            // 👉 Activar el efecto de spawn visual
+            EnemyView enemyView = enemy.GetComponent<EnemyView>();
+            if (enemyView != null)
+                enemyView.PlaySpawnEffect();
+
             enemy.GetComponent<EnemyModel>().OnDeath += OnEnemyDeath;
             enemiesQuantity++;
         }
     }
-
 
     private bool TryGetRandomNavMeshPosition(out Vector3 result)
     {

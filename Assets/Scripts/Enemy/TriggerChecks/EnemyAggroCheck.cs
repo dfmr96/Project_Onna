@@ -9,19 +9,17 @@ public class EnemyAggroCheck : MonoBehaviour
     private Transform _playerTransform;
     private EnemyModel _enemyModel;
 
-
     private void Awake()
     {
         _enemyController = GetComponentInParent<EnemyController>();
         _enemyModel = GetComponentInParent<EnemyModel>();
-
     }
 
     private void Start()
     {
         _playerTransform = PlayerHelper.GetPlayer().transform;
-
     }
+
     private void Update()
     {
         CheckForPlayer();
@@ -47,19 +45,27 @@ public class EnemyAggroCheck : MonoBehaviour
             return;
         }
 
-        if (!Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, _enemyModel.statsSO.obstacleDetectionLayers))
+        // Lógica SphereCast como CanChargeToPlayer
+        Vector3 origin = transform.position + Vector3.up * 1f;
+        float rayRadius = 0.5f;
+
+        bool canSeePlayer = true;
+        if (Physics.SphereCast(origin, rayRadius, directionToPlayer, out RaycastHit hit, distanceToPlayer))
         {
-            _enemyController.SetAggroStatus(true);
+            if (hit.transform != _playerTransform)
+            {
+                Debug.DrawLine(origin, hit.point, Color.red);
+                canSeePlayer = false;
+            }
         }
-        else
-        {
-            _enemyController.SetAggroStatus(false);
-        }
+
+        Debug.DrawLine(origin, _playerTransform.position, canSeePlayer ? Color.green : Color.red);
+        _enemyController.SetAggroStatus(canSeePlayer);
     }
 
     private void OnDrawGizmosSelected()
     {
-        if (_playerTransform == null) return;
+        if (_playerTransform == null || _enemyModel == null) return;
 
         Gizmos.color = Color.red;
         Vector3 rightBoundary = Quaternion.Euler(0, _enemyModel.statsSO.visionAngle / 2, 0) * transform.forward;

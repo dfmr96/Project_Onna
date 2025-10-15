@@ -1,43 +1,73 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "Attack-Charging attack Tank type", menuName = "Enemy Logic/Attack Logic/Charging attack Tank type")]
 public class EnemyAttackCharge : EnemyAttackSOBase
 {
-    private bool _hasAttackedOnce = false;
-
+    [Header("Tank Settings")]
+    [SerializeField] private float punchChargeRadius = 1f;
     [SerializeField] private float chargeSpeed = 10f;
-    [SerializeField] private float chargeDuration = 1f;
+    [SerializeField] private float maxChargeTime = 1f;
     [SerializeField] private float meleeRange = 2f;
     [SerializeField] private float postChargeDelay = 0.5f;
-    private float postChargeTimer;
-    private bool isPostCharging;
+    [SerializeField] private LayerMask damageableLayers;
+    [SerializeField] private float stopDistanceFromPlayer = 1.5f;
 
-    private bool isCharging = false;
+    [Header("Particle Settings")]
+    [SerializeField] private ParticleSystem particleChargeAttack;
+    [SerializeField] private float forwardOffset = 1f;
+    [SerializeField] private float downOffset = 1f;
+    [SerializeField] private ParticleSystem particleMeleeAttack;
+    private ParticleSystem chargeParticlesInstance;
+    private ParticleSystem meleeParticlesInstance;
+
+
+    private bool isPreparingCharge = false;
+    private bool isChargeActive = false;
+    private bool isPostCharging = false;
+
     private float chargeTimer = 0f;
+    private float postChargeTimer = 0f;
     private Vector3 chargeDirection;
     private Vector3 chargeEndPoint;
+
+    private bool _hasAttackedOnce = false;
 
 
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
-
-
-        //enemy.SetShield(false);
-
-        _navMeshAgent.SetDestination(playerTransform.position);
         _hasAttackedOnce = false;
-        isCharging = false;
+        isPreparingCharge = false;
+        isChargeActive = false;
+        isPostCharging = false;
 
-        _navMeshAgent.isStopped = true;
+        _enemyView.OnAttackImpact += OnAttackImpact;
+        _enemyView.OnAttackStarted += OnMeleeAttack;
+
+        chargeParticlesInstance = Instantiate(
+                   particleChargeAttack,
+                   _enemyView.PunchPoint.position,
+                   Quaternion.identity
+               );
+
+        meleeParticlesInstance = Instantiate(
+               particleMeleeAttack,
+               _enemyView.PunchPoint.position,
+               Quaternion.identity
+           );
+
+        chargeParticlesInstance.Stop();
+        meleeParticlesInstance.Stop();
     }
 
     public override void DoExitLogic()
     {
         base.DoExitLogic();
+        _enemyView.OnAttackImpact -= OnAttackImpact;
+        _enemyView.OnAttackStarted -= OnMeleeAttack;
 
+        Destroy(chargeParticlesInstance.gameObject);
 
         ResetValues();
     }
@@ -45,14 +75,11 @@ public class EnemyAttackCharge : EnemyAttackSOBase
     public override void DoFrameUpdateLogic()
     {
         base.DoFrameUpdateLogic();
-
         _timer += Time.deltaTime;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-
-
-
+        // Post-charge
         if (isPostCharging)
         {
             postChargeTimer += Time.deltaTime;
@@ -65,7 +92,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
             return;
         }
 
-        // Si se aleja del rango de ataque cambiar a busqueda
+        // Player demasiado lejos
         if (distanceToPlayer > _distanceToCountExit)
         {
             EndAttackAnimations();
@@ -74,30 +101,49 @@ public class EnemyAttackCharge : EnemyAttackSOBase
             return;
         }
 
-        if (isCharging)
+        // Charge activo
+        if (isChargeActive)
         {
-            chargeTimer += Time.fixedDeltaTime;
+            chargeTimer += Time.deltaTime;
 
-        
+            // Mover enemigo
+            //_rb.position += chargeDirection * chargeSpeed * Time.deltaTime;
+            Vector3 newPos = _rb.position + chargeDirection * chargeSpeed * Time.deltaTime;
 
-            // Movimiento suave con física
-            _rb.MovePosition(_rb.position + chargeDirection * chargeSpeed * Time.fixedDeltaTime);
-
-            distanceToPlayer = Vector3.Distance(_rb.position, playerTransform.position);
-
-            if (distanceToPlayer < 1f || chargeTimer >= chargeDuration)
+            // si ya pasó el endPoint, clávalo en el endPoint y terminá el charge
+            if (Vector3.Dot(chargeEndPoint - transform.position, chargeDirection) <= 0f)
             {
+                _rb.position = chargeEndPoint;
                 EndCharge();
             }
-
-            if (Vector3.Distance(enemy.transform.position, chargeEndPoint) < 0.5f)
+            else
             {
-                isCharging = false;
-                _navMeshAgent.enabled = true; // volver al navmesh
+                _rb.position = newPos;
             }
+
+          
+                // Chequear colisión con player
+                Collider[] hits = Physics.OverlapSphere(_enemyView.PunchPoint.position, punchChargeRadius, damageableLayers);
+                foreach (var hit in hits)
+                {
+                    IDamageable damageable = hit.GetComponent<IDamageable>();
+                    if (damageable != null)
+                    {
+                        enemy.ExecuteAttack(damageable);
+                        EndCharge(); // Frenar charge al golpear
+                        break;
+                    }
+                }
+            
+
+            // Limitar duración máxima
+            if (chargeTimer >= maxChargeTime)
+                EndCharge();
+
+            return;
         }
 
-        // Si ya atacó una vez, espera el tiempo entre ataques
+        // Espera entre ataques
         if (_hasAttackedOnce)
         {
             if (_timer >= _enemyModel.currentAttackTimeRate)
@@ -108,43 +154,149 @@ public class EnemyAttackCharge : EnemyAttackSOBase
             return;
         }
 
-        // Iniciar ataque si cumplió delay inicial
+        bool canSeePlayer = CanChargeToPlayer(out Vector3 dir);
+
+        // Si no hay línea de visión, aunque esté en rango de ataque, retrocede a chase
+        if (!canSeePlayer)
+        {
+            EndAttackAnimations();
+            enemy.SetShield(true);
+            enemy.fsm.ChangeState(enemy.ChaseState);
+            return;
+        }
+
         if (_timer >= _enemyModel.statsSO.AttackInitialDelay)
         {
+            // Si hay línea de visión, decidí si hacer melee o charge
             if (distanceToPlayer <= meleeRange)
+            {
                 StartMeleeAttack();
+            }
             else
-                StartCharge();
+            {
+                chargeDirection = dir;
+                PrepareCharge();
+            }
         }
+
+ 
     }
 
-
-
-
-    public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
+    private void StartMeleeAttack()
     {
-        base.Initialize(gameObject, enemy);
-        _rb.isKinematic = false;
+        _enemyView.PlayAttackAnimation(false);
+        _enemyView.PlayMeleeAttackAnimation(true);
+        _hasAttackedOnce = true;
+        _timer = 0f;
     }
 
-    public override void ResetValues()
+    private void PrepareCharge()
     {
-        base.ResetValues();
+        // Animación pre-attack
+        _enemyView.PlayAttackAnimation(true);
+        _enemyView.PlayMeleeAttackAnimation(false);
 
-        _hasAttackedOnce = false;
-        isCharging = false;
+        isPreparingCharge = true;
+        _hasAttackedOnce = true;
+        _timer = 0f;
+
+        // Detener NavMeshAgent mientras se prepara
+        _navMeshAgent.isStopped = true;
+    }
+
+    // Animation Event
+    private void OnAttackImpact()
+    {
+        if (!isPreparingCharge) return;
+
+        isPreparingCharge = false;
+        isChargeActive = true;
         chargeTimer = 0f;
-        chargeDirection = Vector3.zero;
 
-        if (_navMeshAgent != null)
-        {
-            _navMeshAgent.isStopped = true;
-            _navMeshAgent.velocity = Vector3.zero;
-            _navMeshAgent.ResetPath();
-        }
+
+        // Definir dirección y endpoint
+        chargeDirection = (playerTransform.position - transform.position).normalized;
+        //chargeEndPoint = transform.position + chargeDirection * 5f;
+
+        // calculamos un "endPoint" que queda a cierta distancia del player
+        Vector3 toPlayer = playerTransform.position - transform.position;
+        float totalDistance = Mathf.Max(0f, toPlayer.magnitude - stopDistanceFromPlayer);
+        chargeEndPoint = transform.position + chargeDirection * totalDistance;
+
+
+        // Apagar NavMesh mientras dura el charge
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.updatePosition = false;
+        _navMeshAgent.updateRotation = false;
+
+        // PARTICULA
+        Vector3 forward = _enemyView.PunchPoint.forward;
+        forward.y = 0f; // aplastamos la componente vertical
+        forward.Normalize(); // aseguramos que sea unitario
+
+        Quaternion flatRotation = Quaternion.LookRotation(forward, Vector3.up);
+        Vector3 spawnPos = _enemyView.PunchPoint.position
+                         + forward * forwardOffset
+                         + Vector3.down * downOffset;
+        chargeParticlesInstance.transform.SetPositionAndRotation(
+            spawnPos,
+            flatRotation
+        );
+
+        chargeParticlesInstance.Clear();
+        chargeParticlesInstance.Play();
+    }
+
+    private void EndCharge()
+    {
+        isChargeActive = false;
+        isPostCharging = true;
+        postChargeTimer = 0f;
+
+
+
+        _enemyView.PlayAttackAnimation(false);
+        _enemyView.PlayMeleeAttackAnimation(false);
+
+        // Restaurar NavMesh
+        _navMeshAgent.isStopped = false;
+        _navMeshAgent.updatePosition = true;
+        _navMeshAgent.updateRotation = true;
+        _navMeshAgent.Warp(_rb.position); // actualizar posición real
+
+        enemy.SetShield(false);
+        enemy.fsm.ChangeState(enemy.IdleState);
 
     }
 
+    private void OnMeleeAttack()
+    {
+        Vector3 impactPos = _enemyView.PunchPoint.position;
+        Collider[] hits = Physics.OverlapSphere(impactPos, punchChargeRadius, damageableLayers);
+        foreach (var hit in hits)
+        {
+            IDamageable damageable = hit.GetComponent<IDamageable>();
+            if (damageable != null)
+                enemy.ExecuteAttack(damageable);
+        }
+
+        // PARTICULA
+        Vector3 forward = _enemyView.PunchPoint.forward;
+        forward.y = 0f; // aplastamos la componente vertical
+        forward.Normalize(); // aseguramos que sea unitario
+
+        Quaternion flatRotation = Quaternion.LookRotation(forward, Vector3.up);
+
+        Vector3 spawnPos = _enemyView.PunchPoint.position + Vector3.down * downOffset;
+
+        meleeParticlesInstance.transform.SetPositionAndRotation(
+            spawnPos,
+            flatRotation
+        );
+
+        meleeParticlesInstance.Clear();
+        meleeParticlesInstance.Play();
+    }
 
     private void EndAttackAnimations()
     {
@@ -152,103 +304,46 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         _enemyView.PlayMeleeAttackAnimation(false);
     }
 
-    private void StartMeleeAttack()
+    public override void ResetValues()
     {
-        isCharging = false;
-        _enemyView.PlayAttackAnimation(false);
-
-        //enemy.SetShield(false);
-
-        _enemyView.PlayMeleeAttackAnimation(true);
-        _hasAttackedOnce = true;
-        _timer = 0f;
-    }
-    private void StartCharge()
-    {
-        if (playerTransform == null) return;
-
-        isLookingPlayer = false;
-
-        _enemyView.PlayMeleeAttackAnimation(false);
-        _enemyView.PlayAttackAnimation(true);
-
-        enemy.SetShield(false);
-
-        //chargeDirection = (playerTransform.position - enemy.transform.position).normalized;
-        //chargeTimer = 0f;
-        //isCharging = true;
-        //_hasAttackedOnce = true;
-        //_timer = 0f;
-
-        //// Desactivamos NavMeshAgent para evitar conflictos
-        //_navMeshAgent.enabled = false;
-
-        //// Detener velocidad previa
-        //_rb.velocity = Vector3.zero;
-
-        // --- Nuevo: definir el punto final de charge dentro del NavMesh ---
-        Vector3 rawTarget = playerTransform.position;
-        Vector3 safeTarget = enemy.transform.position; // fallback
-
-        // Buscar punto cercano al jugador dentro del NavMesh
-        if (NavMesh.SamplePosition(rawTarget, out NavMeshHit hit, 10f, NavMesh.AllAreas))
-        {
-            safeTarget = hit.position;
-        }
-
-        // Dirección hacia ese punto
-        chargeDirection = (safeTarget - enemy.transform.position).normalized;
-
-        // Limitar distancia máxima del charge (evita que se pase del NavMesh)
-        float maxChargeDistance = 5f; // ajustá según tu diseño
-        Vector3 finalTarget = enemy.transform.position + chargeDirection * maxChargeDistance;
-
-        // Asegurar que el final del charge esté sobre el NavMesh
-        if (NavMesh.SamplePosition(finalTarget, out NavMeshHit safeHit, 2f, NavMesh.AllAreas))
-        {
-            finalTarget = safeHit.position;
-        }
-
-        // Guardar como punto de destino final
-        chargeEndPoint = finalTarget;
-
-        // Reiniciar estados
+        base.ResetValues();
+        isPreparingCharge = false;
+        isChargeActive = false;
+        isPostCharging = false;
         chargeTimer = 0f;
-        isCharging = true;
-        _hasAttackedOnce = true;
-        _timer = 0f;
-
-        // Desactivar NavMeshAgent para no pelear con el Rigidbody
-        _navMeshAgent.enabled = false;
-
-        // Resetear velocidad previa
-        _rb.velocity = Vector3.zero;
-
-    }
-
-    private void EndCharge()
-    {
-        isCharging = false;
-
-        // Reactivamos NavMeshAgent
-        _navMeshAgent.enabled = true;
-        _navMeshAgent.isStopped = true;
-        _navMeshAgent.ResetPath();
-
-        // Detener Rigidbody
-        _rb.velocity = Vector3.zero;
-
-        _enemyView.PlayAttackAnimation(false);
-        isLookingPlayer = true;
-
-        isPostCharging = true;
         postChargeTimer = 0f;
+        chargeDirection = Vector3.zero;
+        _hasAttackedOnce = false;
 
-      
+        if (_navMeshAgent != null && _navMeshAgent.isOnNavMesh)
+        {
+            _navMeshAgent.isStopped = true;
+            _navMeshAgent.ResetPath();
+        }
     }
 
+    private bool CanChargeToPlayer(out Vector3 direction)
+    {
+        direction = (playerTransform.position - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, playerTransform.position);
+        Vector3 origin = transform.position + Vector3.up * 1f;
 
+        // radio del "chequeo frontal"
+        float rayRadius = 0.5f;
 
-  
+        // hacemos un SphereCast en dirección al player
+        if (Physics.SphereCast(origin, rayRadius, direction, out RaycastHit hit, distance))
+        {
+            // si choca algo que NO es el player  no puede cargar
+            if (hit.transform != playerTransform)
+            {
+                Debug.DrawLine(origin, hit.point, Color.red);
+                return false;
+            }
+        }
+
+        Debug.DrawLine(origin, playerTransform.position, Color.green);
+        return true;
+    }
 
 }

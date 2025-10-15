@@ -6,10 +6,6 @@ using UnityEngine;
 [System.Serializable]
 public class HubMovementStrategy : BaseMovementStrategy
 {
-
-    [Header("Hub Settings")]
-    [SerializeField] private bool useLowerLayerAnimator = true;
-
     [Header("Rotation Settings")]
     [SerializeField] private float rotationSpeed = 720f; // degrees per second
     [SerializeField] private bool enableRotation = true;
@@ -146,7 +142,7 @@ public class HubMovementStrategy : BaseMovementStrategy
             moveDirection = Vector3.zero;
         }
 
-        Vector3 targetVelocity = moveDirection * speed;
+        Vector3 targetVelocity = moveDirection * Speed;
 
         float smoothSpeed = targetVelocity.magnitude > 0.1f ? acceleration : deceleration;
         smoothedMovement = Vector3.MoveTowards(smoothedMovement, targetVelocity, smoothSpeed * Time.deltaTime);

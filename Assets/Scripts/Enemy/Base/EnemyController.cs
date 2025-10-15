@@ -109,7 +109,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
         fsm = new EnemyStateMachine<BaseEnemyController>();
 
-        // Inicialización de estados
+        // Inicializaciï¿½n de estados
         PatrolState = new EnemyPatrolState(this, fsm, EnemyPatrolBaseInstance);
         ChaseState = new EnemyChaseState(this, fsm, EnemyChaseBaseInstance);
         IdleState = new EnemyIdleState(this, fsm, EnemyIdleBaseInstance);
@@ -120,7 +120,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         HurtState = new EnemyHurtState(this, fsm, EnemyHurtBaseInstance);
         DefendState = new EnemyDefendState(this, fsm, EnemyDefendBaseInstance);
 
-        // El AttackState se construye con el currentAttackSO dinámico
+        // El AttackState se construye con el currentAttackSO dinï¿½mico
         currentAttackSO = attackPhaseInstances[0];
         AttackState = new EnemyAttackState(this, fsm);
 
@@ -161,7 +161,11 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
 void Update()
     {
-        view.PlayMovingAnimation(_navMeshAgent.speed);
+        // Solo reproducir animaciÃ³n de movimiento si NO estÃ¡ atacando
+        if (fsm.CurrentState != AttackState)
+        {
+            view.PlayMovingAnimation(_navMeshAgent.speed);
+        }
         fsm.CurrentState?.FrameUpdate();
 
         //Debug.Log("ESTADO: " + fsm.CurrentState);
@@ -205,7 +209,7 @@ void Update()
     //public void DoAttack(IDamageable target)
     //{
     //    target.TakeDamage(GetDamage());
-    //    Debug.Log("Daño hecho por el estado Melee");
+    //    Debug.Log("Daï¿½o hecho por el estado Melee");
     //}
 
     private void HandleHealthChanged(float currentHealth) => view.HandleDamage();

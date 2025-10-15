@@ -11,6 +11,7 @@ namespace Player
     public class PlayerModelBootstrapper : MonoBehaviour
     {
         public static PlayerModelBootstrapper Instance { get; private set; }
+
         [SerializeField] private GameMode currentMode;
 
         [Header("Stats Setup")] [SerializeField]
@@ -28,8 +29,14 @@ namespace Player
 
         private void Awake()
         {
-            if (Instance != null && Instance != this) Destroy(gameObject);
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             Instance = this;
+            
             DontDestroyOnLoad(gameObject);
             if (!ValidateDependencies()) return;
 
@@ -84,7 +91,7 @@ namespace Player
                 return;
             }
 
-            var inventory = SaveSystem.LoadInventory();
+            var inventory = SaveSystem.Load().inventory;
             inventory.PlayerItemsHolder.RestoreFromSave();
             playerModel.InjectInventory(inventory);
 
@@ -93,9 +100,13 @@ namespace Player
             switch (GameModeSelector.SelectedMode)
             {
                 case GameMode.Run:
-                    var runtimeStats = RunData.CurrentStats ?? new RuntimeStats(baseStats, metaStats, statRefs);
+                    RunData.Initialize();
+                    var runtimeStats = /*RunData.CurrentStats ??*/ new RuntimeStats(baseStats, metaStats, statRefs);
                     RunData.SetStats(runtimeStats);
+                    //Debug.Log("Trying to apply effects");
                     _statContext.SetupFromExistingRuntime(runtimeStats, metaStats);
+                    playerModel.InjectStatContext(_statContext);
+                    RunData.NewMutationController.ApplyEffects(PlayerHelper.GetPlayer());
                     //Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando RuntimeStats en PlayerModel.");
                     break;
 
@@ -105,7 +116,8 @@ namespace Player
                     metaStats.Clear();
                     inventory.PlayerItemsHolder.ApplyAllUpgradesTo(metaStats);
                     _statContext.SetupForHub(reader, metaStats);
-                    Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando MetaStats en PlayerModel.");
+                    //Debug.Log("<b>🛠 PlayerModelBootstrapper</b>: Inyectando MetaStats en PlayerModel.");
+                    playerModel.InjectStatContext(_statContext);
                     break;
 
                 default:
@@ -114,7 +126,7 @@ namespace Player
             }
 
             //Debug.Log("✅ StatContext inyectado correctamente en PlayerModel.");
-            playerModel.InjectStatContext(_statContext);
+            
         }
     }
 }

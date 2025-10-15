@@ -42,6 +42,9 @@ public class CinematicController : MonoBehaviour
 
         if (currentIndex >= cinematicSprites.Count)
         {
+            //Save intro status
+            SaveSystem.MarkIntroSeen();
+
             GameModeSelector.SelectedMode = GameMode.Hub;
             SceneManagementUtils.AsyncLoadSceneByName(nextScene, loadCanvasPrefab, this);
             return;

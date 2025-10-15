@@ -18,6 +18,8 @@ public class ProjectileBurstShooter : MonoBehaviour
 
     private Coroutine _loopCoroutine;
 
+    float verticalOffset = 1.0f;
+
     private void Start()
     {
         _spawner = GameManager.Instance?.projectileSpawner;
@@ -72,7 +74,7 @@ public class ProjectileBurstShooter : MonoBehaviour
         if (_spawner == null || _playerTransform == null || _bossController?.firePoint == null) return;
 
         Vector3 targetPos = _playerTransform.position;
-        targetPos.y = _bossController.firePoint.position.y;
+        targetPos.y += verticalOffset;
 
         Vector3 dir = (targetPos - _bossController.firePoint.position).normalized;
         dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
