@@ -9,5 +9,7 @@ public enum DialogueActionId
 {
     None,
     OpenStore,
-    ChangeDialogue 
+    ChangeDialogue,
+    EndBoss,
+    EngineerEnd
 }

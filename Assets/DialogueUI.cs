@@ -37,12 +37,46 @@ public class DialogueUI : MonoBehaviour
                         {
                             var trigger = DialogueManager.Instance.CurrentTrigger;
 
-                            if (trigger is Engineer engineer)
+                            if (trigger is Engineer_Dialogue_Trigger engineer)
                                 engineer.SetDialogueToNext();
                             else if (trigger is Boss_Dialogue_Trigger boss)
                                 boss.SetDialogueData(boss.GetNextDialogue());
                         };
                         break;
+                    case DialogueActionId.EndBoss:
+                        option.onSelectedAction = () =>
+                        {
+                            if (DialogueManager.Instance.CurrentTrigger is Boss_Dialogue_Trigger bossTrigger)
+                            {
+                                var nextBossDialogue = bossTrigger.GetNextDialogue();
+                                if (nextBossDialogue != null)
+                                {
+                                    bossTrigger.SetDialogueData(nextBossDialogue);
+                                    Debug.Log("Boss dialogue changed to next data.");
+                                }
+                            }
+                            Engineer_Dialogue_Trigger engineer = FindObjectOfType<Engineer_Dialogue_Trigger>();
+                            if (engineer != null)
+                            {
+                                engineer.SetDialogueToNext();
+                                Debug.Log("Engineer dialogue changed after Boss conversation.");
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Engineer not found in the scene to update dialogue.");
+                            }
+                        };
+                        break;
+                    case DialogueActionId.EngineerEnd:
+                        {
+                            Engineer_Dialogue_Trigger engineer = FindObjectOfType<Engineer_Dialogue_Trigger>();
+                            if (engineer != null)
+                            {
+                                engineer.SetDialogueToLoop(); // Cambia el diálogo al loop final
+                                engineer.OnEngineerEndAction(); // Ejecuta la lógica de activación/desactivación
+                            }
+                            break;
+                        }
 
                     case DialogueActionId.None:
                     default:
