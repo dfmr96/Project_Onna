@@ -1,5 +1,6 @@
-using UnityEngine;
+using System;
 using Player;
+using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -9,8 +10,10 @@ public class DialogueManager : MonoBehaviour
     private DialogueNode currentNode;
     private NPCData currentNPCData;
     public InteractableBase CurrentTrigger { get; private set; }
+    
+    public Action CurrentTriggerActionOnEnd;
 
-    [SerializeField] private DialogueUI dialogueUIPrefab; // prefab de UI
+    [SerializeField] private DialogueUI dialogueUIPrefab;
 
     private void Awake()
     {
@@ -21,23 +24,16 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(NPCData npcData, InteractableBase trigger = null)
     {
         if (npcData == null || npcData.StartingDialogue == null)
-        {
-            //Debug.LogError("StartDialogue: npcData o StartingDialogue es null!");
             return;
-        }
 
         CurrentTrigger = trigger;
         currentNPCData = npcData;
         currentNode = npcData.StartingDialogue;
 
-        // Mostrar cursor
         CursorHelper.Show();
 
-        // Instanciar prefab si aún no existe
         if (dialogueUI == null)
-        {
             dialogueUI = Instantiate(dialogueUIPrefab);
-        }
 
         dialogueUI.gameObject.SetActive(true);
         dialogueUI.SetName(npcData.NpcName);
@@ -45,15 +41,12 @@ public class DialogueManager : MonoBehaviour
         dialogueUI.BindActions(currentNode);
         dialogueUI.DisplayNode(currentNode, OnOptionSelected);
 
-        // Desactivar control del jugador
         PlayerHelper.DisableInput();
     }
 
     private void OnOptionSelected(int index)
     {
         var option = currentNode.Options[index];
-
-        // Ejecuta acción asociada (incluye ChangeDialogue, OpenStore, etc.)
         option.onSelectedAction?.Invoke();
 
         if (option.endsDialogue)
@@ -78,12 +71,18 @@ public class DialogueManager : MonoBehaviour
         CurrentTrigger = null;
         currentNode = null;
 
-        // Reactivar input del jugador
         PlayerHelper.EnableInput();
 
-        // Ocultar cursor solo si no hay otra UI activa (por ejemplo tienda)
         if (!HubManager.Instance || !HubManager.Instance.IsStoreOpen)
             CursorHelper.Hide();
+    }
+
+        
+    public System.Collections.IEnumerator PreTutorialTimer(NPCData nextData, InteractableBase trigger)
+    {
+        EndDialogue();
+        yield return new WaitForSeconds(5f);
+        StartDialogue(nextData, trigger);
     }
 
     public void SetCurrentNPCData(NPCData newData)

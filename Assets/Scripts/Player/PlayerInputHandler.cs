@@ -10,6 +10,8 @@ namespace Player
         public Vector3 RawMovementInput { get; private set; }
         public Vector2 RawAimInput { get; private set; }
 
+        public static PlayerInputHandler Instance { get; private set; }
+
         public event Action FirePerformed;
         public event Action MeleeAtackPerformed;
         public event Action ReloadPerformed;
@@ -17,6 +19,12 @@ namespace Player
         public event Action InteractionPerformed;
         public event Action OnPauseGame;
 
+        private void Awake()
+        {
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+        }
+        
         public void OnMove(InputAction.CallbackContext context)
         {
             Vector2 input = context.ReadValue<Vector2>();
