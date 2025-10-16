@@ -11,5 +11,8 @@ public enum DialogueActionId
     OpenStore,
     ChangeDialogue,
     EndBoss,
-    EngineerEnd
+    EngineerEnd,
+    ONNAPreTutorial,
+    StartChecklist,
+    ONNAAfterChecklist
 }
