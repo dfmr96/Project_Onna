@@ -43,8 +43,6 @@ public class GameManager : MonoBehaviour
     private void WinGame() 
     {
         enemySpawner.OnAllWavesCompleted -= WinGame;
-        OpenDoorDebug();
-
     }
     
     private void DefeatGame()
@@ -120,11 +118,11 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void OpenDoorDebug()
+    public void OpenDoorDebug()
     {
         foreach (GameObject door in doors) { Destroy(door); }
     }
-    
+
     [Button("Link References")]
     public void LinkReferences()
     {

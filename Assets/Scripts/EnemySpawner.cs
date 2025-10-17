@@ -29,7 +29,6 @@ public class EnemySpawner : MonoBehaviour
     private Transform playerTransform;
     private int maxTries = 30;
     public Action OnAllWavesCompleted;
-    //public Action OnWaveCompleted;    --  Se puede usar para que pase algo entre oleadas
     private int actualWave = 0;
     private int enemiesQuantity = 0;
 
@@ -72,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
             GameObject enemyPrefab = GetRandomEnemyPrefab();
             GameObject enemy = Instantiate(enemyPrefab, spawnPoints[i].position, Quaternion.identity);
 
-            // 👉 Activar el efecto de spawn visual
+            //Activar el efecto de spawn visual
             EnemyView enemyView = enemy.GetComponent<EnemyView>();
             if (enemyView != null)
                 enemyView.PlaySpawnEffect();

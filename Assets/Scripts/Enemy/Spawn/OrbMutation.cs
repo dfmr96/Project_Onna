@@ -11,25 +11,13 @@ public class OrbMutation : InteractableBase
     [ContextMenu("Show mutation selection")]
     private void ShowMutationSelection() => Instantiate(mutationCanvasPrefab);
 
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //     //Interfaz para Mutaciones
-    //    var collector = other.GetComponent<IOrbCollectable>();
-    //    if (collector != null)
-    //    {
-    //        ShowMutationSelection();
-    //        Destroy(gameObject);
-    //    }
-
-
-    //}
-
     public override void Interact()
     {
         base.Interact();
         ShowMutationSelection();
+        GameManager.Instance?.OpenDoorDebug();
         Destroy(gameObject);
     }
+
 
 }
