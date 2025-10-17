@@ -6,17 +6,26 @@ using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("Orb Mutation Settings")]
+    [SerializeField] private GameObject orbMutationPrefab;
+    [SerializeField] private float orbMutationYOffset = 2f;
 
+    [Header("Enemy Spawning Settings")]
     [SerializeField] private float initialDelaySpawn = 3f;
     [SerializeField] private float particleLifeTime = 4f;
     [SerializeField] private GameObject spawnParticlesPrefab;
-    [SerializeField] private GameObject mutationCanvasPrefab;
+    //[SerializeField] private GameObject mutationCanvasPrefab;
     [SerializeField] private EnemySpawnInfo[] enemiesToSpawn;
     [SerializeField] private int wavesQuantity = 3;
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private Vector3 spawnAreaCenter;
     [SerializeField] private Vector3 spawnAreaSize;
     [SerializeField] private float safeDistanceFromPlayer = 5f;
+
+
+
+
+
     private Transform playerTransform;
     private int maxTries = 30;
     public Action OnAllWavesCompleted;
@@ -147,12 +156,22 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
-                ShowMutationSelection();
+                //ShowMutationSelection();     
+                SpawnOrbMutation(enemy.transform.position, orbMutationPrefab);
                 OnAllWavesCompleted?.Invoke();
             }
         }
     }
 
-    [ContextMenu("Show mutation selection")]
-    private void ShowMutationSelection() => Instantiate(mutationCanvasPrefab);
+    //[ContextMenu("Show mutation selection")]
+    //private void ShowMutationSelection() => Instantiate(mutationCanvasPrefab);
+
+    private void SpawnOrbMutation(Vector3 position, GameObject prefab)
+    {
+        Instantiate(
+                    prefab,
+                    position + Vector3.up * orbMutationYOffset,
+                    Quaternion.identity
+                );
+    }
 }
