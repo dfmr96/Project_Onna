@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    
+
     public void ReturnToHub()
     {
         GameModeSelector.SelectedMode = GameMode.Hub;
@@ -103,6 +103,22 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManagementUtils.LoadSceneByName("HUB");
     }
+    
+    public void ReturnToTutorial()
+    {
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
+        SceneManagementUtils.LoadSceneByName("Z1_L5_Tutorial");
+    }
+
+    public void ReturnToHubTutorial()
+    {
+        GameModeSelector.SelectedMode = GameMode.Hub;
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
+        SceneManagementUtils.LoadSceneByName("HUB_Tutorial");
+    }
+
 
     private void OpenDoorDebug()
     {

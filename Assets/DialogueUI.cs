@@ -132,16 +132,49 @@ public class DialogueUI : MonoBehaviour
                         };
                         break;
 
-                        case DialogueActionId.ONNAAfterChecklist:
-                            option.onSelectedAction += () =>
+                    case DialogueActionId.ONNAAfterChecklist:
+                        option.onSelectedAction += () =>
+                        {
+                            PlayerTutorialTracker tracker = FindObjectOfType<PlayerTutorialTracker>();
+                            if (tracker != null)
                             {
-                                PlayerTutorialTracker tracker = FindObjectOfType<PlayerTutorialTracker>();
-                                if (tracker != null)
-                                    tracker.ActivateEnemySpawner();
-                                else
-                                    Debug.LogWarning("ONNAAfterChecklist: No se encontró PlayerTutorialTracker en la escena");
-                            };
-                            break;
+                                tracker.ActivateEnemySpawner();
+                                var trigger = DialogueManager.Instance.CurrentTrigger;
+                                if (trigger is WeaponDialogueTrigger weaponTrigger)
+                                {
+                                    var nextData = weaponTrigger.defeatedEnemiesDialogue;
+                                    if (nextData != null)
+                                    {
+                                        weaponTrigger.SetDialogueData(nextData);
+                                        Debug.Log("WeaponDialogueTrigger: Preparado defeatedEnemiesDialogue tras ONNAAfterChecklist");
+                                    }
+                                    else
+                                    {
+                                        Debug.LogWarning("ONNAAfterChecklist: defeatedEnemiesDialogue no asignado en WeaponDialogueTrigger.");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Debug.LogWarning("ONNAAfterChecklist: No se encontró PlayerTutorialTracker en la escena");
+                            }
+                        };
+                        break;
+
+                    case DialogueActionId.EndTutorial:
+                        option.onSelectedAction += () =>
+                        {
+                            var trigger = DialogueManager.Instance.CurrentTrigger;
+                            if (trigger is EndTutorialTrigger endTrigger)
+                            {
+                                endTrigger.HandleAction("EndTutorial");
+                            }
+                            else
+                            {
+                                Debug.LogWarning("EndTutorial: Trigger actual no es EndTutorialTrigger");
+                            }
+                        };
+                        break;
 
 
                     case DialogueActionId.None:

@@ -14,5 +14,6 @@ public enum DialogueActionId
     EngineerEnd,
     ONNAPreTutorial,
     StartChecklist,
-    ONNAAfterChecklist
+    ONNAAfterChecklist,
+    EndTutorial
 }

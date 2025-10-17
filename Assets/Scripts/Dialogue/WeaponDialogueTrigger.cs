@@ -8,6 +8,9 @@ public class WeaponDialogueTrigger : InteractableBase
     [Header("Próximo diálogo tras el ActionID")]
     [SerializeField] private NPCData nextDialogueData;
 
+    [Header("Próximo diálogo tras enemysDeafet")]
+    [SerializeField] public NPCData defeatedEnemiesDialogue;
+
     [Header("Action ID que dispara evento especial")]
     [SerializeField] private string actionId = "ONNAPreTutorial";
 
@@ -39,6 +42,20 @@ public class WeaponDialogueTrigger : InteractableBase
             );
         }
     }
+
+    public void StartDefeatedEnemiesDialogue()
+    {
+        if (defeatedEnemiesDialogue != null)
+        {
+            DialogueManager.Instance.SetCurrentNPCData(defeatedEnemiesDialogue);
+            DialogueManager.Instance.StartDialogue(defeatedEnemiesDialogue, this);
+        }
+        else
+        {
+            Debug.LogWarning("WeaponDialogueTrigger: defeatedEnemiesDialogue no asignado.");
+        }
+    }
+
 
     public NPCData GetNextDialogue() => nextDialogueData;
 

@@ -36,6 +36,17 @@ public class PlayerTutorialTracker : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (enemySpawnerGO != null)
+        {
+            EnemySpawner spawner = enemySpawnerGO.GetComponent<EnemySpawner>();
+            if (spawner != null)
+                spawner.OnAllWavesCompleted -= OnAllWavesCompleted;
+        }
+    }
+
+
     private void Start()
     {
         if (inputHandler == null)
@@ -48,7 +59,16 @@ public class PlayerTutorialTracker : MonoBehaviour
             inputHandler.ReloadPerformed += OnReload;
             inputHandler.DashPerformed += OnDash;
         }
+
+        // 🔹 Si el spawner ya está referenciado, suscribimos al evento
+        if (enemySpawnerGO != null)
+        {
+            EnemySpawner spawner = enemySpawnerGO.GetComponent<EnemySpawner>();
+            if (spawner != null)
+                spawner.OnAllWavesCompleted += OnAllWavesCompleted;
+        }
     }
+
 
     private void Update()
     {
@@ -72,6 +92,13 @@ public class PlayerTutorialTracker : MonoBehaviour
         if (checklistCompleted)
             CompleteChecklist();
     }
+    
+    private void OnAllWavesCompleted()
+    {
+        Debug.Log("✅ Todas las oleadas completadas, abriendo diálogo final.");
+        if (weaponTrigger != null)
+            weaponTrigger.StartDefeatedEnemiesDialogue();
+    }
 
 
     private void CompleteChecklist()
@@ -81,6 +108,9 @@ public class PlayerTutorialTracker : MonoBehaviour
         if (weaponTrigger != null && nextDialogueData != null)
         {
             weaponTrigger.SetDialogueData(nextDialogueData);
+
+            // 👇 aseguramos que el DialogueManager use la data actualizada
+            DialogueManager.Instance.SetCurrentNPCData(nextDialogueData);
 
             // Abrimos el diálogo final del arma
             DialogueManager.Instance.StartDialogue(nextDialogueData, weaponTrigger);

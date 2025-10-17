@@ -7651,6 +7651,7 @@ MonoBehaviour:
   interactAudio: {fileID: 0}
   weaponDialogueData: {fileID: 11400000, guid: 580d59009cc6a5d4a9dc822c9e66c2ff, type: 2}
   nextDialogueData: {fileID: 11400000, guid: ca12ab159da9cf74792e62c901201eb5, type: 2}
+  defeatedEnemiesDialogue: {fileID: 11400000, guid: 28c385cfc3071cf4582ba767f4dee3d7, type: 2}
   actionId: ONNAPreTutorial
 --- !u!4 &794166310
 Transform:
@@ -9399,6 +9400,10 @@ PrefabInstance:
       propertyPath: playerSpawner
       value: 
       objectReference: {fileID: 1617006254}
+    - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
+      propertyPath: defeatUIPrefab
+      value: 
+      objectReference: {fileID: 7121083172180269478, guid: d0ab7c42bfae4ba45bcd9f69a666a246, type: 3}
     - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
       propertyPath: projectileSpawner
       value: 
@@ -13988,6 +13993,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerHUD
       objectReference: {fileID: 0}
+    - target: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3866983295355512437, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -17327,6 +17336,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: e4216ed230756484abf33d5227564c83, type: 2}
+    - target: {fileID: 5740563148966045424, guid: 5d5bd57e328a2484b9f2b14a7114233f, type: 3}
+      propertyPath: levelProgression
+      value: 
+      objectReference: {fileID: 11400000, guid: 7c2f31e5ed5eba64b9f9a58eaacdcc75, type: 2}
     - target: {fileID: 6597899693275548709, guid: 5d5bd57e328a2484b9f2b14a7114233f, type: 3}
       propertyPath: m_Name
       value: EndLevelTrigger
