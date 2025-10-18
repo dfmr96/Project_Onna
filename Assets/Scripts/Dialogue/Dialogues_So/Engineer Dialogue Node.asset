@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
+  m_Name: Engineer Dialogue Node
+  m_EditorClassIdentifier: 
+  dialogueText: "Heeellooooo! Good morniiing! Right on time. I just finished tweaking
+    a few things... Did you bring more fragments? Remember, they're vital for upgrades!
+    If you don't have any, I think it's time you start your mission \u2014 time\u2019s
+    ticking"
+  options:
+  - optionText: "Sure, show me what you\u2019ve got."
+    nextNode: {fileID: 0}
+    endsDialogue: 1
+    actionIds: 01000000
+  - optionText: No thanks, just looking around.
+    nextNode: {fileID: 0}
+    endsDialogue: 1
+    actionIds: 

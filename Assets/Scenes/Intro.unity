@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 582018274}
   - component: {fileID: 582018273}
+  - component: {fileID: 582018275}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -216,6 +217,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &582018275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582018272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &587766074
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,6 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71f9d22ab79a4dc3a19e2d3747bde8b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadCanvasPrefab: {fileID: 1822515629045912885, guid: c214e4a145d9467458f42cd11ed1b19d, type: 3}
+  nextScene: Z1_L5_Tutorial
   cinematicSprites:
   - {fileID: 1279957904, guid: ec1dd899e5b5b1b4da20aacaa20b7ee9, type: 3}
   - {fileID: -135950858, guid: ec1dd899e5b5b1b4da20aacaa20b7ee9, type: 3}
@@ -419,7 +445,6 @@ MonoBehaviour:
   - {fileID: -1875893230, guid: fd0808135f4725c438cfd671995f5821, type: 3}
   - {fileID: 846470392, guid: fd0808135f4725c438cfd671995f5821, type: 3}
   cinematicImage: {fileID: 587766076}
-  nextSceneName: HUB
 --- !u!4 &895325704
 Transform:
   m_ObjectHideFlags: 0

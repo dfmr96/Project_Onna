@@ -2494,6 +2494,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpawner: {fileID: 223702374}
+  enemySpawner: {fileID: 0}
+  doors: []
+  orbSpawner: {fileID: 0}
+  projectileSpawner: {fileID: 0}
 --- !u!4 &1283800370
 Transform:
   m_ObjectHideFlags: 0
@@ -2677,6 +2681,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
   timeCircle: {fileID: 108312083}
+  weaponOverheat: {fileID: 0}
+  weaponCooling: {fileID: 0}
 --- !u!4 &1324798658
 Transform:
   m_ObjectHideFlags: 0

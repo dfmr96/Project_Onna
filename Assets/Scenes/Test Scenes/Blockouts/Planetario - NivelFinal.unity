@@ -11350,7 +11350,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17702,6 +17702,8 @@ MonoBehaviour:
   heightTextSpawn: 2
   particleExplosion: {fileID: 0}
   _bossModel: {fileID: 0}
+  spawnClip: {fileID: 0}
+  destroyClip: {fileID: 0}
 --- !u!1 &1002706632714058002
 GameObject:
   m_ObjectHideFlags: 0
@@ -17877,6 +17879,8 @@ MonoBehaviour:
   heightTextSpawn: 2
   particleExplosion: {fileID: 0}
   _bossModel: {fileID: 0}
+  spawnClip: {fileID: 0}
+  destroyClip: {fileID: 0}
 --- !u!1 &1203236664573475234
 GameObject:
   m_ObjectHideFlags: 0
@@ -21939,6 +21943,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27344c2d6689d6c4bbc24abee4cafe90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  laserShootAudioClip: {fileID: 0}
+  shootAudioClip: {fileID: 0}
   burstCount: 3
   burstInterval: 0.2
   pelletsPerShot: 5
@@ -22128,6 +22134,8 @@ MonoBehaviour:
   heightTextSpawn: 2
   particleExplosion: {fileID: 0}
   _bossModel: {fileID: 0}
+  spawnClip: {fileID: 0}
+  destroyClip: {fileID: 0}
 --- !u!4 &5164755107462196063
 Transform:
   m_ObjectHideFlags: 0
@@ -24803,6 +24811,8 @@ MonoBehaviour:
   statsSO: {fileID: 11400000, guid: 466d6238e2587e94fb1a36e43e98359e, type: 2}
   floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
   heightTextSpawn: 2
+  jumpingCoinsTextPrefab: {fileID: 0}
+  heightCoinsTextSpawn: 2
 --- !u!4 &8200160245734093631
 Transform:
   m_ObjectHideFlags: 0
@@ -24921,6 +24931,8 @@ MonoBehaviour:
   heightTextSpawn: 2
   particleExplosion: {fileID: 0}
   _bossModel: {fileID: 0}
+  spawnClip: {fileID: 0}
+  destroyClip: {fileID: 0}
 --- !u!4 &8436217235274255426
 Transform:
   m_ObjectHideFlags: 0
@@ -25537,10 +25549,12 @@ MonoBehaviour:
   pillarSpawnPoints: []
   bossSpawnPoints: []
   bossTransform: {fileID: 0}
+  torretPrefab: {fileID: 0}
+  torretSpawnPoints: []
   shield: {fileID: 3942273321410267140}
   shieldEffectDuration: 0.5
-  timeToReactivatePillars: 5
-  pushDistance: 5
+  bossUIController: {fileID: 0}
+  deathClip: {fileID: 0}
   currentAttackSO: {fileID: 0}
   initialState: 4
   attackPhases: []

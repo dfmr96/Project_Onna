@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class AudioOptions : MonoBehaviour
 {
@@ -17,7 +15,6 @@ public class AudioOptions : MonoBehaviour
         SFXSlider.value = PlayerPrefs.GetFloat("AudioSFX", 1f);
         musicSlider.value = PlayerPrefs.GetFloat("AudioMusic", 1f);
         AudioListener.volume = masterSlider.value;
-        //Aca hay que agregar los audio listeners correspondientes a los SFX y a la musica, por ahora solamente se modifica el general.
     }
 
     public void SetMaster()
@@ -28,13 +25,13 @@ public class AudioOptions : MonoBehaviour
     }
     public void SetSFX()
     {
-        //Aca se setea el audio listener correspondiente a los SFX
+        AudioManager.Instance?.MusicMixer.audioMixer.SetFloat("SFXVolume", SFXSlider.value);
         PlayerPrefs.SetFloat("AudioSFX", SFXSlider.value);
         PlayerPrefs.Save();
     }
     public void SetMusic()
     {
-        //Aca se setea el audio listener correspondiente a la musica
+        AudioManager.Instance?.SFXMixer.audioMixer.SetFloat("MusicVolume", musicSlider.value);
         PlayerPrefs.SetFloat("AudioMusic", musicSlider.value);
         PlayerPrefs.Save();
     }

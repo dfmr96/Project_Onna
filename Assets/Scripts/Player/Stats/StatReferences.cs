@@ -10,10 +10,15 @@ namespace Player.Stats
         public StatDefinition initialVitalTime;
         public StatDefinition passiveDrainRate;
         public StatDefinition enemyHitPenalty;
+        public StatDefinition healingMultiplier;
+
+        [Header("Status Flags")]
+        public StatDefinition isInvulnerable;
 
         [Header("Combat Stats")]
         public StatDefinition damage;
         public StatDefinition bulletSpeed;
+        public StatDefinition bulletMaxPenetration;
         public StatDefinition maxAmmo;
         public StatDefinition attackRange;
         public StatDefinition fireRate;
@@ -27,6 +32,10 @@ namespace Player.Stats
         public StatDefinition movementSpeed;
         public StatDefinition dashDistance;
         public StatDefinition dashCooldown;
+
+        [Header("Orb Interaction Stats")]
+        public StatDefinition orbAttractRange;
+        public StatDefinition orbAttractSpeed;
 
 #if UNITY_EDITOR
         [ContextMenu("Auto Link From Registry")]
@@ -44,6 +53,8 @@ namespace Player.Stats
             TryAssign(ref initialVitalTime, "InitialVitalTime", registry);
             TryAssign(ref passiveDrainRate, "PassiveDrainRate", registry);
             TryAssign(ref enemyHitPenalty, "EnemyHitPenalty", registry);
+            TryAssign(ref healingMultiplier, "HealingMultiplier", registry);
+            TryAssign(ref isInvulnerable, "IsInvulnerable", registry);
             TryAssign(ref damage, "Damage", registry);
             TryAssign(ref attackRange, "AttackRange", registry);
             TryAssign(ref fireRate, "FireRate", registry);
@@ -57,6 +68,11 @@ namespace Player.Stats
             TryAssign(ref coolingCooldown, "CoolingCooldown", registry);
             TryAssign(ref bulletSpeed, "BulletSpeed", registry);
             TryAssign(ref maxAmmo, "MaxAmmo", registry);
+            TryAssign(ref orbAttractRange, "OrbAttractRange", registry);
+            TryAssign(ref orbAttractSpeed, "OrbAttractSpeed", registry);
+            TryAssign(ref bulletMaxPenetration, "bulletMaxPenetration", registry);
+
+            
 
             UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.SaveAssets();

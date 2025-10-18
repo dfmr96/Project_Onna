@@ -16,6 +16,8 @@ public class EnemyDeadTorret : EnemyDeadSOBase
         _timer = 0f;
 
         _enemyView.PlayDeathParticles();
+        _enemyView.PlayDeathAnimation();
+
     }
 
     public override void DoExitLogic()

@@ -8,20 +8,23 @@ public class EnemyProjectile : MonoBehaviour
 {
     private float damage;
     [SerializeField] private float lifeTime = 5f;
+    private float _timer = 0f;
+
     [SerializeField] private ParticleSystem impactEffectParticlesPrefab;
+    [SerializeField] private TrailRenderer trail;
+
     protected Transform playerTransform;
     [SerializeField] float bulletSpeed;
-    [SerializeField] private LayerMask obstacleLayers;
+    [SerializeField] private LayerMask ignoreLayers;
     private bool hasHit = false;
     private Action onRelease;
     private Rigidbody rb;
-    private float _timer = 0f;
+
+    private EnemyModel ownerModel;
 
 
 
-   
-
-private void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -33,14 +36,30 @@ private void Awake()
 
     }
 
-    public void Launch(Vector3 direction, float force, float damage, Action onReleaseCallback)
+    public void Launch(Vector3 direction, float force, float damage, EnemyModel owner, Action onReleaseCallback)
     {
         this.damage = damage;
         onRelease = onReleaseCallback;
         rb.velocity = direction * force;
-
+        this.ownerModel = owner;
         _timer = 0f;
         hasHit = false;
+
+    
+    }
+
+
+    public void LaunchBoss(Vector3 direction, float force, float damage, Action onReleaseCallback)
+    {
+        this.damage = damage;
+        onRelease = onReleaseCallback;
+        rb.velocity = direction * force;
+        _timer = 0f;
+        hasHit = false;
+
+        // Reactivar trail después de disparar
+        if (trail != null)
+            trail.emitting = true;
     }
 
     private void Update()
@@ -56,11 +75,11 @@ private void Awake()
         }
     }
 
-    private void PlayImpactParticles()
+    private void PlayImpactParticles(Vector3 position, Vector3 normal)
     {
         if (impactEffectParticlesPrefab != null)
         {
-            var impact = Instantiate(impactEffectParticlesPrefab, transform.position, Quaternion.identity);
+            var impact = Instantiate(impactEffectParticlesPrefab, position, Quaternion.LookRotation(normal));
             impact.Play();
             Destroy(impact.gameObject, impact.main.duration);
         }
@@ -68,32 +87,69 @@ private void Awake()
 
     private void OnCollisionEnter(Collision collision)
     {
-
         if (hasHit) return;
 
-        if (((1 << collision.gameObject.layer) & obstacleLayers) != 0)
+        // ignorar capas
+        if (((1 << collision.gameObject.layer) & ignoreLayers) != 0) return;
+
+        hasHit = true;
+
+        // punto de contacto principal
+        ContactPoint contact = collision.contacts[0];
+
+        if ((collision.transform.root == playerTransform) && 
+            collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
         {
-            PlayImpactParticles();
-            onRelease?.Invoke();
-
-        }
-
-
-        if ((collision.transform.root == playerTransform) && (collision.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable)))
-        {
-            hasHit = true;
-
             damageable.TakeDamage(damage);
 
-            PlayImpactParticles();
+            // aplicar veneno si corresponde
+            if (ownerModel != null && ownerModel.variantSO.variantType == EnemyVariantType.Green)
+            {
+                damageable.ApplyDebuffDoT(ownerModel.variantSO.dotDuration, ownerModel.variantSO.dotDamage);
+            }
+        }
+
+        // siempre instanciamos partículas en el punto de impacto
+        PlayImpactParticles(contact.point, contact.normal);
+
+        onRelease?.Invoke();
+    }
 
 
-            onRelease?.Invoke();
+    public void ResetIdle(System.Action releaseAction)
+    {
+        onRelease = releaseAction;
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;  // congelamos mientras está en la mano
 
+        ResetTrail();
 
+    }
+
+    public void Fire(Vector3 direction, float force, float damage, EnemyModel owner)
+    {
+
+        this.damage = damage;
+        this.ownerModel = owner;
+        _timer = 0f;
+        hasHit = false;
+
+        rb.isKinematic = false;
+        rb.velocity = direction * force;
+
+        // Reactivar trail después de disparar
+        if (trail != null)
+            trail.emitting = true;
+    }
+
+    public void ResetTrail()
+    {
+        if (trail != null)
+        {
+            trail.Clear();       // limpia el trail viejo
+            trail.emitting = false; // desactiva temporalmente
         }
 
     }
- 
 }
 

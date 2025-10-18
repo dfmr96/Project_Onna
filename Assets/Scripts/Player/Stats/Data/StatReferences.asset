@@ -16,8 +16,11 @@ MonoBehaviour:
   initialVitalTime: {fileID: 11400000, guid: df323769573a1dd4fbb145b08ed7ddb6, type: 2}
   passiveDrainRate: {fileID: 11400000, guid: 4c3eee7e88c54454dbfccc7dc9fb3fe3, type: 2}
   enemyHitPenalty: {fileID: 11400000, guid: a513e205dea3a3d4a80aa660bb3b9cd7, type: 2}
+  healingMultiplier: {fileID: 11400000, guid: e864073d80959024aad6941e619cf2f4, type: 2}
+  isInvulnerable: {fileID: 0}
   damage: {fileID: 11400000, guid: f0fb482783c35e44e9d107ae015b6a67, type: 2}
   bulletSpeed: {fileID: 11400000, guid: f1dee4cd37ca38f43b3f7dd2caf42223, type: 2}
+  bulletMaxPenetration: {fileID: 11400000, guid: 20d70eebb8c53f748aeada9a4278d5d6, type: 2}
   maxAmmo: {fileID: 11400000, guid: 0901ca5ee86f7364ba79800f66bfa61e, type: 2}
   attackRange: {fileID: 11400000, guid: c097363ef9e22c343838d787cbfd03b5, type: 2}
   fireRate: {fileID: 11400000, guid: 7d6d579f7ee372d45ae131905ac548c3, type: 2}
@@ -29,3 +32,5 @@ MonoBehaviour:
   movementSpeed: {fileID: 11400000, guid: 6f20e8aa8a55e3e46bcbb08664708756, type: 2}
   dashDistance: {fileID: 11400000, guid: 75dc9929020fb3f49b2b8e60ad74acdc, type: 2}
   dashCooldown: {fileID: 11400000, guid: 3857823e71d6d8e4081f24e258a0d8c4, type: 2}
+  orbAttractRange: {fileID: 11400000, guid: 9451d5e7ffed45b46b8c99e31e114925, type: 2}
+  orbAttractSpeed: {fileID: 11400000, guid: b3f00c3458854a94eb92c908f5d55ba3, type: 2}

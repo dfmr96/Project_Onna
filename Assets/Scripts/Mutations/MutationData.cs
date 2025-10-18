@@ -12,6 +12,7 @@ namespace Mutations
         [field:SerializeField] private ValueMode valueMode = ValueMode.None;
         [field:SerializeField] private float upgradeBonus;
         [field:SerializeField] private UpgradeEffect upgradeEffect;
+        
         public string MutationName
         {
             get => mutationName;

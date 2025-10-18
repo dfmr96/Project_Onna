@@ -2,45 +2,85 @@ using UnityEngine;
 using System;
 using UnityEngine.AI;
 using Player;
+using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject mutationCanvasPrefab;
-    
+    [Header("Orb Mutation Settings")]
+    [SerializeField] private GameObject orbMutationPrefab;
+    [SerializeField] private float orbMutationYOffset = 2f;
+
+    [Header("Enemy Spawning Settings")]
+    [SerializeField] private float initialDelaySpawn = 3f;
+    [SerializeField] private float particleLifeTime = 4f;
+    [SerializeField] private GameObject spawnParticlesPrefab;
+    //[SerializeField] private GameObject mutationCanvasPrefab;
     [SerializeField] private EnemySpawnInfo[] enemiesToSpawn;
     [SerializeField] private int wavesQuantity = 3;
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private Vector3 spawnAreaCenter;
     [SerializeField] private Vector3 spawnAreaSize;
     [SerializeField] private float safeDistanceFromPlayer = 5f;
+
+
+
+
+
     private Transform playerTransform;
     private int maxTries = 30;
     public Action OnAllWavesCompleted;
-    //public Action OnWaveCompleted;    --  Se puede usar para que pase algo entre oleadas
     private int actualWave = 0;
     private int enemiesQuantity = 0;
 
     private void Start() 
     {
+        if (PlayerHelper.GetPlayer() == null) return;
         playerTransform = PlayerHelper.GetPlayer().transform;
         StartWave();
     }
+
+
+
     public void StartWave()
     {
         actualWave++;
         Vector3 randomPosition;
         if (TryGetRandomNavMeshPosition(out randomPosition))
             transform.position = randomPosition;
-        else Debug.LogWarning("No se encontr� posici�n v�lida sobre el NavMesh.");
+        else Debug.LogWarning("No se encontro posicion valida sobre el NavMesh");
+
+
+        if (spawnParticlesPrefab != null)
+        {
+            Vector3 spawnPos = transform.position;
+            GameObject particles = Instantiate(spawnParticlesPrefab, spawnPos, Quaternion.Euler(0f, 0f, 0f));
+
+            Destroy(particles, particleLifeTime);
+        }
+
+        StartCoroutine(DelayedStartWave());
+
+    }
+
+    private IEnumerator DelayedStartWave()
+    {
+        yield return new WaitForSeconds(initialDelaySpawn);
 
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             GameObject enemyPrefab = GetRandomEnemyPrefab();
             GameObject enemy = Instantiate(enemyPrefab, spawnPoints[i].position, Quaternion.identity);
+
+            //Activar el efecto de spawn visual
+            EnemyView enemyView = enemy.GetComponent<EnemyView>();
+            if (enemyView != null)
+                enemyView.PlaySpawnEffect();
+
             enemy.GetComponent<EnemyModel>().OnDeath += OnEnemyDeath;
             enemiesQuantity++;
         }
     }
+
     private bool TryGetRandomNavMeshPosition(out Vector3 result)
     {
         for (int i = 0; i < maxTries; i++)
@@ -115,14 +155,22 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
-                ShowMutationSelection();
+                //ShowMutationSelection();     
+                SpawnOrbMutation(enemy.transform.position, orbMutationPrefab);
                 OnAllWavesCompleted?.Invoke();
             }
         }
     }
-    
-    private void ShowMutationSelection()
+
+    //[ContextMenu("Show mutation selection")]
+    //private void ShowMutationSelection() => Instantiate(mutationCanvasPrefab);
+
+    private void SpawnOrbMutation(Vector3 position, GameObject prefab)
     {
-        Instantiate(mutationCanvasPrefab);
+        Instantiate(
+                    prefab,
+                    position + Vector3.up * orbMutationYOffset,
+                    Quaternion.identity
+                );
     }
 }

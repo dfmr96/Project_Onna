@@ -3,14 +3,18 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Logic", menuName = "Enemy Stats/Enemy Stats Base")]
 public class EnemyStatsSO : ScriptableObject
 {
+    [Header("Current State")]
+    public string currentState = "No State";
+
     [Header("Vitality")]
     public float MaxHealth = 100f;
     public bool isShieldActive = false;
 
-
     [Header("Combat")]
     public float AttackDamage = 20f;
     public float AttackRange = 10f;
+    public float AttackTimeRate = 1.5f;
+    public float AttackInitialDelay = 0.3f;
 
     [Header("Vision Combat Stats")]
     public float combatAngle = 30f;

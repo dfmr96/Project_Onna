@@ -9,18 +9,18 @@ public class GraphicsOptions : MonoBehaviour
     [Header("Shadows")]
     [SerializeField] Toggle shadowsToggle; // Off - On
 
-    [Header("Anti-Aliasing")]
-    [SerializeField] TextMeshProUGUI antiAliasingText;
-    [SerializeField] Button decreaseAntiAliasingButton;
-    [SerializeField] Button increaseAntiAliasingButton;
+    //[Header("Anti-Aliasing")]
+    //[SerializeField] TextMeshProUGUI antiAliasingText;
+    //[SerializeField] Button decreaseAntiAliasingButton;
+    //[SerializeField] Button increaseAntiAliasingButton;
 
-    [Header("Quality")]
-    [SerializeField] TextMeshProUGUI qualityText;
-    [SerializeField] Button decreaseQualityButton;
-    [SerializeField] Button increaseQualityButton;
+    //[Header("Quality")]
+    //[SerializeField] TextMeshProUGUI qualityText;
+    //[SerializeField] Button decreaseQualityButton;
+    //[SerializeField] Button increaseQualityButton;
 
-    private int currentQualityIndex = 1; // Low - Medium - High
-    private int currentAntiAliasing = 0; // Off - 2x - 4x
+    //private int currentQualityIndex = 1; // Low - Medium - High
+    //private int currentAntiAliasing = 0; // Off - 2x - 4x
 
     void Start() { Initialize(); }
 
@@ -32,21 +32,24 @@ public class GraphicsOptions : MonoBehaviour
 
         shadowsToggle.isOn = savedShadowsEnabled;
 
-        currentAntiAliasing = savedAntiAliasing;
-        UpdateAntiAliasingText();
+        //currentAntiAliasing = savedAntiAliasing;
+        //UpdateAntiAliasingText();
 
-        currentQualityIndex = savedOverallQuality;
-        UpdateQualityText();
+        //currentQualityIndex = savedOverallQuality;
+        //UpdateQualityText();
 
         ApplyShadows(savedShadowsEnabled);
         ApplyOverallQuality(savedOverallQuality);
         ApplyAntiAliasing(savedAntiAliasing);
 
         shadowsToggle.onValueChanged.AddListener(ApplyShadows);
-        decreaseQualityButton.onClick.AddListener(DecreaseQuality);
-        increaseQualityButton.onClick.AddListener(IncreaseQuality);
-        decreaseAntiAliasingButton.onClick.AddListener(DecreaseAntiAliasing);
-        increaseAntiAliasingButton.onClick.AddListener(IncreaseAntiAliasing);
+
+
+
+        //decreaseQualityButton.onClick.AddListener(DecreaseQuality);
+        //increaseQualityButton.onClick.AddListener(IncreaseQuality);
+        //decreaseAntiAliasingButton.onClick.AddListener(DecreaseAntiAliasing);
+        //increaseAntiAliasingButton.onClick.AddListener(IncreaseAntiAliasing);
     }
 
     private void ApplyShadows(bool enabled)
@@ -63,69 +66,73 @@ public class GraphicsOptions : MonoBehaviour
         else if (antiAliasing == 2) QualitySettings.antiAliasing = 4;
 
         PlayerPrefs.SetInt("AntiAliasing", antiAliasing);
-        UpdateAntiAliasingText();
+        //UpdateAntiAliasingText();
     }
 
     private void ApplyOverallQuality(int quality)
     {
-        QualitySettings.SetQualityLevel(quality);
-        PlayerPrefs.SetInt("OverallQuality", quality);
-        UpdateQualityText();
+        //QualitySettings.SetQualityLevel(quality);
+        //PlayerPrefs.SetInt("OverallQuality", quality);
+
+        QualitySettings.SetQualityLevel(0);
+        PlayerPrefs.SetInt("OverallQuality", 0);
+
+        //UpdateQualityText();
     }
 
-    private void DecreaseQuality()
-    {
-        if (currentQualityIndex > 0)
-        {
-            currentQualityIndex--;
-            ApplyOverallQuality(currentQualityIndex);
-        }
-    }
+    //private void DecreaseQuality()
+    //{
+    //    if (currentQualityIndex > 0)
+    //    {
+    //        currentQualityIndex--;
+    //        ApplyOverallQuality(currentQualityIndex);
+    //    }
+    //}
 
-    private void IncreaseQuality()
-    {
-        if (currentQualityIndex < 2)
-        {
-            currentQualityIndex++;
-            ApplyOverallQuality(currentQualityIndex);
-        }
-    }
+    //private void IncreaseQuality()
+    //{
+    //    if (currentQualityIndex < 2)
+    //    {
+    //        currentQualityIndex++;
+    //        ApplyOverallQuality(currentQualityIndex);
+    //    }
+    //}
 
-    private void DecreaseAntiAliasing()
-    {
-        if (currentAntiAliasing > 0)
-        {
-            currentAntiAliasing--;
-            ApplyAntiAliasing(currentAntiAliasing);
-        }
-    }
+    //private void DecreaseAntiAliasing()
+    //{
+    //    if (currentAntiAliasing > 0)
+    //    {
+    //        currentAntiAliasing--;
+    //        ApplyAntiAliasing(currentAntiAliasing);
+    //    }
+    //}
 
-    private void IncreaseAntiAliasing()
-    {
-        if (currentAntiAliasing < 2)
-        {
-            currentAntiAliasing++;
-            ApplyAntiAliasing(currentAntiAliasing);
-        }
-    }
+    //private void IncreaseAntiAliasing()
+    //{
+    //    if (currentAntiAliasing < 2)
+    //    {
+    //        currentAntiAliasing++;
+    //        ApplyAntiAliasing(currentAntiAliasing);
+    //    }
+    //}
 
-    private void UpdateQualityText()
-    {
-        switch (currentQualityIndex)
-        {
-            case 0: qualityText.text = "Low"; break;
-            case 1: qualityText.text = "Medium"; break;
-            case 2: qualityText.text = "High"; break;
-        }
-    }
+    //private void UpdateQualityText()
+    //{
+    //    switch (currentQualityIndex)
+    //    {
+    //        case 0: qualityText.text = "Low"; break;
+    //        case 1: qualityText.text = "Medium"; break;
+    //        case 2: qualityText.text = "High"; break;
+    //    }
+    //}
 
-    private void UpdateAntiAliasingText()
-    {
-        switch (currentAntiAliasing)
-        {
-            case 0: antiAliasingText.text = "Off"; break;
-            case 1: antiAliasingText.text = "2x"; break;
-            case 2: antiAliasingText.text = "4x"; break;
-        }
-    }
+    //private void UpdateAntiAliasingText()
+    //{
+    //    switch (currentAntiAliasing)
+    //    {
+    //        case 0: antiAliasingText.text = "Off"; break;
+    //        case 1: antiAliasingText.text = "2x"; break;
+    //        case 2: antiAliasingText.text = "4x"; break;
+    //    }
+    //}
 }

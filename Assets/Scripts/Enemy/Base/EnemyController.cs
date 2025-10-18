@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -34,6 +35,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
     public EnemyEscapeState EscapeState { get; set; }
     public EnemyHurtState HurtState { get; set; }
     public EnemyDefendState DefendState { get; set; }
+
 
     public enum InitialState
     {
@@ -78,6 +80,9 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
     private List<EnemyAttackSOBase> attackPhaseInstances = new();
 
+    //Status de DoTs por Mutaciones
+    private EnemyStatusHandler _statusHandler;
+
     void Awake()
     {
         // Instanciar behaviors
@@ -104,7 +109,7 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
         fsm = new EnemyStateMachine<BaseEnemyController>();
 
-        // Inicialización de estados
+        // Inicializaciï¿½n de estados
         PatrolState = new EnemyPatrolState(this, fsm, EnemyPatrolBaseInstance);
         ChaseState = new EnemyChaseState(this, fsm, EnemyChaseBaseInstance);
         IdleState = new EnemyIdleState(this, fsm, EnemyIdleBaseInstance);
@@ -115,9 +120,17 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         HurtState = new EnemyHurtState(this, fsm, EnemyHurtBaseInstance);
         DefendState = new EnemyDefendState(this, fsm, EnemyDefendBaseInstance);
 
-        // El AttackState se construye con el currentAttackSO dinámico
+        // El AttackState se construye con el currentAttackSO dinï¿½mico
         currentAttackSO = attackPhaseInstances[0];
         AttackState = new EnemyAttackState(this, fsm);
+
+        //Para manejar estados de daño DoT en mutaciones
+        _statusHandler = GetComponent<EnemyStatusHandler>();
+        if (_statusHandler == null)
+        {
+            _statusHandler = gameObject.AddComponent<EnemyStatusHandler>();
+            //Debug.Log("[EnemyController] EnemyStatusHandler agregado automáticamente.");
+        }
     }
 
     void Start()
@@ -144,14 +157,23 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         InitializeState();
 
 
-    }
+}
 
-    void Update()
+void Update()
     {
-        view.PlayMovingAnimation(_navMeshAgent.speed);
+        // Solo reproducir animaciÃ³n de movimiento si NO estÃ¡ atacando
+        if (fsm.CurrentState != AttackState)
+        {
+            view.PlayMovingAnimation(_navMeshAgent.speed);
+        }
         fsm.CurrentState?.FrameUpdate();
 
-        Debug.Log("ESTADO: " + fsm.CurrentState);
+        //Debug.Log("ESTADO: " + fsm.CurrentState);
+
+        model.statsSO.currentState = fsm.CurrentState.ToString();
+
+    
+
 
     }
 
@@ -173,15 +195,21 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
 
     public override void ExecuteAttack(IDamageable target)
     {
-        target.TakeDamage(model.statsSO.AttackDamage);
+        target.TakeDamage(model.currentDamage);
+
+        //Si el que ataque es una variante verde aplica veneno
+        if(model.variantSO.variantType == EnemyVariantType.Green)
+        {
+            target.ApplyDebuffDoT(model.variantSO.dotDuration, model.variantSO.dotDamage);
+        }
     }
 
-    public float GetDamage() => model.statsSO.AttackDamage;
+    public float GetDamage() => model.currentDamage;
 
     //public void DoAttack(IDamageable target)
     //{
     //    target.TakeDamage(GetDamage());
-    //    Debug.Log("Daño hecho por el estado Melee");
+    //    Debug.Log("Daï¿½o hecho por el estado Melee");
     //}
 
     private void HandleHealthChanged(float currentHealth) => view.HandleDamage();

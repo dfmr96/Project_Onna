@@ -1,6 +1,8 @@
 using Player;
 using System.Collections;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
 
 public class BossView : MonoBehaviour
 {
@@ -15,15 +17,25 @@ public class BossView : MonoBehaviour
     [SerializeField] private AudioClip laserShootAudioClip;
     [SerializeField] private AudioClip shootAudioClip;
 
-    //private float _distanceToCountExit = 3f;
+    [Header("Visual Effects")]
+    [SerializeField] private GameObject[] excludedObjects;
+    
+    [SerializeField] private ParticleSystem deathParticlesPrefab;
+    [SerializeField] private ParticleSystem damageParticlesPrefab;
+    [SerializeField] private Material[] damageMaterials;
+    [SerializeField] private Material[] deathMaterials;
 
-
+    private Renderer[] targetRenderers;         // 🔹 Todos los renderers del boss
+    private Material[][] originalMaterials;     // 🔹 Materiales originales de cada renderer
+    private Coroutine flashCoroutine = null;
+    private float flashDuration = .3f;
+    private bool isDead = false;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-
     }
+
     public Animator Animator => animator;
 
     private void Start()
@@ -34,145 +46,208 @@ public class BossView : MonoBehaviour
         projectileSpawner = GameManager.Instance.projectileSpawner;
         audioSource = GetComponent<AudioSource>();
 
+        // 🔹 Obtenemos todos los renderers hijos
+        Renderer[] allRenderers = GetComponentsInChildren<Renderer>();
+        List<Renderer> filtered = new List<Renderer>();
+
+        foreach (Renderer rend in allRenderers)
+        {
+            bool isExcluded = false;
+
+            // Revisamos si este renderer está en un GO excluido o es hijo de uno
+            foreach (GameObject go in excludedObjects)
+            {
+                if (rend.gameObject == go || rend.transform.IsChildOf(go.transform))
+                {
+                    isExcluded = true;
+                    break;
+                }
+            }
+
+            if (!isExcluded)
+                filtered.Add(rend);
+        }
+
+        targetRenderers = filtered.ToArray();
+
+        // 🔹 Guardamos materiales originales de los que SÍ se pueden modificar
+        originalMaterials = new Material[targetRenderers.Length][];
+        for (int i = 0; i < targetRenderers.Length; i++)
+        {
+            originalMaterials[i] = targetRenderers[i].materials;
+        }
     }
 
-    //ActionEvent de Ataque
-    //public void AnimationAttackFunc()
+    public void HandleDamage()
+    {
+        animator.SetTrigger("IsDamaged");
+
+        if (damageParticlesPrefab != null)
+        {
+            ParticleSystem damageParticlesInstance = Instantiate(
+                damageParticlesPrefab,
+                transform.position + Vector3.up * 1f,
+                Quaternion.identity,
+                transform
+            );
+
+            damageParticlesInstance.Play();
+            Destroy(damageParticlesInstance.gameObject, 2f);
+        }
+
+        PlayDamageEffect();
+    }
+
+    public void PlayDamageEffect()
+    {
+        if (isDead || targetRenderers == null) return;
+
+        if (flashCoroutine != null)
+            StopCoroutine(flashCoroutine);
+
+        flashCoroutine = StartCoroutine(FlashDamageMaterialsCoroutine());
+    }
+
+    private IEnumerator FlashDamageMaterialsCoroutine()
+    {
+        // 🔹 Aplicamos el material de daño a todos los renderers
+        foreach (Renderer rend in targetRenderers)
+        {
+            Material[] glitchedMaterials = new Material[rend.materials.Length];
+            for (int i = 0; i < glitchedMaterials.Length; i++)
+                glitchedMaterials[i] = damageMaterials[0];
+
+            rend.materials = glitchedMaterials;
+        }
+
+        yield return new WaitForSeconds(flashDuration);
+
+        // 🔹 Restauramos materiales originales
+        if (!isDead)
+        {
+            for (int i = 0; i < targetRenderers.Length; i++)
+            {
+                targetRenderers[i].materials = originalMaterials[i];
+            }
+        }
+
+        flashCoroutine = null;
+    }
+
+    // ===========================================================
+    // ☠️ EFECTOS DE MUERTE
+    // ===========================================================
+    public void PlayDeathAnimation()
+    {
+        animator.SetTrigger("IsDead");
+        isDead = true;
+
+        // 🔹 Aplicamos materiales de muerte en todas las partes
+        for (int i = 0; i < targetRenderers.Length; i++)
+            targetRenderers[i].materials = GetFittedMaterials(deathMaterials, originalMaterials[i].Length);
+
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+
+        PlayDeathParticles();
+    }
+
+    private void PlayDeathParticles()
+    {
+        if (deathParticlesPrefab != null)
+        {
+            ParticleSystem deathParticlesInstance = Instantiate(
+                deathParticlesPrefab,
+                transform.position + Vector3.up,
+                Quaternion.identity
+            );
+
+            deathParticlesInstance.Play();
+            Destroy(deathParticlesInstance.gameObject, 2f);
+        }
+    }
+
+    private Material[] GetFittedMaterials(Material[] source, int slots)
+    {
+        Material[] newMaterials = new Material[slots];
+        for (int i = 0; i < slots; i++)
+        {
+            if (i < source.Length)
+                newMaterials[i] = source[i];
+            else
+                newMaterials[i] = source[source.Length - 1];
+        }
+        return newMaterials;
+    }
+
+    // ===========================================================
+    // 🔫 DISPAROS
+    // ===========================================================
+    //private Coroutine _shootCoroutine;
+    //[SerializeField] private int burstCount = 3;
+    //[SerializeField] private float burstInterval = 0.2f;
+    //[SerializeField] private int pelletsPerShot = 5;
+    //[SerializeField] private float spreadAngle = 15f;
+
+    //public void AnimationShootProjectileFunc()
     //{
+    //    if (_shootCoroutine != null)
+    //        StopCoroutine(_shootCoroutine);
 
-    //    if (_playerTransform != null)
+    //    _shootCoroutine = StartCoroutine(ShootBurstCoroutine());
+    //}
+
+    //private IEnumerator ShootBurstCoroutine()
+    //{
+    //    for (int i = 0; i < burstCount; i++)
     //    {
-    //        float distanceToPlayer = Vector3.Distance(_playerTransform.position, transform.position);
-
-    //        //doble comprobacion por si se aleja
-    //        if (distanceToPlayer <= _distanceToCountExit)
-    //        {
-    //            IDamageable damageablePlayer = _playerTransform.GetComponent<IDamageable>();
-    //            _bossController.ExecuteAttack(damageablePlayer);
-
-    //        }
+    //        ShootShotgunProjectile();
+    //        yield return new WaitForSeconds(burstInterval);
     //    }
     //}
 
-    private Coroutine _shootCoroutine;
+    //private void ShootShotgunProjectile()
+    //{
+    //    if (projectileSpawner == null || _playerTransform == null) return;
 
-    [SerializeField] private int burstCount = 3;           // Cantidad de disparos por r�faga
-    [SerializeField] private float burstInterval = 0.2f;   // Tiempo entre disparos
-    //[SerializeField] private float spreadAngle = 5f;
-    [SerializeField] private int pelletsPerShot = 5;          // cu�ntos proyectiles por escopetazo
-    [SerializeField] private float spreadAngle = 15f;         // dispersi�n en grados
+    //    Transform firePoint = _bossController.firePoint;
+    //    Vector3 targetPos = _playerTransform.position;
+    //    targetPos.y = firePoint.position.y;
 
-    public void AnimationShootProjectileFunc()
-    {
-        //Debug.Log("Entro animacion");
-        //if (projectileSpawner == null) return;
+    //    Vector3 baseDir = (targetPos - firePoint.position).normalized;
 
+    //    for (int i = 0; i < pelletsPerShot; i++)
+    //    {
+    //        float angle = UnityEngine.Random.Range(-spreadAngle, spreadAngle);
+    //        Vector3 spreadDir = Quaternion.Euler(0, angle, 0) * baseDir;
 
-        //Transform firePoint = _bossController.firePoint;
+    //        projectileSpawner.SpawnProjectileBoss(
+    //            firePoint.position,
+    //            spreadDir,
+    //            _bossModel.statsSO.ShootForce,
+    //            _bossModel.statsSO.ProjectileDamage
+    //        );
+    //    }
+    //}
 
-        //Vector3 targetPos = _playerTransform.position;
-        //targetPos.y = firePoint.position.y;
+    // ===========================================================
+    // 🎭 ANIMACIONES
+    // ===========================================================
+    public void PlayAttackAnimation(bool isAttacking) => animator.SetBool("IsAttacking", isAttacking);
+    public void PlayProjectilesAttackAnimation() => animator.SetTrigger("IsProjectilesAttacking");
+    public void PlayStrafeAnimation() => animator.SetTrigger("IsStrafing");
+    public bool GetBoolAttackAnimation() => animator.GetBool("IsAttacking");
+    public void PlayIdleAnimation() => animator.SetTrigger("Idle");
+    public void PlayMovingAnimation(float moveSpeed) => animator.SetFloat("MoveSpeed", moveSpeed);
+    public void PlayStunnedAnimation() => animator.SetTrigger("IsStunned");
 
-        //Vector3 dir = (targetPos - firePoint.position).normalized;
-
-        //projectileSpawner.SpawnProjectile(firePoint.position, dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.AttackDamage);
-
-        if (_shootCoroutine != null)
-            StopCoroutine(_shootCoroutine);
-
-        _shootCoroutine = StartCoroutine(ShootBurstCoroutine());
-    
-
-    }
-    private IEnumerator ShootBurstCoroutine()
-    {
-        for (int i = 0; i < burstCount; i++)
-        {
-            ShootShotgunProjectile();
-            yield return new WaitForSeconds(burstInterval);
-        }
-    }
-
-    private void ShootSingleProjectile()
-    {
-        if (projectileSpawner == null || _playerTransform == null) return;
-
-        Transform firePoint = _bossController.firePoint;
-
-        Vector3 targetPos = _playerTransform.position;
-        targetPos.y = firePoint.position.y;
-
-        //Vector3 dir = (targetPos - firePoint.position).normalized;
-
-        Vector3 dir = (targetPos - firePoint.position).normalized;
-        dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
-
-        projectileSpawner.SpawnProjectile(firePoint.position, dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.ProjectileDamage);
-    }
-
-    private void ShootShotgunProjectile()
-    {
-        if (projectileSpawner == null || _playerTransform == null) return;
-
-        Transform firePoint = _bossController.firePoint;
-        Vector3 targetPos = _playerTransform.position;
-        targetPos.y = firePoint.position.y;
-
-        Vector3 baseDir = (targetPos - firePoint.position).normalized;
-
-        for (int i = 0; i < pelletsPerShot; i++)
-        {
-            float angle = Random.Range(-spreadAngle, spreadAngle);
-            Vector3 spreadDir = Quaternion.Euler(0, angle, 0) * baseDir;
-
-            projectileSpawner.SpawnProjectile(
-                firePoint.position,
-                spreadDir,
-                _bossModel.statsSO.ShootForce,
-                _bossModel.statsSO.ProjectileDamage
-            );
-        }
-    }
-
-
-
-    //Animaciones
-    public void PlayAttackAnimation(bool isAttacking)
-    {
-        animator.SetBool("IsAttacking", isAttacking);
-    }
-
-    public void PlayProjectilesAttackAnimation()
-    {
-        animator.SetTrigger("IsProjectilesAttacking");
-    }
-
-    public void PlayStrafeAnimation()
-    {
-        animator.SetTrigger("IsStrafing");
-    }
-
-    public bool GetBoolAttackAnimation()
-    {
-        return animator.GetBool("IsAttacking");
-    }
-
-    public void PlayIdleAnimation()
-    {
-        animator.SetTrigger("Idle");
-    }
-
-    public void PlayMovingAnimation(float moveSpeed)
-    {
-        animator.SetFloat("MoveSpeed", moveSpeed);
-    }
-
-    public void PlayStunnedAnimation()
-    {
-        animator.SetTrigger("IsStunned");
-    }
-
-    public void StartLaserShoot() 
+    // ===========================================================
+    // 🔊 SONIDO
+    // ===========================================================
+    public void StartLaserShoot()
     {
         audioSource.clip = laserShootAudioClip;
         audioSource.loop = true;
@@ -186,25 +261,10 @@ public class BossView : MonoBehaviour
         audioSource.Stop();
     }
 
-    public void ShootShotgun() { audioSource.PlayOneShot(shootAudioClip); }
-
-
-    public void PlayDamageAnimation()
-    {
-        animator.SetTrigger("IsDamaged");
-    }
-
-    public void PlayDeathAnimation()
-    {
-        animator.SetTrigger("IsDead");
-     
-
-
-    }
+    public void ShootShotgun() => audioSource.PlayOneShot(shootAudioClip);
 
     public void UpdateHealthBar(float healthPercentage)
     {
-        //health bar logic
+        // lógica UI barra de vida
     }
 }
-

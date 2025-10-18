@@ -2149,11 +2149,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &925855757 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3863611926642077226, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
-  m_PrefabInstance: {fileID: 2786435004488669609}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &925855761 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5232816373119301103, guid: b33c40dcbf1abff4e90acc1afae25b55, type: 3}
@@ -2624,7 +2619,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3611,7 +3606,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7167f0bd7393b854eb6133f5a1571f75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 0}
   timeCircle: {fileID: 1312992448}
+  weaponOverheat: {fileID: 0}
+  weaponCooling: {fileID: 0}
 --- !u!4 &1514527542
 Transform:
   m_ObjectHideFlags: 0
@@ -4549,7 +4547,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b72e03c8dae0b489e9196f242f76de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 925855757}
+  playerSpawner: {fileID: 0}
+  enemySpawner: {fileID: 0}
+  doors: []
+  orbSpawner: {fileID: 0}
+  projectileSpawner: {fileID: 0}
 --- !u!4 &1791363798
 Transform:
   m_ObjectHideFlags: 0

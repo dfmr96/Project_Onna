@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using Player;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,10 +16,19 @@ public class GameManager : MonoBehaviour
     [Header("Doors")]
     [SerializeField] private GameObject[] doors;
     private GameObject player;
+    [SerializeField] private GameObject deathScreenTransitionPrefab;
+    [SerializeField] private GameObject deathParticlesPrefab;
+    [SerializeField] private GameObject playerHUD;
 
     [Header("Enemies Spawners")]
     public OrbSpawner orbSpawner;
     public ProjectileSpawner projectileSpawner;
+
+    [SerializeField] private GameObject defeatUIPrefab;
+    private GameObject defeatUIInstance;
+
+    //Evento para activar portal tras seleccion de mutacion
+    public static event Action OnMutationUIClosed;
 
     private void Awake()
     {
@@ -32,19 +43,86 @@ public class GameManager : MonoBehaviour
     private void WinGame() 
     {
         enemySpawner.OnAllWavesCompleted -= WinGame;
-        OpenDoorDebug();
-    } 
+    }
+    
     private void DefeatGame()
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
+        PlayerHelper.DisableInput();
+        Cursor.visible = true;
+        playerHUD.SetActive(false);
+        Time.timeScale = 0f;
+
+        StartCoroutine(HandleDefeatSequence());
+    }
+
+    private IEnumerator HandleDefeatSequence()
+    {
+        // Partículas primero
+        if (deathParticlesPrefab != null && player != null)
+        {
+            Instantiate(
+                deathParticlesPrefab,
+                player.transform.position - new Vector3(0,1.5f,0),
+                Quaternion.identity
+            );
+        }
+
+        // Esperar 0.5 segundos
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // Luego transición
+        if (deathScreenTransitionPrefab != null && player != null)
+        {
+            GameObject transition = Instantiate(
+                deathScreenTransitionPrefab,
+                player.transform.position,
+                Quaternion.identity
+            );
+
+            var transitionScript = transition.GetComponent<DeathScreenTransition>();
+            if (transitionScript != null)
+            {
+                transitionScript.SetDefeatUI(defeatUIPrefab);
+            }
+        }
+        else
+        {
+            Debug.LogError("No se encontró el prefab de transición o el player.");
+        }
+    }
+
+
+
+    public void ReturnToHub()
+    {
         GameModeSelector.SelectedMode = GameMode.Hub;
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
         SceneManagementUtils.LoadSceneByName("HUB");
     }
-    private void OpenDoorDebug() 
+    
+    public void ReturnToTutorial()
+    {
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
+        SceneManagementUtils.LoadSceneByName("Z1_L5_Tutorial");
+    }
+
+    public void ReturnToHubTutorial()
+    {
+        GameModeSelector.SelectedMode = GameMode.Hub;
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
+        SceneManagementUtils.LoadSceneByName("HUB_Tutorial");
+    }
+
+
+    public void OpenDoorDebug()
     {
         foreach (GameObject door in doors) { Destroy(door); }
     }
-    
+
     [Button("Link References")]
     public void LinkReferences()
     {
@@ -61,5 +139,10 @@ public class GameManager : MonoBehaviour
         if (enemySpawner.gameObject.activeInHierarchy) Debug.Log("EnemySpawner linked successfully.");
         else Debug.LogError("EnemySpawner not found.");
         
+    }
+
+    public void RaiseMutationUIClosed()
+    {
+        OnMutationUIClosed?.Invoke();
     }
 }

@@ -1,71 +1,92 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 using Player;
+using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
-    public static DialogueManager Instance;
+    public static DialogueManager Instance { get; private set; }
 
-    [Header("UI")]
-    [SerializeField] private GameObject dialoguePrefab;
-    private GameObject dialogueInstance;
+    private DialogueUI dialogueUI;
     private DialogueNode currentNode;
+    private NPCData currentNPCData;
+    public InteractableBase CurrentTrigger { get; private set; }
+    
+    public Action CurrentTriggerActionOnEnd;
+
+    [SerializeField] private DialogueUI dialogueUIPrefab;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        //DontDestroyOnLoad(gameObject); por ahora solo funciona en el hub pero
-        //cuando haya dialogos en todo el juego esto NO DEBERIA destruirse!
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    public void StartDialogue(NPCData npcData)
+    public void StartDialogue(NPCData npcData, InteractableBase trigger = null)
     {
-        if (dialogueInstance == null) dialogueInstance = Instantiate(dialoguePrefab);
+        if (npcData == null || npcData.StartingDialogue == null)
+            return;
 
-        dialogueInstance.gameObject.SetActive(true);
-        dialogueInstance.GetComponent<DialogueUI>().SetName(npcData.NpcName);
-        dialogueInstance.GetComponent<DialogueUI>().SetImage(npcData.NpcImage);
-        dialogueInstance.GetComponent<DialogueUI>().BindActions(npcData.StartingDialogue);
-        ShowNode(npcData.StartingDialogue);
+        CurrentTrigger = trigger;
+        currentNPCData = npcData;
+        currentNode = npcData.StartingDialogue;
+
+        CursorHelper.Show();
+
+        if (dialogueUI == null)
+            dialogueUI = Instantiate(dialogueUIPrefab);
+
+        dialogueUI.gameObject.SetActive(true);
+        dialogueUI.SetName(npcData.NpcName);
+        dialogueUI.SetImage(npcData.NpcImage);
+        dialogueUI.BindActions(currentNode);
+        dialogueUI.DisplayNode(currentNode, OnOptionSelected);
 
         PlayerHelper.DisableInput();
     }
 
-    void ShowNode(DialogueNode node)
+    private void OnOptionSelected(int index)
     {
-        currentNode = node;
-        dialogueInstance.GetComponent<DialogueUI>().DisplayNode(node, OnOptionSelected);
-    }
+        var option = currentNode.Options[index];
+        option.onSelectedAction?.Invoke();
 
-    void OnOptionSelected(int index)
-    {
-        var selectedOption = currentNode.Options[index];
-        selectedOption.onSelectedAction?.Invoke();
-
-        if (selectedOption.endsDialogue)
+        if (option.endsDialogue)
         {
             EndDialogue();
             return;
         }
 
-        if (selectedOption.nextNode != null)
+        if (option.nextNode != null)
         {
-            dialogueInstance.GetComponent<DialogueUI>().BindActions(selectedOption.nextNode);
-            ShowNode(selectedOption.nextNode);
+            currentNode = option.nextNode;
+            dialogueUI.BindActions(currentNode);
+            dialogueUI.DisplayNode(currentNode, OnOptionSelected);
         }
-        else EndDialogue();
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
-        dialogueInstance.gameObject.SetActive(false);
+        if (dialogueUI != null)
+            dialogueUI.gameObject.SetActive(false);
+
+        CurrentTrigger = null;
         currentNode = null;
+
         PlayerHelper.EnableInput();
+
+        if (!HubManager.Instance || !HubManager.Instance.IsStoreOpen)
+            CursorHelper.Hide();
+    }
+
+        
+    public System.Collections.IEnumerator PreTutorialTimer(NPCData nextData, InteractableBase trigger)
+    {
+        EndDialogue();
+        yield return new WaitForSeconds(5f);
+        StartDialogue(nextData, trigger);
+    }
+
+    public void SetCurrentNPCData(NPCData newData)
+    {
+        currentNPCData = newData;
     }
 }

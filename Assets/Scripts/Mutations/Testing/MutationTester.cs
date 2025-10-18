@@ -105,59 +105,61 @@ namespace Mutations.Testing
             }
         }
     
-        [Button("🧪 Test CoolingCooldown con tiempo")]
-        private void TestCoolingCooldownTimed()
-        {
-            StartCoroutine(TestCoolingCooldownCoroutine());
-        }
+        //[Button("🧪 Test CoolingCooldown con tiempo")]
 
-        private IEnumerator TestCoolingCooldownCoroutine()
-        {
-            var weapon = FindObjectOfType<WeaponController>();
-            if (weapon == null)
-            {
-                Debug.LogWarning("⛔ No se encontró WeaponController.");
-                yield break;
-            }
 
-            float startTime = Time.time;
+        //private void TestCoolingCooldownTimed()
+        //{
+        //    StartCoroutine(TestCoolingCooldownCoroutine());
+        //}
 
-            Debug.Log("🧪 Iniciando CoolingCooldown...");
-            weapon.SendMessage("StartCoolingCooldown", SendMessageOptions.DontRequireReceiver);
+        //private IEnumerator TestCoolingCooldownCoroutine()
+        //{
+        //    var weapon = FindObjectOfType<WeaponController>();
+        //    if (weapon == null)
+        //    {
+        //        Debug.LogWarning("⛔ No se encontró WeaponController.");
+        //        yield break;
+        //    }
 
-            float expectedCooldown = weapon.Settings.CoolingCooldown;
-            yield return new WaitForSeconds(expectedCooldown + 0.1f);
+        //    float startTime = Time.time;
 
-            float elapsed = Time.time - startTime;
-            Debug.Log($"✅ CoolingCooldown completado. Duración real: {elapsed:F2} segundos (esperado: {expectedCooldown:F2})");
-        }
+        //    Debug.Log("🧪 Iniciando CoolingCooldown...");
+        //    weapon.SendMessage("StartCoolingCooldown", SendMessageOptions.DontRequireReceiver);
+
+        //    float expectedCooldown = weapon.Settings.CoolingCooldown;
+        //    yield return new WaitForSeconds(expectedCooldown + 0.1f);
+
+        //    float elapsed = Time.time - startTime;
+        //    Debug.Log($"✅ CoolingCooldown completado. Duración real: {elapsed:F2} segundos (esperado: {expectedCooldown:F2})");
+        //}
     
-        [Button("🧪 Test OverheatCooldown con tiempo")]
-        private void TestOverheatCooldownTimed()
-        {
-            StartCoroutine(TestOverheatCooldownCoroutine());
-        }
+        //[Button("🧪 Test OverheatCooldown con tiempo")]
+        //private void TestOverheatCooldownTimed()
+        //{
+        //    StartCoroutine(TestOverheatCooldownCoroutine());
+        //}
 
-        private IEnumerator TestOverheatCooldownCoroutine()
-        {
-            var weapon = FindObjectOfType<WeaponController>();
-            if (weapon == null)
-            {
-                Debug.LogWarning("⛔ No se encontró WeaponController.");
-                yield break;
-            }
+        //private IEnumerator TestOverheatCooldownCoroutine()
+        //{
+        //    var weapon = FindObjectOfType<WeaponController>();
+        //    if (weapon == null)
+        //    {
+        //        Debug.LogWarning("⛔ No se encontró WeaponController.");
+        //        yield break;
+        //    }
 
-            float startTime = Time.time;
+        //    float startTime = Time.time;
 
-            Debug.Log("🧪 Iniciando OverheatCooldown...");
-            weapon.SendMessage("StartOverheatCooldown", SendMessageOptions.DontRequireReceiver);
+        //    Debug.Log("🧪 Iniciando OverheatCooldown...");
+        //    weapon.SendMessage("StartOverheatCooldown", SendMessageOptions.DontRequireReceiver);
 
-            float expectedCooldown = weapon.Settings.OverheatCooldown;
-            yield return new WaitForSeconds(expectedCooldown + 0.1f);
+        //    float expectedCooldown = weapon.Settings.OverheatCooldown;
+        //    yield return new WaitForSeconds(expectedCooldown + 0.1f);
 
-            float elapsed = Time.time - startTime;
-            Debug.Log($"✅ OverheatCooldown completado. Duración real: {elapsed:F2} segundos (esperado: {expectedCooldown:F2})");
-        }
+        //    float elapsed = Time.time - startTime;
+        //    Debug.Log($"✅ OverheatCooldown completado. Duración real: {elapsed:F2} segundos (esperado: {expectedCooldown:F2})");
+        //}
 
 
     }

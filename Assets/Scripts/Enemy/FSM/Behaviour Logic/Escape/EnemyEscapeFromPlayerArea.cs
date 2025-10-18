@@ -8,13 +8,17 @@ using UnityEngine.AI;
 public class EnemyEscapeFromPlayerArea : EnemyEscapeSOBase
 {
     [SerializeField] private int _speedAgentMultiply;
-
+    private float _speedBase;
+    private float _angularSpeedBase;
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
 
-        //_navMeshAgent.speed = _enemyModel.statsSO.moveSpeed * _speedAgentMultiply;
-        //_navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed * _speedAgentMultiply; 
+        _speedBase = _navMeshAgent.speed;
+        _angularSpeedBase = _navMeshAgent.angularSpeed;
+
+        _navMeshAgent.speed = _speedBase * _speedAgentMultiply;
+        _navMeshAgent.angularSpeed = _angularSpeedBase * _speedAgentMultiply; 
 
     }
 
@@ -42,6 +46,7 @@ public class EnemyEscapeFromPlayerArea : EnemyEscapeSOBase
         }
         else
         {
+            ResetValues();
             enemy.fsm.ChangeState(enemy.ChaseState); 
         }
 
@@ -56,6 +61,8 @@ public class EnemyEscapeFromPlayerArea : EnemyEscapeSOBase
     {
         base.ResetValues();
 
+        _navMeshAgent.speed = _speedBase;
+        _navMeshAgent.angularSpeed = _angularSpeedBase;
     }
 
 }

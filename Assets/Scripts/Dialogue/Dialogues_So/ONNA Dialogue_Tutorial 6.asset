@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
+  m_Name: ONNA Dialogue_Tutorial 6
+  m_EditorClassIdentifier: 
+  dialogueText: "They didn\u2019t tell you that either? No wonder you\u2019re losing
+    the war. Just attach it to me \u2014 my core should mutate some of my systems
+    and it will help you in combat. Then go through  the portal\nCome on, move the
+    clock\u2019s ticking."
+  options:
+  - optionText: "Let\u2019s try it."
+    nextNode: {fileID: 0}
+    endsDialogue: 1
+    actionIds: 

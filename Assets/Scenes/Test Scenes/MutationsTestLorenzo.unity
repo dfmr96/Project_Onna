@@ -2197,9 +2197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae583efb4c5c4ec69eeb5daac1e230f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRuntimeStats:
-    baseStats: {fileID: 0}
-    runtimeBonuses: {fileID: 0}
   oxigenoOnna: {fileID: 11400000, guid: 031aa9bd600ff6647a646761bdb77937, type: 2}
   blindajeOseo: {fileID: 11400000, guid: 160423481a79f314798cf1f461ac60f6, type: 2}
   miradaDelUmbral: {fileID: 11400000, guid: 6b7a2da209f0bcb41af6c65a534cc678, type: 2}
@@ -2724,6 +2721,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 73044ce485033bf4a8b690d8a02fc542, type: 2}
   timeCircle: {fileID: 1312992448}
+  weaponOverheat: {fileID: 0}
+  weaponCooling: {fileID: 0}
 --- !u!4 &1514527542
 Transform:
   m_ObjectHideFlags: 0
@@ -3349,6 +3348,8 @@ MonoBehaviour:
   playerSpawner: {fileID: 131406156}
   enemySpawner: {fileID: 0}
   doors: []
+  orbSpawner: {fileID: 0}
+  projectileSpawner: {fileID: 0}
 --- !u!4 &1791363798
 Transform:
   m_ObjectHideFlags: 0
@@ -3883,6 +3884,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4057348306094105487, guid: 5d5bd57e328a2484b9f2b14a7114233f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 6597899693275548709, guid: 5d5bd57e328a2484b9f2b14a7114233f, type: 3}
       propertyPath: m_Name
       value: EndLevelTrigger

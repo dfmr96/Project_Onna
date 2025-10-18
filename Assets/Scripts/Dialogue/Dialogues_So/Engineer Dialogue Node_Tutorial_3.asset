@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
+  m_Name: Engineer Dialogue Node_Tutorial_3
+  m_EditorClassIdentifier: 
+  dialogueText: "Incredible! So sticky and\u2026 what a peculiar smell! Let\u2019s
+    mix this with that little device of yours\u2026\nwe should get permanent changes,
+    although, well, it will probably benefit the space invader more than you, but
+    hey, not personal!\nYour available time is not exactly the priority right now."
+  options:
+  - optionText: The ONNA fragments.
+    nextNode: {fileID: 11400000, guid: eb89c2a38ec568548b793a3b7bc9ff2c, type: 2}
+    endsDialogue: 0
+    actionIds: 

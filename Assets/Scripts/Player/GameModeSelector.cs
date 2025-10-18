@@ -21,16 +21,23 @@ namespace Player
                 if (!_selectedMode.HasValue || _selectedMode.Value == GameMode.None)
                 {
                     string sceneName = SceneManager.GetActiveScene().name;
-                    GameMode mode = sceneName == "HUB" ? GameMode.Hub : GameMode.Run;
+
+                    GameMode mode = 
+                        (sceneName == "HUB" || sceneName == "HUB_Tutorial")
+                            ? GameMode.Hub 
+                            : GameMode.Run;
+
                     _selectedMode = mode;
                     Debug.Log($"[GameModeSelector] Inicializado automáticamente: {mode} (escena: {sceneName})");
                 }
+
                 return _selectedMode.Value;
             }
             set
             {
                 _selectedMode = value;
             }
+
         }
     }
     

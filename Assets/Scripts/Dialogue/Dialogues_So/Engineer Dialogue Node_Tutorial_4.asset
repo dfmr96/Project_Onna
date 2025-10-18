@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
+  m_Name: Engineer Dialogue Node_Tutorial_4
+  m_EditorClassIdentifier: 
+  dialogueText: "Oh, right, those! They\u2019re amazing.\nSince they\u2019re immune
+    to our tech, the only way to handle them is using their own matter.\nIt\u2019s
+    a kind of living biotechnology\u2026 incredible! Well, at least for me.\nI don\u2019t
+    think they enjoy me poking at their minds as much as I do."
+  options:
+  - optionText: "So\u2026?"
+    nextNode: {fileID: 11400000, guid: 5c25e43bcf20b2247b43b221617343ff, type: 2}
+    endsDialogue: 0
+    actionIds: 

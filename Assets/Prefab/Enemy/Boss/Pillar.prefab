@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3506121333258830058}
   - component: {fileID: 7142910274412121909}
   - component: {fileID: -8280054764607263706}
+  - component: {fileID: 3990485807029758140}
   m_Layer: 8
   m_Name: Pillar
   m_TagString: Untagged
@@ -72,7 +73,7 @@ MonoBehaviour:
   targetHeight: 0
   riseSpeed: 1.5
   shakeIntensity: 0.1
-  floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
+  floatingTextPrefab: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
   heightTextSpawn: 6
   particleExplosion: {fileID: 4000606309234296067, guid: f84f5269c2501854292626425fb30685, type: 3}
   _bossModel: {fileID: 0}
@@ -174,6 +175,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!208 &3990485807029758140
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759861078974615366}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 2.5, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 2, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &3566226277306931634
 GameObject:
   m_ObjectHideFlags: 0
