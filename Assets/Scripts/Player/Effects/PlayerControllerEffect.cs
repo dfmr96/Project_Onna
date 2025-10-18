@@ -38,6 +38,10 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     private int enemyHit = 0;
     private bool hitCount = false;
 
+    //Mutaciones Nervous Microwave
+    private BulletModifierSO oneShotBurnModifier;
+    private BulletModifierSO fullClipBurnModifier;
+
 
 
     private void Awake()
@@ -98,9 +102,6 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     #endregion
 
 
-
-
-
     #region BALUBIS
 
     public void AddBulletModifier(BulletModifierSO modifier)
@@ -120,11 +121,6 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     }
 
     #endregion
-
-
-
-
-
 
     #region MUTACION ALPHA
     public void SetAlphaMajor(bool active, float duration = 0f)
@@ -164,10 +160,6 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 
     #endregion
 
-
-
-
-
     #region MUTACION NEUTRONS
     public void SetNeutronsEffect(bool active, float extraTime = 0f)
     {
@@ -175,11 +167,7 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
         extraVitalTime = extraTime;
     }
 
-    #endregion
-
-
-    #region MUTACION MUSCULAR
-    public void SetMuscularNeutronsMajor(int kills, float time) 
+    public void SetMuscularNeutronsMajor(int kills, float time)
     {
         enemiesToKill = kills;
         majorTimeToRecover = time;
@@ -187,13 +175,13 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
         DeathManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMajor;
         Debug.LogWarning($"Muscular Neutrons Major Setted");
     }
-    public void UnSetMuscularNeutronsMajor() 
+    public void UnSetMuscularNeutronsMajor()
     {
         enemyKilled = 0;
         DeathManager.Instance.OnEnemyDeath -= ApplyMuscularNeutronsMajor;
         Debug.LogWarning($"Muscular Neutrons Major Unsetted");
     }
-    public void SetMuscularNeutronsMinor(int hits, float time) 
+    public void SetMuscularNeutronsMinor(int hits, float time)
     {
         enemiesToHit = hits;
         minorTimeToRecover = time;
@@ -201,7 +189,7 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
         hitCount = true;
         Debug.LogWarning($"Muscular Neutrons Minor Setted");
     }
-    public void UnSetMuscularNeutronsMinor() 
+    public void UnSetMuscularNeutronsMinor()
     {
         enemyHit = 0;
         hitCount = false;
@@ -211,7 +199,7 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
     public void ApplyMuscularNeutronsMajor()
     {
         enemyKilled++;
-        if (enemyKilled >= enemiesToKill) 
+        if (enemyKilled >= enemiesToKill)
         {
             playerModel.RecoverTime(majorTimeToRecover);
             enemyKilled = 0;
@@ -235,4 +223,47 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
 
     #endregion
 
+    #region MUTACION MICROWAVE
+
+    public void SetSkillCheckOneShotBurn(BulletModifierSO burnSO) => oneShotBurnModifier = burnSO;
+
+    public void UnSetSkillCheckOneShotBurn()
+    {
+        if (oneShotBurnModifier != null) RemoveBulletModifier(oneShotBurnModifier);
+        oneShotBurnModifier = null;
+    }
+
+    public void ActivateOneShotBurn()
+    {
+        if (oneShotBurnModifier != null)
+            AddBulletModifier(oneShotBurnModifier);
+    }
+
+    public void ConsumeOneShotBurn()
+    {
+        if (oneShotBurnModifier != null)
+            RemoveBulletModifier(oneShotBurnModifier);
+    }
+
+    public void SetSkillCheckFullClipBurn(BulletModifierSO burnSO) => fullClipBurnModifier = burnSO;
+
+    public void UnSetSkillCheckFullClipBurn()
+    {
+        if (fullClipBurnModifier != null) RemoveBulletModifier(fullClipBurnModifier);
+        fullClipBurnModifier = null;
+    }
+
+    public void ActivateFullClipBurn()
+    {
+        if (fullClipBurnModifier != null)
+            AddBulletModifier(fullClipBurnModifier);
+    }
+
+    public void ConsumeFullClipBurn()
+    {
+        if (fullClipBurnModifier != null)
+            RemoveBulletModifier(fullClipBurnModifier);
+    }
+
+    #endregion
 }
