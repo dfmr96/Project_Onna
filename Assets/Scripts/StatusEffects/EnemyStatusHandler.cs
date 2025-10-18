@@ -67,5 +67,27 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
         return false;
     }
 
+    public int GetBonusOrbsFromMark()
+    {
+        int totalBonusOrbs = 0;
 
+        // --- DEBUG ---
+        Debug.LogWarning($"[GetBonusOrbs] Revisando {_activeEffects.Count} efectos en {gameObject.name}");
+        // --- FIN DEBUG ---
+
+        foreach (var effect in _activeEffects)
+        {
+            // --- DEBUG ---
+            // Decime qué tipo de efecto encontraste
+            Debug.Log($"[GetBonusOrbs] -> Encontrado efecto: {effect.GetType().Name}");
+            // --- FIN DEBUG ---
+
+            if (effect is MarkedOrbsEffect markedEffect)
+            {
+                totalBonusOrbs += markedEffect.OrbsQuantityAddition;
+            }
+        }
+        Debug.LogWarning($"[GetBonusOrbs] {totalBonusOrbs} orbs to add");
+        return totalBonusOrbs;
+    }
 }

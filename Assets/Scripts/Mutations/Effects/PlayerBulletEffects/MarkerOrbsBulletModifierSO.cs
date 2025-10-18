@@ -1,10 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MarkerBulletModifier", menuName = "Mutations/Bullet Modifiers/Marker Bullet Effect")]
-public class MarkerBulletModifierSO : BulletModifierSO
+[CreateAssetMenu(fileName = "MarkerOrbsBulletModifier", menuName = "Mutations/Bullet Modifiers/Marker Orbs Bullet Effect")]
+public class MarkerOrbsBulletModifierSO : BulletModifierSO
 {
-    [SerializeField] private float damage;
+    [SerializeField] private int orbsQuantityAddition;
     
     [Header("Trail Settings")]
     public Material markerTrailMaterial;
@@ -22,7 +22,7 @@ public class MarkerBulletModifierSO : BulletModifierSO
         if (statusHandler != null)
         {
             string source = this.name;
-            statusHandler.ApplyStatusEffect(new MarkedEffect(-1, damage, source));
+            statusHandler.ApplyStatusEffect(new MarkedOrbsEffect(-1, orbsQuantityAddition, source));
         }
     }
 }

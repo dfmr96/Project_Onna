@@ -22,6 +22,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
     private EnemyView view;
     private EnemyController enemy;
     private OrbSpawner orbSpawner;
+    private EnemyStatusHandler statusHandler;
 
     [Header("Floating Damage Text Effect")]
     [SerializeField] private GameObject floatingTextPrefab;
@@ -88,6 +89,7 @@ public class EnemyModel : MonoBehaviour, IDamageable
         view = GetComponent<EnemyView>();
         enemy = GetComponent<EnemyController>();
         orbSpawner = GameManager.Instance.orbSpawner;
+        statusHandler = GetComponent<EnemyStatusHandler>();
 
         //Instanciar la barra de vida
         if (healthBarPrefab != null)
@@ -155,7 +157,17 @@ public class EnemyModel : MonoBehaviour, IDamageable
     {
         if (statsSO.RastroOrbOnDeath && orbSpawner != null)
         {
-            for (int i = 0; i < statsSO.numberOfOrbsOnDeath + orbsMultiplier; i++)
+            int baseOrbs = statsSO.numberOfOrbsOnDeath;
+
+            int variantBonusOrbs = (int)orbsMultiplier;
+            
+            int markBonusOrbs = statusHandler.GetBonusOrbsFromMark();
+
+            int totalOrbs = baseOrbs + variantBonusOrbs + markBonusOrbs;
+
+            Debug.LogWarning($"{totalOrbs} orbs to instanciate!");
+
+            for (int i = 0; i < totalOrbs; i++)
             {
                 orbSpawner.SpawnHealingOrb(transform.position, transform.forward);
             }

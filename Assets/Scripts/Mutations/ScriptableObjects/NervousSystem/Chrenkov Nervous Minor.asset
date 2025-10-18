@@ -9,20 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50e88b93018e5174a87adfe02858e138, type: 3}
-  m_Name: Microwaves Nervous Minor
+  m_Script: {fileID: 11500000, guid: 9aa18def10243b7499748a23215b7e97, type: 3}
+  m_Name: Chrenkov Nervous Minor
   m_EditorClassIdentifier: 
-  radiationType: 4
+  radiationType: 5
   systemType: 0
   slotType: 1
-  effectName: Microwaves Minor
-  description: Al realizar skillcheck la siguiente bala aplica quemadura
+  effectName: Cherenkov Minor
+  description: Enemigos marcados sueltan un orbe extra al morir.
   icon: {fileID: 0}
   baseValue: 0
   upgradeMultiplier: 1.2
   maxLevel: 4
-  statType: 7
-  isMultiplier: 0
+  statType: 0
+  isMultiplier: 1
   isTemporary: 0
   temporaryDuration: 5
-  burnBulletModifierSO: {fileID: 11400000, guid: 4ca03f40ce0aa8b41bb1467bdb3ade6a, type: 2}
+  markerModifierSO: {fileID: 11400000, guid: 2c362ce3fcfea914a835efec944bddc8, type: 2}
