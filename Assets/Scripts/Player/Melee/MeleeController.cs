@@ -14,6 +14,11 @@ namespace Player.Melee
         [SerializeField] private Transform attackPoint;
         private MeleeModel Model { get; set; }
 
+        public event Action OnCooldownComplete;
+        public bool CanAttack => !_onCoolDown && ComboStep < 2;
+        public bool IsOnCooldown => _onCoolDown;
+
+
 
 
         [Header("Combo")] 
@@ -185,6 +190,10 @@ namespace Player.Melee
             _onCoolDown = true;
             yield return new WaitForSeconds(Model.CoolDown);
             _onCoolDown = false;
+
+            // Disparamos evento para UI
+            OnCooldownComplete?.Invoke();
+
             ResetCombo();
         }
 

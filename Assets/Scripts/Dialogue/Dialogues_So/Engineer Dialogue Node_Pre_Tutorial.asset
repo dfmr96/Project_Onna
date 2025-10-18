@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
+  m_Name: Engineer Dialogue Node_Pre_Tutorial
+  m_EditorClassIdentifier: 
+  dialogueText: "Heeellooooo! You must be the Runner, right? I love your suit \u2014
+    way more fun than the boring stuff regular soldiers wear! I mean, if you\u2019re
+    gonna die, might as well do it in style! Anyway, the boss is looking for you.
+    Go talk to him and come back after."
+  options:
+  - optionText: Sure, wait for me
+    nextNode: {fileID: 0}
+    endsDialogue: 1
+    actionIds: 

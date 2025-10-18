@@ -19,6 +19,8 @@ namespace Player
         private IInteractable currentInteractable;
         private bool canInteract = true;
 
+        
+
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerInitializedSignal>(OnPlayerInitialized);
@@ -62,18 +64,27 @@ namespace Player
         }
         private void HandleFire()
         {
-            if (_playerModel != null && _playerModel.CanShoot)
+            if (weaponController.IsSkillCheckActive()) // agregamos un getter
+            {
+                weaponController.TrySkillCheck(); 
+            }
+            else if (_playerModel != null && _playerModel.CanShoot)
             {
                 weaponController.Attack();
             }
         }
+
         private void HandleMelee()
         {
             if (_playerModel != null && _playerModel.CanMelee) meleeController.Attack();
         }
         private void HandleReload()
         {
-            if (_playerModel != null && _playerModel.CanShoot)
+            if (weaponController.IsSkillCheckActive())
+            {
+                weaponController.TrySkillCheck();
+            }
+            else if (_playerModel != null && _playerModel.CanShoot)
             {
                 weaponController.Reloading();
             }
@@ -84,6 +95,7 @@ namespace Player
             if (dashController != null)
             {
                 dashController.TryDash();
+                Debug.Log("HandleDash executed");
             }
         }
         private void HandleInteraction()

@@ -34,6 +34,10 @@ public class DefeatUIController : MonoBehaviour
 
     public void OnReturnToHubButton() => GameManager.Instance?.ReturnToHub();
 
+    public void OnReturnToHubTutorialButton() => GameManager.Instance?.ReturnToHubTutorial();
+    
+    public void OnReturnToTutorialButton() => GameManager.Instance?.ReturnToTutorial();
+
     private IEnumerator ShakeUI()
     {
         if (rectTransform == null) yield break;

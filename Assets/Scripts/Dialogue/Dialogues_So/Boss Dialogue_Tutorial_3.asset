@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
+  m_Name: Boss Dialogue_Tutorial_3
+  m_EditorClassIdentifier: 
+  dialogueText: "Most likely. But it shouldn\u2019t affect anyone other than you.
+    Stay within your function, Runner, and don\u2019t question orders.\nThis is how
+    you repay the Empire for the time invested in you."
+  options:
+  - optionText: Yes, sir.
+    nextNode: {fileID: 11400000, guid: 38ceb9b28775d854f9b9b29ddcec0b57, type: 2}
+    endsDialogue: 0
+    actionId: 0

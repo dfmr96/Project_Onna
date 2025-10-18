@@ -16808,6 +16808,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1806952260}
     m_Modifications:
     - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
+      propertyPath: playerHUD
+      value: 
+      objectReference: {fileID: 1814756299}
+    - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
       propertyPath: orbSpawner
       value: 
       objectReference: {fileID: 1376500280}
@@ -16819,6 +16823,10 @@ PrefabInstance:
       propertyPath: playerSpawner
       value: 
       objectReference: {fileID: 1617006254}
+    - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
+      propertyPath: doors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1570841225365423191, guid: 0f23725218db4aa4e9f0b380f2f2cef1, type: 3}
       propertyPath: projectileSpawner
       value: 

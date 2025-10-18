@@ -43,8 +43,6 @@ public class GameManager : MonoBehaviour
     private void WinGame() 
     {
         enemySpawner.OnAllWavesCompleted -= WinGame;
-        OpenDoorDebug();
-
     }
     
     private void DefeatGame()
@@ -95,7 +93,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    
+
     public void ReturnToHub()
     {
         GameModeSelector.SelectedMode = GameMode.Hub;
@@ -103,12 +101,28 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManagementUtils.LoadSceneByName("HUB");
     }
+    
+    public void ReturnToTutorial()
+    {
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
+        SceneManagementUtils.LoadSceneByName("Z1_L5_Tutorial");
+    }
 
-    private void OpenDoorDebug()
+    public void ReturnToHubTutorial()
+    {
+        GameModeSelector.SelectedMode = GameMode.Hub;
+        PlayerHelper.EnableInput();
+        Time.timeScale = 1f;
+        SceneManagementUtils.LoadSceneByName("HUB_Tutorial");
+    }
+
+
+    public void OpenDoorDebug()
     {
         foreach (GameObject door in doors) { Destroy(door); }
     }
-    
+
     [Button("Link References")]
     public void LinkReferences()
     {

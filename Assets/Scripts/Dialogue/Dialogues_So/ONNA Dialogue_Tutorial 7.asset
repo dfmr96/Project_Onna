@@ -10,17 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
-  m_Name: Engineer Dialogue Node
+  m_Name: ONNA Dialogue_Tutorial 7
   m_EditorClassIdentifier: 
-  dialogueText: "Hey! Just in time. I just finished tuning up a few things... Interested
-    in checking out what I\u2019ve got? Some of it\u2019s useful, some of it I barely
-    understand... but it works."
+  dialogueText: "Something\u2019s wrong\u2026 I can feel the Monarch, she\u2019s
+    angrier than usual. I hope you\u2019re ready, something big is coming.\nLuckily
+    for me, if you die, I\u2019ll just calmly return to base. Good luck."
   options:
-  - optionText: "Sure, show me what you\u2019ve got."
+  - optionText: ... Shit
     nextNode: {fileID: 0}
     endsDialogue: 1
-    actionId: 1
-  - optionText: No thanks, just looking around.
-    nextNode: {fileID: 0}
-    endsDialogue: 1
-    actionId: 0
+    actionIds: 08000000
