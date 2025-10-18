@@ -165,8 +165,6 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
             int totalOrbs = baseOrbs + variantBonusOrbs + markBonusOrbs;
 
-            Debug.LogWarning($"{totalOrbs} orbs to instanciate!");
-
             for (int i = 0; i < totalOrbs; i++)
             {
                 orbSpawner.SpawnHealingOrb(transform.position, transform.forward);
