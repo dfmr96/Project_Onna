@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         PlayerModel.OnPlayerDie -= DefeatGame;
         PlayerHelper.DisableInput();
         Cursor.visible = true;
-        playerHUD.SetActive(false);
+        playerHUD?.SetActive(false);
         Time.timeScale = 0f;
 
         StartCoroutine(HandleDefeatSequence());
