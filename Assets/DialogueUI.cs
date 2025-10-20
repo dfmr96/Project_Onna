@@ -29,7 +29,6 @@ public class DialogueUI : MonoBehaviour
         
         npcImage.SetNativeSize();
 
-        // 4️⃣ Si usás "Preserve Aspect" (recomendado)
         npcImage.preserveAspect = true;
     }
 
