@@ -36,6 +36,8 @@ public class EnemyView : MonoBehaviour
     private EnemyController _enemyController;
     private EnemyModel _enemyModel;
     private ProjectileSpawner projectileSpawner;
+    private EnemyProjectile _currentProjectile;
+
 
     //private float _distanceToCountExit = 3f;
 
@@ -85,7 +87,6 @@ public class EnemyView : MonoBehaviour
     private Coroutine recoilCoroutine;
 
 
-    private EnemyProjectile _currentProjectile;
 
     private void Awake()
     {

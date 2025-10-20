@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Player;
+using System.Collections.Generic;
 
 public class ProjectileBurstShooter : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class ProjectileBurstShooter : MonoBehaviour
     private BossController _bossController;
     private BossView _bossView;
     private Transform _playerTransform;
+    private List<EnemyProjectile> _pendingProjectiles = new List<EnemyProjectile>();
+
 
     private Coroutine _loopCoroutine;
 
@@ -37,11 +40,20 @@ public class ProjectileBurstShooter : MonoBehaviour
 
     public void StartBurstLoop()
     {
-
-     
+        if (_pendingProjectiles.Count > 0)
+        {
+            foreach (var proj in _pendingProjectiles)
+            {
+                if (proj != null) proj.gameObject.SetActive(false);
+            }
+            _pendingProjectiles.Clear();
+        }
 
         if (_loopCoroutine == null)
             _loopCoroutine = StartCoroutine(BurstLoop());
+
+        AnimationSpawnProjectileFunc(1);
+
     }
 
     public void StopBurstLoop()
@@ -50,6 +62,23 @@ public class ProjectileBurstShooter : MonoBehaviour
         {
             StopCoroutine(_loopCoroutine);
             _loopCoroutine = null;
+        }
+
+        // limpiar proyectiles pendientes cuando se corta el ataque
+        if (_pendingProjectiles.Count > 0)
+        {
+            foreach (var proj in _pendingProjectiles)
+            {
+                if (proj != null)
+                {
+                    // si usás pooling, devolverlo al pool
+                    proj.gameObject.SetActive(false);
+                    // o si no, destruir directamente:
+                    // Destroy(proj.gameObject);
+                }
+            }
+
+            _pendingProjectiles.Clear();
         }
     }
 
@@ -61,32 +90,96 @@ public class ProjectileBurstShooter : MonoBehaviour
 
             for (int i = 0; i < shots; i++)
             {
-                ShootProjectile();
+                // Spawnea un proyectil y lo guarda como pendiente
+                //AnimationSpawnProjectileFunc(1);
+
+                //yield return new WaitForSeconds(1f); // opcional: un mini delay visual para que aparezca
+
+                // Dispara solo uno (el último de la lista)
+                AnimationShootProjectileFunc(1);
+
                 yield return new WaitForSeconds(delayBetweenShots);
+
+                AnimationSpawnProjectileFunc(1);
+
             }
 
             yield return new WaitForSeconds(delayBetweenBursts);
         }
     }
 
-    private void ShootProjectile()
+
+    //private void ShootProjectile()
+    //{
+    //    if (_spawner == null || _playerTransform == null || _bossController?.firePoint == null) return;
+
+    //    Vector3 targetPos = _playerTransform.position;
+    //    targetPos.y += verticalOffset;
+
+    //    Vector3 dir = (targetPos - _bossController.firePoint.position).normalized;
+    //    dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
+
+    //    _spawner.SpawnProjectileBoss(
+    //        _bossController.firePoint.position,
+    //        dir,
+    //        _bossModel.statsSO.ShootForce,
+    //        _bossModel.statsSO.ProjectileDamage
+    //    );
+
+    //    _bossView?.PlayProjectilesAttackAnimation();
+    //    _bossView?.ShootShotgun();
+    //}
+
+
+    public void AnimationSpawnProjectileFunc(int amount = 1)
     {
+        Transform firePoint = _bossController.firePoint;
+
+        for (int i = 0; i < amount; i++)
+        {
+            Vector3 spawnPos = firePoint.position;
+            Quaternion spawnRot = firePoint.rotation;
+
+            EnemyProjectile pendingProjectile = _spawner.SpawnIdleProjectile(spawnPos, spawnRot);
+
+            if (pendingProjectile != null)
+            {
+                _pendingProjectiles.Add(pendingProjectile);
+
+                // Efecto visual de aparición
+                var fx = pendingProjectile.GetComponent<ObjectScalerFx>();
+                if (fx != null)
+                    fx.enabled = true;
+            }
+        }
+    }
+
+
+    public void AnimationShootProjectileFunc(int amount = 1)
+    {
+        if (_pendingProjectiles.Count == 0) return;
         if (_spawner == null || _playerTransform == null || _bossController?.firePoint == null) return;
 
-        Vector3 targetPos = _playerTransform.position;
-        targetPos.y += verticalOffset;
+        for (int i = 0; i < amount && _pendingProjectiles.Count > 0; i++)
+        {
+            var projectile = _pendingProjectiles[0]; // saca el primero
+            _pendingProjectiles.RemoveAt(0);
 
-        Vector3 dir = (targetPos - _bossController.firePoint.position).normalized;
-        dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
+            if (projectile == null) continue;
 
-        _spawner.SpawnProjectileBoss(
-            _bossController.firePoint.position,
-            dir,
-            _bossModel.statsSO.ShootForce,
-            _bossModel.statsSO.ProjectileDamage
-        );
+            Vector3 targetPos = _playerTransform.position;
+            targetPos.y += verticalOffset;
+
+            Vector3 dir = (targetPos - _bossController.firePoint.position).normalized;
+            dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
+
+            projectile.FireBoss(dir, _bossModel.statsSO.ShootForce, _bossModel.statsSO.ProjectileDamage, _bossModel);
+        }
 
         _bossView?.PlayProjectilesAttackAnimation();
         _bossView?.ShootShotgun();
     }
+
+
+
 }
