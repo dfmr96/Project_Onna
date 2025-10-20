@@ -169,6 +169,8 @@ public class UI_Mutation : MonoBehaviour
         bool equipped = mController.EquipRadiation(radData.Type, activeSystem, slot);
         if (equipped) 
         {
+            majorSlotButton.enabled = false;
+            minorSlotButton.enabled = false;
             UpdateSystemUI();
             OnRadiationEquipped();
         }
