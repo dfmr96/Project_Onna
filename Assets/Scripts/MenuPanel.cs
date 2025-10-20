@@ -54,9 +54,10 @@ public class MenuPanel : MonoBehaviour
             if (SaveSystem.Load().progress.hasTutorialEnded)
                 SceneManagementUtils.AsyncLoadSceneByName(hubLevelName, loadCanvasPrefab, this);
             else
-                SceneManagementUtils.AsyncLoadSceneByName(hubTutorialLevelName, loadCanvasPrefab, this);
+                SceneManagementUtils.AsyncLoadSceneByName(introLevelName, loadCanvasPrefab, this);
         }
-        else SceneManagementUtils.AsyncLoadSceneByName(introLevelName, loadCanvasPrefab, this);
+        else 
+            SceneManagementUtils.AsyncLoadSceneByName(introLevelName, loadCanvasPrefab, this);
     }
 
     public void PlaySound(AudioClip audioClip) => AudioManager.Instance?.PlaySFX(audioClip);
