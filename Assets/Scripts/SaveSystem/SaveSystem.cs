@@ -56,6 +56,13 @@ public static class SaveSystem
         Save(data);
     }
 
+    public static void MarkTutorialDone()
+    {
+        var data = Load();
+        data.progress.hasTutorialEnded = true;
+        Save(data);
+    }
+
     private static byte[] Encrypt(string plainText)
     {
         using (Aes aes = Aes.Create())

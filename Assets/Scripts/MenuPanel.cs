@@ -6,6 +6,7 @@ public class MenuPanel : MonoBehaviour
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] GameObject loadCanvasPrefab;
     [SerializeField] private string hubLevelName;
+    [SerializeField] private string hubTutorialLevelName;
     [SerializeField] private string introLevelName;
     [SerializeField] private AudioClip mainMenuMusic;
 
@@ -48,7 +49,13 @@ public class MenuPanel : MonoBehaviour
     private void StartGame()
     {
         levelProgression.ResetProgress();
-        if (SaveSystem.Load().progress.hasSeenIntro) SceneManagementUtils.AsyncLoadSceneByName(hubLevelName, loadCanvasPrefab, this);
+        if (SaveSystem.Load().progress.hasSeenIntro) 
+        {
+            if (SaveSystem.Load().progress.hasTutorialEnded)
+                SceneManagementUtils.AsyncLoadSceneByName(hubLevelName, loadCanvasPrefab, this);
+            else
+                SceneManagementUtils.AsyncLoadSceneByName(hubTutorialLevelName, loadCanvasPrefab, this);
+        }
         else SceneManagementUtils.AsyncLoadSceneByName(introLevelName, loadCanvasPrefab, this);
     }
 

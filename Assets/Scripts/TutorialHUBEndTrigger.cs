@@ -2,7 +2,7 @@ using Player;
 using Player.Stats.Runtime;
 using UnityEngine;
 
-public class HubEndTrigger : InteractableBase
+public class TutorialHUBEndTrigger : InteractableBase
 {
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] private GameObject loadCanvasPrefab;
@@ -10,6 +10,7 @@ public class HubEndTrigger : InteractableBase
     {
         base.Interact();
         PlayerHelper.DisableInput();
+        SaveSystem.MarkTutorialDone();
         SceneManagementUtils.AsyncLoadSceneByName(levelProgression.GetNextRoom(), loadCanvasPrefab, this);
     }
 }
