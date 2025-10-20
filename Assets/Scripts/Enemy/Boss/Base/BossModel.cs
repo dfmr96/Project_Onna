@@ -14,8 +14,11 @@ public class BossModel : MonoBehaviour, IDamageable
     public event Action<float> OnHealthChanged;
     public float MaxHealth { get; private set; }
     public float CurrentHealth { get; private set; }
+    public Vector3 Transform => transform.position;
+
 
     public event Action<BossModel> OnDeath;
+
 
     private BossView view;
     private BossController enemy;

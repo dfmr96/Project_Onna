@@ -39,6 +39,7 @@ namespace Player
         [SerializeField] private Transform healAnchor;
         [SerializeField] private Vector3 healOffset;
 
+        public Vector3 Transform => transform.position;
 
         public StatReferences StatRefs => statRefs;
         public float Speed => StatContext.Source.Get(statRefs.movementSpeed);

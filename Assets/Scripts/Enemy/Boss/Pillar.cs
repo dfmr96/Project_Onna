@@ -15,6 +15,8 @@ public class Pillar : MonoBehaviour, IDamageable
 
     public event Action<Pillar> OnPillarDestroyed;
 
+    public Vector3 Transform => transform.position;
+
     public float MaxHealth { get; private set; }
     public float CurrentHealth { get; private set; }
 

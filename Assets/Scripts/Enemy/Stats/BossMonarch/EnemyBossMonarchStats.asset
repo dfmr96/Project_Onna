@@ -16,14 +16,15 @@ MonoBehaviour:
   isShieldActive: 0
   ProjectileDamage: 15
   ShootForce: 15
-  minProjectilesPerBurst: 3
-  maxProjectilesPerBurst: 5
+  minProjectilesPerBurst: 5
+  maxProjectilesPerBurst: 9
   delayBetweenShots: 0.2
-  delayBetweenBursts: 2
-  spreadAngle: 15
+  delayBetweenBursts: 1
+  spreadAngle: 10
   LaserDamagePerSecond: 25
   LaserTickRate: 0.2
   LaserLenght: 20
+  LaserRotationSpeed: 50
   AttackRange: 200
   combatAngle: 360
   obstacleCombatLayers:

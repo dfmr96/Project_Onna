@@ -10,6 +10,8 @@ public interface IDamageable
     float MaxHealth { get; }
     float CurrentHealth { get; }
 
+    Vector3 Transform {  get; }
+
     //Envenenamiento Enemigo Variante verde
     void ApplyDebuffDoT(float dotDuration, float dps);
 

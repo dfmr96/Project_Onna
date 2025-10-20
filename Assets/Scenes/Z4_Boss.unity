@@ -4043,6 +4043,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a6bffc7fe4d21bd43adac61e3354a5b3, type: 3}
   m_PrefabInstance: {fileID: 296803488}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &316263524 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4252758138246553324, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+  m_PrefabInstance: {fileID: 2389333258379008032}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &325280947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37002,6 +37007,10 @@ PrefabInstance:
       value: -334000983
       objectReference: {fileID: 0}
     - target: {fileID: 3277193318799075035, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277193318799075035, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_WalkableMask
       value: 5
       objectReference: {fileID: 0}
@@ -37025,6 +37034,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.284
       objectReference: {fileID: 0}
+    - target: {fileID: 4283978977039039019, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: firePoint
+      value: 
+      objectReference: {fileID: 316263524}
     - target: {fileID: 4283978977039039019, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: pilarSpawnClip
       value: 
@@ -37101,6 +37114,10 @@ PrefabInstance:
       propertyPath: torretSpawnPoints.Array.data[5]
       value: 
       objectReference: {fileID: 1195343639}
+    - target: {fileID: 4283978977039039019, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: attackPhases.Array.data[0].attackSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 755bd5cb09f1b68498204e23659904d0, type: 2}
     - target: {fileID: 4524019439447716025, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: riseSpeed
       value: 2
@@ -37157,6 +37174,14 @@ PrefabInstance:
       propertyPath: particleExplosion
       value: 
       objectReference: {fileID: 4596544553357837919, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
+    - target: {fileID: 4573245808535541643, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: damageDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4573245808535541643, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
+      propertyPath: rotationSpeed
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4589468880134367855, guid: c05ef063e61313e43a4c8e734a9f4d66, type: 3}
       propertyPath: m_LocalPosition.x
       value: 22.94

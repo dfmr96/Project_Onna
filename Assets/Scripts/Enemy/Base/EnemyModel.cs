@@ -18,6 +18,8 @@ public class EnemyModel : MonoBehaviour, IDamageable
     public float CurrentHealth { get; private set; }
 
     public event Action<EnemyModel> OnDeath;
+    public Vector3 Transform => transform.position;
+
 
     private EnemyView view;
     private EnemyController enemy;
