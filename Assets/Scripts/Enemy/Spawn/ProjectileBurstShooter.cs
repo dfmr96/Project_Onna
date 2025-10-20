@@ -90,11 +90,7 @@ public class ProjectileBurstShooter : MonoBehaviour
 
             for (int i = 0; i < shots; i++)
             {
-                // Spawnea un proyectil y lo guarda como pendiente
-                //AnimationSpawnProjectileFunc(1);
-
-                //yield return new WaitForSeconds(1f); // opcional: un mini delay visual para que aparezca
-
+    
                 // Dispara solo uno (el último de la lista)
                 AnimationShootProjectileFunc(1);
 
@@ -108,27 +104,6 @@ public class ProjectileBurstShooter : MonoBehaviour
         }
     }
 
-
-    //private void ShootProjectile()
-    //{
-    //    if (_spawner == null || _playerTransform == null || _bossController?.firePoint == null) return;
-
-    //    Vector3 targetPos = _playerTransform.position;
-    //    targetPos.y += verticalOffset;
-
-    //    Vector3 dir = (targetPos - _bossController.firePoint.position).normalized;
-    //    dir = Quaternion.Euler(0, Random.Range(-spreadAngle, spreadAngle), 0) * dir;
-
-    //    _spawner.SpawnProjectileBoss(
-    //        _bossController.firePoint.position,
-    //        dir,
-    //        _bossModel.statsSO.ShootForce,
-    //        _bossModel.statsSO.ProjectileDamage
-    //    );
-
-    //    _bossView?.PlayProjectilesAttackAnimation();
-    //    _bossView?.ShootShotgun();
-    //}
 
 
     public void AnimationSpawnProjectileFunc(int amount = 1)

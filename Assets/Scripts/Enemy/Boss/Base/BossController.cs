@@ -412,9 +412,11 @@ public class BossController : BaseEnemyController, ITriggerCheck, IEnemyBaseCont
 
         bossTransform.position = bossSpawnPoints[bossRespawnIndex].position;
         bossTransform.rotation = bossSpawnPoints[bossRespawnIndex].rotation;
+        //shield.transform.position = bossSpawnPoints[bossRespawnIndex].position;
+        //shield.transform.rotation = bossSpawnPoints[bossRespawnIndex].rotation;
 
-      
-            _navMeshAgent.enabled = true;
+
+        _navMeshAgent.enabled = true;
 
         bossRespawnIndex++;
 

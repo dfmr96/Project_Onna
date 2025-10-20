@@ -20,6 +20,7 @@ public class BossStatsSO : ScriptableObject
     public float LaserDamagePerSecond = 25f;
     public float LaserTickRate = 0.2f;
     public float LaserLenght = 20f;
+    public float LaserRotationSpeed = 50f;
 
     [Header("Attack Range Vision")]
     public float AttackRange = 10f;
