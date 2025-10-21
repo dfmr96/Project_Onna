@@ -253,8 +253,8 @@ namespace Player
                     shake.Shake(0.25f, 8f);
                 Debug.Log($"[PlayerModel] Taking {effectiveDamage} dmg — firing OnTakeDamage from {gameObject.name}");
                 Debug.Log($"[PlayerModel] OnTakeDamage invoked for {effectiveDamage} dmg — Subscribers: {(OnTakeDamage == null ? 0 : OnTakeDamage.GetInvocationList().Length)}");
+                OnTakeDamage?.Invoke(effectiveDamage);
             }
-            OnTakeDamage?.Invoke(effectiveDamage);
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             if (_currentTime <= 0)
