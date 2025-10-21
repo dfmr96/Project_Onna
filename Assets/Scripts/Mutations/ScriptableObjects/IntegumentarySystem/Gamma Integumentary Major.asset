@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56448c8bf2b811d4783a6ea07581eed1, type: 3}
+  m_Name: Gamma Integumentary Major
+  m_EditorClassIdentifier: 
+  radiationType: 0
+  systemType: 1
+  slotType: 0
+  effectName: Gamma Integumentary Major
+  description: Creates a radioactive aura that deals continuous damage to nearby
+    enemies.
+  icon: {fileID: 0}
+  baseValue: 1
+  upgradeMultiplier: 1.2
+  maxLevel: 4
+  auraData: {fileID: 11400000, guid: 2cf4721de3a39a04cb17e9277cc291c7, type: 2}
+  behavior: {fileID: 11400000, guid: 19e6b3918964a674bb1ecd7d2a63e17c, type: 2}
