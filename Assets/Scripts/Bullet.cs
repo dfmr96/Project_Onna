@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using Player;
 using System.Collections.Generic;
-using static UnityEditor.Experimental.GraphView.GraphView;
+//using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Bullet : MonoBehaviour
 {

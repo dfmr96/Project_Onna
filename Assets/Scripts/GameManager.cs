@@ -121,6 +121,10 @@ public class GameManager : MonoBehaviour
     public void OpenDoorDebug()
     {
         foreach (GameObject door in doors) { Destroy(door); }
+
+        //derivamos el invoke aca porque la otra llamada trae problemas con el canvas mutation
+        OnMutationUIClosed?.Invoke();
+
     }
 
     [Button("Link References")]
@@ -141,8 +145,8 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void RaiseMutationUIClosed()
-    {
-        OnMutationUIClosed?.Invoke();
-    }
+    //public void RaiseMutationUIClosed()
+    //{
+    //    OnMutationUIClosed?.Invoke();
+    //}
 }
