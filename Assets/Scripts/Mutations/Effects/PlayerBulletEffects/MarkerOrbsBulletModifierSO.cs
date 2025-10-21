@@ -22,7 +22,7 @@ public class MarkerOrbsBulletModifierSO : BulletModifierSO
         if (statusHandler != null)
         {
             string source = this.name;
-            statusHandler.ApplyStatusEffect(new MarkedOrbsEffect(-1, orbsQuantityAddition, source));
+            statusHandler.ApplyStatusEffect(new MarkedOrbsEffect(10, orbsQuantityAddition, source));
         }
     }
 }

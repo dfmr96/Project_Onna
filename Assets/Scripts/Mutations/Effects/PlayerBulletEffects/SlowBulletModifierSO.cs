@@ -26,13 +26,21 @@ public class SlowBulletModifierSO : BulletModifierSO
 
     public override void OnHit(Bullet bullet, GameObject target, PlayerControllerEffect player)
     {
-        var statusHandler = target.GetComponent<EnemyStatusHandler>();
+        // Subir al root por si el collider pertenece a un hijo (ej: cabeza, brazo, etc.)
+        var root = target.transform.root.gameObject;
+
+        var statusHandler = root.GetComponent<EnemyStatusHandler>();
         if (statusHandler != null)
         {
             string source = this.name; // usa el nombre del asset
             statusHandler.ApplyStatusEffect(new SlowEffect(slowDuration, slowAmount, source));
-            Debug.Log($"[SlowBulletModifierSO] Slow aplicado {slowAmount * 100}% por {slowDuration}s");
+            Debug.Log($"[SlowBulletModifierSO] Slow aplicado {slowAmount * 100}% por {slowDuration}s a {root.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"[SlowBulletModifierSO] No se encontró EnemyStatusHandler en {root.name}");
         }
     }
+
 }
 
