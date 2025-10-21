@@ -257,7 +257,10 @@ MonoBehaviour:
   attackDamage: 5
   attackInterval: 2
   detectionRadius: 3.5
+  moveSpeed: 2
+  patrolDistance: 5
   detectionColor: {r: 1, g: 0.3, b: 0.3, a: 0.3}
+  showDebug: 1
 --- !u!135 &171731396
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -709,7 +712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ddc63839fea44839e316978f75d0804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiationEffect: {fileID: 11400000, guid: fadd50af2e5905746a464235163c48ed, type: 2}
+  radiationEffect: {fileID: 11400000, guid: eba1eaf44374ee2499409b7c53265f45, type: 2}
   mutationLevel: 1
   isEffectActive: 0
   showGizmos: 0
