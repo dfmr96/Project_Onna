@@ -1,10 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseController
+public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseController, ISlowable
 {
+    private Coroutine slowRoutine;
+
+    
     private EnemyModel model;
     private EnemyView view;
     private Rigidbody rb;
@@ -124,12 +128,12 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         currentAttackSO = attackPhaseInstances[0];
         AttackState = new EnemyAttackState(this, fsm);
 
-        //Para manejar estados de daño DoT en mutaciones
+        //Para manejar estados de daï¿½o DoT en mutaciones
         _statusHandler = GetComponent<EnemyStatusHandler>();
         if (_statusHandler == null)
         {
             _statusHandler = gameObject.AddComponent<EnemyStatusHandler>();
-            //Debug.Log("[EnemyController] EnemyStatusHandler agregado automáticamente.");
+            //Debug.Log("[EnemyController] EnemyStatusHandler agregado automï¿½ticamente.");
         }
     }
 
@@ -244,4 +248,27 @@ void Update()
     //        GUI.Label(new Rect(10, 200, 400, 30), $"Estado FSM: {fsm.CurrentState.GetType().Name}", style);
     //    }
     //}
+    public void ApplySlow(float multiplier, float duration)
+    {
+        if (_navMeshAgent == null) return;
+
+        if (slowRoutine != null)
+            StopCoroutine(slowRoutine);
+
+        slowRoutine = StartCoroutine(ApplySlowRoutine(multiplier, duration));
+    }
+    
+    private IEnumerator ApplySlowRoutine(float mult, float dur)
+    {
+        float originalSpeed = _navMeshAgent.speed;
+        _navMeshAgent.speed = originalSpeed * mult;
+
+        yield return new WaitForSeconds(dur);
+
+        // Evita stacking de ralentizaciones
+        _navMeshAgent.speed = originalSpeed;
+        slowRoutine = null;
+    }
+    
+    
 }
