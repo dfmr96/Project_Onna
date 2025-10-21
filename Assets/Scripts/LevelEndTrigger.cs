@@ -16,7 +16,8 @@ public class LevelEndTrigger : LevelTrigger
     private void Start()
     {
         //Evento para activar portal tras seleccion de mutacion
-        GameManager.OnMutationUIClosed += ActivatePortal;
+        if (GameManager.Instance != null)
+            GameManager.OnMutationUIClosed += ActivatePortal;
 
     }
 
@@ -40,7 +41,8 @@ public class LevelEndTrigger : LevelTrigger
 
         Instantiate(portalPrefab, position, rotation);
 
-        GameManager.OnMutationUIClosed -= ActivatePortal;
+        if (GameManager.Instance != null)
+            GameManager.OnMutationUIClosed -= ActivatePortal;
 
     }
 }
