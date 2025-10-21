@@ -39412,11 +39412,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7845692764835248689, guid: 1ee35974fbcbbd244b8266041617bde6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1898849740952444750, guid: 1ee35974fbcbbd244b8266041617bde6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1583191333}
   m_SourcePrefab: {fileID: 100100000, guid: 1ee35974fbcbbd244b8266041617bde6, type: 3}
+--- !u!1 &1583191332 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1898849740952444750, guid: 1ee35974fbcbbd244b8266041617bde6, type: 3}
+  m_PrefabInstance: {fileID: 1583191331}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1583191333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583191332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd9a38fc8e88894796164b07af73565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactPrefab: {fileID: 519957397520615639, guid: 231385c29ecdf0f40bbf993960bb0c31, type: 3}
+  promptOffset: {x: 0, y: 2, z: 0}
+  interactAudio: {fileID: 8300000, guid: bc8eb62720363cc4682e28ee3ea19392, type: 3}
+  levelProgression: {fileID: 11400000, guid: 47f7c09258b695a4b8f6403fd5067858, type: 2}
+  loadCanvasPrefab: {fileID: 1822515629045912885, guid: c214e4a145d9467458f42cd11ed1b19d, type: 3}
 --- !u!1 &1592304860
 GameObject:
   m_ObjectHideFlags: 0
