@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 171731392}
   - component: {fileID: 171731391}
   - component: {fileID: 171731395}
+  - component: {fileID: 171731396}
   m_Layer: 7
   m_Name: DummyEnemy
   m_TagString: Untagged
@@ -251,7 +252,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cb9b3c1c98f40dfa8a366de50739a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 1000
+  attackDamage: 5
+  attackInterval: 2
+  detectionRadius: 3.5
+  detectionColor: {r: 1, g: 0.3, b: 0.3, a: 0.3}
+--- !u!135 &171731396
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171731390}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.6
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!850595691 &332410386
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -655,7 +681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ddc63839fea44839e316978f75d0804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiationEffect: {fileID: 11400000, guid: d38f69b655230324380c1ffa9289ab30, type: 2}
+  radiationEffect: {fileID: 11400000, guid: b1dee7d85b62391408c86afed3c58899, type: 2}
   mutationLevel: 1
   isEffectActive: 0
   showGizmos: 0

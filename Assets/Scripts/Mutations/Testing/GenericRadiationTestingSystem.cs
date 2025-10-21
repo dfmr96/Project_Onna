@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mutations.Core;   // For RadiationEffect
 using Player;
+using UnityEditor;
 
 namespace Mutations.Testing
 {
@@ -54,6 +55,7 @@ namespace Mutations.Testing
             isEffectActive = true;
 
             Debug.Log($"[RadiationTesting] ✅ {radiationEffect.name} APPLIED - Level {mutationLevel}");
+            
         }
 
         private void RemoveEffect()
@@ -133,4 +135,23 @@ namespace Mutations.Testing
             }
         }
     }
+    
+#if UNITY_EDITOR
+    [InitializeOnLoad]
+    public static class PlayModeEventCleaner
+    {
+        static PlayModeEventCleaner()
+        {
+            EditorApplication.playModeStateChanged += OnPlayModeChanged;
+        }
+
+        private static void OnPlayModeChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingPlayMode)
+            {
+                Resources.UnloadUnusedAssets(); // limpia ScriptableObjects en memoria
+            }
+        }
+    }
+#endif
 }

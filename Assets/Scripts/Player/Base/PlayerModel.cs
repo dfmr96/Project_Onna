@@ -13,6 +13,7 @@ namespace Player
     public class PlayerModel : MonoBehaviour, IDamageable, IHealable
     {
         public static Action OnPlayerDie;
+        public event Action<float> OnTakeDamage;
         public static Action<float> OnUpdateTime;
         public event Action<GameMode> OnGameModeChanged;
         public event Action<bool> OnCanShootChanged;
@@ -174,6 +175,13 @@ namespace Player
             ApplyDamage(timeTaken, true, true);
             _playerView?.PlayDamageEffect();
         }
+        
+#if UNITY_EDITOR
+        public int GetTakeDamageSubscriberCount()
+        {
+            return OnTakeDamage?.GetInvocationList().Length ?? 0;
+        }
+#endif
 
         public void ApplyDebuffDoT(float dotDuration, float dps)
         {
@@ -243,8 +251,10 @@ namespace Player
                 var shake = FindObjectOfType<UI_Shake>();
                 if (shake != null)
                     shake.Shake(0.25f, 8f);
+                Debug.Log($"[PlayerModel] Taking {effectiveDamage} dmg — firing OnTakeDamage from {gameObject.name}");
+                Debug.Log($"[PlayerModel] OnTakeDamage invoked for {effectiveDamage} dmg — Subscribers: {(OnTakeDamage == null ? 0 : OnTakeDamage.GetInvocationList().Length)}");
             }
-
+            OnTakeDamage?.Invoke(effectiveDamage);
             OnUpdateTime?.Invoke(_currentTime / StatContext.Source.Get(statRefs.maxVitalTime));
 
             if (_currentTime <= 0)
