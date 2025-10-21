@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private GameObject defeatUIInstance;
 
     //Evento para activar portal tras seleccion de mutacion
-    public static event Action OnMutationUIClosed;
+    public event Action OnMutationUIClosed;
 
     private void Awake()
     {
@@ -122,9 +122,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject door in doors) { Destroy(door); }
 
-        //derivamos el invoke aca porque la otra llamada trae problemas con el canvas mutation
-        OnMutationUIClosed?.Invoke();
-
     }
 
     [Button("Link References")]
@@ -145,8 +142,22 @@ public class GameManager : MonoBehaviour
         
     }
 
-    //public void RaiseMutationUIClosed()
-    //{
-    //    OnMutationUIClosed?.Invoke();
-    //}
+    public void OnOrbMutationActivated(OrbMutation orb)
+    {
+        // Primero destruir el orbe con seguridad
+        if (orb != null)
+            Destroy(orb.gameObject);
+
+        // Luego invocar el evento en el siguiente frame
+        StartCoroutine(InvokeMutationClosedNextFrame());
+    }
+
+    private IEnumerator InvokeMutationClosedNextFrame()
+    {
+        yield return null; // espera un frame para asegurar destrucción del orbe
+        OnMutationUIClosed?.Invoke();
+        OpenDoorDebug();
+    }
+
+
 }
