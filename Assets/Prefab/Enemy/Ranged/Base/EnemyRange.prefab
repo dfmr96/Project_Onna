@@ -1079,9 +1079,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPositionEffect: {fileID: 201378595184252760}
   yOffsetPositionEffect: 1
-  dotBurnEffectPrefab: {fileID: 0}
-  slowedEffectPrefab: {fileID: 0}
-  markedEffectPrefab: {fileID: 0}
+  offsetBetweenEffects: 0.5
+  dotBurnEffectPrefab: {fileID: 2760595013140097665, guid: 82c0479b27b3a26429c39d93e7d9f125, type: 3}
+  slowedEffectPrefab: {fileID: 2760595013140097665, guid: a0c461160d9634a48a5374893d452989, type: 3}
+  markedEffectPrefab: {fileID: 2760595013140097665, guid: a4aa27c735a00064bbd319385244d3cc, type: 3}
 --- !u!1 &5528583827056112533
 GameObject:
   m_ObjectHideFlags: 0
