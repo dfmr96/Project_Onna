@@ -12,6 +12,7 @@ namespace Player.Stats.Runtime
             if (NewMutationController == null)
             {
                 NewMutationController = new NewMutationController();
+                NewMutationController.InitDB();
             }
         }
         public static void SetStats(RuntimeStats stats) => CurrentStats = stats;
