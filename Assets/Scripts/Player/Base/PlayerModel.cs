@@ -130,10 +130,11 @@ namespace Player
             //if (!_isInitialized) return;
             if (Input.GetKeyDown(KeyCode.F2)) devMode = !DevMode;
 
-            //Agrega Vida
+            //Invulnerable
             if (Input.GetKeyDown(KeyCode.F3))
             {
-                _currentTime = 9999999f;
+                //_currentTime = 9999999f;
+                _isInvulnerable = !_isInvulnerable;
             }
 
             //Salta al nivel del Boss
