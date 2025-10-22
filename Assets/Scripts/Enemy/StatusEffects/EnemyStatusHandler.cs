@@ -3,20 +3,24 @@ using UnityEngine;
 
 public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
 {
-    [Header("Status Particles")]
-    [SerializeField] private Transform spawnPositionEffect;
-    [SerializeField] private float yOffsetPositionEffect = 1f;
-    [SerializeField] private float offsetBetweenEffects = 0.5f;
-
+     [Header("Status Particles")]
     [SerializeField] private ParticleSystem dotBurnEffectPrefab;
     [SerializeField] private ParticleSystem slowedEffectPrefab;
     [SerializeField] private ParticleSystem markedEffectPrefab;
+
+    [Header("Settings Particles")]
+    [SerializeField] private Transform spawnPositionEffect;
+    [SerializeField] private float yOffsetPositionEffect = 1f;
+    [SerializeField] private float offsetBetweenEffects = 0.5f;
+  
 
     private ParticleSystem dotBurnEffectInstance;
     private ParticleSystem slowedEffectInstance;
     private ParticleSystem markedEffectInstance;
 
     private EnemyModel _enemyModel;
+    private BossModel _enemyBossModel;
+
     private IDamageable _damageable;
     private List<StatusEffect> _activeEffects = new List<StatusEffect>();
 
@@ -27,24 +31,47 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
     private void Awake()
     {
         _enemyModel = GetComponent<EnemyModel>();
+        _enemyBossModel = GetComponent<BossModel>();
         _damageable = GetComponent<IDamageable>();
+
+
     }
 
     private void OnEnable()
     {
         if (_enemyModel != null)
             _enemyModel.OnDeath += HandleEnemyDeath;
+
+        if (_enemyBossModel != null)
+            _enemyBossModel.OnDeath += HandleEnemyBossDeath;
     }
 
     private void OnDisable()
     {
         if (_enemyModel != null)
             _enemyModel.OnDeath -= HandleEnemyDeath;
+
+        if (_enemyBossModel != null)
+            _enemyBossModel.OnDeath -= HandleEnemyBossDeath;
     }
 
     private void HandleEnemyDeath(EnemyModel deadEnemy)
     {
         if (deadEnemy == _enemyModel)
+        {
+            foreach (var ps in _activeParticles)
+            {
+                if (ps != null)
+                    Destroy(ps.gameObject);
+            }
+
+            _activeParticles.Clear();
+        }
+    }
+
+    private void HandleEnemyBossDeath(BossModel deadEnemy)
+    {
+        if (deadEnemy == _enemyBossModel)
         {
             foreach (var ps in _activeParticles)
             {
