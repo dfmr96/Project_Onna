@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_Mutation : MonoBehaviour
 {
@@ -36,6 +37,12 @@ public class UI_Mutation : MonoBehaviour
     [SerializeField] private float rotationStep = 120f;
     [SerializeField] private float rotationSpeed = 200f;
 
+    [Header("Hover Info")]
+    [SerializeField] private TextMeshProUGUI nextSystemHoverText;   
+    [SerializeField] private Button nextSystemButton;
+
+
+
     [Header("Pulse Effect (Alpha)")]
     [SerializeField] private float pulseDuration = 0.8f;  // Tiempo para subir/bajar alpha
     [SerializeField] private float pulseDelay = 0.2f;     // Pausa entre alternancias
@@ -57,6 +64,9 @@ public class UI_Mutation : MonoBehaviour
 
     private void Start()
     {
+        if (nextSystemHoverText != null)
+            nextSystemHoverText.gameObject.SetActive(false);
+        
         mController = RunData.NewMutationController;
         if (mController == null)
         {
@@ -64,6 +74,7 @@ public class UI_Mutation : MonoBehaviour
             return;
         }
         StartCoroutine(InitialSequence());
+        SetupNextSystemButtonHover();
     }
 
     private IEnumerator InitialSequence()
@@ -155,7 +166,6 @@ public class UI_Mutation : MonoBehaviour
         {
             float t = 0f;
 
-            // 🔆 Fade in
             while (t < 1f)
             {
                 t += Time.deltaTime / pulseDuration;
@@ -179,7 +189,6 @@ public class UI_Mutation : MonoBehaviour
                 yield return null;
             }
 
-            // 🔅 Fade out
             t = 0f;
             while (t < 1f)
             {
@@ -205,6 +214,47 @@ public class UI_Mutation : MonoBehaviour
             majorActive = !majorActive;
         }
     }
+
+
+
+    private void SetupNextSystemButtonHover()
+    {
+        if (nextSystemButton == null || nextSystemHoverText == null)
+            return;
+
+        EventTrigger trigger = nextSystemButton.gameObject.GetComponent<EventTrigger>();
+        if (trigger == null)
+            trigger = nextSystemButton.gameObject.AddComponent<EventTrigger>();
+
+        // PointerEnter
+        EventTrigger.Entry enter = new EventTrigger.Entry();
+        enter.eventID = EventTriggerType.PointerEnter;
+        enter.callback.AddListener((eventData) => ShowNextSystemHover());
+        trigger.triggers.Add(enter);
+
+        // PointerExit
+        EventTrigger.Entry exit = new EventTrigger.Entry();
+        exit.eventID = EventTriggerType.PointerExit;
+        exit.callback.AddListener((eventData) => HideNextSystemHover());
+        trigger.triggers.Add(exit);
+    }
+
+    private void ShowNextSystemHover()
+    {
+        if (nextSystemHoverText == null) return;
+
+        nextSystemHoverText.gameObject.SetActive(true);
+        nextSystemHoverText.text = "To " + GetNextSystem(activeSystem).ToString();
+    }
+
+    private void HideNextSystemHover()
+    {
+        if (nextSystemHoverText == null) return;
+
+        nextSystemHoverText.gameObject.SetActive(false);
+    }
+
+
 
 
 
@@ -333,6 +383,17 @@ public class UI_Mutation : MonoBehaviour
 
         majorImg.color = cMajor;
         minorImg.color = cMinor;
+    }
+
+    private SystemType GetNextSystem(SystemType current)
+    {
+        return current switch
+        {
+            SystemType.Nerve => SystemType.Integumentary,
+            SystemType.Integumentary => SystemType.Muscular,
+            SystemType.Muscular => SystemType.Nerve,
+            _ => SystemType.Nerve
+        };
     }
 
 
