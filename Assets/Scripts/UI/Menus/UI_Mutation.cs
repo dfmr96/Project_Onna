@@ -36,6 +36,14 @@ public class UI_Mutation : MonoBehaviour
     [SerializeField] private float rotationStep = 120f;
     [SerializeField] private float rotationSpeed = 200f;
 
+    [Header("Pulse Effect (Alpha)")]
+    [SerializeField] private float pulseDuration = 0.8f;  // Tiempo para subir/bajar alpha
+    [SerializeField] private float pulseDelay = 0.2f;     // Pausa entre alternancias
+
+    private Coroutine pulseRoutine;
+    private NewRadiationData currentSelectedRad;
+    
+
     private bool isRotating = false;
     private float currentRotation = 0f;
 
@@ -103,9 +111,102 @@ public class UI_Mutation : MonoBehaviour
     public void OnRadiationSelected(NewRadiationData radData)
     {
         if (isRotating) return;
+
+        currentSelectedRad = radData; // Guardamos la radiación seleccionada
+
         ShowSlotSelection(radData);
         ShowSlotDescriptions(radData);
+        ShowSlotIconsPreview(radData);
     }
+
+
+    private void ShowSlotIconsPreview(NewRadiationData radData)
+    {
+        if (radData == null) return;
+
+        Image majorImg = majorSlotButton.GetComponent<Image>();
+        Image minorImg = minorSlotButton.GetComponent<Image>();
+
+        majorImg.sprite = radData.SmallIcon;
+        minorImg.sprite = radData.SmallIcon;
+
+        // Detener pulso anterior
+        if (pulseRoutine != null)
+            StopCoroutine(pulseRoutine);
+
+        // Iniciar pulso alternado
+        pulseRoutine = StartCoroutine(PulseAlternate(majorImg, minorImg));
+    }
+
+    private IEnumerator PulseAlternate(Image majorImg, Image minorImg)
+    {
+        bool majorActive = true;
+
+        Color cMajor = majorImg.color;
+        Color cMinor = minorImg.color;
+
+        // Inicializamos ambos en alpha 0
+        cMajor.a = 0f;
+        cMinor.a = 0f;
+        majorImg.color = cMajor;
+        minorImg.color = cMinor;
+
+        while (true)
+        {
+            float t = 0f;
+
+            // 🔆 Fade in
+            while (t < 1f)
+            {
+                t += Time.deltaTime / pulseDuration;
+                float alpha = Mathf.SmoothStep(0f, 1f, t);
+
+                if (majorActive)
+                {
+                    cMajor.a = alpha;
+                    majorImg.color = cMajor;
+                    cMinor.a = 0f;
+                    minorImg.color = cMinor;
+                }
+                else
+                {
+                    cMinor.a = alpha;
+                    minorImg.color = cMinor;
+                    cMajor.a = 0f;
+                    majorImg.color = cMajor;
+                }
+
+                yield return null;
+            }
+
+            // 🔅 Fade out
+            t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime / pulseDuration;
+                float alpha = Mathf.SmoothStep(1f, 0f, t);
+
+                if (majorActive)
+                {
+                    cMajor.a = alpha;
+                    majorImg.color = cMajor;
+                }
+                else
+                {
+                    cMinor.a = alpha;
+                    minorImg.color = cMinor;
+                }
+
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(pulseDelay);
+
+            majorActive = !majorActive;
+        }
+    }
+
+
 
     private void ShowSlotSelection(NewRadiationData radData)
     {
@@ -167,10 +268,28 @@ public class UI_Mutation : MonoBehaviour
     private void TryEquip(NewRadiationData radData, SlotType slot)
     {
         bool equipped = mController.EquipRadiation(radData.Type, activeSystem, slot);
-        if (equipped) 
+        if (equipped)
         {
+            // Detener pulso
+            if (pulseRoutine != null)
+            {
+                StopCoroutine(pulseRoutine);
+                pulseRoutine = null;
+            }
+
+            // Aseguramos que ambos slots queden visibles al 100%
+            Image majorImg = majorSlotButton.GetComponent<Image>();
+            Image minorImg = minorSlotButton.GetComponent<Image>();
+            Color cMajor = majorImg.color;
+            Color cMinor = minorImg.color;
+            cMajor.a = 1f;
+            cMinor.a = 1f;
+            majorImg.color = cMajor;
+            minorImg.color = cMinor;
+
             majorSlotButton.enabled = false;
             minorSlotButton.enabled = false;
+
             UpdateSystemUI();
             OnRadiationEquipped();
         }
@@ -178,10 +297,45 @@ public class UI_Mutation : MonoBehaviour
 
     private IEnumerator RotateAndSetSystem()
     {
+        // Detener cualquier pulso y limpiar UI
+        ResetRadiationUI();
+
         DestroySlotDescriptions();
+
         yield return RotateSequence();
-        UpdateSystemUI();
+        UpdateSystemUI(); // Slots con radiaciones equipadas
+
+        // 🔹 Reaplicar información de la radiación seleccionada automáticamente
+        if (currentSelectedRad != null)
+        {
+            ShowSlotDescriptions(currentSelectedRad);
+            ShowSlotIconsPreview(currentSelectedRad);
+        }
     }
+
+    private void ResetRadiationUI()
+    {
+        // Detener el pulso si existe
+        if (pulseRoutine != null)
+        {
+            StopCoroutine(pulseRoutine);
+            pulseRoutine = null;
+        }
+
+        // Reiniciar alpha de los slots
+        Image majorImg = majorSlotButton.GetComponent<Image>();
+        Image minorImg = minorSlotButton.GetComponent<Image>();
+
+        Color cMajor = majorImg.color;
+        Color cMinor = minorImg.color;
+        cMajor.a = 1f;
+        cMinor.a = 1f;
+
+        majorImg.color = cMajor;
+        minorImg.color = cMinor;
+    }
+
+
 
     private void UpdateSystemUI()
     {
