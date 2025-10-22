@@ -6,10 +6,10 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
     [SerializeField] private AudioMixerGroup musicMixer;
     [SerializeField] private AudioMixerGroup sFXMixer;
+    [SerializeField] private AudioSource musicAudioSource;
+    [SerializeField] private AudioSource sfxAudioSource;
     public AudioMixerGroup MusicMixer => musicMixer;
     public AudioMixerGroup SFXMixer => sFXMixer;
-    private AudioSource musicAudioSource;
-    private AudioSource sfxAudioSource;
 
     private void Awake()
     {
@@ -17,14 +17,20 @@ public class AudioManager : MonoBehaviour
         else Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
-        musicAudioSource = GetComponent<AudioSource>();
+        Initialice();
+    }
+
+    private void Initialice()
+    {
+        AudioListener.volume = PlayerPrefs.GetFloat("MasterVolume");
+        musicMixer.audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("AudioMusic"));
+        sFXMixer.audioMixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("AudioSFX"));
+
         musicAudioSource.loop = true;
         musicAudioSource.outputAudioMixerGroup = musicMixer;
-
-        sfxAudioSource = GetComponent<AudioSource>();
         sfxAudioSource.outputAudioMixerGroup = sFXMixer;
     }
-    public void PlaySFX(AudioClip audioClip) { sfxAudioSource.PlayOneShot(audioClip); }
+    public void PlaySFX(AudioClip audioClip) => sfxAudioSource.PlayOneShot(audioClip);
     public void PlayMusic(AudioClip audioClip) 
     {
         musicAudioSource.clip = audioClip;
