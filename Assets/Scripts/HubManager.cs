@@ -8,7 +8,6 @@ public class HubManager : MonoBehaviour
     public static HubManager Instance;
 
     [SerializeField] private LevelProgression levelProgression;
-    [SerializeField] private TextMeshProUGUI currencyText;
     [SerializeField] private GameObject storePrefab;
     [SerializeField] private AudioClip gameMusicClip;
     private GameObject storeInstance;
@@ -46,13 +45,9 @@ public class HubManager : MonoBehaviour
             RunData.Clear();
         }
 
-        UpdateCoins();
     }
 
-    public void UpdateCoins()
-    {
-        currencyText.text = $"Onna Fragments: {playerInventory.PlayerWallet.Coins}";
-    }
+
 
     public void OpenStore()
     {
@@ -87,6 +82,5 @@ public class HubManager : MonoBehaviour
     private void ApplyCurrency()
     {
         playerInventory.PlayerWallet.AddCoins(100);
-        UpdateCoins();
     }
 }

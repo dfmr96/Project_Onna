@@ -32,6 +32,7 @@ public class DialogueManager : MonoBehaviour
 
         CursorHelper.Show();
 
+
         if (dialogueUI == null)
             dialogueUI = Instantiate(dialogueUIPrefab);
 
@@ -42,6 +43,7 @@ public class DialogueManager : MonoBehaviour
         dialogueUI.DisplayNode(currentNode, OnOptionSelected);
 
         PlayerHelper.DisableInput();
+        PlayerHelper.GetPlayer()?.GetComponent<PlayerModel>().SetInvulnerable(true);
     }
 
     private void OnOptionSelected(int index)
@@ -72,6 +74,7 @@ public class DialogueManager : MonoBehaviour
         currentNode = null;
 
         PlayerHelper.EnableInput();
+        PlayerHelper.GetPlayer()?.GetComponent<PlayerModel>().SetInvulnerable(false);
 
         if (!HubManager.Instance || !HubManager.Instance.IsStoreOpen)
             CursorHelper.Hide();

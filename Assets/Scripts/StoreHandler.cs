@@ -84,7 +84,7 @@ public class StoreHandler : MonoBehaviour
 
     private void UpdateCurrencyStatus()
     {
-        onnaFragments.text = "Onna Fragments: " + playerInventory.PlayerWallet.Coins;
+        onnaFragments.text = $"{playerInventory.PlayerWallet.Coins}";
     }
 
     private void CheckAvailableUpgrades()
@@ -132,7 +132,6 @@ public class StoreHandler : MonoBehaviour
         player = PlayerHelper.GetPlayer().GetComponent<PlayerModel>();
         selectedData.UpgradeEffect?.Apply(player.StatContext.Meta, selectedData.GetValue(currentLevel), selectedData.Mode);
         playerInventory.PlayerItemsHolder.AddUpgrade(selectedData);
-        hub.UpdateCoins();
         AudioManager.Instance?.PlaySFX(upgradeClip);
         CheckAvailableUpgrades();
         HandleBuyChance(selectedButton);
