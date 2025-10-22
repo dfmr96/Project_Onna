@@ -1690,7 +1690,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5215764810527803941}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -1901,6 +1901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPositionEffect: {fileID: 3450268061211636524}
   yOffsetPositionEffect: 0.2
+  offsetBetweenEffects: 0.5
   dotBurnEffectPrefab: {fileID: 2760595013140097665, guid: 82c0479b27b3a26429c39d93e7d9f125, type: 3}
   slowedEffectPrefab: {fileID: 2760595013140097665, guid: a0c461160d9634a48a5374893d452989, type: 3}
   markedEffectPrefab: {fileID: 2760595013140097665, guid: a4aa27c735a00064bbd319385244d3cc, type: 3}

@@ -136,14 +136,10 @@ namespace Player
                 _currentTime = 9999999f;
             }
 
-            //Vuelve Player al suelo
-            if (Input.GetKeyDown(KeyCode.F4))
+            //Salta al nivel del Boss
+            if (Input.GetKeyDown(KeyCode.F12))
             {
-                //_currentPosition = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
-
-                Vector3 pos = transform.position;
-                pos.y = 0f; 
-                transform.position = pos;
+                SceneManagementUtils.LoadSceneByName("Z4_Boss");
 
             }
 
