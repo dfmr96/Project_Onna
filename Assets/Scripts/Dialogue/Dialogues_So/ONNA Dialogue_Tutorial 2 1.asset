@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueText: "Of course. Do you think we invaded your planet without knowing how
     to communicate? Anyway, I suppose that\u2019s just the usual human ego. Now move,
-    time is ticking."
+    time is ticking. <sprite name=\"Keys_W\"> <sprite name=\"Keys_A\"> <sprite name=\"Keys_S\">
+    <sprite name=\"Keys_D\">"
   options:
-  - optionText: "Yes, sorry, let\u2019s go."
-    nextNode: {fileID: 11400000, guid: 41cef7fa045641e45ac1d6c451d98c25, type: 2}
-    endsDialogue: 1
-    actionIds: 05000000
+  - optionText: Yes
+    nextNode: {fileID: 11400000, guid: bab38dd486a75a644bb8f55d7bd74eae, type: 2}
+    endsDialogue: 0
+    actionIds: 00000000
