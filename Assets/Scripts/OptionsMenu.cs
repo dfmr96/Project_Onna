@@ -94,6 +94,4 @@ public class OptionsMenu : MonoBehaviour
             yield return UI_MainMenu_ParallaxZoom.Instance.ZoomToPreviousCoroutine();
         Destroy(gameObject);
     }
-
-    public void PlaySound(AudioClip audioClip) { AudioManager.Instance?.PlaySFX(audioClip); }
 }

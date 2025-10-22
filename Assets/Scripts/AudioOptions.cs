@@ -11,9 +11,9 @@ public class AudioOptions : MonoBehaviour
 
     private void Initialize()
     {
-        masterSlider.value = PlayerPrefs.GetFloat("AudioMaster", 1f);
-        SFXSlider.value = PlayerPrefs.GetFloat("AudioSFX", 1f);
-        musicSlider.value = PlayerPrefs.GetFloat("AudioMusic", 1f);
+        masterSlider.value = PlayerPrefs.GetFloat("MasterVolume");
+        SFXSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         AudioListener.volume = masterSlider.value;
     }
 
@@ -27,6 +27,7 @@ public class AudioOptions : MonoBehaviour
     {
         AudioManager.Instance?.MusicMixer.audioMixer.SetFloat("SFXVolume", SFXSlider.value);
         PlayerPrefs.SetFloat("AudioSFX", SFXSlider.value);
+        Debug.Log(PlayerPrefs.GetFloat("AudioSFX"));
         PlayerPrefs.Save();
     }
     public void SetMusic()
