@@ -5,7 +5,7 @@ using System.Collections;
 namespace Enemy
 {
     [RequireComponent(typeof(SphereCollider))]
-    public class DummyEnemy : MonoBehaviour, IDamageable, ISlowable
+    public class DummyEnemy : MonoBehaviour, IDamageable, ISlowable, IPushable
     {
         [Header("Stats")]
         [SerializeField] private float maxHealth = 100f;
@@ -16,6 +16,7 @@ namespace Enemy
         [Header("Movement")]
         [SerializeField] private float moveSpeed = 2f;
         [SerializeField] private float patrolDistance = 5f;
+        [SerializeField] private bool canMove = true;
 
         [Header("Debug")]
         [SerializeField] private Color detectionColor = new Color(1f, 0.3f, 0.3f, 0.3f);
@@ -32,6 +33,7 @@ namespace Enemy
         private Coroutine slowRoutine;
         private Renderer rend;
         private Color baseColor;
+        private Coroutine pushbackRoutine;
 
         private void Awake()
         {
@@ -58,6 +60,8 @@ namespace Enemy
 
         private void HandlePatrol()
         {
+            if (!canMove) return;
+
             // Movimiento de lado a lado entre -patrolDistance y +patrolDistance
             Vector3 pos = transform.position;
             pos += transform.right * currentMoveSpeed * direction * Time.deltaTime;
@@ -169,6 +173,62 @@ namespace Enemy
 
             slowRoutine = null;
             Debug.Log("[DummyEnemy] 🟢 Slow expired, back to normal speed.");
+        }
+
+        // -----------------------------
+        // IPushable Implementation
+        // -----------------------------
+        public void ApplyPushback(Vector3 direction, float force)
+        {
+            if (pushbackRoutine != null)
+                StopCoroutine(pushbackRoutine);
+
+            pushbackRoutine = StartCoroutine(PushbackRoutine(direction, force));
+        }
+
+        private IEnumerator PushbackRoutine(Vector3 direction, float force)
+        {
+            // Visual feedback
+            if (rend)
+                rend.material.color = Color.yellow;
+
+            // Aplicar pushback solo en el plano XZ (sin cambio en Y)
+            direction.y = 0f;
+            direction.Normalize();
+
+            float pushDistance = force * 0.1f; // Convertir fuerza a distancia
+            Vector3 currentPos = transform.position;
+            Vector3 targetPos = currentPos + direction * pushDistance;
+
+            // Mantener la Y original
+            targetPos.y = currentPos.y;
+
+            float elapsed = 0f;
+            float duration = 0.2f;
+            Vector3 startPos = transform.position;
+
+            Debug.Log($"[DummyEnemy] 💨 Pushed! Direction={direction}, Force={force}, Distance={pushDistance:F2}");
+
+            // Mover suavemente hacia la posición objetivo (solo en XZ)
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                Vector3 newPos = Vector3.Lerp(startPos, targetPos, t);
+                newPos.y = startPos.y; // Forzar Y constante durante el lerp
+                transform.position = newPos;
+                yield return null;
+            }
+
+            // Asegurar posición final con Y original
+            targetPos.y = startPos.y;
+            transform.position = targetPos;
+
+            // Restaurar color
+            if (rend)
+                rend.material.color = baseColor;
+
+            pushbackRoutine = null;
         }
 
         private void OnDrawGizmosSelected()
