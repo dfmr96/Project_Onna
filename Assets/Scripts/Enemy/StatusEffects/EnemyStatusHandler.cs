@@ -24,7 +24,7 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
     private IDamageable _damageable;
     private List<StatusEffect> _activeEffects = new List<StatusEffect>();
 
-    //lista para manejar las partículas activas
+    //lista para manejar las partï¿½culas activas
     private readonly List<ParticleSystem> _activeParticles = new List<ParticleSystem>();
 
 
@@ -221,6 +221,24 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
         }
 
         return totalBonusOrbs;
+    }
+
+    /// <summary>
+    /// Returns the damage multiplier from all active WeakenEffects.
+    /// </summary>
+    public float GetDamageMultiplier()
+    {
+        float multiplier = 1f;
+
+        foreach (var effect in _activeEffects)
+        {
+            if (effect is WeakenEffect weakenEffect)
+            {
+                multiplier *= weakenEffect.DamageMultiplier;
+            }
+        }
+
+        return multiplier;
     }
 
     private void OnDestroy()

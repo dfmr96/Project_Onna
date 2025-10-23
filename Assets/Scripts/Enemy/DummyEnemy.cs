@@ -120,6 +120,18 @@ namespace Enemy
         // -----------------------------
         public void TakeDamage(float amount)
         {
+            // Apply damage multiplier from WeakenEffect
+            var statusHandler = GetComponent<EnemyStatusHandler>();
+            if (statusHandler != null)
+            {
+                float multiplier = statusHandler.GetDamageMultiplier();
+                if (multiplier > 1f)
+                {
+                    Debug.Log($"[DummyEnemy] 💥 WEAKENED! Damage {amount:F1} → {amount * multiplier:F1} ({multiplier:P0} multiplier)");
+                }
+                amount *= multiplier;
+            }
+
             currentHealth -= amount;
             Debug.Log($"[DummyEnemy] Took {amount:F1} dmg. Health = {currentHealth:F1}");
 
