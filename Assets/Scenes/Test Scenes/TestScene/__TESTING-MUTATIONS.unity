@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 171731391}
   - component: {fileID: 171731395}
   - component: {fileID: 171731396}
+  - component: {fileID: 171731397}
   m_Layer: 7
   m_Name: DummyEnemy
   m_TagString: Untagged
@@ -282,6 +283,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.6
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &171731397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171731390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1686b42493ce74b4c9f92c596ec6fae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dotBurnEffectPrefab: {fileID: 6469354921825657977, guid: 4d9a3b35b3bc07649b697df7fb497b6d, type: 3}
+  slowedEffectPrefab: {fileID: 7551388611195229131, guid: 4de940934933c4841bbad7642d2ef221, type: 3}
+  markedEffectPrefab: {fileID: 2400466318854986903, guid: bad5794a53f5c3645bb444b3a040ba01, type: 3}
+  spawnPositionEffect: {fileID: 171731394}
+  yOffsetPositionEffect: 2
+  offsetBetweenEffects: 0.1
 --- !u!850595691 &332410386
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -813,7 +832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ddc63839fea44839e316978f75d0804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiationEffect: {fileID: 11400000, guid: adc2a46421cf0624a9fe1facff38dec6, type: 2}
+  radiationEffect: {fileID: 11400000, guid: ff5d040ffdb0eb549bf83c147ff45f69, type: 2}
   mutationLevel: 1
   isEffectActive: 0
   showGizmos: 0
@@ -882,6 +901,7 @@ GameObject:
   - component: {fileID: 606894734}
   - component: {fileID: 606894733}
   - component: {fileID: 606894732}
+  - component: {fileID: 606894739}
   m_Layer: 7
   m_Name: DummyEnemy Fisico
   m_TagString: Untagged
@@ -1044,6 +1064,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &606894739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606894731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1686b42493ce74b4c9f92c596ec6fae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dotBurnEffectPrefab: {fileID: 0}
+  slowedEffectPrefab: {fileID: 0}
+  markedEffectPrefab: {fileID: 0}
+  spawnPositionEffect: {fileID: 0}
+  yOffsetPositionEffect: 1
+  offsetBetweenEffects: 0.5
 --- !u!1 &644303064 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 88900b0a1ee93a74cb7fdfa350fcd022, type: 3}
