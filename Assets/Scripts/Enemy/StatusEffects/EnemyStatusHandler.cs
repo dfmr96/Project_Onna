@@ -241,6 +241,24 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
         return multiplier;
     }
 
+    /// <summary>
+    /// Returns the outgoing damage multiplier from all active DamageReductionEffects.
+    /// </summary>
+    public float GetOutgoingDamageMultiplier()
+    {
+        float multiplier = 1f;
+
+        foreach (var effect in _activeEffects)
+        {
+            if (effect is DamageReductionEffect damageReduction)
+            {
+                multiplier *= damageReduction.OutgoingDamageMultiplier;
+            }
+        }
+
+        return multiplier;
+    }
+
     private void OnDestroy()
     {
         foreach (var ps in _activeParticles)

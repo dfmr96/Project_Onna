@@ -91,8 +91,22 @@ namespace Enemy
         {
             if (targetPlayer == null) return;
 
-            Debug.Log($"[DummyEnemy] 💢 Attacking player for {attackDamage} dmg (interval={currentAttackInterval:F2}s)");
-            targetPlayer.TakeDamage(attackDamage);
+            float finalDamage = attackDamage;
+
+            // Apply outgoing damage multiplier from DamageReductionEffect
+            var statusHandler = GetComponent<EnemyStatusHandler>();
+            if (statusHandler != null)
+            {
+                float multiplier = statusHandler.GetOutgoingDamageMultiplier();
+                if (multiplier < 1f)
+                {
+                    Debug.Log($"[DummyEnemy] 😵 WEAKENED! Damage {attackDamage:F1} → {attackDamage * multiplier:F1} ({multiplier:P0} multiplier)");
+                }
+                finalDamage *= multiplier;
+            }
+
+            Debug.Log($"[DummyEnemy] 💢 Attacking player for {finalDamage:F1} dmg (interval={currentAttackInterval:F2}s)");
+            targetPlayer.TakeDamage(finalDamage);
         }
 
         private void OnTriggerEnter(Collider other)
