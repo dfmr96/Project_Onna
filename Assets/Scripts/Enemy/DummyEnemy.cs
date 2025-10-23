@@ -5,6 +5,7 @@ using System.Collections;
 namespace Enemy
 {
     [RequireComponent(typeof(SphereCollider))]
+    [RequireComponent(typeof(EnemyStatusHandler))]
     public class DummyEnemy : MonoBehaviour, IDamageable, ISlowable, IPushable
     {
         [Header("Stats")]
