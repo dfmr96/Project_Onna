@@ -6,7 +6,7 @@ namespace Enemy
 {
     [RequireComponent(typeof(SphereCollider))]
     [RequireComponent(typeof(EnemyStatusHandler))]
-    public class DummyEnemy : MonoBehaviour, IDamageable, ISlowable, IPushable
+    public class DummyEnemy : MonoBehaviour, IDamageable, IPushable
     {
         [Header("Stats")]
         [SerializeField] private float maxHealth = 100f;
@@ -31,7 +31,6 @@ namespace Enemy
         private int direction = 1;
 
         private PlayerModel targetPlayer;
-        private Coroutine slowRoutine;
         private Renderer rend;
         private Color baseColor;
         private Coroutine pushbackRoutine;
@@ -164,42 +163,6 @@ namespace Enemy
         public void ApplyDebuffDoT(float dotDuration, float dps)
         {
             Debug.Log($"[DummyEnemy] Received DoT {dps} DPS for {dotDuration}s");
-        }
-
-        // -----------------------------
-        // ISlowable Implementation
-        // -----------------------------
-        public void ApplySlow(float multiplier, float duration)
-        {
-            if (slowRoutine != null)
-                StopCoroutine(slowRoutine);
-
-            slowRoutine = StartCoroutine(SlowRoutine(multiplier, duration));
-        }
-
-        private IEnumerator SlowRoutine(float mult, float dur)
-        {
-            // Cambiar color visual
-            if (rend)
-                rend.material.color = Color.cyan;
-
-            // Aplicar slow (reduce velocidad y frecuencia de ataque)
-            currentMoveSpeed = moveSpeed * mult;
-            currentAttackInterval = attackInterval / mult; // ataca más lento (intervalo mayor)
-
-            Debug.Log($"[DummyEnemy] 🧊 Slowed ({mult:P0}) → moveSpeed={currentMoveSpeed:F2}, atkInterval={currentAttackInterval:F2}");
-
-            yield return new WaitForSeconds(dur);
-
-            // Restaurar valores originales
-            currentMoveSpeed = moveSpeed;
-            currentAttackInterval = attackInterval;
-
-            if (rend)
-                rend.material.color = baseColor;
-
-            slowRoutine = null;
-            Debug.Log("[DummyEnemy] 🟢 Slow expired, back to normal speed.");
         }
 
         // -----------------------------

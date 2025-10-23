@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d324f0ceb54698a86ab92a04f15bb6, type: 3}
-  m_Name: AuraPushbackEffect
+  m_Script: {fileID: 11500000, guid: c545e86606344ea43964672f0e187a50, type: 3}
+  m_Name: AuraDamageReductionEffect
   m_EditorClassIdentifier: 
-  pushForce: 1000
-  upModifier: 0
-  useExplosion: 0
+  effectDuration: 2
+  outgoingDamageMultiplier: 0.75
+  sourceId: Cherenkov Minor

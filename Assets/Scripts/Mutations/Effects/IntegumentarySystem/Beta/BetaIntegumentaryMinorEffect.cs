@@ -38,9 +38,10 @@ namespace Mutations.Effects.IntegumentarySystem
 
             // Crear comportamiento runtime escalado
             runtimeBehavior = ScriptableObject.CreateInstance<AuraRandomSlowEffect>();
-            runtimeBehavior.speedMultiplier = GetScaledSpeedMultiplier(level);
+            runtimeBehavior.slowAmount = GetScaledSlowAmount(level);
             runtimeBehavior.duration = GetScaledDuration(level);
             runtimeBehavior.affectedFraction = GetScaledAffectedFraction(level);
+            runtimeBehavior.sourceId = "Beta Minor";
 
             auraCtrl.AddAura(auraData, runtimeBehavior);
 
@@ -66,7 +67,7 @@ namespace Mutations.Effects.IntegumentarySystem
             if (!ValidateReferences())
                 return "Missing configuration data.";
 
-            float slowPct = (1f - GetScaledSpeedMultiplier(level)) * 100f;
+            float slowPct = GetScaledSlowAmount(level) * 100f;
             float fracPct = GetScaledAffectedFraction(level) * 100f;
             float duration = GetScaledDuration(level);
             return $"Every {auraData.tickRate:F1}s, slows ~{fracPct:F0}% of nearby enemies by {slowPct:F0}% for {duration:F1}s.";
@@ -78,9 +79,11 @@ namespace Mutations.Effects.IntegumentarySystem
             return auraData != null && randomSlowBehavior != null;
         }
 
-        private float GetScaledSpeedMultiplier(int level)
+        private float GetScaledSlowAmount(int level)
         {
-            return Mathf.Clamp(randomSlowBehavior.speedMultiplier - 0.05f * (level - 1), 0.4f, 0.95f);
+            // Escala slowAmount: 0.25 → 0.30 → 0.35 → 0.40 → 0.45
+            // (25% → 45% speed reduction)
+            return Mathf.Clamp(randomSlowBehavior.slowAmount + 0.05f * (level - 1), 0.25f, 0.6f);
         }
 
         private float GetScaledDuration(int level)

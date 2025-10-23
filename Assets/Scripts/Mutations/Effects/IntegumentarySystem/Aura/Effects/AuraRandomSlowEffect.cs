@@ -5,9 +5,10 @@ using UnityEngine;
 public class AuraRandomSlowEffect : ScriptableObject, IAuraBehavior
 {
     [Header("Slow Settings")]
-    [Range(0.1f, 1f)] public float speedMultiplier = 0.75f; // 25% slow
+    [Range(0.1f, 0.9f)] public float slowAmount = 0.25f; // 25% slow (0.25 = 25% reduction)
     [Range(0.1f, 3f)] public float duration = 1.5f;
     [Range(0f, 1f)] public float affectedFraction = 0.5f; // 50% de enemigos
+    public string sourceId = "Beta Integumentary";
 
     public void OnAuraTick(Vector3 origin, float radius, LayerMask mask)
     {
@@ -24,13 +25,22 @@ public class AuraRandomSlowEffect : ScriptableObject, IAuraBehavior
 
         // Calcular cuántos afectar
         int affectedCount = Mathf.CeilToInt(candidates.Count * affectedFraction);
+        int slowedCount = 0;
+
         for (int i = 0; i < affectedCount; i++)
         {
             var c = candidates[i];
-            if (c.TryGetComponent<ISlowable>(out var slowable))
+            if (c.TryGetComponent<IStatusAffectable>(out var target))
             {
-                slowable.ApplySlow(speedMultiplier, duration);
+                var slowEffect = new SlowEffect(duration, slowAmount, sourceId);
+                target.ApplyStatusEffect(slowEffect);
+                slowedCount++;
             }
+        }
+
+        if (slowedCount > 0)
+        {
+            Debug.Log($"[AuraRandomSlow] Slowed {slowedCount}/{hits.Length} enemies ({slowAmount:P0} reduction for {duration}s)");
         }
     }
 }

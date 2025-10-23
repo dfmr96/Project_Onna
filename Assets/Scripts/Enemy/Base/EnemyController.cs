@@ -4,9 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseController, ISlowable
+public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseController
 {
-    private Coroutine slowRoutine;
 
     
     private EnemyModel model;
@@ -199,7 +198,20 @@ void Update()
 
     public override void ExecuteAttack(IDamageable target)
     {
-        target.TakeDamage(model.currentDamage);
+        float finalDamage = model.currentDamage;
+
+        // Apply outgoing damage multiplier from DamageReductionEffect
+        if (_statusHandler != null)
+        {
+            float multiplier = _statusHandler.GetOutgoingDamageMultiplier();
+            if (multiplier < 1f)
+            {
+                Debug.Log($"[EnemyController] 😵 WEAKENED! Damage {model.currentDamage:F1} → {model.currentDamage * multiplier:F1} ({multiplier:P0} multiplier)");
+            }
+            finalDamage *= multiplier;
+        }
+
+        target.TakeDamage(finalDamage);
 
         //Si el que ataque es una variante verde aplica veneno
         if(model.variantSO.variantType == EnemyVariantType.Green)
@@ -248,27 +260,4 @@ void Update()
     //        GUI.Label(new Rect(10, 200, 400, 30), $"Estado FSM: {fsm.CurrentState.GetType().Name}", style);
     //    }
     //}
-    public void ApplySlow(float multiplier, float duration)
-    {
-        if (_navMeshAgent == null) return;
-
-        if (slowRoutine != null)
-            StopCoroutine(slowRoutine);
-
-        slowRoutine = StartCoroutine(ApplySlowRoutine(multiplier, duration));
-    }
-    
-    private IEnumerator ApplySlowRoutine(float mult, float dur)
-    {
-        float originalSpeed = _navMeshAgent.speed;
-        _navMeshAgent.speed = originalSpeed * mult;
-
-        yield return new WaitForSeconds(dur);
-
-        // Evita stacking de ralentizaciones
-        _navMeshAgent.speed = originalSpeed;
-        slowRoutine = null;
-    }
-    
-    
 }

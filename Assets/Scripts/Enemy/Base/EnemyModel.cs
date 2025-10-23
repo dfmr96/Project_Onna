@@ -118,6 +118,17 @@ public class EnemyModel : MonoBehaviour, IDamageable
 
         //Debug.Log($"[EnemyModel] Recibi daño: {damageAmount}");
 
+        // Apply damage multiplier from WeakenEffect
+        if (statusHandler != null)
+        {
+            float multiplier = statusHandler.GetDamageMultiplier();
+            if (multiplier > 1f)
+            {
+                Debug.Log($"[EnemyModel] 💥 WEAKENED! Damage {damageAmount:F1} → {damageAmount * multiplier:F1} ({multiplier:P0} multiplier)");
+            }
+            damageAmount *= multiplier;
+        }
+
         //Debug.Log("Damagen received: " + damageAmount);
         if (statsSO.RastroOrbOnHit && orbSpawner != null)
         {
