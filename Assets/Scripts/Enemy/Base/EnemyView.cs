@@ -87,6 +87,9 @@ public class EnemyView : MonoBehaviour
     private Coroutine recoilCoroutine;
 
 
+    [Header("Turret Mode")]
+    [SerializeField] private bool isTurret = false;
+
 
     private void Awake()
     {
@@ -522,13 +525,99 @@ public class EnemyView : MonoBehaviour
 
     public void PlayDamageEffect()
     {
-        if (isDead) return; // si está muerto no hacemos flash
+        if (isDead) return;
 
         if (flashCoroutine != null)
             StopCoroutine(flashCoroutine);
 
-        flashCoroutine = StartCoroutine(FlashDamageColorsCoroutine());
+        if (isTurret)
+            flashCoroutine = StartCoroutine(FlashDamageColorsTurretCoroutine());
+        else
+            flashCoroutine = StartCoroutine(FlashDamageColorsCoroutine());
     }
+
+    private IEnumerator FlashDamageColorsTurretCoroutine()
+    {
+        if (childRenderers == null || childRenderers.Length == 0)
+            yield break;
+
+        // Guardar los colores originales de cada renderer hijo
+        List<Color[]> originalColorsPerRenderer = new List<Color[]>();
+
+        foreach (Renderer r in childRenderers)
+        {
+            if (r == null)
+            {
+                originalColorsPerRenderer.Add(null);
+                continue;
+            }
+
+            Material[] mats = r.materials;
+            Color[] colors = new Color[mats.Length];
+
+            for (int i = 0; i < mats.Length; i++)
+            {
+                if (mats[i].HasProperty("_BaseColor"))
+                    colors[i] = mats[i].GetColor("_BaseColor");
+                else if (mats[i].HasProperty("_Color"))
+                    colors[i] = mats[i].GetColor("_Color");
+            }
+
+            originalColorsPerRenderer.Add(colors);
+        }
+
+        // Aplicar color de flash a todos los materiales hijos
+        foreach (Renderer r in childRenderers)
+        {
+            if (r == null) continue;
+
+            foreach (Material mat in r.materials)
+            {
+                if (mat.HasProperty("_BaseColor"))
+                    mat.SetColor("_BaseColor", Color.white);
+                else if (mat.HasProperty("_Color"))
+                    mat.SetColor("_Color", Color.white);
+
+                if (mat.HasProperty("_EmissionColor"))
+                {
+                    mat.SetColor("_EmissionColor", Color.white);
+                    mat.EnableKeyword("_EMISSION");
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(flashDuration);
+
+        // Restaurar colores originales
+        for (int i = 0; i < childRenderers.Length; i++)
+        {
+            Renderer r = childRenderers[i];
+            if (r == null || originalColorsPerRenderer[i] == null) continue;
+
+            Material[] mats = r.materials;
+            Color[] colors = originalColorsPerRenderer[i];
+
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (mats[j] == null) continue;
+
+                if (mats[j].HasProperty("_BaseColor"))
+                    mats[j].SetColor("_BaseColor", colors[j]);
+                else if (mats[j].HasProperty("_Color"))
+                    mats[j].SetColor("_Color", colors[j]);
+
+                if (mats[j].HasProperty("_EmissionColor"))
+                {
+                    mats[j].SetColor("_EmissionColor", Color.black);
+                    mats[j].DisableKeyword("_EMISSION");
+                }
+            }
+        }
+
+        flashCoroutine = null;
+    }
+
+
 
     private IEnumerator FlashDamageColorsCoroutine()
     {
