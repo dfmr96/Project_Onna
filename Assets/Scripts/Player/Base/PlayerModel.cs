@@ -63,6 +63,7 @@ namespace Player
         public bool IsInvulnerable => _isInvulnerable;
 
         private bool passiveDrainEnabled = true;
+        private float drainMultiplier = 1f;
         private GameMode _currentGameMode;
         private Vector3 _currentPosition;
         private Vector3 _movementDirection;
@@ -161,8 +162,20 @@ namespace Player
         {
             if (_isInvulnerable) return;
 
-            float damagePerFrame = DrainRate * Time.deltaTime;
+            float damagePerFrame = DrainRate * drainMultiplier * Time.deltaTime;
             ApplyDamage(damagePerFrame, false, false);
+        }
+
+        public void SetDrainMultiplier(float multiplier)
+        {
+            drainMultiplier = Mathf.Clamp(multiplier, 0f, 10f);
+            Debug.Log($"🔋 Drain multiplier set to {drainMultiplier:P0} ({drainMultiplier}x)");
+        }
+
+        public void ResetDrainMultiplier()
+        {
+            drainMultiplier = 1f;
+            Debug.Log("🔋 Drain multiplier reset to normal (1.0x)");
         }
 
         public void TakeDamage(float timeTaken)
