@@ -172,13 +172,13 @@ public class PlayerControllerEffect : MonoBehaviour, IOrbCollectable, IHealable
         enemiesToKill = kills;
         majorTimeToRecover = time;
         enemyKilled = 0;
-        DeathManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMajor;
+        EnemyManager.Instance.OnEnemyDeath += ApplyMuscularNeutronsMajor;
         Debug.LogWarning($"Muscular Neutrons Major Setted");
     }
     public void UnSetMuscularNeutronsMajor()
     {
         enemyKilled = 0;
-        DeathManager.Instance.OnEnemyDeath -= ApplyMuscularNeutronsMajor;
+        EnemyManager.Instance.OnEnemyDeath -= ApplyMuscularNeutronsMajor;
         Debug.LogWarning($"Muscular Neutrons Major Unsetted");
     }
     public void SetMuscularNeutronsMinor(int hits, float time)

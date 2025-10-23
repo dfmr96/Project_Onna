@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathManager : MonoBehaviour
+public class EnemyManager : MonoBehaviour
 {
-    public static DeathManager Instance { get; private set; }
+    public static EnemyManager Instance { get; private set; }
 
     //Para usarlo->
     //DeathManager.Instance.DestroyObject(_gameObject, 1f);
@@ -13,6 +13,11 @@ public class DeathManager : MonoBehaviour
     public Action OnEnemyDeath;
 
     [SerializeField] private GameObject mutantExplotionPrefab;
+
+    [Header("Spawners")]
+    [SerializeField] public FloatingTextSpawner floatingTextSpawner;
+    [SerializeField] public JumpingTextSpawner jumpingTextSpawner;
+    [SerializeField] public ParticleSpawner particleSpawner;
 
 
     private void Awake()

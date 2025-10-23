@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class ObjectPool<T> where T : MonoBehaviour
+public class ObjectPool<T> where T : Component
 {
     private T prefab;
     private Transform parent;

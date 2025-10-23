@@ -25,12 +25,13 @@ public class EnemyModel : MonoBehaviour, IDamageable
     private EnemyController enemy;
     private OrbSpawner orbSpawner;
     private EnemyStatusHandler statusHandler;
+    private FloatingTextSpawner floatingTextSpawner;
+    private JumpingTextSpawner _jumpingTextSpawner;
 
-    [Header("Floating Damage Text Effect")]
-    [SerializeField] private GameObject floatingTextPrefab;
-    [SerializeField] private GameObject jumpingCoinsTextPrefab;
-    [SerializeField] private float heightCoinsTextSpawn = 2f;
-    [SerializeField] private float heightTextSpawn = 2f;
+
+    //[Header("Floating Damage Text Effect")]
+    //[SerializeField] private GameObject jumpingCoinsTextPrefab;
+    //[SerializeField] private float heightCoinsTextSpawn = 2f;
 
     [Header("Health bar")]
     [SerializeField] private GameObject healthBarPrefab;
@@ -92,6 +93,9 @@ public class EnemyModel : MonoBehaviour, IDamageable
         enemy = GetComponent<EnemyController>();
         orbSpawner = GameManager.Instance.orbSpawner;
         statusHandler = GetComponent<EnemyStatusHandler>();
+        floatingTextSpawner = EnemyManager.Instance.floatingTextSpawner;
+        _jumpingTextSpawner = EnemyManager.Instance.jumpingTextSpawner;
+
 
         //Instanciar la barra de vida
         if (healthBarPrefab != null)
@@ -156,12 +160,18 @@ public class EnemyModel : MonoBehaviour, IDamageable
         UpdateHealthBar();
 
         //Mostrar texto flotante Da�o
-        if (floatingTextPrefab != null)
+        //if (floatingTextPrefab != null)
+        //{
+        //    Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
+        //    GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
+        //    textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
+        //}
+
+        if (EnemyManager.Instance != null && EnemyManager.Instance.floatingTextSpawner != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
-            GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-            textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
+            floatingTextSpawner.SpawnFloatingText(transform.position, damageAmount);
         }
+
 
         if (CurrentHealth <= 0) Die();
     }
@@ -198,11 +208,9 @@ public class EnemyModel : MonoBehaviour, IDamageable
         {
             RunData.CurrentCurrency.AddCoins(statsSO.CoinsToDrop);
 
-            if (jumpingCoinsTextPrefab != null)
+            if (EnemyManager.Instance != null && EnemyManager.Instance.jumpingTextSpawner != null)
             {
-                Vector3 spawnPos = transform.position + Vector3.up * heightCoinsTextSpawn;
-                GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
-                textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
+                _jumpingTextSpawner.SpawnFloatingText(transform.position, statsSO.CoinsToDrop);
             }
         }
 

@@ -28,14 +28,14 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
     private readonly List<ParticleSystem> _activeParticles = new List<ParticleSystem>();
 
 
-    private void Awake()
-    {
-        _enemyModel = GetComponent<EnemyModel>();
-        _enemyBossModel = GetComponent<BossModel>();
-        _damageable = GetComponent<IDamageable>();
+    //private void Awake()
+    //{
+    //    _enemyModel = GetComponent<EnemyModel>();
+    //    _enemyBossModel = GetComponent<BossModel>();
+    //    _damageable = GetComponent<IDamageable>();
 
 
-    }
+    //}
 
     private void OnEnable()
     {
@@ -85,6 +85,10 @@ public class EnemyStatusHandler : MonoBehaviour, IStatusAffectable
 
     private void Start()
     {
+        _enemyModel = GetComponent<EnemyModel>();
+        _enemyBossModel = GetComponent<BossModel>();
+        _damageable = GetComponent<IDamageable>();
+
         dotBurnEffectInstance = Instantiate(dotBurnEffectPrefab, spawnPositionEffect);
         dotBurnEffectInstance.Stop();
 

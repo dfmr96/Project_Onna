@@ -31,12 +31,8 @@ namespace Player
         private float poisonTimeRemaining = 0f;
         private ParticleSystem poisonEffectInstance;
 
-        [Header("Floating Damage Text Effect")] 
-        [SerializeField] private float heightTextSpawn = 1.5f;
-        [SerializeField] private GameObject floatingTextPrefab;
-
         [Header("Healing Effect")]
-        [SerializeField] private GameObject healEffectPrefab;
+        //[SerializeField] private GameObject healEffectPrefab;
         [SerializeField] private Transform healAnchor;
         [SerializeField] private Vector3 healOffset;
 
@@ -74,6 +70,8 @@ namespace Player
         private float _currentTime;
         private PlayerStatContext _statContext;
         private PlayerView _playerView;
+        private FloatingTextSpawner floatingTextSpawner;
+        private ParticleSpawner particleSpawner;
 
         private bool _isInvulnerable = false;
 
@@ -98,6 +96,8 @@ namespace Player
                 //EventBus.Publish(new PlayerSpawnedSignal { PlayerGO = gameObject });
             }
 
+            floatingTextSpawner = EnemyManager.Instance.floatingTextSpawner;
+            particleSpawner = EnemyManager.Instance.particleSpawner;
         }
 
         public void InjectStatContext(PlayerStatContext context)
@@ -128,13 +128,11 @@ namespace Player
 
         private void Update()
         {
-            //if (!_isInitialized) return;
             if (Input.GetKeyDown(KeyCode.F2)) devMode = !DevMode;
 
             //Invulnerable
             if (Input.GetKeyDown(KeyCode.F3))
             {
-                //_currentTime = 9999999f;
                 _isInvulnerable = !_isInvulnerable;
             }
 
@@ -246,12 +244,10 @@ namespace Player
 
             if (applyResistance)
             {
-                // Mostrar texto flotante
-                if (floatingTextPrefab != null)
+
+                if (EnemyManager.Instance != null && EnemyManager.Instance.floatingTextSpawner != null)
                 {
-                    Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
-                    GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-                    textObj.GetComponent<FloatingDamageText>().Initialize(timeTaken);
+                    floatingTextSpawner.SpawnFloatingText(transform.position, timeTaken);
                 }
             }
 
@@ -280,18 +276,23 @@ namespace Player
             _playerView?.PlayHealthEffect();
 
             // Instanciar partículas de curación
-            if (healEffectPrefab != null)
-            {
-                Vector3 spawnPos = healAnchor != null 
-                    ? healAnchor.position + healOffset 
-                    : transform.position;
+            //if (healEffectPrefab != null)
+            //{
+            //    Vector3 spawnPos = healAnchor != null 
+            //        ? healAnchor.position + healOffset 
+            //        : transform.position;
 
-                GameObject effect = Instantiate(healEffectPrefab, spawnPos, Quaternion.identity, healAnchor != null ? healAnchor : transform);
-                var ps = effect.GetComponent<ParticleSystem>();
-                if (ps != null)
-                    Destroy(effect, ps.main.duration);
-                else
-                    Destroy(effect, 2f); // fallback
+            //    GameObject effect = Instantiate(healEffectPrefab, spawnPos, Quaternion.identity, healAnchor != null ? healAnchor : transform);
+            //    var ps = effect.GetComponent<ParticleSystem>();
+            //    if (ps != null)
+            //        Destroy(effect, ps.main.duration);
+            //    else
+            //        Destroy(effect, 2f); // fallback
+            //}
+
+            if (EnemyManager.Instance != null && EnemyManager.Instance.particleSpawner != null)
+            {
+                particleSpawner.Spawn("PlayerHeal", transform.position + Vector3.up * 1f, Quaternion.identity, 1f);
             }
         }
         

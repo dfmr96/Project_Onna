@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject deathParticlesPrefab;
     [SerializeField] private GameObject playerHUD;
 
-    [Header("Enemies Spawners")]
+    [Header("Spawners")]
     public OrbSpawner orbSpawner;
     public ProjectileSpawner projectileSpawner;
 

@@ -15,6 +15,8 @@ public class BossModel : MonoBehaviour, IDamageable
     public float MaxHealth { get; private set; }
     public float CurrentHealth { get; private set; }
     public Vector3 Transform => transform.position;
+    private FloatingTextSpawner floatingTextSpawner;
+    private JumpingTextSpawner _jumpingTextSpawner;
 
 
     public event Action<BossModel> OnDeath;
@@ -25,16 +27,8 @@ public class BossModel : MonoBehaviour, IDamageable
     private OrbSpawner orbSpawner;
 
     [Header("Floating Damage Text Effect")]
-    [SerializeField] private GameObject floatingTextPrefab;
-    [SerializeField] private float heightTextSpawn = 2f;
     [SerializeField] private GameObject jumpingCoinsTextPrefab;
     [SerializeField] private float heightCoinsTextSpawn = 2f;
-
-    //[Header("Health bar")]
-    //[SerializeField] private GameObject healthBarPrefab;
-    //[SerializeField] private float heightBarSpawn = 2.5f;
-    //private Transform healthBar;
-    //private Transform healthFill;
 
 
     private void Start()
@@ -48,17 +42,17 @@ public class BossModel : MonoBehaviour, IDamageable
 
 
         OnHealthChanged?.Invoke(CurrentHealth);
+        floatingTextSpawner = EnemyManager.Instance.floatingTextSpawner;
+        _jumpingTextSpawner = EnemyManager.Instance.jumpingTextSpawner;
 
     }
 
     public void PrintMessage(String text, float lifeTime)
     {
-        if (floatingTextPrefab != null)
+  
+        if (EnemyManager.Instance != null && EnemyManager.Instance.floatingTextSpawner != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
-            GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-            textObj.GetComponent<FloatingDamageText>().Initialize(text, lifeTime);
-
+            floatingTextSpawner.SpawnFloatingText(transform.position, text, lifeTime);
         }
     }
     public void TakeDamage(float damageAmount)
@@ -78,15 +72,13 @@ public class BossModel : MonoBehaviour, IDamageable
         CurrentHealth = GetCappedHealth(newHealth);
 
         OnHealthChanged?.Invoke(CurrentHealth);
-      
 
 
-        // Mostrar texto flotante
-        if (floatingTextPrefab != null)
+
+ 
+        if (EnemyManager.Instance != null && EnemyManager.Instance.floatingTextSpawner != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
-            GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-            textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
+            floatingTextSpawner.SpawnFloatingText(transform.position, damageAmount);
         }
 
         if (CurrentHealth <= 0) Die();
@@ -125,11 +117,9 @@ public class BossModel : MonoBehaviour, IDamageable
             RunData.CurrentCurrency.AddCoins(statsSO.CoinsToDrop);
 
             //Mostrar texto flotante Coins
-            if (jumpingCoinsTextPrefab != null)
+                 if (EnemyManager.Instance != null && EnemyManager.Instance.jumpingTextSpawner != null)
             {
-                Vector3 spawnPos = transform.position + Vector3.up * heightCoinsTextSpawn;
-                GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
-                textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
+                _jumpingTextSpawner.SpawnFloatingText(transform.position, statsSO.CoinsToDrop);
             }
 
         }

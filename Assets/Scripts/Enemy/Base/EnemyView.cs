@@ -37,7 +37,7 @@ public class EnemyView : MonoBehaviour
     private EnemyModel _enemyModel;
     private ProjectileSpawner projectileSpawner;
     private EnemyProjectile _currentProjectile;
-
+    private ParticleSpawner _particleSpawner;
 
     //private float _distanceToCountExit = 3f;
 
@@ -67,12 +67,12 @@ public class EnemyView : MonoBehaviour
     private float recoilSpeed = 5f;
 
     [Header("Damage Settings")]
-    [SerializeField] private ParticleSystem deathParticlesPrefab;
+    //[SerializeField] private ParticleSystem deathParticlesPrefab;
     [SerializeField] private Material[] damageMaterials;
     [SerializeField] private Material[] deathMaterials;
     private Material[] originalMaterials;// material temporal de daño
     [SerializeField] private int[] materialIndexesToFlash = { 0 };
-    [SerializeField] private ParticleSystem damageParticlesPrefab;
+    //[SerializeField] private ParticleSystem damageParticlesPrefab;
 
 
     private float deadAngle = 40f;
@@ -146,6 +146,8 @@ public class EnemyView : MonoBehaviour
         }
 
         projectileSpawner = GameManager.Instance.projectileSpawner;
+        _particleSpawner = EnemyManager.Instance.particleSpawner;
+        
         _enemyController = GetComponent<EnemyController>();
         _enemyModel = GetComponent<EnemyModel>();
 
@@ -210,20 +212,25 @@ public class EnemyView : MonoBehaviour
         audioSource?.PlayOneShot(damagedAudioClip);
 
         // Instanciar partículas de daño si existen
-        if (damageParticlesPrefab != null)
+        //if (damageParticlesPrefab != null)
+        //{
+        //    // Crear como hijo del enemy
+        //    ParticleSystem damageParticlesInstance = Instantiate(
+        //        damageParticlesPrefab,
+        //        transform.position + Vector3.up * 1f,
+        //        Quaternion.identity,
+        //        transform
+        //    );
+
+        //    damageParticlesInstance.Play();
+
+        //    // Destruir después de que termine
+        //    Destroy(damageParticlesInstance.gameObject, 2f);
+        //}
+
+        if (EnemyManager.Instance != null && EnemyManager.Instance.particleSpawner != null)
         {
-            // Crear como hijo del enemy
-            ParticleSystem damageParticlesInstance = Instantiate(
-                damageParticlesPrefab,
-                transform.position + Vector3.up * 1f,
-                Quaternion.identity,
-                transform
-            );
-
-            damageParticlesInstance.Play();
-
-            // Destruir después de que termine
-            Destroy(damageParticlesInstance.gameObject, 2f);
+            _particleSpawner.Spawn("EnemyDamage", transform.position + Vector3.up * 1f, Quaternion.identity, 1f);
         }
     }
 
@@ -441,16 +448,23 @@ public class EnemyView : MonoBehaviour
     #region Visual Effects
     public void PlayDeathParticles()
     {
-        if (deathParticlesPrefab != null)
+        //if (deathParticlesPrefab != null)
+        //{
+        //    ParticleSystem deathParticlesInstance = Instantiate(deathParticlesPrefab, transform.position + new Vector3(0,1,0), Quaternion.identity);
+        //    deathParticlesInstance.Play();
+
+        if (turretHead != null)
+            turretHead.localRotation = Quaternion.Euler(deadAngle, 0f, 0f);
+
+        //    Destroy(deathParticlesInstance.gameObject, 2f);
+        //}
+
+        if (EnemyManager.Instance != null && EnemyManager.Instance.particleSpawner != null)
         {
-            ParticleSystem deathParticlesInstance = Instantiate(deathParticlesPrefab, transform.position + new Vector3(0,1,0), Quaternion.identity);
-            deathParticlesInstance.Play();
-
-            if (turretHead != null)
-                turretHead.localRotation = Quaternion.Euler(deadAngle, 0f, 0f);
-
-            Destroy(deathParticlesInstance.gameObject, 2f);
+            _particleSpawner.Spawn("EnemyDeath", transform.position + new Vector3(0, 1, 0), Quaternion.identity, 1f);
         }
+
+   
     }
 
 
