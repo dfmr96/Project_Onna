@@ -11,21 +11,41 @@ public class AuraPushbackEffect : ScriptableObject, IAuraBehavior
     public void OnAuraTick(Vector3 origin, float radius, LayerMask mask)
     {
         var hits = Physics.OverlapSphere(origin, radius, mask);
+        Debug.Log($"[AuraPushback] OverlapSphere found {hits.Length} colliders");
+
         foreach (var hit in hits)
         {
+            // Intento 1: Empujar usando Rigidbody (física real)
             var rb = hit.attachedRigidbody;
-            if (rb == null) continue;
+            if (rb != null)
+            {
+                if (useExplosion)
+                {
+                    rb.AddExplosionForce(pushForce, origin, radius, upModifier, ForceMode.Impulse);
+                }
+                else
+                {
+                    Vector3 dir = (rb.worldCenterOfMass - origin).normalized;
+                    dir.y += upModifier;
+                    rb.AddForce(dir * pushForce, ForceMode.Impulse);
+                }
+                Debug.Log($"[AuraPushback] Applied physics push to {hit.name}");
+                continue;
+            }
 
-            if (useExplosion)
+            // Intento 2: Empujar usando IPushable (movimiento manual)
+            var pushable = hit.GetComponent<IPushable>();
+            if (pushable != null)
             {
-                rb.AddExplosionForce(pushForce, origin, radius, upModifier, ForceMode.Impulse);
-            }
-            else
-            {
-                Vector3 dir = (rb.worldCenterOfMass - origin).normalized;
+                Vector3 dir = (hit.transform.position - origin).normalized;
                 dir.y += upModifier;
-                rb.AddForce(dir * pushForce, ForceMode.Impulse);
+                dir.Normalize();
+                pushable.ApplyPushback(dir, pushForce);
+                Debug.Log($"[AuraPushback] Applied IPushable push to {hit.name}");
+                continue;
             }
+
+            Debug.LogWarning($"[AuraPushback] {hit.name} has no Rigidbody or IPushable - cannot push!");
         }
     }
 }
