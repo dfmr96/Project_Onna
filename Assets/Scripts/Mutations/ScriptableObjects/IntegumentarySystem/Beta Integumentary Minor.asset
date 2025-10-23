@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a4f0829c9e43feb2e362c7c78cc034, type: 3}
+  m_Name: Beta Integumentary Minor
+  m_EditorClassIdentifier: 
+  radiationType: 2
+  systemType: 1
+  slotType: 1
+  effectName: Beta Integumentary Minor
+  description: Occasionally slows a random subset of nearby enemies.
+  icon: {fileID: 0}
+  baseValue: 0
+  upgradeMultiplier: 1.2
+  maxLevel: 4
+  auraData: {fileID: 11400000, guid: a91805a812af0374f8e5d6c4ecad76bb, type: 2}
+  randomSlowBehavior: {fileID: 11400000, guid: 6e7ba5f557744b84f801c33c54bb1787, type: 2}
