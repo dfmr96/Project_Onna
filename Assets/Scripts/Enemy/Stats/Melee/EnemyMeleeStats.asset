@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a980c3ede781443bca97b6deaac8b3, type: 3}
   m_Name: EnemyMeleeStats
   m_EditorClassIdentifier: 
-  currentState: EnemyAttackState
-  MaxHealth: 150
+  currentState: EnemyDeadState
+  MaxHealth: 160
   isShieldActive: 0
-  AttackDamage: 7
-  AttackRange: 1
-  AttackTimeRate: 1.2
+  AttackDamage: 9
+  AttackRange: 1.2
+  AttackTimeRate: 1
   AttackInitialDelay: 0
   combatAngle: 30.27
   obstacleCombatLayers:
@@ -29,12 +29,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   ShootForce: 15
-  moveSpeed: 5.8
+  moveSpeed: 5.9
   rotationSpeed: 400
-  RandomMovementRange: 30
+  RandomMovementRange: 33
   radiusSpawnOrb: 1.5
   RastroOrbOnHit: 1
   numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
-  numberOfOrbsOnDeath: 3
+  numberOfOrbsOnDeath: 1
   CoinsToDrop: 1

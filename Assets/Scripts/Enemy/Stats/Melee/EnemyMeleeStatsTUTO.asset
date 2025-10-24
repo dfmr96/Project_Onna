@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: EnemyMeleeStatsTUTO
   m_EditorClassIdentifier: 
   currentState: EnemyDeadState
-  MaxHealth: 500
+  MaxHealth: 330
   isShieldActive: 0
   AttackDamage: 55
   AttackRange: 1
-  AttackTimeRate: 1.2
+  AttackTimeRate: 1.1
   AttackInitialDelay: 0
   combatAngle: 30.27
   obstacleCombatLayers:
@@ -36,5 +36,5 @@ MonoBehaviour:
   RastroOrbOnHit: 1
   numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
-  numberOfOrbsOnDeath: 3
+  numberOfOrbsOnDeath: 1
   CoinsToDrop: 1
