@@ -69,8 +69,64 @@ public class AuraController : MonoBehaviour
             AuraRuntime aura = kvp.Value;
             if (aura == null || aura.data == null) continue;
 
-            Gizmos.color = aura.data.auraColor;
-            Gizmos.DrawWireSphere(transform.position, aura.data.radius);
+            // Draw circle with aura color
+            Gizmos.color = new Color(aura.data.auraColor.r, aura.data.auraColor.g, aura.data.auraColor.b, 0.5f);
+            DrawCircle(transform.position, aura.data.radius, 64);
+
+            // Draw filled circle with transparency
+            Color fillColor = new Color(aura.data.auraColor.r, aura.data.auraColor.g, aura.data.auraColor.b, 0.15f);
+            Gizmos.color = fillColor;
+            DrawFilledCircle(transform.position, aura.data.radius, 32);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Draw a simple gizmo even when not selected to show the controller is present
+        if (activeAuras != null && activeAuras.Count > 0)
+        {
+            foreach (var kvp in activeAuras)
+            {
+                AuraRuntime aura = kvp.Value;
+                if (aura == null || aura.data == null) continue;
+
+                // Very subtle visualization when not selected
+                Gizmos.color = new Color(aura.data.auraColor.r, aura.data.auraColor.g, aura.data.auraColor.b, 0.2f);
+                DrawCircle(transform.position, aura.data.radius, 32);
+            }
+        }
+    }
+
+    private void DrawCircle(Vector3 center, float radius, int segments)
+    {
+        float angleStep = 360f / segments;
+        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
+
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 newPoint = center + new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
+            Gizmos.DrawLine(prevPoint, newPoint);
+            prevPoint = newPoint;
+        }
+    }
+
+    private void DrawFilledCircle(Vector3 center, float radius, int segments)
+    {
+        float angleStep = 360f / segments;
+
+        for (int i = 0; i < segments; i++)
+        {
+            float angle1 = i * angleStep * Mathf.Deg2Rad;
+            float angle2 = (i + 1) * angleStep * Mathf.Deg2Rad;
+
+            Vector3 point1 = center + new Vector3(Mathf.Cos(angle1) * radius, 0, Mathf.Sin(angle1) * radius);
+            Vector3 point2 = center + new Vector3(Mathf.Cos(angle2) * radius, 0, Mathf.Sin(angle2) * radius);
+
+            // Draw triangle from center to edge
+            Gizmos.DrawLine(center, point1);
+            Gizmos.DrawLine(point1, point2);
+            Gizmos.DrawLine(point2, center);
         }
     }
 
