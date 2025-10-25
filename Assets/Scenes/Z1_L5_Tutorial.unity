@@ -4392,6 +4392,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 237319932}
     m_Modifications:
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
+      propertyPath: wavesQuantity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: spawnAreaSize.x
       value: 26.9
       objectReference: {fileID: 0}
@@ -4413,12 +4417,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.size
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[0].prefab
       value: 
-      objectReference: {fileID: 5215764810527803941, guid: 485566aee052c934482ff62ef697c679, type: 3}
+      objectReference: {fileID: 3015250977966867711, guid: ba48da7592a01ae4293d4830161ddf13, type: 3}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[1].prefab
       value: 
@@ -4445,31 +4449,31 @@ PrefabInstance:
       objectReference: {fileID: 391768422325813718, guid: 368472a8c27f9c144ae3a6a0b21cdbf6, type: 3}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[0].percentChance
-      value: 58
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[1].percentChance
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[2].percentChance
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[3].percentChance
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[4].percentChance
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[5].percentChance
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 32902766306509460, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: enemiesToSpawn.Array.data[6].percentChance
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7520276946578091184, guid: e5d6a4426831464489a88f2c650b19f5, type: 3}
       propertyPath: m_LocalPosition.x
