@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 2000
   isShieldActive: 0
-  ProjectileDamage: 15
-  ShootForce: 15
+  ProjectileDamage: 18
+  ShootForce: 18
   minProjectilesPerBurst: 5
   maxProjectilesPerBurst: 9
-  delayBetweenShots: 0.2
+  delayBetweenShots: 0.35
   delayBetweenBursts: 1
   spreadAngle: 10
-  LaserDamagePerSecond: 25
+  LaserDamagePerSecond: 20
   LaserTickRate: 0.2
-  LaserLenght: 20
-  LaserRotationSpeed: 50
+  LaserLenght: 18
+  LaserRotationSpeed: 45
   AttackRange: 200
   combatAngle: 360
   obstacleCombatLayers:
@@ -41,9 +41,9 @@ MonoBehaviour:
   pillarNumberOfOrbsOnHit: 1
   PillarRastroOrbOnDeath: 1
   pillarNumberOfOrbsOnDeath: 4
-  radiusSpawnOrb: 1.5
+  radiusSpawnOrb: 4
   RastroOrbOnHit: 1
   numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
-  numberOfOrbsOnDeath: 2
-  CoinsToDrop: 1
+  numberOfOrbsOnDeath: 15
+  CoinsToDrop: 200
