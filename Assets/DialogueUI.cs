@@ -1,3 +1,4 @@
+using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,9 +72,9 @@ public class DialogueUI : MonoBehaviour
                                 if (nextBossDialogue != null)
                                 {
                                     bossTrigger.SetDialogueData(nextBossDialogue);
-                                    SaveSystem.ReplaceCoins(30);
                                 }
                             }
+                            PlayerHelper.GetPlayer()?.GetComponent<PlayerModel>().Inventory.PlayerWallet.ReplaceCoins(30);
                             Engineer_Dialogue_Trigger engineer = FindObjectOfType<Engineer_Dialogue_Trigger>();
                             if (engineer != null)
                                 engineer.SetDialogueToNext();
