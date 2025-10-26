@@ -16,13 +16,7 @@ public class Boss_Dialogue_Trigger : InteractableBase
         base.Interact();
 
         if (bossDialogueData != null)
-        {
-            DialogueManager.Instance.StartDialogue(bossDialogueData, this); // le pasamos this
-        }
-        else
-        {
-            //Debug.LogWarning($"{name}: No se asignó ningún NPCData para el diálogo del Boss.");
-        }
+            DialogueManager.Instance.StartDialogue(bossDialogueData, this);
 
         // if (bossObject != null)
         // {
@@ -32,11 +26,7 @@ public class Boss_Dialogue_Trigger : InteractableBase
         // }
     }
 
-    // ✅ Método para cambiar el diálogo
-    public void SetDialogueData(NPCData newData)
-    {
-        bossDialogueData = newData;
-    }
+    public void SetDialogueData(NPCData newData) => bossDialogueData = newData;
 
     public NPCData GetNextDialogue() => nextDialogueData;
 }

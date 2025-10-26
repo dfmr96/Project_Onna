@@ -7,6 +7,8 @@ public class PlayerWallet
 
     public void AddCoins(int amount) => coins += amount;
 
+    public void ReplaceCoins(int ammount) => coins = ammount;
+
     public bool CheckCost(int ammount)
     {
         if (Coins >= ammount) return true;

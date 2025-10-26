@@ -42,10 +42,17 @@ public static class SaveSystem
         Save(data);
     }
 
-    public static void SaveCoins(int newCoins)
+    public static void AddCoins(int newCoins)
     {
         var data = Load();
-        data.playerData.totalCoins = newCoins;
+        data.inventory.PlayerWallet.AddCoins(newCoins);
+        Save(data);
+    }
+
+    public static void ReplaceCoins(int newCoins)
+    {
+        var data = Load();
+        data.inventory.PlayerWallet.ReplaceCoins(newCoins);
         Save(data);
     }
 

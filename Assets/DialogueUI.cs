@@ -9,7 +9,7 @@ public class DialogueUI : MonoBehaviour
     [SerializeField] private Image npcImage;
     [SerializeField] private Button[] optionButtons;
 
-    public void SetName(string name) { nameText.text = name; }
+    public void SetName(string name) => nameText.text = name;
 
     public void SetImage(Sprite image)
     {
@@ -21,7 +21,7 @@ public class DialogueUI : MonoBehaviour
 
         float aspectRatio = image.rect.width / image.rect.height;
 
-        float baseHeight = 400f; // o lo que quieras como altura base visual
+        float baseHeight = 400f;
         float newWidth = baseHeight * aspectRatio;
 
         rect.sizeDelta = new Vector2(newWidth, baseHeight);
@@ -39,7 +39,6 @@ public class DialogueUI : MonoBehaviour
         {
             option.onSelectedAction = null;
 
-            // Iteramos sobre todas las acciones asignadas
             foreach (var actionId in option.actionIds)
             {
                 switch (actionId)
@@ -72,19 +71,12 @@ public class DialogueUI : MonoBehaviour
                                 if (nextBossDialogue != null)
                                 {
                                     bossTrigger.SetDialogueData(nextBossDialogue);
-                                    //Debug.Log("Boss dialogue changed to next data.");
+                                    SaveSystem.ReplaceCoins(30);
                                 }
                             }
                             Engineer_Dialogue_Trigger engineer = FindObjectOfType<Engineer_Dialogue_Trigger>();
                             if (engineer != null)
-                            {
                                 engineer.SetDialogueToNext();
-                                //Debug.Log("Engineer dialogue changed after Boss conversation.");
-                            }
-                            else
-                            {
-                                //Debug.LogWarning("Engineer not found in the scene to update dialogue.");
-                            }
                         };
                         break;
                     case DialogueActionId.EngineerEnd:
@@ -92,8 +84,8 @@ public class DialogueUI : MonoBehaviour
                             Engineer_Dialogue_Trigger engineer = FindObjectOfType<Engineer_Dialogue_Trigger>();
                             if (engineer != null)
                             {
-                                engineer.SetDialogueToLoop(); // Cambia el diálogo al loop final
-                                engineer.OnEngineerEndAction(); // Ejecuta la lógica de activación/desactivación
+                                engineer.SetDialogueToLoop();
+                                engineer.OnEngineerEndAction();
                             }
                             break;
                             }
@@ -113,10 +105,6 @@ public class DialogueUI : MonoBehaviour
                                         DialogueManager.Instance.PreTutorialTimer(nextData, trigger)
                                     );
                                 }
-                                else
-                                {
-                                    Debug.LogWarning("ONNAPreTutorial: No se encontró un nextData válido para el trigger.");
-                                }
                             }
                         };
                         break;
@@ -127,7 +115,7 @@ public class DialogueUI : MonoBehaviour
                         {
                             var tracker = FindObjectOfType<PlayerTutorialTracker>();
                             if (tracker != null)
-                                tracker.StartCountingInputs(); // 🔹 aquí empieza a contar inputs
+                                tracker.StartCountingInputs();
                         };
                         break;
 
@@ -143,19 +131,8 @@ public class DialogueUI : MonoBehaviour
                                 {
                                     var nextData = weaponTrigger.defeatedEnemiesDialogue;
                                     if (nextData != null)
-                                    {
                                         weaponTrigger.SetDialogueData(nextData);
-                                        Debug.Log("WeaponDialogueTrigger: Preparado defeatedEnemiesDialogue tras ONNAAfterChecklist");
-                                    }
-                                    else
-                                    {
-                                        Debug.LogWarning("ONNAAfterChecklist: defeatedEnemiesDialogue no asignado en WeaponDialogueTrigger.");
-                                    }
                                 }
-                            }
-                            else
-                            {
-                                Debug.LogWarning("ONNAAfterChecklist: No se encontró PlayerTutorialTracker en la escena");
                             }
                         };
                         break;
@@ -165,13 +142,7 @@ public class DialogueUI : MonoBehaviour
                         {
                             var trigger = DialogueManager.Instance.CurrentTrigger;
                             if (trigger is EndTutorialTrigger endTrigger)
-                            {
                                 endTrigger.HandleAction("EndTutorial");
-                            }
-                            else
-                            {
-                                Debug.LogWarning("EndTutorial: Trigger actual no es EndTutorialTrigger");
-                            }
                         };
                         break;
 

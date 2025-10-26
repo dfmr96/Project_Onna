@@ -88,8 +88,5 @@ public class DialogueManager : MonoBehaviour
         StartDialogue(nextData, trigger);
     }
 
-    public void SetCurrentNPCData(NPCData newData)
-    {
-        currentNPCData = newData;
-    }
+    public void SetCurrentNPCData(NPCData newData) => currentNPCData = newData;
 }
