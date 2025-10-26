@@ -64,7 +64,7 @@ namespace Player
         }
         private void HandleFire()
         {
-            if (weaponController.IsSkillCheckActive()) // agregamos un getter
+            if (weaponController.IsSkillCheckActive())
             {
                 weaponController.TrySkillCheck(); 
             }
@@ -92,11 +92,7 @@ namespace Player
         
         private void HandleDash()
         {
-            if (dashController != null)
-            {
-                dashController.TryDash();
-                Debug.Log("HandleDash executed");
-            }
+            if (dashController != null) dashController.TryDash();
         }
         private void HandleInteraction()
         {

@@ -27,6 +27,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         {
             if (interactPrompt != null)
                 interactPrompt.SetActive(true);
+            other.GetComponent<PlayerController>().ToggleInteraction(true);
         }
     }
 
