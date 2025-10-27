@@ -16,10 +16,10 @@ namespace Mutations.Effects.IntegumentarySystem
         [SerializeField] private AuraBurnEffect burnBehavior;
 
         [Header("Trigger Settings")]
-        [SerializeField] private float cooldown = 1.5f;
-        [SerializeField] private float visualDuration = 0.3f;
-        [SerializeField] private float baseProcChance = 0.2f; // 20%
-        [SerializeField] private float procChancePerLevel = 0.05f; // +5% por nivel
+        private float cooldown = 2f;
+        private float visualDuration = 0.3f;
+        private float baseProcChance = 0.2f; // 20%
+        private float procChancePerLevel = 0.05f; // +5% por nivel
 
         private float lastTriggerTime;
         private PlayerModel playerModel;
@@ -33,7 +33,7 @@ namespace Mutations.Effects.IntegumentarySystem
             systemType = SystemType.Integumentary;
             slotType = SlotType.Minor;
             effectName = "Microwave Integumentary Minor";
-            description = "When taking damage, chance to emit reduced thermal field with brief burn.";
+            description = $"When taking damage, gain a 20% chance to emit reduced thermal field with brief burn. (Cooldown: {cooldown})";
 
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;

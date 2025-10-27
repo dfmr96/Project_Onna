@@ -11,8 +11,8 @@ namespace Mutations.Effects.IntegumentarySystem
         [SerializeField] private AuraDamageEffect behavior;
 
         [Header("Pulse Settings")]
-        [SerializeField] private float pulseInterval = 4f;  // seconds between pulses
-        [SerializeField] private float pulseDuration = 1f;  // how long the aura lasts
+        private float pulseInterval = 4f;  // seconds between pulses
+        private float pulseDuration = 1f;  // how long the aura lasts
 
         private float pulseTimer;
         private bool isPulsing;
@@ -24,7 +24,7 @@ namespace Mutations.Effects.IntegumentarySystem
             systemType = SystemType.Integumentary;
             slotType = SlotType.Minor;
             effectName = "Gamma Integumentary Minor";
-            description = "Emits periodic gamma pulses that damage nearby enemies.";
+            description = $"Emits periodic gamma pulses every {pulseInterval} seconds that damage nearby enemies.";
         }
 
         public override void ApplyEffect(GameObject player, int level = 1)

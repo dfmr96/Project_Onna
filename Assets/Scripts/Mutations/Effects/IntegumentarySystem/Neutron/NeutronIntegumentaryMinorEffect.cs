@@ -12,11 +12,11 @@ namespace Mutations.Effects.IntegumentarySystem
     public class NeutronIntegumentaryMinorEffect : RadiationEffect
     {
         [Header("Drain Reduction Settings")]
-        [SerializeField] private float drainReduction = 0.5f; // 50% reducción (0.5x multiplier)
-        [SerializeField] private float baseDuration = 3f;
-        [SerializeField] private float durationPerLevel = 0.5f;
-        [SerializeField] private float baseProcChance = 0.2f; // 20%
-        [SerializeField] private float procChancePerLevel = 0.05f; // +5% por nivel
+        private float drainReduction = 0.5f; // 50% reducción (0.5x multiplier)
+        private float baseDuration = 5f;
+        private float durationPerLevel = 0.5f;
+        private float baseProcChance = 0.2f; // 20%
+        private float procChancePerLevel = 0.05f; // +5% por nivel
 
         private PlayerModel playerModel;
         private int currentLevel = 1;
@@ -28,7 +28,7 @@ namespace Mutations.Effects.IntegumentarySystem
             systemType = SystemType.Integumentary;
             slotType = SlotType.Minor;
             effectName = "Neutron Integumentary Minor";
-            description = "When taking damage, chance to reduce vital time drain.";
+            description = "Upon taking damage, you gain a 20% temporary chance to reduce the loss of vital time by 50%.";
 
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
