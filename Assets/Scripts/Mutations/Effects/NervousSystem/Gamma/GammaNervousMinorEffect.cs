@@ -7,8 +7,8 @@ namespace Mutations.Effects.NervousSystem
     public class GammaNervousMinorEffect : StatModifierEffect
     {
         [Header("Gamma Nervous Minor Settings")]
-        [SerializeField] private float orbAttractRangeBase = 8.0f;
-        [SerializeField] private float orbAttractSpeedBase = 1.5f;
+        private float orbAttractRangeBase = 2f;
+        private float orbAttractSpeedBase = 1.5f;
 
         // Para trackear el level aplicado
         private int appliedLevel = 0;
@@ -19,7 +19,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Minor;
             effectName = "Atracción Gamma Neural";
-            description = "Atrae orbes de vida desde {range}m de distancia a velocidad x{speed}";
+            description = $"Increases the attraction range of vital orbs by +{orbAttractRangeBase}m away, and their attraction speed by +{orbAttractSpeedBase}.";
             baseValue = orbAttractRangeBase;
             upgradeMultiplier = 1.25f;
             maxLevel = 4;

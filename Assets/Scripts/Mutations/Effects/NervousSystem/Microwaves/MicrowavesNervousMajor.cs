@@ -17,7 +17,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Major;
             effectName = "Microwaves Major";
-            description = $"Al realizar skillcheck el siguiente cargador aplica quemadura";
+            description = "After successfully performing the skillcheck, the next charger will apply a burn.";
             statType = StatModifierType.ShootingBuff;
         }
 

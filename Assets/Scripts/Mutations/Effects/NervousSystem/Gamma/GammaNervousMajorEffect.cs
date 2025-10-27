@@ -7,8 +7,8 @@ namespace Mutations.Effects.NervousSystem
     public class GammaNervousMajorEffect : StatModifierEffect
     {
         [Header("Gamma Nervous Major Settings")]
-        [SerializeField] private float healingMultiplierBase = 1.5f;
-        [SerializeField] private float healthDrainIncrease = 0.5f;
+        private float healingMultiplierBase = 1.5f;
+        private float healthDrainIncrease = 0.5f;
 
         // Para trackear el level aplicado
         private int appliedLevel = 0;
@@ -19,7 +19,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Major;
             effectName = "Radiación Gamma Neural";
-            description = "Aumenta curación de orbes x{value} pero incrementa drenaje de vida +{drain}/s";
+            description = $"Increases the healing of vital orbs by +{healingMultiplierBase}% but the drain of vital time rises to +{healthDrainIncrease}/s.";
             baseValue = healingMultiplierBase;
             upgradeMultiplier = 1.3f;
             maxLevel = 4;

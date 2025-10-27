@@ -18,7 +18,7 @@ namespace Mutations.Effects
             systemType = SystemType.Nerve;
             slotType = SlotType.Major;
             effectName = "Cherenkov Major";
-            description = $"Los enemigos marcados sueltan orbes adicionales al morir.";
+            description = "Marked enemies drop additional vital orbs upon death.";
             isTemporary = false;
         }
 

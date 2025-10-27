@@ -9,8 +9,8 @@ namespace Mutations.Effects.NervousSystem
     public class BetaNervousMajorEffect : StatModifierEffect
     {
         [Header("Beta Nervous Major Settings")]
-        [SerializeField] private float baseSpeedBonus = 0.25f; // +25% velocidad base
-        [SerializeField] private float baseDashBonus = 0.25f;  // +25% distancia de dash base
+        private float baseSpeedBonus = 0.4f;
+        private float baseDashBonus = 0.4f;
 
         private int appliedLevel = 0;
 
@@ -20,7 +20,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Major;
             effectName = "Velocidad Beta Avanzada";
-            description = "Aumenta la velocidad de movimiento y la distancia de dash en +{percent}%";
+            description = $"Increases movement speed by +{baseSpeedBonus}% and dash distance by +{baseDashBonus}%.";
             baseValue = baseSpeedBonus;
             upgradeMultiplier = 1.15f;
             maxLevel = 4;

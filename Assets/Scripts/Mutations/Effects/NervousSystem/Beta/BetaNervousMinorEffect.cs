@@ -9,7 +9,7 @@ namespace Mutations.Effects.NervousSystem
     public class BetaNervousMinorEffect : StatModifierEffect
     {
         [Header("Beta Nervous Minor Settings")]
-        [SerializeField] private float baseSpeedBonus = 0.2f; // incremento base (20%)
+        private float baseSpeedBonus = 0.25f;
 
         // Para trackear el level aplicado
         private int appliedLevel = 0;
@@ -20,7 +20,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Minor;
             effectName = "Velocidad Beta Neural";
-            description = "Incrementa ligeramente la velocidad de movimiento en +{percent}%";
+            description = $"Slightly increases movement speed by +{baseSpeedBonus}%.";
             baseValue = baseSpeedBonus;
             upgradeMultiplier = 1.15f;
             maxLevel = 4;
