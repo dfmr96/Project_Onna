@@ -15,8 +15,8 @@ namespace Mutations.Effects.IntegumentarySystem
         [SerializeField] private AuraDamageEffect behavior;
 
         [Header("Trigger Settings")]
-        [SerializeField] private float cooldown = 2f;
-        [SerializeField] private float damageMultiplier = 3f;
+        private float cooldown = 2f;
+        private float damageMultiplier = 10f;
 
         private float lastTriggerTime;
         private AuraController auraCtrl;
@@ -29,7 +29,7 @@ namespace Mutations.Effects.IntegumentarySystem
             systemType = SystemType.Integumentary;
             slotType = SlotType.Major;
             effectName = "Alpha Integumentary Major";
-            description = "Releases a damaging shockwave when the player takes direct damage.";
+            description = $"Releases a damaging shockwave that deals {damageMultiplier} damage to enemies when the player takes direct damage. (Cooldown: {cooldown})";
 
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;

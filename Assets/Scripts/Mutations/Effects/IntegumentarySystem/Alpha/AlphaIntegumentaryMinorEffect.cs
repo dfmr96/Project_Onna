@@ -17,8 +17,8 @@ namespace Mutations.Effects.IntegumentarySystem
         [SerializeField] private AuraPushbackEffect pushBehavior;
 
         [Header("Trigger")]
-        [SerializeField] private float cooldown = 0.4f;
-        [SerializeField] private float visualDuration = 0.35f;
+        private float cooldown = 0.4f;
+        private float visualDuration = 0.35f;
         [SerializeField] private LayerMask enemyMask;
 
         private float lastTriggerTime;
@@ -31,7 +31,7 @@ namespace Mutations.Effects.IntegumentarySystem
             systemType = SystemType.Integumentary;
             slotType = SlotType.Minor;
             effectName = "Alpha Integumentary Minor";
-            description = "On taking damage, releases a short shockwave that pushes nearby enemies.";
+            description = $"On taking damage, releases a short shockwave that pushes nearby enemies. (Cooldown: {cooldown})";
 
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;

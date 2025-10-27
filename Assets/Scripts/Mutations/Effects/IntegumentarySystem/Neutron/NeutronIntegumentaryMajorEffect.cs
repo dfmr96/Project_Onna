@@ -11,9 +11,9 @@ namespace Mutations.Effects.IntegumentarySystem
     public class NeutronIntegumentaryMajorEffect : RadiationEffect
     {
         [Header("Time Recovery Settings")]
-        [SerializeField] private float timeRecovered = 2f;
-        [SerializeField] private float baseProcChance = 0.2f; // 20%
-        [SerializeField] private float procChancePerLevel = 0.05f; // +5% por nivel
+        private float timeRecovered = 10f;
+        private float baseProcChance = 0.2f; // 20%
+        private float procChancePerLevel = 0.05f; // +5% por nivel
 
         private PlayerModel playerModel;
         private int currentLevel = 1;
@@ -24,7 +24,7 @@ namespace Mutations.Effects.IntegumentarySystem
             systemType = SystemType.Integumentary;
             slotType = SlotType.Major;
             effectName = "Neutron Integumentary Major";
-            description = "When taking damage, has a chance to recover vital time.";
+            description = $"When taking damage, has a 20% chance to recover {timeRecovered} of vital time.";
 
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
