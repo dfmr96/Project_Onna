@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class AudioOptions : MonoBehaviour
@@ -7,33 +8,47 @@ public class AudioOptions : MonoBehaviour
     [SerializeField] private Slider SFXSlider;
     [SerializeField] private Slider musicSlider;
 
-    private void Start() { Initialize(); }
+    private void Start() => InitializeSliders();
 
-    private void Initialize()
+    private void InitializeSliders()
     {
-        masterSlider.value = PlayerPrefs.GetFloat("MasterVolume");
-        SFXSlider.value = PlayerPrefs.GetFloat("SFXVolume");
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        AudioListener.volume = masterSlider.value;
+        masterSlider.value = PlayerPrefs.GetFloat(AudioManager.MASTER_KEY, 1f);
+        SFXSlider.value = PlayerPrefs.GetFloat(AudioManager.SFX_KEY, 1f);
+        musicSlider.value = PlayerPrefs.GetFloat(AudioManager.MUSIC_KEY, 1f);
+    }
+
+    private void SetAndSaveVolume(AudioMixerGroup mixer, string parameter, string key, float linearVolume)
+    {
+        AudioManager.Instance.SetMixerVolume(mixer, parameter, linearVolume);
+
+        PlayerPrefs.SetFloat(key, Mathf.Clamp(linearVolume, 0.0001f, 1f));
+        PlayerPrefs.Save();
     }
 
     public void SetMaster()
     {
-        AudioListener.volume = masterSlider.value;
-        PlayerPrefs.SetFloat("AudioMaster", masterSlider.value);
-        PlayerPrefs.Save();
+        SetAndSaveVolume(
+            AudioManager.Instance.GeneralMixer,
+            AudioManager.MASTER_KEY,
+            AudioManager.MASTER_KEY,
+            masterSlider.value);
     }
+
     public void SetSFX()
     {
-        AudioManager.Instance?.MusicMixer.audioMixer.SetFloat("SFXVolume", SFXSlider.value);
-        PlayerPrefs.SetFloat("AudioSFX", SFXSlider.value);
-        Debug.Log(PlayerPrefs.GetFloat("AudioSFX"));
-        PlayerPrefs.Save();
+        SetAndSaveVolume(
+            AudioManager.Instance.SFXMixer,
+            AudioManager.SFX_KEY,
+            AudioManager.SFX_KEY,
+            SFXSlider.value);
     }
+
     public void SetMusic()
     {
-        AudioManager.Instance?.SFXMixer.audioMixer.SetFloat("MusicVolume", musicSlider.value);
-        PlayerPrefs.SetFloat("AudioMusic", musicSlider.value);
-        PlayerPrefs.Save();
+        SetAndSaveVolume(
+            AudioManager.Instance.MusicMixer,
+            AudioManager.MUSIC_KEY,
+            AudioManager.MUSIC_KEY,
+            musicSlider.value);
     }
 }

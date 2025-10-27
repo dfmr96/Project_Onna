@@ -1,10 +1,39 @@
+using Player;
+using TMPro;
 using UnityEngine;
 
 public class PausePanel : MonoBehaviour
 {
     [SerializeField] private GameObject loadCanvasPrefab;
-    private void OnEnable() { Time.timeScale = 0f; }
-    public void ResumeGame() { Time.timeScale = 1f; Destroy(gameObject); }
-    public void BackToHub() { Time.timeScale = 1f; SceneManagementUtils.AsyncLoadSceneByName("HUB", loadCanvasPrefab, this); }
-    public void ExitButton() { Time.timeScale = 1f; Application.Quit(); }
+    [SerializeField] private TextMeshProUGUI buttonText;
+    [SerializeField] private string returnToHubText = "";
+    [SerializeField] private string quitGameText = "";
+
+    private void OnEnable()
+    {
+        switch (GameModeSelector.SelectedMode)
+        {
+            case GameMode.Hub:
+                buttonText.text = quitGameText;
+                break;
+
+            default:
+                buttonText.text = returnToHubText;
+                break;
+        }
+    }
+    public void HandleButton()
+    {
+        switch (GameModeSelector.SelectedMode)
+        {
+            case GameMode.Hub:
+                Application.Quit();
+                break;
+
+            default:
+                //Se puede hacer que en vez de volver como tal al hub, el jugador muera capaz
+                SceneManagementUtils.AsyncLoadSceneByName("HUB", loadCanvasPrefab, this);
+                break;
+        }
+    }
 }
