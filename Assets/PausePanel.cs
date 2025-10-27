@@ -21,7 +21,9 @@ public class PausePanel : MonoBehaviour
                 buttonText.text = returnToHubText;
                 break;
         }
+        PlayerHelper.DisableInput();
     }
+
     public void HandleButton()
     {
         switch (GameModeSelector.SelectedMode)
@@ -35,5 +37,11 @@ public class PausePanel : MonoBehaviour
                 SceneManagementUtils.AsyncLoadSceneByName("HUB", loadCanvasPrefab, this);
                 break;
         }
+    }
+
+    public void ResumeGame()
+    {
+        PlayerHelper.EnableInput();
+        transform.parent.gameObject.SetActive(false);
     }
 }

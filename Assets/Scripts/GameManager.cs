@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         player.GetComponent<PlayerController>().HandlePauseAccess += TogglePauseMenu;
     }
 
-    private void OnDisable() => player.GetComponent<PlayerController>().HandlePauseAccess -= TogglePauseMenu;
+    private void OnDestroy() => player.GetComponent<PlayerController>().HandlePauseAccess -= TogglePauseMenu;
 
     private void WinGame() => enemySpawner.OnAllWavesCompleted -= WinGame;
 

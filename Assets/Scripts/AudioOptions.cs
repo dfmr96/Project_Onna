@@ -12,6 +12,7 @@ public class AudioOptions : MonoBehaviour
 
     private void InitializeSliders()
     {
+        if (AudioManager.Instance == null) return;
         masterSlider.value = PlayerPrefs.GetFloat(AudioManager.MASTER_KEY, 1f);
         SFXSlider.value = PlayerPrefs.GetFloat(AudioManager.SFX_KEY, 1f);
         musicSlider.value = PlayerPrefs.GetFloat(AudioManager.MUSIC_KEY, 1f);
@@ -19,7 +20,7 @@ public class AudioOptions : MonoBehaviour
 
     private void SetAndSaveVolume(AudioMixerGroup mixer, string parameter, string key, float linearVolume)
     {
-        AudioManager.Instance.SetMixerVolume(mixer, parameter, linearVolume);
+        AudioManager.Instance?.SetMixerVolume(mixer, parameter, linearVolume);
 
         PlayerPrefs.SetFloat(key, Mathf.Clamp(linearVolume, 0.0001f, 1f));
         PlayerPrefs.Save();
