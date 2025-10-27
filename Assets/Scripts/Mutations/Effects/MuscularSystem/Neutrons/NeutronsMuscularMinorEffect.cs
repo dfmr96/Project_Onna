@@ -7,8 +7,8 @@ namespace Mutations.Effects
     [CreateAssetMenu(fileName = "Neutrons Muscular Minor", menuName = "Mutations/Effects/Muscular System/Neutrons Minor")]
     public class NeutronsMuscularMinorEffect : StatModifierEffect
     {
-        [SerializeField] private int enemiesToHit = 8;
-        [SerializeField] private float timeToRecover = 3f;
+        private int enemiesToHit = 8;
+        private float timeToRecover = 3f;
 
         [Header("Bullet Modifier")]
         [SerializeField] private CounterBulletModifierSO counterModifierSO;
@@ -18,7 +18,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Minor;
             effectName = "Neutrons Minor";
-            description = $"Cada 8 disparos acertados sin fallar devuelven +3s de tiempo vital";
+            description = $"Each {enemiesToHit} successful shots without missing, gains +{timeToRecover}s of vital time.";
             isTemporary = false;
         }
 

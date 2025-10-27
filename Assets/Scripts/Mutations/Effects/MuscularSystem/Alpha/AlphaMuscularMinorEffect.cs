@@ -11,8 +11,8 @@ namespace Mutations.Effects
     public class AlphaMuscularMinorEffect : StatModifierEffect
     {
         [Header("Alpha Muscular Minor Settings")]
-        [SerializeField] private float damageBonus = 0.5f; // 50% daño
-        [SerializeField] private int maxPenetration = 2;
+        private float damageBonus = 0.5f; // +50% daño
+        private int maxPenetration = 2;
         private int bonusToApply;
 
         [Header("Bullet Modifier")]
@@ -24,7 +24,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Minor;
             effectName = "Alpha Muscular Minor";
-            description = "Aumenta el daño, pero limita la penetración a 2 objetivos.";
+            description = $"Increases the damage of each shot by +50%, but enemy penetration is reduced to a maximum of {maxPenetration} enemies.";
             statType = StatModifierType.ShootingBuff;
 
         }

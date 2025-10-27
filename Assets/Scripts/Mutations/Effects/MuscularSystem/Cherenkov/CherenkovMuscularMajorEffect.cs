@@ -16,7 +16,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Major;
             effectName = "Cherenkov Major";
-            description = $"Disparos que marcan a los enemigos, aumentando el daño que reciben de todas las fuentes";
+            description = "Shots mark enemies they hit, causing them to take more damage from all sources";
             isTemporary = false;
         }
 

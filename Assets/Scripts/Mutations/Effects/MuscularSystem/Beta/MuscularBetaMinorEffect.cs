@@ -18,7 +18,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Minor;
             effectName = "Muscular Beta Minor";
-            description = "Disparos aplican ralentización básica.";
+            description = "The shots will apply a slowdown against the enemies that hit.";
             isTemporary = true;
         }
 
