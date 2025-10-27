@@ -31,6 +31,7 @@ public class PausePanel : MonoBehaviour
                 break;
 
             default:
+                //Se puede hacer que en vez de volver como tal al hub, el jugador muera capaz
                 SceneManagementUtils.AsyncLoadSceneByName("HUB", loadCanvasPrefab, this);
                 break;
         }
