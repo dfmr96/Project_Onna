@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject defeatUIPrefab;
     private GameObject defeatUIInstance;
+    private GameObject pauseInstance = null;
 
     //Evento para activar portal tras seleccion de mutacion
     public event Action OnMutationUIClosed;
@@ -41,7 +42,11 @@ public class GameManager : MonoBehaviour
         PlayerHelper.EnableInput();
         PlayerModel.OnPlayerDie += DefeatGame;
         enemySpawner.OnAllWavesCompleted += WinGame;
+        player.GetComponent<PlayerController>().HandlePauseAccess += TogglePauseMenu;
     }
+
+    private void OnDisable() => player.GetComponent<PlayerController>().HandlePauseAccess -= TogglePauseMenu;
+
     private void WinGame() => enemySpawner.OnAllWavesCompleted -= WinGame;
 
     private void DefeatGame()
@@ -151,5 +156,10 @@ public class GameManager : MonoBehaviour
         OpenDoorDebug();
     }
 
-
+    private void TogglePauseMenu()
+    {
+        if (pauseInstance == null)
+            pauseInstance = Instantiate(pausePrefab);
+        pauseInstance.SetActive(!pauseInstance.activeInHierarchy);
+    }
 }

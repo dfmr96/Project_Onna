@@ -59,10 +59,7 @@ namespace Player
 
         public void OnDash(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                DashPerformed?.Invoke();
-            }
+            if (context.performed) DashPerformed?.Invoke();
         }
 
         public void OnPause(InputAction.CallbackContext context)

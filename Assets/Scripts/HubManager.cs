@@ -9,12 +9,12 @@ public class HubManager : MonoBehaviour
 
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] private GameObject storePrefab;
+    [SerializeField] private GameObject pausePrefab;
     [SerializeField] private AudioClip gameMusicClip;
-    private GameObject storeInstance;
-    
-    private PlayerInventory playerInventory;
+    private GameObject storeInstance = null;
+    private GameObject pauseInstance = null;
 
-    // 🔹 Propiedad útil para que DialogueManager sepa si la tienda está abierta
+    private PlayerInventory playerInventory;
     public bool IsStoreOpen => storeInstance != null;
 
     private void Awake()
@@ -27,15 +27,13 @@ public class HubManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
-        AudioManager.Instance?.PlayMusic(gameMusicClip);
-    }
+    private void Start() => AudioManager.Instance?.PlayMusic(gameMusicClip);
 
     public void Init()
     {
         levelProgression.ResetProgress();
-        playerInventory = PlayerHelper.GetPlayer().GetComponent<PlayerModel>().Inventory;
+        playerInventory = PlayerHelper.GetPlayer()?.GetComponent<PlayerModel>().Inventory;
+        PlayerHelper.GetPlayer().GetComponent<PlayerController>().HandlePauseAccess += TogglePauseMenu;
 
         // Si venimos de una run con monedas, las sumamos
         if (RunData.CurrentCurrency != null)
@@ -44,10 +42,9 @@ public class HubManager : MonoBehaviour
             SaveSystem.SaveInventory(playerInventory);
             RunData.Clear();
         }
-
     }
 
-
+    //private void OnDisable() => PlayerHelper.GetPlayer().GetComponent<PlayerController>().HandlePauseAccess -= TogglePauseMenu;
 
     public void OpenStore()
     {
@@ -56,8 +53,6 @@ public class HubManager : MonoBehaviour
         storeInstance = Instantiate(storePrefab);
         StoreHandler handler = storeInstance.GetComponent<StoreHandler>();
         handler.SetHubManager(this);
-
-        // Bloquea movimiento del jugador y muestra cursor
        
         CursorHelper.Show();
     }
@@ -69,13 +64,21 @@ public class HubManager : MonoBehaviour
             Destroy(storeInstance);
             storeInstance = null;
 
-            // Reactiva movimiento del jugador
             PlayerHelper.EnableInput();
 
-            // Oculta el cursor si no hay otra UI abierta (como un diálogo)
             if (DialogueManager.Instance == null || DialogueManager.Instance.CurrentTrigger == null)
                 Cursor.visible = false;
         }
+    }
+
+    private void TogglePauseMenu()
+    {
+        if (pauseInstance == null)
+        {
+            pauseInstance = Instantiate(pausePrefab);
+            pauseInstance.SetActive(false);
+        }
+        pauseInstance.SetActive(!pauseInstance.activeInHierarchy);
     }
 
     [ContextMenu("Add Currency")]
