@@ -159,7 +159,14 @@ public class GameManager : MonoBehaviour
     private void TogglePauseMenu()
     {
         if (pauseInstance == null)
+        {
             pauseInstance = Instantiate(pausePrefab);
-        pauseInstance.SetActive(!pauseInstance.activeInHierarchy);
+
+        }
+        else
+        {
+            pauseInstance.SetActive(!pauseInstance.activeInHierarchy);
+
+        }
     }
 }
