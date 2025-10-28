@@ -9,7 +9,7 @@ namespace Mutations.Effects
     [CreateAssetMenu(fileName = "Gamma Muscular Minor", menuName = "Mutations/Effects/Muscular System/Gamma Minor")]
     public class GammaMuscularMinorEffect : StatModifierEffect
     {
-          [Header("Bullet Modifier")]
+        [Header("Bullet Modifier")]
         [SerializeField] private IgnoreLayerBulletModifierSO ignoreLayerBulletModifierSO;
 
         private void Awake()
@@ -18,7 +18,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Minor;
             effectName = "Gamma Muscular Minor";
-            description = "Disparos atraviesan obstáculos del escenario, pero no enemigos adicionales.";
+            description = "Shots may pass through obstacles on the stage but will no longer pass through various enemies.";
             statType = StatModifierType.ShootingBuff;
 
         }

@@ -8,7 +8,7 @@ namespace Mutations.Effects.NervousSystem
     public class AlphaNervousMajorEffect : StatModifierEffect
     {
         [Header("Alpha Major Settings")]
-        [SerializeField] private float invulnerabilityDuration = 0.5f;
+        private float invulnerabilityDuration = 0.8f;
 
         private void Awake()
         {
@@ -16,7 +16,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Major;
             effectName = "Alpha Invulnerabilidad";
-            description = $"Cada orbe recogido otorga invulnerabilidad durante {invulnerabilityDuration} segundos";
+            description = $"Each vital orb collected grants invulnerability for {invulnerabilityDuration} seconds.";
             isTemporary = true;
         }
 

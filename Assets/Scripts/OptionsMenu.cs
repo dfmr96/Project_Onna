@@ -9,13 +9,11 @@ public class OptionsMenu : MonoBehaviour
     [Header("Paneles")]
     public GameObject AudioOptions;
     public GameObject ScreenOptions;
-    public GameObject GraphicsOptions;
     public GameObject chains;
 
     [Header("Botones")]
     public GameObject AudioButton;
     public GameObject ScreenButton;
-    public GameObject GraphicsButton;
     public GameObject BackButton;
     public GameObject MainBackButton;
     
@@ -36,11 +34,6 @@ public class OptionsMenu : MonoBehaviour
         StartCoroutine(OpenPanelCoroutine(ScreenOptions));
     }
 
-    public void OpenGraphics()
-    {
-        StartCoroutine(OpenPanelCoroutine(GraphicsOptions));
-    }
-
     public void Back()
     {
         StartCoroutine(BackCoroutine());
@@ -58,7 +51,6 @@ public class OptionsMenu : MonoBehaviour
         // Llamar al Zoom Next (si aplica)
         ScreenButton.SetActive(false);
         AudioButton.SetActive(false);
-        GraphicsButton.SetActive(false);
         chains.SetActive(false);
        
         MainBackButton.SetActive(false);
@@ -75,7 +67,6 @@ public class OptionsMenu : MonoBehaviour
     {
         AudioOptions.SetActive(false);
         ScreenOptions.SetActive(false);
-        GraphicsOptions.SetActive(false);
         BackButton.SetActive(false);
 
         if (UI_MainMenu_ParallaxZoom.Instance != null)
@@ -84,7 +75,6 @@ public class OptionsMenu : MonoBehaviour
         chains.SetActive(true);
         ScreenButton.SetActive(true);
         AudioButton.SetActive(true);
-        GraphicsButton.SetActive(true);
         MainBackButton.SetActive(true); 
     }
 
@@ -94,6 +84,4 @@ public class OptionsMenu : MonoBehaviour
             yield return UI_MainMenu_ParallaxZoom.Instance.ZoomToPreviousCoroutine();
         Destroy(gameObject);
     }
-
-    public void PlaySound(AudioClip audioClip) { AudioManager.Instance?.PlaySFX(audioClip); }
 }

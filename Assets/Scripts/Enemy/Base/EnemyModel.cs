@@ -18,16 +18,20 @@ public class EnemyModel : MonoBehaviour, IDamageable
     public float CurrentHealth { get; private set; }
 
     public event Action<EnemyModel> OnDeath;
+    public Vector3 Transform => transform.position;
+
 
     private EnemyView view;
     private EnemyController enemy;
     private OrbSpawner orbSpawner;
+    private EnemyStatusHandler statusHandler;
+    private FloatingTextSpawner floatingTextSpawner;
+    private JumpingTextSpawner _jumpingTextSpawner;
 
-    [Header("Floating Damage Text Effect")]
-    [SerializeField] private GameObject floatingTextPrefab;
-    [SerializeField] private GameObject jumpingCoinsTextPrefab;
-    [SerializeField] private float heightCoinsTextSpawn = 2f;
-    [SerializeField] private float heightTextSpawn = 2f;
+
+    //[Header("Floating Damage Text Effect")]
+    //[SerializeField] private GameObject jumpingCoinsTextPrefab;
+    //[SerializeField] private float heightCoinsTextSpawn = 2f;
 
     [Header("Health bar")]
     [SerializeField] private GameObject healthBarPrefab;
@@ -88,6 +92,10 @@ public class EnemyModel : MonoBehaviour, IDamageable
         view = GetComponent<EnemyView>();
         enemy = GetComponent<EnemyController>();
         orbSpawner = GameManager.Instance.orbSpawner;
+        statusHandler = GetComponent<EnemyStatusHandler>();
+        floatingTextSpawner = EnemyManager.Instance.floatingTextSpawner;
+        _jumpingTextSpawner = EnemyManager.Instance.jumpingTextSpawner;
+
 
         //Instanciar la barra de vida
         if (healthBarPrefab != null)
@@ -113,6 +121,17 @@ public class EnemyModel : MonoBehaviour, IDamageable
         if (enemy.GetShield()) return;
 
         //Debug.Log($"[EnemyModel] Recibi daño: {damageAmount}");
+
+        // Apply damage multiplier from WeakenEffect
+        if (statusHandler != null)
+        {
+            float multiplier = statusHandler.GetDamageMultiplier();
+            if (multiplier > 1f)
+            {
+                Debug.Log($"[EnemyModel] 💥 WEAKENED! Damage {damageAmount:F1} → {damageAmount * multiplier:F1} ({multiplier:P0} multiplier)");
+            }
+            damageAmount *= multiplier;
+        }
 
         //Debug.Log("Damagen received: " + damageAmount);
         if (statsSO.RastroOrbOnHit && orbSpawner != null)
@@ -141,12 +160,18 @@ public class EnemyModel : MonoBehaviour, IDamageable
         UpdateHealthBar();
 
         //Mostrar texto flotante Da�o
-        if (floatingTextPrefab != null)
+        //if (floatingTextPrefab != null)
+        //{
+        //    Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
+        //    GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
+        //    textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
+        //}
+
+        if (EnemyManager.Instance != null && EnemyManager.Instance.floatingTextSpawner != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn; 
-            GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-            textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
+            floatingTextSpawner.SpawnFloatingText(transform.position, damageAmount);
         }
+
 
         if (CurrentHealth <= 0) Die();
     }
@@ -155,7 +180,15 @@ public class EnemyModel : MonoBehaviour, IDamageable
     {
         if (statsSO.RastroOrbOnDeath && orbSpawner != null)
         {
-            for (int i = 0; i < statsSO.numberOfOrbsOnDeath + orbsMultiplier; i++)
+            int baseOrbs = statsSO.numberOfOrbsOnDeath;
+
+            int variantBonusOrbs = (int)orbsMultiplier;
+            
+            int markBonusOrbs = statusHandler.GetBonusOrbsFromMark();
+
+            int totalOrbs = baseOrbs + variantBonusOrbs + markBonusOrbs;
+
+            for (int i = 0; i < totalOrbs; i++)
             {
                 orbSpawner.SpawnHealingOrb(transform.position, transform.forward);
             }
@@ -175,11 +208,9 @@ public class EnemyModel : MonoBehaviour, IDamageable
         {
             RunData.CurrentCurrency.AddCoins(statsSO.CoinsToDrop);
 
-            if (jumpingCoinsTextPrefab != null)
+            if (EnemyManager.Instance != null && EnemyManager.Instance.jumpingTextSpawner != null)
             {
-                Vector3 spawnPos = transform.position + Vector3.up * heightCoinsTextSpawn;
-                GameObject textObj = Instantiate(jumpingCoinsTextPrefab, spawnPos, Quaternion.identity);
-                textObj.GetComponent<JumpingCoinsText>().Initialize(statsSO.CoinsToDrop);
+                _jumpingTextSpawner.SpawnFloatingText(transform.position, statsSO.CoinsToDrop);
             }
         }
 

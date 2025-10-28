@@ -13,28 +13,28 @@ MonoBehaviour:
   m_Name: EnemyMeleeStats
   m_EditorClassIdentifier: 
   currentState: EnemyDeadState
-  MaxHealth: 150
+  MaxHealth: 160
   isShieldActive: 0
-  AttackDamage: 7
-  AttackRange: 2
-  AttackTimeRate: 1.2
+  AttackDamage: 9
+  AttackRange: 1.2
+  AttackTimeRate: 1
   AttackInitialDelay: 0
   combatAngle: 30.27
   obstacleCombatLayers:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 256
   detectionRange: 50
   visionAngle: 360
   obstacleDetectionLayers:
     serializedVersion: 2
     m_Bits: 256
   ShootForce: 15
-  moveSpeed: 5.8
+  moveSpeed: 5.9
   rotationSpeed: 400
-  RandomMovementRange: 30
+  RandomMovementRange: 33
   radiusSpawnOrb: 1.5
   RastroOrbOnHit: 1
   numberOfOrbsOnHit: 1
   RastroOrbOnDeath: 1
-  numberOfOrbsOnDeath: 3
+  numberOfOrbsOnDeath: 1
   CoinsToDrop: 1

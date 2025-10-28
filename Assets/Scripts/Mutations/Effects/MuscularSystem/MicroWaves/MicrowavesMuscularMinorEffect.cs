@@ -10,7 +10,7 @@ namespace Mutations.Effects.NervousSystem
     public class MicrowavesMuscularMinorEffect : StatModifierEffect
     {
         [Header("Bullet Modifier")]
-        [SerializeField] private BurnBulletModifierSO burnModifierSO; // Scriptable del modificador
+        [SerializeField] private BurnBulletModifierSO burnModifierSO;
 
 
         private void Awake()
@@ -19,7 +19,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Muscular;
             slotType = SlotType.Minor;
             effectName = "Microwaves Minor";
-            description = $"Cada Disparos aplican quemadura leve.";
+            description = "All shots will apply a slight burn.";
             isTemporary = true;
         }
 

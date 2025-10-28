@@ -10,7 +10,7 @@ namespace Mutations.Effects
     public class GammaMuscularMajorEffect : StatModifierEffect
     {
         [Header("Gamma Muscular Major Settings")]
-        [SerializeField] private int maxPenetration = 5;
+        private int maxPenetration = 5;
         private int bonusToApply;
 
         [Header("Bullet Modifier")]
@@ -22,7 +22,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Major;
             effectName = "Gamma Muscular Major";
-            description = "Disparos con gran penetración que atraviesan múltiples enemigos";
+            description = $"Shots gain high penetration, causing them to pass through a maximum of {maxPenetration} enemies.";
             statType = StatModifierType.ShootingBuff;
 
         }

@@ -16,7 +16,7 @@ MonoBehaviour:
   systemType: 0
   slotType: 0
   effectName: Alpha Invulnerabilidad
-  description: Cada orbe recogido otorga invulnerabilidad durante 2 segundos
+  description: Each vital orb collected grants invulnerability for 0.8 seconds.
   icon: {fileID: 0}
   baseValue: 0
   upgradeMultiplier: 1.2
@@ -25,4 +25,4 @@ MonoBehaviour:
   isMultiplier: 1
   isTemporary: 1
   temporaryDuration: 5
-  invulnerabilityDuration: 2
+  invulnerabilityDuration: 0.8

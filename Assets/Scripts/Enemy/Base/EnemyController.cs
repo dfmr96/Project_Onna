@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.AI;
 
 public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseController
 {
+
+    
     private EnemyModel model;
     private EnemyView view;
     private Rigidbody rb;
@@ -124,12 +127,12 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
         currentAttackSO = attackPhaseInstances[0];
         AttackState = new EnemyAttackState(this, fsm);
 
-        //Para manejar estados de daño DoT en mutaciones
+        //Para manejar estados de daï¿½o DoT en mutaciones
         _statusHandler = GetComponent<EnemyStatusHandler>();
         if (_statusHandler == null)
         {
             _statusHandler = gameObject.AddComponent<EnemyStatusHandler>();
-            //Debug.Log("[EnemyController] EnemyStatusHandler agregado automáticamente.");
+            //Debug.Log("[EnemyController] EnemyStatusHandler agregado automï¿½ticamente.");
         }
     }
 
@@ -195,7 +198,20 @@ void Update()
 
     public override void ExecuteAttack(IDamageable target)
     {
-        target.TakeDamage(model.currentDamage);
+        float finalDamage = model.currentDamage;
+
+        // Apply outgoing damage multiplier from DamageReductionEffect
+        if (_statusHandler != null)
+        {
+            float multiplier = _statusHandler.GetOutgoingDamageMultiplier();
+            if (multiplier < 1f)
+            {
+                Debug.Log($"[EnemyController] ðŸ˜µ WEAKENED! Damage {model.currentDamage:F1} â†’ {model.currentDamage * multiplier:F1} ({multiplier:P0} multiplier)");
+            }
+            finalDamage *= multiplier;
+        }
+
+        target.TakeDamage(finalDamage);
 
         //Si el que ataque es una variante verde aplica veneno
         if(model.variantSO.variantType == EnemyVariantType.Green)

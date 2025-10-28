@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
   m_Name: SU_09_Blindaje
   m_EditorClassIdentifier: 
-  upgradeName: Blindaje Inicial
-  description: "+0.4 de Resistencia al Da\xF1o. (Max +2 de Resistencia al Da\xF1o)"
+  upgradeName: Initial Shielding
+  description: +0.4 Damage Resistance. (Max +1.6 Damage Resistance).
   icon: {fileID: -1471847155, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   iconOnSelected: {fileID: 652176095, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   valueMode: 2
   _levels:
   - value: 0.4
-    cost: 20
+    cost: 50
   - value: 0.8
-    cost: 60
+    cost: 120
   - value: 1.2
-    cost: 110
+    cost: 210
   - value: 1.6
-    cost: 180
+    cost: 380
   upgradeEffect: {fileID: 11400000, guid: b4c5f42bdd13db54bbc2ec60c227d369, type: 2}

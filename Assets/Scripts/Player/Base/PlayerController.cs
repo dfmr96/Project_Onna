@@ -2,6 +2,7 @@ using Core;
 using Player.Melee;
 using Player.Movement;
 using Player.Weapon;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,8 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
+        public Action HandlePauseAccess;
+        
         [SerializeField] private WeaponController weaponController = null;
         [SerializeField] private MeleeController meleeController = null;
         [SerializeField] private DashController dashController = null;
@@ -37,6 +40,7 @@ namespace Player
                 _playerInputHandler.MeleeAtackPerformed -= HandleMelee;
                 _playerInputHandler.ReloadPerformed -= HandleReload;
                 _playerInputHandler.DashPerformed -= HandleDash;
+                _playerInputHandler.OnPauseGame -= HandlePause;
             }
         }
 
@@ -60,18 +64,16 @@ namespace Player
             _playerInputHandler.MeleeAtackPerformed += HandleMelee;
             _playerInputHandler.ReloadPerformed += HandleReload;
             _playerInputHandler.DashPerformed += HandleDash;
+            _playerInputHandler.OnPauseGame += HandlePause;
 
         }
         private void HandleFire()
         {
-            if (weaponController.IsSkillCheckActive()) // agregamos un getter
-            {
-                weaponController.TrySkillCheck(); 
-            }
+            if (weaponController.IsSkillCheckActive())
+                weaponController.TrySkillCheck();
+
             else if (_playerModel != null && _playerModel.CanShoot)
-            {
                 weaponController.Attack();
-            }
         }
 
         private void HandleMelee()
@@ -81,22 +83,15 @@ namespace Player
         private void HandleReload()
         {
             if (weaponController.IsSkillCheckActive())
-            {
                 weaponController.TrySkillCheck();
-            }
+
             else if (_playerModel != null && _playerModel.CanShoot)
-            {
                 weaponController.Reloading();
-            }
         }
         
         private void HandleDash()
         {
-            if (dashController != null)
-            {
-                dashController.TryDash();
-                Debug.Log("HandleDash executed");
-            }
+            if (dashController != null) dashController.TryDash();
         }
         private void HandleInteraction()
         {
@@ -116,6 +111,8 @@ namespace Player
             
             currentInteractable = closestInteractable;
         }
+
+        private void HandlePause() => HandlePauseAccess?.Invoke();
         public void ToggleInteraction(bool value) => canInteract = value;
     }
 }

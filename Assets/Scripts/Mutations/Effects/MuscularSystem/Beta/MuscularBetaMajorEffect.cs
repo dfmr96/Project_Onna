@@ -13,7 +13,7 @@ namespace Mutations.Effects
         [SerializeField] private SlowBulletModifierSO slowModifierSO;
 
         [Header("Fire Rate Settings")]
-        [SerializeField] private float fireRateMultiplier = 1.5f; // 50% más rápido
+        private float fireRateMultiplier = 1.9f; // 90% más rápido
 
         private void Awake()
         {
@@ -21,7 +21,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Major;
             effectName = "Muscular Beta Major";
-            description = "Disparos rápidos que aplican ralentización.";
+            description = "Shots are +90% faster and apply a slight slowdown to enemies.";
             isTemporary = true;
         }
 

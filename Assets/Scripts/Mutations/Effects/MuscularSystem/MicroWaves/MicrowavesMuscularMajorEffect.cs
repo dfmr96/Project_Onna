@@ -10,7 +10,7 @@ namespace Mutations.Effects
     public class MicrowavesMuscularMajorEffect : StatModifierEffect
     {
         [Header("Bullet Modifier")]
-        [SerializeField] private BurnBulletModifierSO burnModifierSO; // Scriptable del modificador
+        [SerializeField] private BurnBulletModifierSO burnModifierSO;
 
 
         private void Awake()
@@ -19,7 +19,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Major;
             effectName = "Microwaves Major";
-            description = $"Cada Disparos aplican quemadura aguda. Si el enemigo ya esta quemado el disparo hace mas daño inicial";
+            description = "All shots will apply a sharp burn. If the enemy was already burned, the shot then does more initial damage.";
             isTemporary = true;
         }
 

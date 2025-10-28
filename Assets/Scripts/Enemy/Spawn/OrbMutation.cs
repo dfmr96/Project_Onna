@@ -15,8 +15,9 @@ public class OrbMutation : InteractableBase
     {
         base.Interact();
         ShowMutationSelection();
-        GameManager.Instance?.OpenDoorDebug();
-        Destroy(gameObject);
+    
+        // Notificar al GameManager para manejar la secuencia completa
+        GameManager.Instance?.OnOrbMutationActivated(this);
     }
 
 

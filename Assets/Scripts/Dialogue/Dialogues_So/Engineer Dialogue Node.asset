@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Engineer Dialogue Node
   m_EditorClassIdentifier: 
   dialogueText: "Heeellooooo! Good morniiing! Right on time. I just finished tweaking
-    a few things... Did you bring more fragments? Remember, they're vital for upgrades!
-    If you don't have any, I think it's time you start your mission \u2014 time\u2019s
+    a few things... Did you bring more fragments? Remember, they're vital for upgrades!\nTime\u2019s
     ticking"
   options:
-  - optionText: "Sure, show me what you\u2019ve got."
+  - optionText: Sure, show me what you've got.
     nextNode: {fileID: 0}
     endsDialogue: 1
     actionIds: 01000000

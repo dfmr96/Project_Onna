@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
   m_Name: Boss Dialogue_Tutorial_2
   m_EditorClassIdentifier: 
-  dialogueText: "Before you turn yourself into a ticking bomb, report to Erika \u2014
-    she\u2019s the new engineer assigned to the base. Arrived straight from Berlin.\nSays
-    she\u2019s found a way to enhance that alien contraption you\u2019re carrying."
+  dialogueText: "Before you turn yourself into a ticking bomb, report to Erika, she's
+    the new engineer assigned to the base. Arrived straight from Berlin.\nSays she's
+    found a way to enhance that alien contraption you\u2019re carrying."
   options:
   - optionText: Yes, sir.
     nextNode: {fileID: 11400000, guid: 38ceb9b28775d854f9b9b29ddcec0b57, type: 2}
     endsDialogue: 0
-    actionId: 0
-  - optionText: "Sir, isn\u2019t that dangerous?"
+    actionIds: 
+  - optionText: Sir, isn't that dangerous?
     nextNode: {fileID: 11400000, guid: b259e61dfb9c5404fa734ee64d2ea445, type: 2}
     endsDialogue: 0
-    actionId: 0
+    actionIds: 

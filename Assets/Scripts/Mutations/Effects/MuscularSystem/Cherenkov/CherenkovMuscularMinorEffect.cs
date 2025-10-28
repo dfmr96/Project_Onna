@@ -16,7 +16,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Minor;
             effectName = "Cherenkov Minor";
-            description = $"Disparos marcan enemigos, solo aumentan un poco el daño recibido";
+            description = "Shots mark enemies they hit, causing them to take a little more damage.";
             isTemporary = false;
         }
 

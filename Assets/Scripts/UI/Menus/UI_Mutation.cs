@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_Mutation : MonoBehaviour
 {
@@ -36,6 +37,26 @@ public class UI_Mutation : MonoBehaviour
     [SerializeField] private float rotationStep = 120f;
     [SerializeField] private float rotationSpeed = 200f;
 
+    [Header("System Buttons")]
+    [SerializeField] private Button nerveButton;
+    [SerializeField] private Button integumentaryButton;
+    [SerializeField] private Button muscularButton;
+    [SerializeField] private Animator systemAnimator1;
+    [SerializeField] private Animator systemAnimator2;
+
+
+
+
+
+
+    [Header("Pulse Effect (Alpha)")]
+    [SerializeField] private float pulseDuration = 0.8f;  // Tiempo para subir/bajar alpha
+    [SerializeField] private float pulseDelay = 0.2f;     // Pausa entre alternancias
+
+    private Coroutine pulseRoutine;
+    private NewRadiationData currentSelectedRad;
+    
+
     private bool isRotating = false;
     private float currentRotation = 0f;
 
@@ -56,6 +77,17 @@ public class UI_Mutation : MonoBehaviour
             return;
         }
         StartCoroutine(InitialSequence());
+
+
+        nerveButton.onClick.AddListener(() => OnSelectSystem(SystemType.Nerve));
+        integumentaryButton.onClick.AddListener(() => OnSelectSystem(SystemType.Integumentary));
+        muscularButton.onClick.AddListener(() => OnSelectSystem(SystemType.Muscular));
+
+        UpdateSystemButtons();
+
+        systemAnimator2.SetTrigger("Muscular");
+        systemAnimator1.SetTrigger("Integumentary");
+
     }
 
     private IEnumerator InitialSequence()
@@ -103,9 +135,199 @@ public class UI_Mutation : MonoBehaviour
     public void OnRadiationSelected(NewRadiationData radData)
     {
         if (isRotating) return;
+
+        currentSelectedRad = radData; // Guardamos la radiación seleccionada
+
         ShowSlotSelection(radData);
         ShowSlotDescriptions(radData);
+        ShowSlotIconsPreview(radData);
     }
+
+
+    private void ShowSlotIconsPreview(NewRadiationData radData)
+    {
+        if (radData == null) return;
+
+        Image majorImg = majorSlotButton.GetComponent<Image>();
+        Image minorImg = minorSlotButton.GetComponent<Image>();
+
+        // Detenemos cualquier pulso previo
+        if (pulseRoutine != null)
+            StopCoroutine(pulseRoutine);
+
+        // Estado de los slots
+        bool majorOccupied = mController.GetEquippedRadiationData(activeSystem, SlotType.Major) != null;
+        bool minorOccupied = mController.GetEquippedRadiationData(activeSystem, SlotType.Minor) != null;
+
+        // 🔹 Mantenemos el ícono de los slots ocupados
+        if (!majorOccupied)
+            majorImg.sprite = radData.SmallIcon;  // solo actualizamos el libre
+        if (!minorOccupied)
+            minorImg.sprite = radData.SmallIcon;
+
+        // 🔹 Reiniciamos alphas
+        Color cMajor = majorImg.color;
+        Color cMinor = minorImg.color;
+        cMajor.a = 1f;
+        cMinor.a = 1f;
+        majorImg.color = cMajor;
+        minorImg.color = cMinor;
+
+        // 🔹 Aplicamos el pulso solo al libre
+        if (!majorOccupied && !minorOccupied)
+        {
+            pulseRoutine = StartCoroutine(PulseAlternate(majorImg, minorImg));
+        }
+        else if (!majorOccupied)
+        {
+            pulseRoutine = StartCoroutine(PulseSingle(majorImg));
+        }
+        else if (!minorOccupied)
+        {
+            pulseRoutine = StartCoroutine(PulseSingle(minorImg));
+        }
+        else
+        {
+            // Ambos ocupados → sin pulso
+            if (pulseRoutine != null)
+            {
+                StopCoroutine(pulseRoutine);
+                pulseRoutine = null;
+            }
+        }
+    }
+
+
+    private IEnumerator PulseSingle(Image img)
+    {
+        Color c = img.color;
+        c.a = 0f;
+        img.color = c;
+
+        while (true)
+        {
+            float t = 0f;
+
+            // Fade in
+            while (t < 1f)
+            {
+                t += Time.deltaTime / pulseDuration;
+                c.a = Mathf.SmoothStep(0f, 1f, t);
+                img.color = c;
+                yield return null;
+            }
+
+            // Fade out
+            t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime / pulseDuration;
+                c.a = Mathf.SmoothStep(1f, 0f, t);
+                img.color = c;
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(pulseDelay);
+        }
+    }
+
+
+
+    private IEnumerator PulseAlternate(Image majorImg, Image minorImg)
+    {
+        bool majorActive = true;
+
+        Color cMajor = majorImg.color;
+        Color cMinor = minorImg.color;
+
+        // Inicializamos ambos en alpha 0
+        cMajor.a = 0f;
+        cMinor.a = 0f;
+        majorImg.color = cMajor;
+        minorImg.color = cMinor;
+
+        while (true)
+        {
+            float t = 0f;
+
+            while (t < 1f)
+            {
+                t += Time.deltaTime / pulseDuration;
+                float alpha = Mathf.SmoothStep(0f, 1f, t);
+
+                if (majorActive)
+                {
+                    cMajor.a = alpha;
+                    majorImg.color = cMajor;
+                    cMinor.a = 0f;
+                    minorImg.color = cMinor;
+                }
+                else
+                {
+                    cMinor.a = alpha;
+                    minorImg.color = cMinor;
+                    cMajor.a = 0f;
+                    majorImg.color = cMajor;
+                }
+
+                yield return null;
+            }
+
+            t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime / pulseDuration;
+                float alpha = Mathf.SmoothStep(1f, 0f, t);
+
+                if (majorActive)
+                {
+                    cMajor.a = alpha;
+                    majorImg.color = cMajor;
+                }
+                else
+                {
+                    cMinor.a = alpha;
+                    minorImg.color = cMinor;
+                }
+
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(pulseDelay);
+
+            majorActive = !majorActive;
+        }
+    }
+
+
+    private void OnSelectSystem(SystemType targetSystem)
+    {
+        if (isRotating || targetSystem == activeSystem)
+            return;
+
+        activeSystem = targetSystem;
+        StartCoroutine(RotateAndSetSystem());
+    }
+
+    private void UpdateSystemButtons()
+    {
+        SetButtonState(nerveButton, activeSystem != SystemType.Nerve);
+        SetButtonState(integumentaryButton, activeSystem != SystemType.Integumentary);
+        SetButtonState(muscularButton, activeSystem != SystemType.Muscular);
+    }
+
+    private void SetButtonState(Button button, bool active)
+    {
+        button.interactable = active;
+        var img = button.GetComponent<Image>();
+        if (img != null)
+        {
+            Color c = img.color;
+            c.a = active ? 1f : 0.3f; // un poco apagado si no se puede
+            img.color = c;
+        }
+    }
+
 
     private void ShowSlotSelection(NewRadiationData radData)
     {
@@ -125,15 +347,29 @@ public class UI_Mutation : MonoBehaviour
     private void ShowSlotDescriptions(NewRadiationData data)
     {
         if (isRotating) return;
+
+        // Estado de ocupación
+        bool majorOccupied = mController.GetEquippedRadiationData(activeSystem, SlotType.Major) != null;
+        bool minorOccupied = mController.GetEquippedRadiationData(activeSystem, SlotType.Minor) != null;
+
+        // Mutaciones correspondientes a esta radiación
         RadiationEffect minorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Minor);
         RadiationEffect majorMutation = mController.GetMutationForSlot(data.Type, activeSystem, SlotType.Major);
 
-        majorSlotDescription.text = majorMutation != null ? majorMutation.Description : "";
-        majorSlotDescription.color = normalTextColor;
+        // Solo actualizamos el texto de los slots vacíos
+        if (!majorOccupied && majorMutation != null)
+        {
+            majorSlotDescription.text = majorMutation.Description;
+            majorSlotDescription.color = normalTextColor;
+        }
 
-        minorSlotDescription.text = minorMutation != null ? minorMutation.Description : "";
-        minorSlotDescription.color = normalTextColor;
+        if (!minorOccupied && minorMutation != null)
+        {
+            minorSlotDescription.text = minorMutation.Description;
+            minorSlotDescription.color = normalTextColor;
+        }
     }
+
 
     private void DestroySlotDescriptions()
     {
@@ -167,8 +403,28 @@ public class UI_Mutation : MonoBehaviour
     private void TryEquip(NewRadiationData radData, SlotType slot)
     {
         bool equipped = mController.EquipRadiation(radData.Type, activeSystem, slot);
-        if (equipped) 
+        if (equipped)
         {
+            // Detener pulso
+            if (pulseRoutine != null)
+            {
+                StopCoroutine(pulseRoutine);
+                pulseRoutine = null;
+            }
+
+            // Aseguramos que ambos slots queden visibles al 100%
+            Image majorImg = majorSlotButton.GetComponent<Image>();
+            Image minorImg = minorSlotButton.GetComponent<Image>();
+            Color cMajor = majorImg.color;
+            Color cMinor = minorImg.color;
+            cMajor.a = 1f;
+            cMinor.a = 1f;
+            majorImg.color = cMajor;
+            minorImg.color = cMinor;
+
+            majorSlotButton.enabled = false;
+            minorSlotButton.enabled = false;
+
             UpdateSystemUI();
             OnRadiationEquipped();
         }
@@ -176,9 +432,72 @@ public class UI_Mutation : MonoBehaviour
 
     private IEnumerator RotateAndSetSystem()
     {
+        isRotating = true;
+
+        // Desactivar botones de sistema y radiaciones
+        nerveButton.interactable = false;
+        integumentaryButton.interactable = false;
+        muscularButton.interactable = false;
+        SetRadiationButtonsInteractable(false);
+
+        ResetRadiationUI();
+        UpdateSystemButtons();
         DestroySlotDescriptions();
+
         yield return RotateSequence();
         UpdateSystemUI();
+
+        // Reaplicar UI si había una radiación seleccionada
+        if (currentSelectedRad != null)
+        {
+            ShowSlotDescriptions(currentSelectedRad);
+            ShowSlotIconsPreview(currentSelectedRad);
+        }
+
+        // Reactivar botones (excepto el del sistema actual)
+        nerveButton.interactable = true;
+        integumentaryButton.interactable = true;
+        muscularButton.interactable = true;
+        SetRadiationButtonsInteractable(true);
+
+        UpdateSystemButtons();
+
+        isRotating = false;
+    }
+
+
+    private void SetRadiationButtonsInteractable(bool interactable)
+    {
+        foreach (Transform child in radiationPanelParent)
+        {
+            Button b = child.GetComponent<Button>();
+            if (b != null)
+                b.interactable = interactable;
+        }
+    }
+
+
+
+    private void ResetRadiationUI()
+    {
+        // Detener el pulso si existe
+        if (pulseRoutine != null)
+        {
+            StopCoroutine(pulseRoutine);
+            pulseRoutine = null;
+        }
+
+        // Reiniciar alpha de los slots
+        Image majorImg = majorSlotButton.GetComponent<Image>();
+        Image minorImg = minorSlotButton.GetComponent<Image>();
+
+        Color cMajor = majorImg.color;
+        Color cMinor = minorImg.color;
+        cMajor.a = 1f;
+        cMinor.a = 1f;
+
+        majorImg.color = cMajor;
+        minorImg.color = cMinor;
     }
 
     private void UpdateSystemUI()
@@ -220,6 +539,12 @@ public class UI_Mutation : MonoBehaviour
 
     private IEnumerator RotateSequence()
     {
+        systemAnimator2.gameObject.SetActive(false);
+        systemAnimator1.gameObject.SetActive(false);
+        nerveButton.interactable = false;
+        integumentaryButton.interactable = false;
+        muscularButton.interactable = false;
+
         isRotating = true;
 
         // 1. MutationClose
@@ -241,10 +566,48 @@ public class UI_Mutation : MonoBehaviour
         radiationAnimator.SetTrigger("Unblock");
         yield return new WaitForSeconds(GetAnimationLength(radiationAnimator, "Unblock"));
 
-        // 6. Radiation Idle
         radiationAnimator.SetTrigger("Idle");
+        systemAnimator2.gameObject.SetActive(true);
+        systemAnimator1.gameObject.SetActive(true);
+        yield return StartCoroutine(PlayOtherSystemAnimations());
+
+        nerveButton.interactable = true;
+        integumentaryButton.interactable = true;
+        muscularButton.interactable = true;
+        UpdateSystemButtons();
+
+        UpdateSystemButtons();
 
         isRotating = false;
+    }
+
+
+    private IEnumerator PlayOtherSystemAnimations()
+    {
+        if (systemAnimator1 == null || systemAnimator2 == null)
+            yield break;
+
+        // Lista de todos los sistemas
+        List<SystemType> allSystems = new() { SystemType.Nerve, SystemType.Integumentary, SystemType.Muscular };
+
+        // Quitamos el activo
+        allSystems.Remove(activeSystem);
+
+        // Asignamos a cada Animator un sistema restante
+        SystemType sys1 = allSystems[0];
+        SystemType sys2 = allSystems[1];
+
+        string trigger1 = sys1.ToString();
+        string trigger2 = sys2.ToString();
+
+        systemAnimator1.SetTrigger(trigger1);
+        systemAnimator2.SetTrigger(trigger2);
+
+        // Esperamos la duración más larga de los 2 clips
+        float animLength1 = GetAnimationLength(systemAnimator1, trigger1);
+        float animLength2 = GetAnimationLength(systemAnimator2, trigger2);
+
+        yield return new WaitForSeconds(Mathf.Max(animLength1, animLength2));
     }
 
     public void OnRadiationEquipped()
@@ -269,9 +632,6 @@ public class UI_Mutation : MonoBehaviour
         yield return new WaitForSeconds(GetAnimationLength(mutationAnimator, "Close"));
         PlayerHelper.EnableInput();
         Cursor.visible = false;
-
-        //Evento para activar portal tras seleccion de mutacion
-        GameManager.Instance?.RaiseMutationUIClosed();
 
         Destroy(gameObject);
     }

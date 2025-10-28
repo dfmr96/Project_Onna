@@ -53,12 +53,12 @@ public class EnemyDeadSOBase : ScriptableObject
         {
             if (_enemyModel.variantSO.explodesOnDeath)
             {
-                DeathManager.Instance.InstantiateMutantDeath(transform, _enemyModel.variantSO.explosionLifetime);
+                EnemyManager.Instance.InstantiateMutantDeath(transform, _enemyModel.variantSO.explosionLifetime);
             }
         }
-       
 
-        DeathManager.Instance.DestroyObject(enemy.gameObject);
+
+        EnemyManager.Instance.DestroyObject(enemy.gameObject);
 
 
     }

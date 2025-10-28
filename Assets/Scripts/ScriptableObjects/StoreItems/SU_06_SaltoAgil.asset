@@ -12,19 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
   m_Name: SU_06_SaltoAgil
   m_EditorClassIdentifier: 
-  upgradeName: "Salto \xC1gil"
-  description: "-0.05 segundos de reducci\xF3n de tiempo de espera del Dash. (Max
-    -.0.20 segundos)"
+  upgradeName: Agile Jump
+  description: -0.05 seconds Dash timeout reduction. (Max -0.20 seconds).
   icon: {fileID: 2043105403, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   iconOnSelected: {fileID: 750972397, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   valueMode: 1
   _levels:
   - value: -0.5
-    cost: 70
+    cost: 30
   - value: -1
-    cost: 150
+    cost: 100
   - value: -1.5
-    cost: 250
+    cost: 200
   - value: -2
-    cost: 400
+    cost: 350
   upgradeEffect: {fileID: 11400000, guid: 4aa96f193c1c38f4fa7db953ac79a0c1, type: 2}

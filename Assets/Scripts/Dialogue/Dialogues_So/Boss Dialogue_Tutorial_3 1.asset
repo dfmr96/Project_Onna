@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
   m_Name: Boss Dialogue_Tutorial_3 1
   m_EditorClassIdentifier: 
-  dialogueText: "Here, take this. It was brought back by the last Runner linked to
-    your weapon. Fragments of those beasts \u2014 Erika will need them for her experiments.\nThat
-    will be all for now, Runner. Progress and Strength to the Empire."
+  dialogueText: 'Here, take this. It was brought back by the last Runner linked to
+    your weapon. Fragments of those beasts,  Erika will need them for her experiments.
+
+    That
+    will be all for now, Runner. Progress and Strength to the Empire.'
   options:
   - optionText: Progress and Strength to the Empire.
     nextNode: {fileID: 0}
     endsDialogue: 1
-    actionIds: 0200000003000000
+    actionIds: 03000000

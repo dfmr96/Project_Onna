@@ -763,6 +763,7 @@ GameObject:
   - component: {fileID: 1729090805337140449}
   - component: {fileID: 1210880959964216394}
   - component: {fileID: -3857017980269826844}
+  - component: {fileID: 7561587462165605362}
   m_Layer: 7
   m_Name: EnemyRange
   m_TagString: Enemy
@@ -950,8 +951,6 @@ MonoBehaviour:
   preAttackDuration: 0.6
   shakeAmount: 0.09
   shakeColorAtenuation: 0.2
-  minFlashFrequency: 0.05
-  maxFlashFrequency: 15
   preAttackMaterials: []
   spawnMaterials:
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}
@@ -1066,6 +1065,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7561587462165605362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5434178895113153990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1686b42493ce74b4c9f92c596ec6fae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPositionEffect: {fileID: 201378595184252760}
+  yOffsetPositionEffect: -2
+  offsetBetweenEffects: 0.2
+  dotBurnEffectPrefab: {fileID: 6469354921825657977, guid: 4d9a3b35b3bc07649b697df7fb497b6d, type: 3}
+  slowedEffectPrefab: {fileID: 7551388611195229131, guid: 4de940934933c4841bbad7642d2ef221, type: 3}
+  markedEffectPrefab: {fileID: 2400466318854986903, guid: bad5794a53f5c3645bb444b3a040ba01, type: 3}
 --- !u!1 &5528583827056112533
 GameObject:
   m_ObjectHideFlags: 0

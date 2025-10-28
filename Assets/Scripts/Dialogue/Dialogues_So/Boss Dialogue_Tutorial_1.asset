@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
   m_Name: Boss Dialogue_Tutorial_1
   m_EditorClassIdentifier: 
-  dialogueText: "Runner, time is a resource in short supply. I don\u2019t want you
-    wandering around the barracks chasing flies. Your immediate deployment to the
-    combat zone is required.\nThose things they call ONNA are getting more violent
-    by the day."
+  dialogueText: "Runner, time is a resource in short supply. \nI don\u2019t want
+    you wandering around the barracks chasing flies. \nYour immediate deployment
+    to the combat zone is required.\nThose things they call ONNA are getting more
+    violent by the day."
   options:
   - optionText: Yes, sir.
     nextNode: {fileID: 11400000, guid: 3b3258f3c06e3274ab4a3c584f33a9da, type: 2}
     endsDialogue: 0
-    actionIds: 
+    actionIds: 00000000

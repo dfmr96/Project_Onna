@@ -18,7 +18,7 @@ public class WeaponDialogueTrigger : InteractableBase
 
     protected override void Start() { /* no queremos el prefab */ }
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void OnTriggerStay(Collider other)
     {
         if (hasTriggered) return; // ya se activó antes
         if (!other.CompareTag("Player")) return;
@@ -59,8 +59,5 @@ public class WeaponDialogueTrigger : InteractableBase
 
     public NPCData GetNextDialogue() => nextDialogueData;
 
-    public void SetDialogueData(NPCData newData)
-    {
-        weaponDialogueData = newData;
-    }
+    public void SetDialogueData(NPCData newData) => weaponDialogueData = newData;
 }

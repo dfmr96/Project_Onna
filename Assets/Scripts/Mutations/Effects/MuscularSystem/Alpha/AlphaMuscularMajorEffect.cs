@@ -10,8 +10,8 @@ namespace Mutations.Effects
     public class AlphaMuscularMajorEffect : StatModifierEffect
     {
         [Header("Alpha Muscular Major Settings")]
-        [SerializeField] private float damageMultiplier = 2f;   // Daño x2
-        [SerializeField] private float fireRatePenalty = 1.5f;
+        private float damageMultiplier = 2f;
+        private float fireRatePenalty = 4f;
 
         [Header("Bullet Modifier")]
         [SerializeField] private OnlyTrailEffectBulletModifierSO trailEffectModifierSO;
@@ -22,7 +22,7 @@ namespace Mutations.Effects
             systemType = SystemType.Muscular;
             slotType = SlotType.Major;
             effectName = "Alpha Muscular Major";
-            description = "Disparos con mucho más daño pero cadencia reducida.";
+            description = $"Shot damage is multiplied by {damageMultiplier}, but rate of fire is reduced.";
             statType = StatModifierType.ShootingBuff;
             isMultiplier = true;
             isTemporary = false;

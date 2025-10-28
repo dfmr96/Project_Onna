@@ -22,8 +22,7 @@ public class MarkerBulletModifierSO : BulletModifierSO
         if (statusHandler != null)
         {
             string source = this.name;
-            statusHandler.ApplyStatusEffect(new MarkedEffect(-1, damage, source));
-            Debug.LogWarning($"[MarkerBulletModifierSO] Marker aplicado, agregado: {damage} extra");
+            statusHandler.ApplyStatusEffect(new MarkedEffect(10, damage, source));
         }
     }
 }

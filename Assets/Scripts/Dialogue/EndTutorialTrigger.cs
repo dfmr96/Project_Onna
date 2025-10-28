@@ -19,7 +19,7 @@ public class EndTutorialTrigger : InteractableBase
 
     protected override void Start() { /* no queremos instanciar nada aquí */ }
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void OnTriggerStay(Collider other)
     {
         if (hasTriggered) return;
         if (!other.CompareTag("Player")) return;
@@ -63,8 +63,5 @@ public class EndTutorialTrigger : InteractableBase
 
     public NPCData GetDialogueData() => endTutorialDialogue;
 
-    public void SetDialogueData(NPCData newData)
-    {
-        endTutorialDialogue = newData;
-    }
+    public void SetDialogueData(NPCData newData) => endTutorialDialogue = newData;
 }

@@ -163,6 +163,9 @@ namespace Player.Weapon
         {
             if (!isReloading && currentAmmo != ammoSettings.MaxAmmo)
             {
+                if (_playerEffect != null) 
+                    _playerEffect.ConsumeFullClipBurn();
+
                 StartCoroutine(Reload());
             }
         }
@@ -229,6 +232,9 @@ namespace Player.Weapon
             bulletObj.ApplyTrailMaterials();
 
             audioSource.PlayOneShot(shootFx);
+
+            if (_playerEffect != null)
+                _playerEffect.ConsumeOneShotBurn();
         }
 
 
@@ -293,6 +299,12 @@ namespace Player.Weapon
                 nextShotDoubleDamage = true;
                 currentAmmo = (int)ammoSettings.MaxAmmo;
                 OnShoot?.Invoke(currentAmmo, (int)ammoSettings.MaxAmmo);
+
+                if (_playerEffect != null)
+                {
+                    _playerEffect.ActivateOneShotBurn();
+                    _playerEffect.ActivateFullClipBurn();
+                }
             }
             else
             {

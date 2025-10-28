@@ -1,67 +1,68 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class JumpingCoinsText : MonoBehaviour
 {
     [SerializeField] private float floatSpeed = 1f;
     [SerializeField] private float lifetime = 1.5f;
     [SerializeField] private float fadeDuration = 1f;
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float gravity = -9.8f;
 
     private TextMeshPro textMesh;
     private Color startColor;
     private float elapsed;
-
-    private float gravity = -9.8f;
-    public float jumpForce = 5f;    
     private float verticalVelocity;
+    private Action onRelease;
 
-    public void Initialize(float damageAmount)
+    public void Initialize(float damageAmount, Action releaseCallback)
     {
-        textMesh = GetComponent<TextMeshPro>();
-        textMesh.text = "+" + Mathf.RoundToInt(damageAmount).ToString() + "\u25CF";
-        startColor = textMesh.color;
+        SetupText("+" + Mathf.RoundToInt(damageAmount).ToString() + "\u25CF", Color.yellow, releaseCallback);
     }
 
-    public void Initialize(string text, float lifeTime)
+    public void Initialize(string text, float lifeTime, Action releaseCallback)
     {
-        textMesh = GetComponent<TextMeshPro>();
-        textMesh.text = text;
-        startColor = Color.yellow;
         fadeDuration = lifeTime;
+        SetupText(text, Color.yellow, releaseCallback);
     }
 
-    void Start()
+    private void SetupText(string content, Color color, Action releaseCallback)
     {
-        verticalVelocity = jumpForce; 
+        if (textMesh == null)
+            textMesh = GetComponent<TextMeshPro>();
+
+        textMesh.text = content;
+        startColor = color;
+        elapsed = 0f;
+        verticalVelocity = jumpForce;
+        onRelease = releaseCallback;
+
+        gameObject.SetActive(true);
     }
 
-    void Update()
+    private void Update()
     {
         elapsed += Time.deltaTime;
 
-
-        Vector3 move = Vector3.right * floatSpeed * Time.deltaTime;
-
-        //parabola
+        // Movimiento parabólico
         verticalVelocity += gravity * Time.deltaTime;
-        move += Vector3.up * verticalVelocity * Time.deltaTime;
-
+        Vector3 move = Vector3.up * verticalVelocity * Time.deltaTime + Vector3.right * floatSpeed * Time.deltaTime;
         transform.position += move;
 
-
-        //Siempre mirar a la camara
+        // Mirar a la cámara
         if (Camera.main != null)
-        {
             transform.forward = Camera.main.transform.forward;
-        }
 
-        //Fade out
+        // Fade out
         float fade = Mathf.Clamp01(1 - (elapsed / fadeDuration));
         textMesh.color = new Color(startColor.r, startColor.g, startColor.b, fade);
 
+        // Cuando termina el lifetime, devolver al pool
         if (elapsed >= lifetime)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            onRelease?.Invoke();
         }
     }
 }

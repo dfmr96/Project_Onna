@@ -1584,6 +1584,7 @@ GameObject:
   - component: {fileID: 3059458471508149341}
   - component: {fileID: 5494369513606284842}
   - component: {fileID: 872886560669737373}
+  - component: {fileID: 710701517036896660}
   m_Layer: 7
   m_Name: EnemyMelee
   m_TagString: Enemy
@@ -1771,8 +1772,6 @@ MonoBehaviour:
   preAttackDuration: 0.4
   shakeAmount: 0.1
   shakeColorAtenuation: 0.2
-  minFlashFrequency: 1
-  maxFlashFrequency: 10
   preAttackMaterials:
   - {fileID: 2100000, guid: 783135275ffc40444aadaf226ed384d2, type: 2}
   spawnMaterials:
@@ -1888,6 +1887,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &710701517036896660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5215764810527803941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1686b42493ce74b4c9f92c596ec6fae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPositionEffect: {fileID: 3450268061211636524}
+  yOffsetPositionEffect: -2
+  offsetBetweenEffects: 0.1
+  dotBurnEffectPrefab: {fileID: 6469354921825657977, guid: 4d9a3b35b3bc07649b697df7fb497b6d, type: 3}
+  slowedEffectPrefab: {fileID: 7551388611195229131, guid: 4de940934933c4841bbad7642d2ef221, type: 3}
+  markedEffectPrefab: {fileID: 2400466318854986903, guid: bad5794a53f5c3645bb444b3a040ba01, type: 3}
 --- !u!1 &5485727888402235831
 GameObject:
   m_ObjectHideFlags: 0

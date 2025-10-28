@@ -33,15 +33,8 @@ namespace ScriptableObjects
         
         public RoomInfo GetRoom(string id)
         {
-            if (rooms.TryGetValue(id, out RoomInfo roomInfo))
-            {
-                return roomInfo;
-            }
-            else
-            {
-                Debug.LogWarning($"RoomDatabase: No se encontró la escena con ID '{id}'.");
-                return default;
-            }
+            if (rooms.TryGetValue(id, out RoomInfo roomInfo)) return roomInfo;
+            else return default;
         }
 
 #if UNITY_EDITOR

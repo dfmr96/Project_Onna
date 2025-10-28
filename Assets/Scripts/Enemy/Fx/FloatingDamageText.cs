@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
 public class FloatingDamageText : MonoBehaviour
 {
     [SerializeField] private float floatSpeed = 1f;
@@ -12,43 +13,52 @@ public class FloatingDamageText : MonoBehaviour
     private TextMeshPro textMesh;
     private Color startColor;
     private float elapsed;
+    private System.Action onRelease;
 
-    public void Initialize(float damageAmount)
+    public void Initialize(float damageAmount, System.Action releaseCallback)
     {
-        textMesh = GetComponent<TextMeshPro>();
-        textMesh.text = Mathf.RoundToInt(damageAmount).ToString();
-        startColor = textMesh.color;
+        SetupText(Mathf.RoundToInt(damageAmount).ToString(), Color.white, releaseCallback);
     }
 
-    public void Initialize(string text, float lifeTime)
+    public void Initialize(string text, float lifeTime, System.Action releaseCallback)
     {
-        textMesh = GetComponent<TextMeshPro>();
-        textMesh.text = text;
-        startColor = Color.yellow;
         fadeDuration = lifeTime;
+        SetupText(text, Color.yellow, releaseCallback);
+    }
+
+    private void SetupText(string content, Color color, System.Action releaseCallback)
+    {
+        if (textMesh == null)
+            textMesh = GetComponent<TextMeshPro>();
+
+        textMesh.text = content;
+        startColor = color;
+        elapsed = 0f;
+        onRelease = releaseCallback;
+
+        gameObject.SetActive(true);
     }
 
     void Update()
     {
         elapsed += Time.deltaTime;
 
-        //Movimiento hacia arriba
+        // Movimiento hacia arriba
         transform.position += Vector3.up * floatSpeed * Time.deltaTime;
 
-        //Siempre mirar a la camara
+        // Siempre mirar a la cámara
         if (Camera.main != null)
-        {
             transform.forward = Camera.main.transform.forward;
-        }
 
-        //Fade out
+        // Fade out
         float fade = Mathf.Clamp01(1 - (elapsed / fadeDuration));
         textMesh.color = new Color(startColor.r, startColor.g, startColor.b, fade);
 
+        // Cuando termina el lifetime devolver al pool
         if (elapsed >= lifetime)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            onRelease?.Invoke();
         }
     }
 }
-

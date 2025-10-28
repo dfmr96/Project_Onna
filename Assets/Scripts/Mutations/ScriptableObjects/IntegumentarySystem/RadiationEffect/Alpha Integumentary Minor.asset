@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a2c97d55b040ab87b019f0760dfe6e, type: 3}
+  m_Name: Alpha Integumentary Minor
+  m_EditorClassIdentifier: 
+  radiationType: 1
+  systemType: 1
+  slotType: 1
+  effectName: Alpha Integumentary Minor
+  description: On taking damage, releases a short shockwave that pushes nearby enemies.
+  icon: {fileID: 0}
+  baseValue: 1
+  upgradeMultiplier: 1.2
+  maxLevel: 4
+  auraData: {fileID: 11400000, guid: 0c9f3579ffafc4648b6cc618dae267d9, type: 2}
+  pushBehavior: {fileID: 11400000, guid: 785e0427a966b124dae63cf681f178ee, type: 2}
+  cooldown: 0.4
+  visualDuration: 0.35
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128

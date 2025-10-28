@@ -14,7 +14,7 @@ public class ScreenOptions : MonoBehaviour
 
     private Resolution[] resolutions;
 
-    void Start() { Initialize(); }
+    void Start() => Initialize();
 
     private void Initialize()
     {
@@ -22,16 +22,31 @@ public class ScreenOptions : MonoBehaviour
         resolutionDropdown.ClearOptions();
 
         List<string> options = new List<string>();
-        int savedResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
-        bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
-        bool isVsyncEnabled = PlayerPrefs.GetInt("VSync", 1) == 1;
-        int savedFps = PlayerPrefs.GetInt("Fps", 60);
+        HashSet<string> uniqueResolutions = new HashSet<string>();
+        List<Resolution> uniqueResolutionObjects = new List<Resolution>();
 
         for (int i = 0; i < resolutions.Length; i++)
         {
-            string resolutionText = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(resolutionText);
+            string resolutionKey = resolutions[i].width + "x" + resolutions[i].height;
+            if (!uniqueResolutions.Contains(resolutionKey))
+            {
+                uniqueResolutions.Add(resolutionKey);
+                uniqueResolutionObjects.Add(resolutions[i]);
+                string resolutionText = resolutions[i].width + " x " + resolutions[i].height;
+                options.Add(resolutionText);
+            }
         }
+        resolutions = uniqueResolutionObjects.ToArray();
+
+        int savedResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
+        if (savedResolutionIndex >= resolutions.Length)
+        {
+            savedResolutionIndex = 0;
+        }
+
+        bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
+        bool isVsyncEnabled = PlayerPrefs.GetInt("VSync", 1) == 1;
+        int savedFps = PlayerPrefs.GetInt("Fps", 60);
 
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = savedResolutionIndex;

@@ -36,6 +36,8 @@ public class EnemyView : MonoBehaviour
     private EnemyController _enemyController;
     private EnemyModel _enemyModel;
     private ProjectileSpawner projectileSpawner;
+    private EnemyProjectile _currentProjectile;
+    private ParticleSpawner _particleSpawner;
 
     //private float _distanceToCountExit = 3f;
 
@@ -65,12 +67,12 @@ public class EnemyView : MonoBehaviour
     private float recoilSpeed = 5f;
 
     [Header("Damage Settings")]
-    [SerializeField] private ParticleSystem deathParticlesPrefab;
+    //[SerializeField] private ParticleSystem deathParticlesPrefab;
     [SerializeField] private Material[] damageMaterials;
     [SerializeField] private Material[] deathMaterials;
     private Material[] originalMaterials;// material temporal de daño
     [SerializeField] private int[] materialIndexesToFlash = { 0 };
-    [SerializeField] private ParticleSystem damageParticlesPrefab;
+    //[SerializeField] private ParticleSystem damageParticlesPrefab;
 
 
     private float deadAngle = 40f;
@@ -85,7 +87,9 @@ public class EnemyView : MonoBehaviour
     private Coroutine recoilCoroutine;
 
 
-    private EnemyProjectile _currentProjectile;
+    [Header("Turret Mode")]
+    [SerializeField] private bool isTurret = false;
+
 
     private void Awake()
     {
@@ -142,6 +146,8 @@ public class EnemyView : MonoBehaviour
         }
 
         projectileSpawner = GameManager.Instance.projectileSpawner;
+        _particleSpawner = EnemyManager.Instance.particleSpawner;
+        
         _enemyController = GetComponent<EnemyController>();
         _enemyModel = GetComponent<EnemyModel>();
 
@@ -206,20 +212,25 @@ public class EnemyView : MonoBehaviour
         audioSource?.PlayOneShot(damagedAudioClip);
 
         // Instanciar partículas de daño si existen
-        if (damageParticlesPrefab != null)
+        //if (damageParticlesPrefab != null)
+        //{
+        //    // Crear como hijo del enemy
+        //    ParticleSystem damageParticlesInstance = Instantiate(
+        //        damageParticlesPrefab,
+        //        transform.position + Vector3.up * 1f,
+        //        Quaternion.identity,
+        //        transform
+        //    );
+
+        //    damageParticlesInstance.Play();
+
+        //    // Destruir después de que termine
+        //    Destroy(damageParticlesInstance.gameObject, 2f);
+        //}
+
+        if (EnemyManager.Instance != null && EnemyManager.Instance.particleSpawner != null)
         {
-            // Crear como hijo del enemy
-            ParticleSystem damageParticlesInstance = Instantiate(
-                damageParticlesPrefab,
-                transform.position + Vector3.up * 1f,
-                Quaternion.identity,
-                transform
-            );
-
-            damageParticlesInstance.Play();
-
-            // Destruir después de que termine
-            Destroy(damageParticlesInstance.gameObject, 2f);
+            _particleSpawner.Spawn("EnemyDamage", transform.position + Vector3.up * 1f, Quaternion.identity, 1f);
         }
     }
 
@@ -437,16 +448,23 @@ public class EnemyView : MonoBehaviour
     #region Visual Effects
     public void PlayDeathParticles()
     {
-        if (deathParticlesPrefab != null)
+        //if (deathParticlesPrefab != null)
+        //{
+        //    ParticleSystem deathParticlesInstance = Instantiate(deathParticlesPrefab, transform.position + new Vector3(0,1,0), Quaternion.identity);
+        //    deathParticlesInstance.Play();
+
+        if (turretHead != null)
+            turretHead.localRotation = Quaternion.Euler(deadAngle, 0f, 0f);
+
+        //    Destroy(deathParticlesInstance.gameObject, 2f);
+        //}
+
+        if (EnemyManager.Instance != null && EnemyManager.Instance.particleSpawner != null)
         {
-            ParticleSystem deathParticlesInstance = Instantiate(deathParticlesPrefab, transform.position + new Vector3(0,1,0), Quaternion.identity);
-            deathParticlesInstance.Play();
-
-            if (turretHead != null)
-                turretHead.localRotation = Quaternion.Euler(deadAngle, 0f, 0f);
-
-            Destroy(deathParticlesInstance.gameObject, 2f);
+            _particleSpawner.Spawn("EnemyDeath", transform.position + new Vector3(0, 1, 0), Quaternion.identity, 1f);
         }
+
+   
     }
 
 
@@ -521,13 +539,99 @@ public class EnemyView : MonoBehaviour
 
     public void PlayDamageEffect()
     {
-        if (isDead) return; // si está muerto no hacemos flash
+        if (isDead) return;
 
         if (flashCoroutine != null)
             StopCoroutine(flashCoroutine);
 
-        flashCoroutine = StartCoroutine(FlashDamageColorsCoroutine());
+        if (isTurret)
+            flashCoroutine = StartCoroutine(FlashDamageColorsTurretCoroutine());
+        else
+            flashCoroutine = StartCoroutine(FlashDamageColorsCoroutine());
     }
+
+    private IEnumerator FlashDamageColorsTurretCoroutine()
+    {
+        if (childRenderers == null || childRenderers.Length == 0)
+            yield break;
+
+        // Guardar los colores originales de cada renderer hijo
+        List<Color[]> originalColorsPerRenderer = new List<Color[]>();
+
+        foreach (Renderer r in childRenderers)
+        {
+            if (r == null)
+            {
+                originalColorsPerRenderer.Add(null);
+                continue;
+            }
+
+            Material[] mats = r.materials;
+            Color[] colors = new Color[mats.Length];
+
+            for (int i = 0; i < mats.Length; i++)
+            {
+                if (mats[i].HasProperty("_BaseColor"))
+                    colors[i] = mats[i].GetColor("_BaseColor");
+                else if (mats[i].HasProperty("_Color"))
+                    colors[i] = mats[i].GetColor("_Color");
+            }
+
+            originalColorsPerRenderer.Add(colors);
+        }
+
+        // Aplicar color de flash a todos los materiales hijos
+        foreach (Renderer r in childRenderers)
+        {
+            if (r == null) continue;
+
+            foreach (Material mat in r.materials)
+            {
+                if (mat.HasProperty("_BaseColor"))
+                    mat.SetColor("_BaseColor", Color.white);
+                else if (mat.HasProperty("_Color"))
+                    mat.SetColor("_Color", Color.white);
+
+                if (mat.HasProperty("_EmissionColor"))
+                {
+                    mat.SetColor("_EmissionColor", Color.white);
+                    mat.EnableKeyword("_EMISSION");
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(flashDuration);
+
+        // Restaurar colores originales
+        for (int i = 0; i < childRenderers.Length; i++)
+        {
+            Renderer r = childRenderers[i];
+            if (r == null || originalColorsPerRenderer[i] == null) continue;
+
+            Material[] mats = r.materials;
+            Color[] colors = originalColorsPerRenderer[i];
+
+            for (int j = 0; j < mats.Length; j++)
+            {
+                if (mats[j] == null) continue;
+
+                if (mats[j].HasProperty("_BaseColor"))
+                    mats[j].SetColor("_BaseColor", colors[j]);
+                else if (mats[j].HasProperty("_Color"))
+                    mats[j].SetColor("_Color", colors[j]);
+
+                if (mats[j].HasProperty("_EmissionColor"))
+                {
+                    mats[j].SetColor("_EmissionColor", Color.black);
+                    mats[j].DisableKeyword("_EMISSION");
+                }
+            }
+        }
+
+        flashCoroutine = null;
+    }
+
+
 
     private IEnumerator FlashDamageColorsCoroutine()
     {

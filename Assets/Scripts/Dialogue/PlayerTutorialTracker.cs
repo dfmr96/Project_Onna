@@ -20,10 +20,8 @@ public class PlayerTutorialTracker : MonoBehaviour
     private bool hasFired;
     private bool hasMelee;
     private bool hasReloaded;
-    private bool hasDashed;
-    private bool hasMoved;
 
-    private bool checklistCompleted => hasFired && hasMelee && hasReloaded && hasDashed && hasMoved;
+    private bool checklistCompleted => hasFired && hasMelee && hasReloaded;
 
     private void OnDisable()
     {
@@ -32,7 +30,6 @@ public class PlayerTutorialTracker : MonoBehaviour
             inputHandler.FirePerformed -= OnFire;
             inputHandler.MeleeAtackPerformed -= OnMelee;
             inputHandler.ReloadPerformed -= OnReload;
-            inputHandler.DashPerformed -= OnDash;
         }
     }
 
@@ -57,7 +54,6 @@ public class PlayerTutorialTracker : MonoBehaviour
             inputHandler.FirePerformed += OnFire;
             inputHandler.MeleeAtackPerformed += OnMelee;
             inputHandler.ReloadPerformed += OnReload;
-            inputHandler.DashPerformed += OnDash;
         }
 
         // 🔹 Si el spawner ya está referenciado, suscribimos al evento
@@ -74,8 +70,6 @@ public class PlayerTutorialTracker : MonoBehaviour
     {
         if (!isCountingInputs || inputHandler == null) return;
 
-        if (!hasMoved && inputHandler.RawMovementInput.magnitude > 0.1f)
-            OnMove();
 
         if (checklistCompleted)
             CompleteChecklist();
@@ -84,8 +78,6 @@ public class PlayerTutorialTracker : MonoBehaviour
     private void OnFire() { if (isCountingInputs) hasFired = true; CompleteIfDone(); }
     private void OnMelee() { if (isCountingInputs) hasMelee = true; CompleteIfDone(); }
     private void OnReload() { if (isCountingInputs) hasReloaded = true; CompleteIfDone(); }
-    private void OnDash() { if (isCountingInputs) hasDashed = true; CompleteIfDone(); }
-    private void OnMove() { if (isCountingInputs) hasMoved = true; CompleteIfDone(); }
 
     private void CompleteIfDone()
     {
@@ -109,13 +101,8 @@ public class PlayerTutorialTracker : MonoBehaviour
         {
             weaponTrigger.SetDialogueData(nextDialogueData);
 
-            // 👇 aseguramos que el DialogueManager use la data actualizada
             DialogueManager.Instance.SetCurrentNPCData(nextDialogueData);
-
-            // Abrimos el diálogo final del arma
             DialogueManager.Instance.StartDialogue(nextDialogueData, weaponTrigger);
-
-            // 🔹 Esperamos a que cierre el diálogo antes de empezar a contar
             DialogueManager.Instance.CurrentTriggerActionOnEnd = () =>
             {
                 StartCountingInputs();

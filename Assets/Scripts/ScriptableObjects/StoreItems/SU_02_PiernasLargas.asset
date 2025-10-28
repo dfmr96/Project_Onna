@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
   m_Name: SU_02_PiernasLargas
   m_EditorClassIdentifier: 
-  upgradeName: Piernas Largas
-  description: +0.5 de velocidad de movimiento. (Max +4 de velocidad de movimiento)
+  upgradeName: Leggy
+  description: +0.5 movement speed. (Max +2 movement speed)
   icon: {fileID: 1443567942, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   iconOnSelected: {fileID: -181064604, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   valueMode: 1
   _levels:
   - value: 0.5
-    cost: 10
+    cost: 35
   - value: 1
-    cost: 25
+    cost: 80
   - value: 1.5
-    cost: 50
+    cost: 140
   - value: 2
-    cost: 75
+    cost: 240
   upgradeEffect: {fileID: 11400000, guid: 842c44155cdd3ce4abefac604dfe56d4, type: 2}

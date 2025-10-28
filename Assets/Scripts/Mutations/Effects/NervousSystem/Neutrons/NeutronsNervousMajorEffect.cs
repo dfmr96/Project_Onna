@@ -10,7 +10,7 @@ namespace Mutations.Effects.NervousSystem
     public class NeutronsNervousMajorEffect : StatModifierEffect
     {
         [Header("Neutrons Major Settings")]
-        [SerializeField] private float extraTime = 5f;
+        private float extraTime = 4f;
 
         private void Awake()
         {
@@ -18,7 +18,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Major;
             effectName = "Neutrons Major";
-            description = $"Cada orbe vital recogido añade +{extraTime} segundos de tiempo vital.";
+            description = $"Each vital orb collected adds +{extraTime} seconds of vital time.";
             isTemporary = false;
         }
 

@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
   m_Name: SU_07_Enfriamiento
   m_EditorClassIdentifier: 
-  upgradeName: Enfriamiento
-  description: "-0.10 segundos de reducci\xF3n de tiempo de sobrecalentamiento del
-    arma ON-0055. (Max -0.60 segundos)"
+  upgradeName: Cooldown
+  description: -0.10 seconds weapon overheat time reduction ON-0055. (Max -0.40 seconds).
   icon: {fileID: -1141499564, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   iconOnSelected: {fileID: 157512039, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   valueMode: 1
@@ -22,9 +21,9 @@ MonoBehaviour:
   - value: -0.1
     cost: 30
   - value: -0.2
-    cost: 60
+    cost: 80
   - value: -0.3
-    cost: 90
+    cost: 160
   - value: -0.4
-    cost: 120
+    cost: 280
   upgradeEffect: {fileID: 11400000, guid: 054eea681c1ffa746bb0ffa497003515, type: 2}

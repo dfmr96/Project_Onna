@@ -6,7 +6,6 @@ public class HubEndTrigger : InteractableBase
 {
     [SerializeField] private LevelProgression levelProgression;
     [SerializeField] private GameObject loadCanvasPrefab;
-    [SerializeField] private MutationDB mutationDB;
     public override void Interact()
     {
         base.Interact();

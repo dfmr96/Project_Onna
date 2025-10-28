@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a49fa8e42ee38a43b750e203b22bf59, type: 3}
   m_Name: SU_08_Telescopio
   m_EditorClassIdentifier: 
-  upgradeName: Telescopio
-  description: +0.5 de Rango de Ataque. (Max +3 de Rango de Ataque)
+  upgradeName: Telescope
+  description: +0.5 Attack Range. (Max +2 Attack Range).
   icon: {fileID: -649927673, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   iconOnSelected: {fileID: -2088077851, guid: e74a9827e089a2240a1c9195a19623c3, type: 3}
   valueMode: 1
   _levels:
   - value: 0.5
-    cost: 20
+    cost: 30
   - value: 1
-    cost: 45
+    cost: 90
   - value: 1.5
-    cost: 80
+    cost: 220
   - value: 2
-    cost: 120
+    cost: 380
   upgradeEffect: {fileID: 11400000, guid: bf460a325fcff5349bde9d26122ff3ec, type: 2}

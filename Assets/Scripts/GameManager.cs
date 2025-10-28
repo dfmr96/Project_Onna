@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     [Header ("Prefabs")]
     [SerializeField] private PlayerSpawner playerSpawner;
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private GameObject pausePrefab;
+    [SerializeField] private GameObject loadScreenPrefab;
     [Header("Doors")]
     [SerializeField] private GameObject[] doors;
     private GameObject player;
@@ -20,15 +22,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject deathParticlesPrefab;
     [SerializeField] private GameObject playerHUD;
 
-    [Header("Enemies Spawners")]
+    [Header("Spawners")]
     public OrbSpawner orbSpawner;
     public ProjectileSpawner projectileSpawner;
 
     [SerializeField] private GameObject defeatUIPrefab;
     private GameObject defeatUIInstance;
+    private GameObject pauseInstance = null;
 
     //Evento para activar portal tras seleccion de mutacion
-    public static event Action OnMutationUIClosed;
+    public event Action OnMutationUIClosed;
 
     private void Awake()
     {
@@ -39,18 +42,19 @@ public class GameManager : MonoBehaviour
         PlayerHelper.EnableInput();
         PlayerModel.OnPlayerDie += DefeatGame;
         enemySpawner.OnAllWavesCompleted += WinGame;
+        player.GetComponent<PlayerController>().HandlePauseAccess += TogglePauseMenu;
     }
-    private void WinGame() 
-    {
-        enemySpawner.OnAllWavesCompleted -= WinGame;
-    }
-    
+
+    private void OnDestroy() => player.GetComponent<PlayerController>().HandlePauseAccess -= TogglePauseMenu;
+
+    private void WinGame() => enemySpawner.OnAllWavesCompleted -= WinGame;
+
     private void DefeatGame()
     {
         PlayerModel.OnPlayerDie -= DefeatGame;
         PlayerHelper.DisableInput();
         Cursor.visible = true;
-        playerHUD.SetActive(false);
+        playerHUD?.SetActive(false);
         Time.timeScale = 0f;
 
         StartCoroutine(HandleDefeatSequence());
@@ -68,10 +72,8 @@ public class GameManager : MonoBehaviour
             );
         }
 
-        // Esperar 0.5 segundos
         yield return new WaitForSecondsRealtime(0.5f);
 
-        // Luego transición
         if (deathScreenTransitionPrefab != null && player != null)
         {
             GameObject transition = Instantiate(
@@ -82,31 +84,27 @@ public class GameManager : MonoBehaviour
 
             var transitionScript = transition.GetComponent<DeathScreenTransition>();
             if (transitionScript != null)
-            {
                 transitionScript.SetDefeatUI(defeatUIPrefab);
-            }
-        }
-        else
-        {
-            Debug.LogError("No se encontró el prefab de transición o el player.");
         }
     }
-
-
 
     public void ReturnToHub()
     {
         GameModeSelector.SelectedMode = GameMode.Hub;
         PlayerHelper.EnableInput();
         Time.timeScale = 1f;
-        SceneManagementUtils.LoadSceneByName("HUB");
+        SceneManagementUtils.AsyncLoadSceneByName("HUB", loadScreenPrefab, this);
+        //  NO -- Encima esta hardcodeado
+        //SceneManagementUtils.LoadSceneByName("HUB");
     }
     
     public void ReturnToTutorial()
     {
         PlayerHelper.EnableInput();
         Time.timeScale = 1f;
-        SceneManagementUtils.LoadSceneByName("Z1_L5_Tutorial");
+        //  NO -- Encima esta hardcodeado
+        SceneManagementUtils.AsyncLoadSceneByName("Z1_L5_Tutorial", loadScreenPrefab, this);
+        //SceneManagementUtils.LoadSceneByName("Z1_L5_Tutorial");
     }
 
     public void ReturnToHubTutorial()
@@ -114,7 +112,9 @@ public class GameManager : MonoBehaviour
         GameModeSelector.SelectedMode = GameMode.Hub;
         PlayerHelper.EnableInput();
         Time.timeScale = 1f;
-        SceneManagementUtils.LoadSceneByName("HUB_Tutorial");
+        SceneManagementUtils.AsyncLoadSceneByName("HUB_Tutorial", loadScreenPrefab, this);
+        //  NO -- Encima esta hardcodeado
+        //SceneManagementUtils.LoadSceneByName("HUB_Tutorial");
     }
 
 
@@ -141,8 +141,32 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void RaiseMutationUIClosed()
+    public void OnOrbMutationActivated(OrbMutation orb)
     {
+        if (orb != null)
+            Destroy(orb.gameObject);
+
+        StartCoroutine(InvokeMutationClosedNextFrame());
+    }
+
+    private IEnumerator InvokeMutationClosedNextFrame()
+    {
+        yield return null;
         OnMutationUIClosed?.Invoke();
+        OpenDoorDebug();
+    }
+
+    private void TogglePauseMenu()
+    {
+        if (pauseInstance == null)
+        {
+            pauseInstance = Instantiate(pausePrefab);
+
+        }
+        else
+        {
+            pauseInstance.SetActive(!pauseInstance.activeInHierarchy);
+
+        }
     }
 }

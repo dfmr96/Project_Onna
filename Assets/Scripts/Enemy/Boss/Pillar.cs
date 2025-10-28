@@ -14,6 +14,9 @@ public class Pillar : MonoBehaviour, IDamageable
     private Vector3 targetPosition;
 
     public event Action<Pillar> OnPillarDestroyed;
+    private FloatingTextSpawner floatingTextSpawner;
+
+    public Vector3 Transform => transform.position;
 
     public float MaxHealth { get; private set; }
     public float CurrentHealth { get; private set; }
@@ -21,8 +24,6 @@ public class Pillar : MonoBehaviour, IDamageable
     private bool isDestroyed = false;
 
     [Header("Floating Damage Text Effect")]
-    [SerializeField] private GameObject floatingTextPrefab;
-    [SerializeField] private float heightTextSpawn = 2f;
     [SerializeField] private ParticleSystem particleExplosion;
 
     private ParticleSystem explosionInstance;
@@ -49,6 +50,7 @@ public class Pillar : MonoBehaviour, IDamageable
     private void Start()
     {
         orbSpawner = GameManager.Instance.orbSpawner;
+        floatingTextSpawner = EnemyManager.Instance.floatingTextSpawner;
 
         MaxHealth = _bossModel.statsSO.PillarMaxHealth;
         CurrentHealth = MaxHealth;
@@ -96,11 +98,10 @@ public class Pillar : MonoBehaviour, IDamageable
 
         CurrentHealth -= damageAmount;
 
-        if (floatingTextPrefab != null)
+  
+        if (EnemyManager.Instance != null && EnemyManager.Instance.floatingTextSpawner != null)
         {
-            Vector3 spawnPos = transform.position + Vector3.up * heightTextSpawn;
-            GameObject textObj = Instantiate(floatingTextPrefab, spawnPos, Quaternion.identity);
-            textObj.GetComponent<FloatingDamageText>().Initialize(damageAmount);
+            floatingTextSpawner.SpawnFloatingText(transform.position, damageAmount);
         }
 
         OnPillarHealthChanged?.Invoke(CurrentHealth, MaxHealth);

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe8740264b18bf43b35eb89fc024843, type: 3}
   m_Name: ONNA Dialogue_Tutorial 7
   m_EditorClassIdentifier: 
-  dialogueText: "Something\u2019s wrong\u2026 I can feel the Monarch, she\u2019s
-    angrier than usual. I hope you\u2019re ready, something big is coming.\nLuckily
-    for me, if you die, I\u2019ll just calmly return to base. Good luck."
+  dialogueText: 'Something''s wrong... I can feel the Monarch, she''s angrier than
+    usual. I hope you''re ready, something big is coming.
+
+    Luckily for me, if
+    you die, I''ll just calmly return to base. Good luck.'
   options:
-  - optionText: ... Shit
+  - optionText: ...Shit
     nextNode: {fileID: 0}
     endsDialogue: 1
     actionIds: 08000000

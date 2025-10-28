@@ -11,7 +11,7 @@ namespace Mutations.Effects.NervousSystem
     public class AlphaNervousMinorEffect : StatModifierEffect
     {
         [Header("Alpha Minor Settings")]
-        [SerializeField] private float invulnerabilityDuration = 0.1f; // Duración muy breve, sin cooldown
+        private float invulnerabilityDuration = 0.2f;
 
         private void Awake()
         {
@@ -19,7 +19,7 @@ namespace Mutations.Effects.NervousSystem
             systemType = SystemType.Nerve;
             slotType = SlotType.Minor;
             effectName = "Alpha Mini-Invulnerabilidad";
-            description = $"Cada orbe recogido otorga un mini-burst de invulnerabilidad de {invulnerabilityDuration} segundos";
+            description = $"Each vital orb collected grants an invulnerability mini-burst of {invulnerabilityDuration} seconds.";
             isTemporary = true;
         }
 

@@ -21,6 +21,8 @@ public class EnemyProjectile : MonoBehaviour
     private Rigidbody rb;
 
     private EnemyModel ownerModel;
+    private BossModel ownerBModel;
+
 
 
 
@@ -131,6 +133,22 @@ public class EnemyProjectile : MonoBehaviour
 
         this.damage = damage;
         this.ownerModel = owner;
+        _timer = 0f;
+        hasHit = false;
+
+        rb.isKinematic = false;
+        rb.velocity = direction * force;
+
+        // Reactivar trail después de disparar
+        if (trail != null)
+            trail.emitting = true;
+    }
+
+    public void FireBoss(Vector3 direction, float force, float damage, BossModel owner)
+    {
+
+        this.damage = damage;
+        this.ownerBModel = owner;
         _timer = 0f;
         hasHit = false;
 

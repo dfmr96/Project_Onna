@@ -7,15 +7,15 @@ namespace Mutations.Effects
     [CreateAssetMenu(fileName = "Neutrons Muscular Major", menuName = "Mutations/Effects/Muscular System/Neutrons Major")]
     public class NeutronsMuscularMajorEffect : StatModifierEffect
     {
-        [SerializeField] private int enemiesToKill = 9;
-        [SerializeField] private float timeToRecover = 10f;
+        private int enemiesToKill = 9;
+        private float timeToRecover = 10f;
         private void Awake()
         {
             radiationType = MutationType.Neutrons;
             systemType = SystemType.Muscular;
             slotType = SlotType.Major;
             effectName = "Neutrons Major";
-            description = $"Cada 9 enemigos eliminados otorgan +10s de tiempo vital (máx. 120s)";
+            description = $"Every {enemiesToKill} enemies eliminated gains +{timeToRecover}s life time. (max. 120s)";
             isTemporary = false;
         }
 

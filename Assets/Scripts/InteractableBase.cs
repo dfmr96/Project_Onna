@@ -21,12 +21,13 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         interactPrompt.SetActive(false);
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerStay(Collider other)
     {
         if (other.gameObject.layer == 6)
         {
             if (interactPrompt != null)
                 interactPrompt.SetActive(true);
+            other.GetComponent<PlayerController>().ToggleInteraction(true);
         }
     }
 
@@ -40,5 +41,5 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         }
     }
 
-    public virtual void Interact() { AudioManager.Instance?.PlaySFX(interactAudio); }
+    public virtual void Interact() => AudioManager.Instance?.PlaySFX(interactAudio);
 }

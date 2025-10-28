@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0a980c3ede781443bca97b6deaac8b3, type: 3}
+  m_Name: EnemyMeleeStatsTUTO
+  m_EditorClassIdentifier: 
+  currentState: EnemyChaseState
+  MaxHealth: 330
+  isShieldActive: 0
+  AttackDamage: 55
+  AttackRange: 1
+  AttackTimeRate: 1.1
+  AttackInitialDelay: 0
+  combatAngle: 30.27
+  obstacleCombatLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  detectionRange: 50
+  visionAngle: 360
+  obstacleDetectionLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  ShootForce: 15
+  moveSpeed: 5.8
+  rotationSpeed: 400
+  RandomMovementRange: 30
+  radiusSpawnOrb: 1.5
+  RastroOrbOnHit: 1
+  numberOfOrbsOnHit: 1
+  RastroOrbOnDeath: 1
+  numberOfOrbsOnDeath: 1
+  CoinsToDrop: 1
