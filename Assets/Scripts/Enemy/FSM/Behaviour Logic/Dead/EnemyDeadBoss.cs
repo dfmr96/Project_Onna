@@ -31,7 +31,7 @@ public class EnemyDeadBoss : EnemyDeadSOBase
     {
         base.DoExitLogic();
 
-        //GameModeSelector.SelectedMode = GameMode.Hub;
+        GameModeSelector.SelectedMode = GameMode.Hub;
         //SceneManager.LoadScene("HUB");
 
         SceneManagementUtils.AsyncLoadSceneByName("HUB", loadingScreenPrefab, PlayerHelper.GetPlayer().GetComponent<PlayerController>());
