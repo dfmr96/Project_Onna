@@ -96,8 +96,8 @@ namespace Player
                 //EventBus.Publish(new PlayerSpawnedSignal { PlayerGO = gameObject });
             }
 
-            floatingTextSpawner = EnemyManager.Instance.floatingTextSpawner;
-            particleSpawner = EnemyManager.Instance.particleSpawner;
+            floatingTextSpawner = EnemyManager.Instance?.floatingTextSpawner;
+            particleSpawner = EnemyManager.Instance?.particleSpawner;
         }
 
         public void InjectStatContext(PlayerStatContext context)

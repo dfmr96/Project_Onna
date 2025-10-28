@@ -43,7 +43,13 @@ public class HubManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy() => PlayerHelper.GetPlayer().GetComponent<PlayerController>().HandlePauseAccess -= TogglePauseMenu;
+    private void OnDestroy()
+    {
+        if (PlayerHelper.GetPlayer() != null)
+        {
+            PlayerHelper.GetPlayer().GetComponent<PlayerController>().HandlePauseAccess -= TogglePauseMenu;
+        }
+    }
 
     public void OpenStore()
     {

@@ -6,10 +6,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-[Serializable]
 public class NewMutationController
 {
-    [SerializeField] SerializedDictionary<SystemType, NewMutationSystem> systems = new();
+    Dictionary<SystemType, NewMutationSystem> systems = new();
     private List<RadiationEffect> effects = new();
     private MutationDB _db;
 
