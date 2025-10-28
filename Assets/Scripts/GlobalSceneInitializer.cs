@@ -26,7 +26,6 @@ public static class GlobalSceneInitializer
         {
             GameMode selected = sceneName == "HUB" ? GameMode.Hub : GameMode.Run;
             GameModeSelector.SelectedMode = selected;
-            Debug.Log($"[GlobalSceneInitializer] GameMode seleccionado automáticamente: {selected} (escena: {sceneName})");
         }
 
         // Inicializar RoomDatabase y buscar la escena actual
@@ -38,14 +37,6 @@ public static class GlobalSceneInitializer
         else
         {
             RoomInfo roomInfo = roomDB.GetRoom(sceneName);
-            if (!string.IsNullOrEmpty(roomInfo.Zone) || !string.IsNullOrEmpty(roomInfo.Level))
-            {
-                Debug.Log($"[GlobalSceneInitializer] Escena '{sceneName}' detectada como Zona: '{roomInfo.Zone}', Nivel: '{roomInfo.Level}'");
-            }
-            else
-            {
-                Debug.LogWarning($"[GlobalSceneInitializer] La escena '{sceneName}' no está registrada en el RoomDatabase.");
-            }
         }
 
         // Ya no necesitamos el listener después de la primera escena cargada

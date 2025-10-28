@@ -28,7 +28,6 @@ namespace Player
                             : GameMode.Run;
 
                     _selectedMode = mode;
-                    Debug.Log($"[GameModeSelector] Inicializado automáticamente: {mode} (escena: {sceneName})");
                 }
 
                 return _selectedMode.Value;
