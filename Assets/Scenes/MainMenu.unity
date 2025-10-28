@@ -1009,7 +1009,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -6473747141543690868, guid: 845ffc095bb9f6d4f9d9005fc8955943, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2993,7 +2993,7 @@ MonoBehaviour:
   hubLevelName: HUB
   hubTutorialLevelName: HUB_Tutorial
   introLevelName: Intro
-  mainMenuMusic: {fileID: 8300000, guid: 973fff7cb14b3fb4f937bca7512bcf93, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: 81d80962d71c9d041bc14b7ebac4b450, type: 3}
 --- !u!114 &1437441034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3097,8 +3097,8 @@ MonoBehaviour:
   musicAudioSource: {fileID: 573710576}
   sfxAudioSource: {fileID: 995236022}
   noteAudioSource: {fileID: 1249296503}
-  runModeMusic: {fileID: 8300000, guid: ddd8bc1adea7ae6449bba3e04f3334f1, type: 3}
-  hubModeMusic: {fileID: 8300000, guid: 62ae91418422e76458758c118d0aa7ec, type: 3}
+  runModeMusic: {fileID: 8300000, guid: 3341b8bce474f204d91932bf6bbb3c4f, type: 3}
+  hubModeMusic: {fileID: 8300000, guid: 128737c37f51dd247869a504d39f8077, type: 3}
   randomRunSFX:
   - {fileID: 8300000, guid: 57e44dd72b49ce94ea037764ea46ea6f, type: 3}
   - {fileID: 8300000, guid: 5470e0d4c8d8a5d44a59aa23f63007ab, type: 3}
@@ -3593,7 +3593,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 0
-  orthographic size: 11.25
+  orthographic size: 12.53125
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
