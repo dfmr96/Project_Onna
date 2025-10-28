@@ -22,6 +22,7 @@ public class PausePanel : MonoBehaviour
                 break;
         }
         PlayerHelper.DisableInput();
+        CursorHelper.Show();
     }
 
     public void HandleButton()
@@ -42,6 +43,7 @@ public class PausePanel : MonoBehaviour
     public void ResumeGame()
     {
         PlayerHelper.EnableInput();
+        CursorHelper.Hide();
         transform.parent.gameObject.SetActive(false);
     }
 }
