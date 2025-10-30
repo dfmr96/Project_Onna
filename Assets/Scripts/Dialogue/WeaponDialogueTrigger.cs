@@ -1,4 +1,5 @@
 using UnityEngine;
+using Player;
 
 public class WeaponDialogueTrigger : InteractableBase
 {
@@ -14,17 +15,29 @@ public class WeaponDialogueTrigger : InteractableBase
     [Header("Action ID que dispara evento especial")]
     [SerializeField] private string actionId = "ONNAPreTutorial";
 
-    private bool hasTriggered = false; // control de primera vez
+    public NPCData GetCurrentDialogueData() => weaponDialogueData;
 
-    protected override void Start() { /* no queremos el prefab */ }
+
+    private bool hasTriggered = false; 
+
+    protected override void Start()
+    {
+        var player = PlayerHelper.GetPlayer();
+        if (player != null)
+        {
+            var model = player.GetComponent<PlayerModel>();
+            if (model != null)
+                model.SetInvulnerable(true);
+        }
+    }
 
     protected override void OnTriggerStay(Collider other)
     {
-        if (hasTriggered) return; // ya se activó antes
+        if (hasTriggered) return; 
         if (!other.CompareTag("Player")) return;
 
-        hasTriggered = true; // marcamos que ya pasó por el trigger
-        
+        hasTriggered = true;
+
         Collider[] colliders = GetComponents<Collider>();
         foreach (var col in colliders)
             col.enabled = false;
@@ -32,11 +45,11 @@ public class WeaponDialogueTrigger : InteractableBase
         DialogueManager.Instance.StartDialogue(weaponDialogueData, this);
     }
 
+
     public void HandleAction(string action)
     {
         if (action == actionId)
         {
-            // Inicia la secuencia con el nuevo data después de 5 segundos
             DialogueManager.Instance.StartCoroutine(
                 DialogueManager.Instance.PreTutorialTimer(nextDialogueData, this)
             );

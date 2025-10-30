@@ -13,14 +13,18 @@ namespace Player.Weapon
 
         [Header("Animador")]
         [SerializeField] private Animator barAnimator;
-        [SerializeField] private Animator moveBarAnimator;// Animator con las animaciones: Open, Success, Fail
+        [SerializeField] private Animator moveBarAnimator;
 
         private bool active = false;
         private WeaponController weaponController;
         private bool skillCheckSuccess = false;
         private Coroutine moveBarCoroutine;
+        private bool skillCheckTried = false;
 
-        private float duration = 1f; // duración del skillcheck
+        private float inputBufferTime = 0.5f; // 1.5 segundos
+        private bool bufferActive = false;
+
+        private float duration = 1f;
 
         [Header("Sonidos")]
         [SerializeField] private AudioClip successSfx;
@@ -31,9 +35,9 @@ namespace Player.Weapon
         void Start()
         {
             HideImmediate();
-                audioSource = GetComponent<AudioSource>();
-                if(audioSource == null)
-                    audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+                audioSource = gameObject.AddComponent<AudioSource>();
         }
 
         public void Show()
@@ -47,10 +51,12 @@ namespace Player.Weapon
 
             ResetBar();
             skillCheckSuccess = false;
+            skillCheckTried = false;
+
+            // Activar el buffer inmediatamente al iniciar el skill check
+            StartCoroutine(BufferTimer());
 
             barAnimator.SetTrigger("Open");
-
-            // Iniciar movimiento de la barra
         }
 
         private IEnumerator MoveBarCoroutine()
@@ -80,8 +86,7 @@ namespace Player.Weapon
             moveBarAnimator.SetTrigger("BarFeedback");
             barAnimator.SetTrigger("Fail");
 
-            // Reproducir sonido de fallo
-            if(failSfx != null)
+            if (failSfx != null)
                 audioSource.PlayOneShot(failSfx);
         }
 
@@ -94,7 +99,6 @@ namespace Player.Weapon
         {
             float startX = -barContainer.rect.width / 2f;
             float endX = barContainer.rect.width / 2f;
-
             float newX = Mathf.Lerp(startX, endX, progress);
             movingBar.localPosition = new Vector3(newX, movingBar.localPosition.y, 0);
         }
@@ -115,7 +119,10 @@ namespace Player.Weapon
 
         public void TrySkillCheck()
         {
-            if (!active || weaponController == null) return;
+            if (bufferActive || !active || weaponController == null || skillCheckTried)
+                return;
+
+            skillCheckTried = true;
 
             if (moveBarCoroutine != null)
                 StopCoroutine(moveBarCoroutine);
@@ -130,8 +137,7 @@ namespace Player.Weapon
                 weaponController.SetSkillCheckSuccess(true);
                 barAnimator.SetTrigger("Success");
 
-                // Reproducir sonido de éxito
-                if(successSfx != null)
+                if (successSfx != null)
                     audioSource.PlayOneShot(successSfx);
             }
             else
@@ -142,7 +148,6 @@ namespace Player.Weapon
 
         public bool IsActive() => active;
 
-        // Llamar desde el último frame de la animación "Open"
         public void OnOpenAnimationEnd()
         {
             movingBar.gameObject.SetActive(true);
@@ -150,29 +155,33 @@ namespace Player.Weapon
             moveBarCoroutine = StartCoroutine(MoveBarCoroutine());
         }
 
-        // Llamar desde el último frame de las animaciones "Success" y "Fail"
+        private IEnumerator BufferTimer()
+        {
+            bufferActive = true;
+            yield return new WaitForSeconds(inputBufferTime);
+            bufferActive = false;
+        }
+
         public void OnResultAnimationEnd()
         {
-            Hide(); // oculta HUD
-
+            Hide();
             if (weaponController != null)
             {
-                // Le avisamos que terminó y si fue éxito o fallo
                 weaponController.SetSkillCheckSuccess(skillCheckSuccess);
                 weaponController.NotifySkillCheckEnded();
             }
         }
 
+        public void HideMoveBar()
+        {
+            movingBar.gameObject.SetActive(false);
+        }
+
+
         public void Hide()
         {
             skillCheckGO.SetActive(false);
             active = false;
-        }
-
-
-        public void HideMoveBar()
-        {
-            movingBar.gameObject.SetActive(false);
         }
 
         private void HideImmediate()

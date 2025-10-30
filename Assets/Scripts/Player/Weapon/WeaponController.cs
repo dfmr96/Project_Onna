@@ -43,7 +43,7 @@ namespace Player.Weapon
         private UI_SkillCheck reloadUI;
 
         [BoxGroup("Sounds")]
-        [SerializeField] private AudioClip shootFx;
+        [SerializeField] private List<AudioClip> shootFxClips = new List<AudioClip>();
         [BoxGroup("Sounds")]
         [SerializeField] private AudioClip overheathFx;
         private AudioSource audioSource;
@@ -231,7 +231,13 @@ namespace Player.Weapon
             // Aplicar materiales después de registrar todos
             bulletObj.ApplyTrailMaterials();
 
-            audioSource.PlayOneShot(shootFx);
+            if (shootFxClips != null && shootFxClips.Count > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, shootFxClips.Count);
+                AudioClip clip = shootFxClips[randomIndex];
+                audioSource.PlayOneShot(clip);
+            }
+
 
             if (_playerEffect != null)
                 _playerEffect.ConsumeOneShotBurn();
@@ -318,7 +324,6 @@ namespace Player.Weapon
                 }
             }
         }
-
 
         public void TrySkillCheck()
         {

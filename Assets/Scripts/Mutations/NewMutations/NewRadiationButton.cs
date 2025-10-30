@@ -46,4 +46,5 @@ public class NewRadiationButton : MonoBehaviour
     /// Update radiation
     /// </summary>
     public void UpdateRadiation(NewRadiationData data, SystemType system, SlotType slot, UI_Mutation uiMutation) => SetupButton(data, controller, uiMutation);
+    public void PlaySound(AudioClip audioClip) => AudioManager.Instance?.PlaySFX(audioClip);
 }

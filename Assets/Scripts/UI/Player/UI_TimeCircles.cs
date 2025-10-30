@@ -38,11 +38,18 @@ public class UI_TimeCircles : MonoBehaviour
 
     public void UpdateTimeUI(float timePercent)
     {
+        // Evitar ejecución si el objeto o la UI no están activos
+        if (!gameObject.activeInHierarchy) return;
+
         var player = PlayerHelper.GetPlayer()?.GetComponent<PlayerModel>();
         if (player == null) return;
 
         float currentTime = player.CurrentHealth;
         float maxTime = player.MaxHealth;
+
+        // Evitar procesamiento si los círculos están ocultos o vacíos
+        if (timeCircles == null || timeCircles.Count == 0)
+            return;
 
         UpdateCircles(currentTime, maxTime);
         UpdateBlink(currentTime);
@@ -50,11 +57,15 @@ public class UI_TimeCircles : MonoBehaviour
 
     private void UpdateCircles(float currentTime, float maxTime)
     {
+        if (!gameObject.activeInHierarchy) return;
+
         int totalCircles = Mathf.Min(timeCircles.Count, Mathf.CeilToInt(maxTime / secondsPerCircle));
 
         for (int i = 0; i < timeCircles.Count; i++)
         {
             Image circle = timeCircles[i];
+            if (circle == null) continue; // si el objeto fue destruido o desactivado
+
             GameObject indicator = (lifeIndicators != null && i < lifeIndicators.Count) ? lifeIndicators[i] : null;
 
             if (i < totalCircles)
@@ -70,30 +81,27 @@ public class UI_TimeCircles : MonoBehaviour
                 {
                     bool shouldBeOn = fill > 0f;
 
-                    // Ejecutamos animación solo si cambió el estado
                     if (indicatorStates[i] != shouldBeOn)
                     {
                         var anim = indicator.GetComponent<Animator>();
                         if (anim != null)
-                        {
                             anim.SetTrigger(shouldBeOn ? "TurnOn" : "TurnOff");
-                        }
+
                         indicatorStates[i] = shouldBeOn;
                     }
                 }
             }
             else
             {
-                circle.gameObject.SetActive(false);
+                if (circle.gameObject.activeSelf)
+                    circle.gameObject.SetActive(false);
 
                 if (indicator != null && indicatorStates[i])
                 {
-                    // Si estaba prendida y ahora se apaga
                     var anim = indicator.GetComponent<Animator>();
                     if (anim != null)
-                    {
                         anim.SetTrigger("TurnOff");
-                    }
+
                     indicatorStates[i] = false;
                 }
             }
@@ -102,11 +110,14 @@ public class UI_TimeCircles : MonoBehaviour
 
     private void UpdateBlink(float currentTime)
     {
-        // Titilea solo la sección que se está por vaciar
+        if (!gameObject.activeInHierarchy) return;
+
         int circleIndex = Mathf.FloorToInt(currentTime / secondsPerCircle);
         if (circleIndex < 0 || circleIndex >= timeCircles.Count) return;
 
         Image circle = timeCircles[circleIndex];
+        if (circle == null || !circle.gameObject.activeInHierarchy) return;
+
         float t = Mathf.PingPong(Time.time * blinkSpeed, 1f);
         circle.color = Color.Lerp(originalColors[circleIndex], blinkColor, t);
     }

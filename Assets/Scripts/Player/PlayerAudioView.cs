@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Player
 {
@@ -8,55 +9,48 @@ namespace Player
         [SerializeField] private AudioSource audioSource;
 
         [Header("Audio Clips")]
-        [SerializeField] private AudioClip hurtFx;
-        [SerializeField] private AudioClip healthFx;
+        [SerializeField] private List<AudioClip> hurtFxList = new List<AudioClip>();
+        [SerializeField] private List<AudioClip> healthFxList = new List<AudioClip>();
 
         public void Initialize()
         {
             if (audioSource == null)
-            {
                 audioSource = GetComponent<AudioSource>();
-            }
         }
 
         public void PlayDamageSound()
         {
-            if (audioSource != null && hurtFx != null)
-            {
-                audioSource.PlayOneShot(hurtFx);
-            }
+            PlayRandomFromList(hurtFxList);
         }
 
         public void PlayHealthSound()
         {
-            if (audioSource != null && healthFx != null)
-            {
-                audioSource.PlayOneShot(healthFx);
-            }
+            PlayRandomFromList(healthFxList);
         }
 
         public void PlaySound(AudioClip clip)
         {
             if (audioSource != null && clip != null)
-            {
                 audioSource.PlayOneShot(clip);
-            }
+        }
+
+        private void PlayRandomFromList(List<AudioClip> list)
+        {
+            if (audioSource == null || list == null || list.Count == 0) return;
+            var clip = list[Random.Range(0, list.Count)];
+            audioSource.PlayOneShot(clip);
         }
 
         public void SetVolume(float volume)
         {
             if (audioSource != null)
-            {
                 audioSource.volume = Mathf.Clamp01(volume);
-            }
         }
 
         public void SetMute(bool mute)
         {
             if (audioSource != null)
-            {
                 audioSource.mute = mute;
-            }
         }
     }
 }

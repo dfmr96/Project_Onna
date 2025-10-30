@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Player.Melee
 {
@@ -8,9 +9,25 @@ namespace Player.Melee
         [SerializeField] private GameObject slashEffectPrefab;
         [SerializeField] private Transform slashSpawnPoint;
 
+        
+        [Header("Audio")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private List<AudioClip> hitSounds = new List<AudioClip>();
+        [SerializeField, Range(0f, 1f)] private float pitchVariation = 0.1f;
+
+
         private int comboStep = 0;
 
         // En uso en Animation Events
+
+        public void PlayAttackSound()
+        {
+            if (audioSource == null || hitSounds.Count == 0) return;
+            AudioClip clip = hitSounds[UnityEngine.Random.Range(0, hitSounds.Count)];
+            audioSource.pitch = 1f + UnityEngine.Random.Range(-pitchVariation, pitchVariation);
+            audioSource.PlayOneShot(clip);
+        }
+
         public void ExecuteDamage()
         {
             if (meleeController != null)

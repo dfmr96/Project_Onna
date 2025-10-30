@@ -44,14 +44,25 @@ public class UI_Mutation : MonoBehaviour
     [SerializeField] private Animator systemAnimator1;
     [SerializeField] private Animator systemAnimator2;
 
+    [Header("Hover Tooltip")]
+    [SerializeField] private TextMeshProUGUI hoverText;
+    [SerializeField] private CanvasGroup hoverCanvasGroup; 
+
+    [SerializeField] private AudioClip openCanvasSfx;
+
 
 
 
 
 
     [Header("Pulse Effect (Alpha)")]
-    [SerializeField] private float pulseDuration = 0.8f;  // Tiempo para subir/bajar alpha
-    [SerializeField] private float pulseDelay = 0.2f;     // Pausa entre alternancias
+    [SerializeField] private float pulseDuration = 1f;  // Tiempo para subir/bajar alpha
+    [SerializeField] private float pulseDelay = 0f;     // Pausa entre alternancias
+    [SerializeField] private float pulseMinAlpha = 0.2f; // Nuevo rango mínimo
+    [SerializeField] private float pulseMaxAlpha = 1f;   // Rango máximo (pleno)
+    [SerializeField] private GameObject majorPulseObject;
+    [SerializeField] private GameObject minorPulseObject;
+
 
     private Coroutine pulseRoutine;
     private NewRadiationData currentSelectedRad;
@@ -78,6 +89,8 @@ public class UI_Mutation : MonoBehaviour
         }
         StartCoroutine(InitialSequence());
 
+        if (openCanvasSfx != null)
+            PlaySound(openCanvasSfx);
 
         nerveButton.onClick.AddListener(() => OnSelectSystem(SystemType.Nerve));
         integumentaryButton.onClick.AddListener(() => OnSelectSystem(SystemType.Integumentary));
@@ -88,7 +101,13 @@ public class UI_Mutation : MonoBehaviour
         systemAnimator2.SetTrigger("Muscular");
         systemAnimator1.SetTrigger("Integumentary");
 
+        SetupButtonHover(nerveButton, SystemType.Nerve);
+        SetupButtonHover(integumentaryButton, SystemType.Integumentary);
+        SetupButtonHover(muscularButton, SystemType.Muscular);
+
+
     }
+
 
     private IEnumerator InitialSequence()
     {
@@ -102,6 +121,16 @@ public class UI_Mutation : MonoBehaviour
 
         Initialize();
     }
+    
+    private void SetPulseObjectActive(bool majorActive, bool minorActive)
+    {
+        if (majorPulseObject != null)
+            majorPulseObject.SetActive(majorActive);
+
+        if (minorPulseObject != null)
+            minorPulseObject.SetActive(minorActive);
+    }
+
 
     [ContextMenu("Re Roll")]
     private void Initialize()
@@ -155,17 +184,14 @@ public class UI_Mutation : MonoBehaviour
         if (pulseRoutine != null)
             StopCoroutine(pulseRoutine);
 
-        // Estado de los slots
         bool majorOccupied = mController.GetEquippedRadiationData(activeSystem, SlotType.Major) != null;
         bool minorOccupied = mController.GetEquippedRadiationData(activeSystem, SlotType.Minor) != null;
 
-        // 🔹 Mantenemos el ícono de los slots ocupados
         if (!majorOccupied)
-            majorImg.sprite = radData.SmallIcon;  // solo actualizamos el libre
+            majorImg.sprite = radData.SmallIcon;
         if (!minorOccupied)
             minorImg.sprite = radData.SmallIcon;
 
-        // 🔹 Reiniciamos alphas
         Color cMajor = majorImg.color;
         Color cMinor = minorImg.color;
         cMajor.a = 1f;
@@ -173,35 +199,25 @@ public class UI_Mutation : MonoBehaviour
         majorImg.color = cMajor;
         minorImg.color = cMinor;
 
-        // 🔹 Aplicamos el pulso solo al libre
+        // Activar objetos de pulso
+        SetPulseObjectActive(true, true);
+
+        // Iniciar corutina de pulso solo en los slots libres
         if (!majorOccupied && !minorOccupied)
-        {
-            pulseRoutine = StartCoroutine(PulseAlternate(majorImg, minorImg));
-        }
+            pulseRoutine = StartCoroutine(PulseAlternate(majorImg, minorImg, majorPulseObject, minorPulseObject));
         else if (!majorOccupied)
-        {
-            pulseRoutine = StartCoroutine(PulseSingle(majorImg));
-        }
+            pulseRoutine = StartCoroutine(PulseSingle(majorImg, majorPulseObject));
         else if (!minorOccupied)
-        {
-            pulseRoutine = StartCoroutine(PulseSingle(minorImg));
-        }
+            pulseRoutine = StartCoroutine(PulseSingle(minorImg, minorPulseObject));
         else
-        {
-            // Ambos ocupados → sin pulso
-            if (pulseRoutine != null)
-            {
-                StopCoroutine(pulseRoutine);
-                pulseRoutine = null;
-            }
-        }
+            SetPulseObjectActive(false, false); // Ninguno libre → desactivar objetos
     }
 
 
-    private IEnumerator PulseSingle(Image img)
+    private IEnumerator PulseSingle(Image img, GameObject pulseObj)
     {
         Color c = img.color;
-        c.a = 0f;
+        c.a = 0.5f; // inicio en 0.5
         img.color = c;
 
         while (true)
@@ -212,8 +228,12 @@ public class UI_Mutation : MonoBehaviour
             while (t < 1f)
             {
                 t += Time.deltaTime / pulseDuration;
-                c.a = Mathf.SmoothStep(0f, 1f, t);
+                c.a = Mathf.SmoothStep(0.5f, 1f, t);
                 img.color = c;
+
+                if (pulseObj != null)
+                    pulseObj.SetActive(true);
+
                 yield return null;
             }
 
@@ -222,8 +242,12 @@ public class UI_Mutation : MonoBehaviour
             while (t < 1f)
             {
                 t += Time.deltaTime / pulseDuration;
-                c.a = Mathf.SmoothStep(1f, 0f, t);
+                c.a = Mathf.SmoothStep(1f, 0.5f, t);
                 img.color = c;
+
+                if (pulseObj != null)
+                    pulseObj.SetActive(false);
+
                 yield return null;
             }
 
@@ -231,18 +255,15 @@ public class UI_Mutation : MonoBehaviour
         }
     }
 
-
-
-    private IEnumerator PulseAlternate(Image majorImg, Image minorImg)
+    private IEnumerator PulseAlternate(Image majorImg, Image minorImg, GameObject majorObj, GameObject minorObj)
     {
         bool majorActive = true;
 
         Color cMajor = majorImg.color;
         Color cMinor = minorImg.color;
 
-        // Inicializamos ambos en alpha 0
-        cMajor.a = 0f;
-        cMinor.a = 0f;
+        cMajor.a = 0.5f;
+        cMinor.a = 0.5f;
         majorImg.color = cMajor;
         minorImg.color = cMinor;
 
@@ -250,44 +271,54 @@ public class UI_Mutation : MonoBehaviour
         {
             float t = 0f;
 
+            // Fade in
             while (t < 1f)
             {
                 t += Time.deltaTime / pulseDuration;
-                float alpha = Mathf.SmoothStep(0f, 1f, t);
+                float alpha = Mathf.SmoothStep(0.5f, 1f, t);
 
                 if (majorActive)
                 {
                     cMajor.a = alpha;
                     majorImg.color = cMajor;
-                    cMinor.a = 0f;
+                    if (majorObj != null) majorObj.SetActive(true);
+
+                    cMinor.a = 0.5f;
                     minorImg.color = cMinor;
+                    if (minorObj != null) minorObj.SetActive(false);
                 }
                 else
                 {
                     cMinor.a = alpha;
                     minorImg.color = cMinor;
-                    cMajor.a = 0f;
+                    if (minorObj != null) minorObj.SetActive(true);
+
+                    cMajor.a = 0.5f;
                     majorImg.color = cMajor;
+                    if (majorObj != null) majorObj.SetActive(false);
                 }
 
                 yield return null;
             }
 
+            // Fade out
             t = 0f;
             while (t < 1f)
             {
                 t += Time.deltaTime / pulseDuration;
-                float alpha = Mathf.SmoothStep(1f, 0f, t);
+                float alpha = Mathf.SmoothStep(1f, 0.5f, t);
 
                 if (majorActive)
                 {
                     cMajor.a = alpha;
                     majorImg.color = cMajor;
+                    if (majorObj != null) majorObj.SetActive(false);
                 }
                 else
                 {
                     cMinor.a = alpha;
                     minorImg.color = cMinor;
+                    if (minorObj != null) minorObj.SetActive(false);
                 }
 
                 yield return null;
@@ -300,12 +331,14 @@ public class UI_Mutation : MonoBehaviour
     }
 
 
+
     private void OnSelectSystem(SystemType targetSystem)
     {
         if (isRotating || targetSystem == activeSystem)
             return;
 
         activeSystem = targetSystem;
+        HideHoverTooltip();
         StartCoroutine(RotateAndSetSystem());
     }
 
@@ -405,14 +438,15 @@ public class UI_Mutation : MonoBehaviour
         bool equipped = mController.EquipRadiation(radData.Type, activeSystem, slot);
         if (equipped)
         {
-            // Detener pulso
+            // Detener pulso y objetos
             if (pulseRoutine != null)
             {
                 StopCoroutine(pulseRoutine);
                 pulseRoutine = null;
             }
+            SetPulseObjectActive(false, false);
 
-            // Aseguramos que ambos slots queden visibles al 100%
+            // Ajustar alpha de botones a 1
             Image majorImg = majorSlotButton.GetComponent<Image>();
             Image minorImg = minorSlotButton.GetComponent<Image>();
             Color cMajor = majorImg.color;
@@ -430,11 +464,10 @@ public class UI_Mutation : MonoBehaviour
         }
     }
 
+
     private IEnumerator RotateAndSetSystem()
     {
         isRotating = true;
-
-        // Desactivar botones de sistema y radiaciones
         nerveButton.interactable = false;
         integumentaryButton.interactable = false;
         muscularButton.interactable = false;
@@ -444,26 +477,28 @@ public class UI_Mutation : MonoBehaviour
         UpdateSystemButtons();
         DestroySlotDescriptions();
 
+        // Desactivar objetos durante rotación
+        SetPulseObjectActive(false, false);
+
         yield return RotateSequence();
         UpdateSystemUI();
 
-        // Reaplicar UI si había una radiación seleccionada
+        // Reactivar slots si hay radiación disponible
         if (currentSelectedRad != null)
         {
             ShowSlotDescriptions(currentSelectedRad);
-            ShowSlotIconsPreview(currentSelectedRad);
+            ShowSlotIconsPreview(currentSelectedRad); // aquí se volverán a activar los objetos
         }
 
-        // Reactivar botones (excepto el del sistema actual)
         nerveButton.interactable = true;
         integumentaryButton.interactable = true;
         muscularButton.interactable = true;
         SetRadiationButtonsInteractable(true);
 
         UpdateSystemButtons();
-
         isRotating = false;
     }
+
 
 
     private void SetRadiationButtonsInteractable(bool interactable)
@@ -610,6 +645,53 @@ public class UI_Mutation : MonoBehaviour
         yield return new WaitForSeconds(Mathf.Max(animLength1, animLength2));
     }
 
+    private void ShowHover(SystemType system)
+    {
+        if (hoverText == null || hoverCanvasGroup == null) return;
+
+        hoverText.text = system.ToString();
+        hoverCanvasGroup.alpha = 1f;
+    }
+
+    private void HideHover()
+    {
+        if (hoverCanvasGroup == null) return;
+        hoverCanvasGroup.alpha = 0f;
+    }
+
+    private void HideHoverTooltip()
+    {
+        if (hoverCanvasGroup != null)
+            hoverCanvasGroup.alpha = 0f;
+    }
+
+
+    private void SetupButtonHover(Button button, SystemType system)
+    {
+        var trigger = button.gameObject.GetComponent<UnityEngine.EventSystems.EventTrigger>();
+        if (trigger == null)
+            trigger = button.gameObject.AddComponent<UnityEngine.EventSystems.EventTrigger>();
+
+        trigger.triggers.Clear();
+
+        // Pointer Enter
+        EventTrigger.Entry entryEnter = new EventTrigger.Entry();
+        entryEnter.eventID = EventTriggerType.PointerEnter;
+        entryEnter.callback.AddListener((data) =>
+        {
+            if (button.interactable) ShowHover(system);
+        });
+        trigger.triggers.Add(entryEnter);
+
+        // Pointer Exit
+        EventTrigger.Entry entryExit = new EventTrigger.Entry();
+        entryExit.eventID = EventTriggerType.PointerExit;
+        entryExit.callback.AddListener((data) => HideHover());
+        trigger.triggers.Add(entryExit);
+    }
+
+
+
     public void OnRadiationEquipped()
     {
         isRotating = true;
@@ -662,5 +744,5 @@ public class UI_Mutation : MonoBehaviour
         return 0.5f;
     }
 
-    
+    public void PlaySound(AudioClip audioClip) => AudioManager.Instance?.PlaySFX(audioClip);
 }

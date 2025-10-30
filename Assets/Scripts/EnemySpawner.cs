@@ -22,6 +22,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Vector3 spawnAreaSize;
     [SerializeField] private float safeDistanceFromPlayer = 5f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip orbSpawnSound;
+    [SerializeField] private AudioSource audioSource;
+
+
 
 
 
@@ -31,6 +36,18 @@ public class EnemySpawner : MonoBehaviour
     public Action OnAllWavesCompleted;
     private int actualWave = 0;
     private int enemiesQuantity = 0;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = FindObjectOfType<AudioSource>();
+            if (audioSource == null)
+                Debug.LogWarning("EnemySpawner: No se encontró AudioSource para reproducir orbSpawnSound");
+        }
+    }
+
 
     private void Start() 
     {
@@ -151,16 +168,20 @@ public class EnemySpawner : MonoBehaviour
             if (actualWave <= wavesQuantity)
             {
                 StartWave();
-                //OnWaveCompleted?.Invoke();
             }
             else
             {
-                //ShowMutationSelection();     
                 SpawnOrbMutation(enemy.transform.position, orbMutationPrefab);
+
+                // 🔹 Reproducir sonido
+                if (audioSource != null && orbSpawnSound != null)
+                    audioSource.PlayOneShot(orbSpawnSound);
+
                 OnAllWavesCompleted?.Invoke();
             }
         }
     }
+
 
     //[ContextMenu("Show mutation selection")]
     //private void ShowMutationSelection() => Instantiate(mutationCanvasPrefab);

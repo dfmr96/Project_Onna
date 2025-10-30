@@ -9319,6 +9319,8 @@ MonoBehaviour:
   weaponTrigger: {fileID: 794166309}
   nextDialogueData: {fileID: 11400000, guid: 3288e5cebf98a674dac330869958f763, type: 2}
   enemySpawnerGO: {fileID: 1069478956}
+  playerHealthUI: {fileID: 1401596847}
+  reminderTime: 10
 --- !u!4 &1044702142
 Transform:
   m_ObjectHideFlags: 0
@@ -14008,11 +14010,23 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1492538997107965751, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
       propertyPath: m_Name
       value: PlayerHUD
       objectReference: {fileID: 0}
     - target: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873144287341361945, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3408075340289336420, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -14096,16 +14110,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5560395795655758743, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1401596853}
   m_SourcePrefab: {fileID: 100100000, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
 --- !u!1 &1401596847 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1594644688222666073, guid: 8665d8d1ddb269d40b4ed2eace467a52, type: 3}
   m_PrefabInstance: {fileID: 1401596846}
   m_PrefabAsset: {fileID: 0}
+--- !u!225 &1401596853
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401596847}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!43 &1401703291
 Mesh:
   m_ObjectHideFlags: 0

@@ -1017,6 +1017,12 @@ MonoBehaviour:
   meleeController: {fileID: 6668341717595924518}
   slashEffectPrefab: {fileID: 1171201465392465800, guid: 4aa9f30a28a77224ba84b2a2c334c71b, type: 3}
   slashSpawnPoint: {fileID: 2610445911632088298}
+  audioSource: {fileID: -2364824535458516691}
+  hitSounds:
+  - {fileID: 8300000, guid: 308b73bb44af41c48bcf4ae2af4e0126, type: 3}
+  - {fileID: 8300000, guid: b9652636d807d5441a9c0915ae749d65, type: 3}
+  - {fileID: 8300000, guid: 92d6499f84895d74cbe9b58cee3440b3, type: 3}
+  pitchVariation: 0.1
 --- !u!1 &3115691216462136299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1979,8 +1985,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
-  hurtFx: {fileID: 8300000, guid: 59d794063924baa4fac1b832c2d9e292, type: 3}
-  healthFx: {fileID: 8300000, guid: d0f484da1817b7f4189a3721200ccf8d, type: 3}
+  hurtFxList:
+  - {fileID: 8300000, guid: 5b2ce95955d97654f8e800c755a5c0b3, type: 3}
+  - {fileID: 8300000, guid: d8f52cdcd7ebcf9458817554dc20610c, type: 3}
+  - {fileID: 8300000, guid: 01254459c7507d448afcef8232896fc5, type: 3}
+  - {fileID: 8300000, guid: 4039a16894d2d2d4bacf667c6e6f8508, type: 3}
+  - {fileID: 8300000, guid: 3510a6fcd50ef64458f8007471729827, type: 3}
+  - {fileID: 8300000, guid: 152b4e2f24062604cb250b4451c822e5, type: 3}
+  healthFxList:
+  - {fileID: 8300000, guid: 3f07a593299b77f4f8c80bf5e1dd86d2, type: 3}
+  - {fileID: 8300000, guid: 7f135c107fc2ca1439b6488240b251c4, type: 3}
+  - {fileID: 8300000, guid: 004b8f1329728f94cba3a888663ac47c, type: 3}
+  - {fileID: 8300000, guid: d7583793c40498342b5199e41de852ec, type: 3}
+  - {fileID: 8300000, guid: 2c833f7e304e01746a631ab4a35ebeb0, type: 3}
+  - {fileID: 8300000, guid: 22ca50ef1cda2244daa22a57198824e1, type: 3}
 --- !u!114 &5225306903837380426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2826,8 +2844,14 @@ MonoBehaviour:
   shootGunParticlesPrefab: {fileID: -6140058637718067864, guid: 4f5fc4bbd01b03a4499a6ed77f175fc7, type: 3}
   laserOrigin: {fileID: 6286168293087101770}
   lineRenderer: {fileID: 4320497290608354658}
-  shootFx: {fileID: 8300000, guid: eb192c69ffce50d4c9eb79b0bc16ac7e, type: 3}
-  overheathFx: {fileID: 8300000, guid: 62d7fcc486ccf424084211b80c981a87, type: 3}
+  shootFxClips:
+  - {fileID: 8300000, guid: 2814eeee4bde2f841823e60b5badbc8e, type: 3}
+  - {fileID: 8300000, guid: 8303a370ad58dbc4b9c4d4f2e379bcfb, type: 3}
+  - {fileID: 8300000, guid: 6cbaef4abfbdd884cb7ff2f927609528, type: 3}
+  - {fileID: 8300000, guid: 15670f9e4beff7b44972cc934d6ebaff, type: 3}
+  - {fileID: 8300000, guid: 7ea6709a24cafde43a7a583de317e4a7, type: 3}
+  - {fileID: 8300000, guid: cd1e91cfbda44ff4babdf148a3e36b3d, type: 3}
+  overheathFx: {fileID: 8300000, guid: 8f06c301c9e4a3849946b6cac77dd1e2, type: 3}
   nextShotDoubleDamage: 0
 --- !u!82 &3104269632160405091
 AudioSource:
