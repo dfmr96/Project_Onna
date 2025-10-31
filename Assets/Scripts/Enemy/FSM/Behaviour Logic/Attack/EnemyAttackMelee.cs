@@ -17,6 +17,9 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     [SerializeField] private ParticleSystem particlePunchAttack;
     private ParticleSystem damageParticlesInstance;
 
+    private float currentSpeed;
+    private float currentAngSpeed;
+
     public override void Initialize(GameObject gameObject, IEnemyBaseController enemy)
     {
         base.Initialize(gameObject, enemy);
@@ -27,6 +30,9 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
+
+        currentSpeed = _navMeshAgent.speed;
+        currentAngSpeed = _navMeshAgent.angularSpeed;
 
         attackRange = _enemyModel.statsSO.AttackRange;
 
@@ -74,12 +80,17 @@ public class EnemyAttackMelee : EnemyAttackSOBase
         _hasAttackedOnce = false;
  
 
-        _navMeshAgent.speed = _enemyModel.currentSpeed;
-        _navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
+        //_navMeshAgent.speed = _enemyModel.currentSpeed;
+        //_navMeshAgent.angularSpeed = _enemyModel.statsSO.rotationSpeed;
+
+        _navMeshAgent.speed = currentSpeed;
+        _navMeshAgent.angularSpeed = currentAngSpeed;
 
         _navMeshAgent.isStopped = false;
 
         Destroy(damageParticlesInstance.gameObject);
+
+        _canBeStunned = false;
 
     }
 
@@ -95,7 +106,9 @@ public class EnemyAttackMelee : EnemyAttackSOBase
             if (distanceToPlayer > attackRange)
             {
                 _enemyView.PlayAttackAnimation(false);
-                enemy.fsm.ChangeState(enemy.SearchState);
+                //enemy.fsm.ChangeState(enemy.SearchState);
+                enemy.fsm.ChangeState(enemy.ChaseState);
+
                 return;
             }
             else if (distanceToPlayer >= _distanceToCountExit)
@@ -217,6 +230,7 @@ public class EnemyAttackMelee : EnemyAttackSOBase
     {
         if (_canBeStunned)
         {
+            _canBeStunned = false;
             enemy.fsm.ChangeState(enemy.StunnedState);
         }
     }

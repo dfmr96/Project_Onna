@@ -37,6 +37,9 @@ using static UnityEngine.ParticleSystem;
             _enemyModel.OnHealthChanged -= HandleHealthChanged;
 
         Destroy(particles);
+
+        _enemyView.ResetStunnedAnimation();
+
     }
 
     public override void DoFrameUpdateLogic()
@@ -48,8 +51,8 @@ using static UnityEngine.ParticleSystem;
 
         if (_timer >= _timeStun)
         {
-                    //_enemyView.PlayMovingAnimation(_enemyModel.statsSO.moveSpeed);
-                    enemy.fsm.ChangeState(enemy.ChaseState);
+            //_enemyView.PlayMovingAnimation(_enemyModel.statsSO.moveSpeed);
+            enemy.fsm.ChangeState(enemy.ChaseState);
 
             }
     }
@@ -73,9 +76,11 @@ using static UnityEngine.ParticleSystem;
 
         private void HandleHealthChanged(float currentHealth)
         {
-        
-           enemy.fsm.ChangeState(enemy.SearchState);
-         
-        }
+
+        //enemy.fsm.ChangeState(enemy.SearchState);
+
+
+
+    }
 }
 

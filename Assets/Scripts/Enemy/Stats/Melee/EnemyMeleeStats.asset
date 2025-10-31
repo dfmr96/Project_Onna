@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a980c3ede781443bca97b6deaac8b3, type: 3}
   m_Name: EnemyMeleeStats
   m_EditorClassIdentifier: 
-  currentState: EnemyDeadState
+  currentState: EnemyAttackState
   MaxHealth: 160
   isShieldActive: 0
   AttackDamage: 9
-  AttackRange: 1.2
+  AttackRange: 2.1
   AttackTimeRate: 1
   AttackInitialDelay: 0
   combatAngle: 30.27
   obstacleCombatLayers:
     serializedVersion: 2
     m_Bits: 256
-  detectionRange: 50
+  detectionRange: 500
   visionAngle: 360
   obstacleDetectionLayers:
     serializedVersion: 2
