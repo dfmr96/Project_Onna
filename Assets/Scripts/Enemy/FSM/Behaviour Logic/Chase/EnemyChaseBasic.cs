@@ -110,7 +110,11 @@ public class EnemyChaseBasic : EnemyChaseSOBase
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
+
+
         if (distanceToPlayer > _enemyModel.statsSO.AttackRange)
+            //if (!enemy.isWhitinCombatRadius)
+
         {
             if (_navMeshAgent.isStopped)
                 _navMeshAgent.isStopped = false;

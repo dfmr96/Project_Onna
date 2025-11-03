@@ -17,13 +17,14 @@ public class EnemyIdleJustStill : EnemyIdleSOBase
         base.DoEnterLogic();
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
-
         timer = 0f;
+        enemy.SetShield(true);
     }
 
     public override void DoExitLogic()
     {
         base.DoExitLogic();
+        enemy.SetShield(false);
     }
 
     public override void DoFrameUpdateLogic()

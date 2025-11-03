@@ -1731,6 +1731,8 @@ MonoBehaviour:
   EnemyHurtSOBase: {fileID: 11400000, guid: cc3e30759b988b3419289f6f13305ff3, type: 2}
   EnemyDefendSOBase: {fileID: 11400000, guid: 2cbdebe29aa18464992e60d1773cdf21, type: 2}
   EnemySearchSOBase: {fileID: 11400000, guid: bb21c07f89f7e7d419ca5740b9777f7e, type: 2}
+  checkInterval: 0.5
+  minMoveDistance: 0.1
 --- !u!114 &3059458471508149341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1745,10 +1747,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statsSO: {fileID: 11400000, guid: 16aa580308e7cf74e9992191b5e4c67e, type: 2}
   variantSO: {fileID: 11400000, guid: 6f3be1e739e0ddb4d8fc5215ad9f9082, type: 2}
-  floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
-  jumpingCoinsTextPrefab: {fileID: 3376755756987271297, guid: 6ef9f7569b8aec740b0780b7df95fe24, type: 3}
-  heightCoinsTextSpawn: 2
-  heightTextSpawn: 2
   healthBarPrefab: {fileID: 8508845231606679208, guid: 8623097c3dba54948ab913cd6882f592, type: 3}
   heightBarSpawn: 2.5
   currentHealth: 0
@@ -1780,7 +1778,6 @@ MonoBehaviour:
   spawnEffectDuration: 2
   firePoint2: {fileID: 3041068540020085891}
   turretHead: {fileID: 3041068540020085891}
-  deathParticlesPrefab: {fileID: 2197626818615626613, guid: 1095a5c9f65bfbe4383f63d5d1886c65, type: 3}
   damageMaterials:
   - {fileID: 2100000, guid: 6b1776448d6ac084594dc9cd0d220fae, type: 2}
   - {fileID: 2100000, guid: 9439510a6cf79ba4b8c3f4f698374f94, type: 2}
@@ -1788,9 +1785,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}
   materialIndexesToFlash: 0000000001000000
-  damageParticlesPrefab: {fileID: 7151510144505425601, guid: 356cf4dca1465b54fabbb8cd9b1cd190, type: 3}
   shootAudioClip: {fileID: 0}
   damagedAudioClip: {fileID: 8300000, guid: 5432abd34717bbe4b8083fecca85ebda, type: 3}
+  isTurret: 0
 --- !u!82 &872886560669737373
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1899,12 +1896,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1686b42493ce74b4c9f92c596ec6fae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPositionEffect: {fileID: 3450268061211636524}
-  yOffsetPositionEffect: -2
-  offsetBetweenEffects: 0.1
   dotBurnEffectPrefab: {fileID: 6469354921825657977, guid: 4d9a3b35b3bc07649b697df7fb497b6d, type: 3}
   slowedEffectPrefab: {fileID: 7551388611195229131, guid: 4de940934933c4841bbad7642d2ef221, type: 3}
   markedEffectPrefab: {fileID: 2400466318854986903, guid: bad5794a53f5c3645bb444b3a040ba01, type: 3}
+  spawnPositionEffect: {fileID: 3450268061211636524}
+  yOffsetPositionEffect: -2
+  offsetBetweenEffects: 0.1
 --- !u!1 &5485727888402235831
 GameObject:
   m_ObjectHideFlags: 0
@@ -2019,7 +2016,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5590283411822690491}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2071,7 +2068,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -2082,7 +2079,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5590283411822690491}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3014975f784424549b545f152c730373, type: 3}
   m_Name: 

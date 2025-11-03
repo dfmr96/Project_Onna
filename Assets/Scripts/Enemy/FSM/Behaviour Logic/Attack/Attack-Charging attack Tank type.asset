@@ -17,16 +17,16 @@ MonoBehaviour:
   isMovingSpeedChangesOnAttack: 0
   isLookingPlayer: 1
   rotationSpeed: 10
-  punchChargeRadius: 2
-  chargeSpeed: 30
+  punchChargeRadius: 1.7
+  chargeSpeed: 15
   maxChargeTime: 1.5
   meleeRange: 2
-  postChargeDelay: 1
+  postChargeDelay: 0
   damageableLayers:
     serializedVersion: 2
     m_Bits: 64
-  stopDistanceFromPlayer: 1
+  stopDistanceFromPlayer: 0
   particleChargeAttack: {fileID: 322485791207682088, guid: 09dd03df8868a4e41a28f252509bbda3, type: 3}
-  forwardOffset: 2
+  forwardOffset: -1.5
   downOffset: 1
   particleMeleeAttack: {fileID: 322485791207682088, guid: 3de0b567c0af79348aaf0f07b6b11e7f, type: 3}

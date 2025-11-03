@@ -86,6 +86,13 @@ public class EnemyController : BaseEnemyController, ITriggerCheck, IEnemyBaseCon
     //Status de DoTs por Mutaciones
     private EnemyStatusHandler _statusHandler;
 
+
+    //Movimiento Enemigo
+    private Vector3 _lastPosition;
+    private float _stuckTimer = 0f;
+    [SerializeField] private float checkInterval = 0.5f;
+    [SerializeField] private float minMoveDistance = 0.1f;
+
     void Awake()
     {
         // Instanciar behaviors
@@ -167,9 +174,59 @@ void Update()
         // Solo reproducir animación de movimiento si NO está atacando
         if (fsm.CurrentState != AttackState)
         {
-            view.PlayMovingAnimation(_navMeshAgent.speed);
+            if (_navMeshAgent.velocity.magnitude > 0.1)
+            {
+                view.ResetIdleAnimation();
+
+                view.PlayMovingAnimation(_navMeshAgent.speed);
+
+            }
+            else
+            {
+                view.PlayIdleAnimation();
+            }
         }
+
+
+
         fsm.CurrentState?.FrameUpdate();
+
+        //float actualSpeed = _navMeshAgent.velocity.magnitude;
+
+        //// ---- Movimiento visible (basado en velocidad real) ----
+        //if (fsm.CurrentState != AttackState)
+        //{
+        //    if (actualSpeed > 0.1f)
+        //    {
+        //        view.PlayMovingAnimation(actualSpeed);
+        //    }
+        //}
+        ////else
+        ////{
+        ////    view.PlayIdleAnimation();
+        ////}
+
+        //// ---- Detección de bloqueo/traba ----
+        //_stuckTimer += Time.deltaTime;
+        //if (_stuckTimer >= checkInterval)
+        //{
+        //    float movedDist = Vector3.Distance(transform.position, _lastPosition);
+
+        //    if (movedDist < minMoveDistance && actualSpeed < 0.1f)
+        //    {
+        //        //  El enemigo no avanzó: podés forzar animación o resetear path
+        //        view.PlayIdleAnimation();
+
+        //        //if (_navMeshAgent.hasPath)
+        //        //{
+        //        //    _navMeshAgent.ResetPath();
+        //        //}
+        //    }
+
+        //    _lastPosition = transform.position;
+        //    _stuckTimer = 0f;
+        //}
+
 
         //Debug.Log("ESTADO: " + fsm.CurrentState);
 

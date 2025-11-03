@@ -193,7 +193,12 @@ public class EnemyView : MonoBehaviour
 
     public void PlayIdleAnimation()
     {
-        //animator.SetTrigger("Idle");
+        animator.SetTrigger("Idle");
+    }
+
+    public void ResetIdleAnimation()
+    {
+        animator.ResetTrigger("Idle");
     }
 
     public void PlayMovingAnimation(float moveSpeed)

@@ -45,20 +45,27 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         _enemyView.OnAttackImpact += OnAttackImpact;
         _enemyView.OnAttackStarted += OnMeleeAttack;
 
-        chargeParticlesInstance = Instantiate(
+        if (chargeParticlesInstance == null)
+        {
+            chargeParticlesInstance = Instantiate(
                    particleChargeAttack,
                    _enemyView.PunchPoint.position,
                    Quaternion.identity
                );
+            chargeParticlesInstance.Stop();
+        }
 
-        meleeParticlesInstance = Instantiate(
+        if (meleeParticlesInstance == null)
+        {
+            meleeParticlesInstance = Instantiate(
                particleMeleeAttack,
                _enemyView.PunchPoint.position,
                Quaternion.identity
            );
+            meleeParticlesInstance.Stop();
 
-        chargeParticlesInstance.Stop();
-        meleeParticlesInstance.Stop();
+        }
+
     }
 
     public override void DoExitLogic()
@@ -67,7 +74,18 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         _enemyView.OnAttackImpact -= OnAttackImpact;
         _enemyView.OnAttackStarted -= OnMeleeAttack;
 
-        Destroy(chargeParticlesInstance.gameObject);
+        if (chargeParticlesInstance == null)
+        {
+            Destroy(chargeParticlesInstance.gameObject);
+        }
+
+        if (meleeParticlesInstance == null)
+        {
+            Destroy(meleeParticlesInstance.gameObject);
+
+        }
+
+
 
         ResetValues();
     }
@@ -87,7 +105,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
             {
                 isPostCharging = false;
                 _timer = 0f;
-                enemy.SetShield(true);
+                //enemy.SetShield(true);
             }
             return;
         }
@@ -96,7 +114,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         if (distanceToPlayer > _distanceToCountExit)
         {
             EndAttackAnimations();
-            enemy.SetShield(true);
+            //enemy.SetShield(true);
             enemy.fsm.ChangeState(enemy.ChaseState);
             return;
         }
@@ -160,7 +178,7 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         if (!canSeePlayer)
         {
             EndAttackAnimations();
-            enemy.SetShield(true);
+            //enemy.SetShield(true);
             enemy.fsm.ChangeState(enemy.ChaseState);
             return;
         }
@@ -264,7 +282,8 @@ public class EnemyAttackCharge : EnemyAttackSOBase
         _navMeshAgent.updateRotation = true;
         _navMeshAgent.Warp(_rb.position); // actualizar posición real
 
-        enemy.SetShield(false);
+        //enemy.SetShield(false);
+        //enemy.fsm.ChangeState(enemy.IdleState);
         enemy.fsm.ChangeState(enemy.IdleState);
 
     }

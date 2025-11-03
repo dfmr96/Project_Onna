@@ -16,6 +16,7 @@ public class EnemyIdleTank : EnemyIdleSOBase
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
         //enemy.SetShield(false);
+        enemy.SetShield(true);
 
         timer = 0f;
     }
@@ -24,6 +25,7 @@ public class EnemyIdleTank : EnemyIdleSOBase
     {
         base.DoExitLogic();
         ResetValues();
+        enemy.SetShield(false);
     }
 
     public override void DoFrameUpdateLogic()
@@ -36,16 +38,19 @@ public class EnemyIdleTank : EnemyIdleSOBase
         {
             float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-            if (distanceToPlayer > model.statsSO.AttackRange)
-            {
-                enemy.fsm.ChangeState(enemy.ChaseState);
+            //if (distanceToPlayer > model.statsSO.AttackRange)
+            //{
+            //    enemy.fsm.ChangeState(enemy.ChaseState);
 
-            }
-            else
-            {
-                enemy.fsm.ChangeState(enemy.AttackState);
+            //}
+            //else
+            //{
+            //    enemy.fsm.ChangeState(enemy.AttackState);
 
-            }
+            //}
+
+            enemy.fsm.ChangeState(enemy.ChaseState);
+
 
         }
 
@@ -60,7 +65,7 @@ public class EnemyIdleTank : EnemyIdleSOBase
     {
         base.ResetValues();
         _navMeshAgent.isStopped = false;
-        enemy.SetShield(true);
+        //enemy.SetShield(true);
 
 
     }

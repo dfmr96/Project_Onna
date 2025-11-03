@@ -133,7 +133,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640625921354044645}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -185,7 +185,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640625921354044645}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3014975f784424549b545f152c730373, type: 3}
   m_Name: 
@@ -1055,6 +1055,8 @@ MonoBehaviour:
   EnemyHurtSOBase: {fileID: 11400000, guid: cc3e30759b988b3419289f6f13305ff3, type: 2}
   EnemyDefendSOBase: {fileID: 11400000, guid: 2cbdebe29aa18464992e60d1773cdf21, type: 2}
   EnemySearchSOBase: {fileID: 11400000, guid: bb21c07f89f7e7d419ca5740b9777f7e, type: 2}
+  checkInterval: 0.5
+  minMoveDistance: 0.1
 --- !u!114 &7951306577797177445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,10 +1071,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statsSO: {fileID: 11400000, guid: adaf0ea2f720628449ccdae3427bcd57, type: 2}
   variantSO: {fileID: 11400000, guid: 6f3be1e739e0ddb4d8fc5215ad9f9082, type: 2}
-  floatingTextPrefab: {fileID: 6386146013502642175, guid: 88bde2d15ccf1d74fa63e3a977dc689a, type: 3}
-  jumpingCoinsTextPrefab: {fileID: 3376755756987271297, guid: 6ef9f7569b8aec740b0780b7df95fe24, type: 3}
-  heightCoinsTextSpawn: 2
-  heightTextSpawn: 2
   healthBarPrefab: {fileID: 8508845231606679208, guid: 8623097c3dba54948ab913cd6882f592, type: 3}
   heightBarSpawn: 2.5
   currentHealth: 0
@@ -1102,7 +1100,6 @@ MonoBehaviour:
   spawnEffectDuration: 2
   firePoint2: {fileID: 3283853659466723465}
   turretHead: {fileID: 4480628916664112943}
-  deathParticlesPrefab: {fileID: 4596544553357837919, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
   damageMaterials:
   - {fileID: -876546973899608171, guid: a6732fc98472db644a184cea3f5172b1, type: 3}
   - {fileID: -876546973899608171, guid: a6732fc98472db644a184cea3f5172b1, type: 3}
@@ -1112,7 +1109,6 @@ MonoBehaviour:
   deathMaterials:
   - {fileID: 2100000, guid: e86358d908998194ba48139cc35a84a0, type: 2}
   materialIndexesToFlash: 00000000
-  damageParticlesPrefab: {fileID: 1446213458924994650}
   shootAudioClip: {fileID: 8300000, guid: 307bfecd8caeba147b2a4016dfdad079, type: 3}
   damagedAudioClip: {fileID: 8300000, guid: 5432abd34717bbe4b8083fecca85ebda, type: 3}
   isTurret: 0
@@ -1398,11 +1394,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a164e676dbbd6e54587237e619372c98, type: 3}
---- !u!198 &1446213458924994650 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4033287822461114141, guid: a164e676dbbd6e54587237e619372c98, type: 3}
-  m_PrefabInstance: {fileID: 2587571548951484231}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3507919986294543872 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1388872548669538631, guid: a164e676dbbd6e54587237e619372c98, type: 3}
