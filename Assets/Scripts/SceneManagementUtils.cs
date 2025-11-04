@@ -46,8 +46,9 @@ public static class SceneManagementUtils
             loadingScreen.GetComponent<Animator>().SetTrigger("FadeOut");
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
-        var currentMode = sceneName == "HUB" ? GameMode.Hub : GameMode.Run;
+
+        var currentMode = sceneName == "HUB" || sceneName == "HUB_Tutorial" ? GameMode.Hub : GameMode.Run;
+        //No fui yo, fue simon
         GameModeSelector.SelectedMode = currentMode;
         
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
